@@ -1,3 +1,13 @@
+helper:
+    resource: "@HelperBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
+organizer:
+    resource: "@OrganizerBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 app:
     resource: '@AppBundle/Controller/'
     type: annotation

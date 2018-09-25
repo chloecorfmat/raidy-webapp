@@ -1,0 +1,4 @@
+services:
+#    organizer.example:
+#        class: OrganizerBundle\Example
+#        arguments: ["@service_id", "plain_value", "%parameter%"]

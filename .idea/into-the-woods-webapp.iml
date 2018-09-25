@@ -2,6 +2,8 @@
 <module type="WEB_MODULE" version="4">
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src/OrganizerBundle" isTestSource="false" packagePrefix="OrganizerBundle\" />
+      <sourceFolder url="file://$MODULE_DIR$/src/HelperBundle" isTestSource="false" packagePrefix="HelperBundle\" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" packagePrefix="Tests\" />
       <sourceFolder url="file://$MODULE_DIR$/src/AppBundle" isTestSource="false" packagePrefix="AppBundle\" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/composer" />
