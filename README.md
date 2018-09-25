@@ -1,4 +1,8 @@
 into-the-woods-webapp
 =====================
 
-A Symfony project created on September 22, 2018, 10:11 pm.
+## Install
+
+`composer install` to download the dependencies
+
+`php bin/console server:start` to start the development server
