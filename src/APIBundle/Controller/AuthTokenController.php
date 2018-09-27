@@ -92,11 +92,11 @@ class AuthTokenController extends Controller
         }
     }
 
-    private function invalidCredentials()
+    public function invalidCredentials()
     {
         $ret = [];
         $ret["code"] = Response::HTTP_BAD_REQUEST;
-        $ret["message"] = "Bad crendentials";
+        $ret["message"] = "Bad credentials";
 
         $res = new Response(json_encode($ret));
         $res->setStatusCode(Response::HTTP_BAD_REQUEST);
