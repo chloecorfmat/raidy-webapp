@@ -23,6 +23,8 @@ class User extends BaseUser
      */
     protected $id;
 
+    protected $plainPassword;
+
     public function __construct()
     {
         parent::__construct();

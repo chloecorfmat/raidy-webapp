@@ -6,7 +6,8 @@
         "psr-4": {
             "AppBundle\\": "src/AppBundle",
             "OrganizerBundle\\": "src/OrganizerBundle",
-            "HelperBundle\\": "src/HelperBundle"
+            "HelperBundle\\": "src/HelperBundle",
+            "APIBundle\\": "src/APIBundle"
         },
         "classmap": [
             "app/AppKernel.php",
@@ -25,6 +26,7 @@
         "php": ">=5.5.9",
         "doctrine/doctrine-bundle": "^1.6",
         "doctrine/orm": "^2.5",
+        "friendsofsymfony/rest-bundle": "^2.4",
         "friendsofsymfony/user-bundle": "^2.1",
         "incenteev/composer-parameter-handler": "^2.0",
         "sensio/distribution-bundle": "^5.0.19",
@@ -38,7 +40,8 @@
     },
     "require-dev": {
         "sensio/generator-bundle": "^3.0",
-        "symfony/phpunit-bridge": "^3.0"
+        "symfony/phpunit-bridge": "^3.0",
+        "symfony/var-dumper": "^3.4"
     },
     "scripts": {
         "symfony-scripts": [
