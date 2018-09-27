@@ -1,0 +1,10 @@
+APIBundle\Entity\AuthToken:
+  attributes:
+    id:
+      groups: ['auth-token']
+    value:
+      groups: ['auth-token']
+    createdAt:
+      groups: ['auth-token']
+    user:
+      groups: ['auth-token']

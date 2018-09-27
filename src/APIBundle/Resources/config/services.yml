@@ -1,0 +1,20 @@
+services:
+  auth_token_user_provider:
+    class: APIBundle\Security\AuthTokenUserProvider
+    arguments: ["@auth_token_repository", "@user_repository"]
+    public:    false
+
+  auth_token_repository:
+    class:   Doctrine\ORM\EntityManager
+    factory: ["@doctrine.orm.entity_manager", "getRepository"]
+    arguments: ["APIBundle:AuthToken"]
+
+  user_repository:
+    class:   Doctrine\ORM\EntityManager
+    factory: ["@doctrine.orm.entity_manager", "getRepository"]
+    arguments: ["AppBundle:User"]
+
+  auth_token_authenticator:
+    class:     APIBundle\Security\AuthTokenAuthenticator
+    arguments: ["@security.http_utils"]
+    public:    false
