@@ -15,3 +15,10 @@
 !var/SymfonyRequirements.php
 /vendor/
 /web/bundles/
+
+/web/assets/node_modules
+/web/assets/css
+/web/assets/dist
+
+.DS_STORE*
+
