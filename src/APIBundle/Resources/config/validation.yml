@@ -1,0 +1,8 @@
+APIBundle\Entity\Credentials:
+  properties:
+    login:
+    - NotBlank: ~
+    - Type: string
+    password:
+    - NotBlank: ~
+    - Type: string

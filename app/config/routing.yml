@@ -1,3 +1,8 @@
+api:
+    resource: "@APIBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 helper:
     resource: "@HelperBundle/Controller/"
     type:     annotation

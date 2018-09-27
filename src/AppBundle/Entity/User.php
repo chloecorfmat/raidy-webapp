@@ -32,19 +32,22 @@ class User extends BaseUser
     protected $phone;
 
     /**
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(name="plain_password", type="string", length=45)
      */
-    protected $password;
+    protected $plainPassword;
 
     /**
      * @ORM\Column(type="string", length=45, unique=true)
      */
     protected $email;
 
-    public function __construct()
+    public function __construct($lastName, $firstName, $phone, $plainPassword)
     {
         parent::__construct();
-        // your own logic
+        $this->lastName = $lastName;
+        $this->firstName = $firstName;
+        $this->phone = $phone;
+        $this->plainPassword = $plainPassword;
     }
 
 
@@ -116,17 +119,17 @@ class User extends BaseUser
     /**
      * @return mixed
      */
-    public function getPassword()
+    public function getPlainPassword()
     {
-        return $this->password;
+        return $this->plainPassword;
     }
 
     /**
      * @param mixed $password
      */
-    public function setPassword($password)
+    public function setPlainPassword($plainPassword)
     {
-        $this->password = $password;
+        $this->plainPassword = $plainPassword;
     }
 
     /**
