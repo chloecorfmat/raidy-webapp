@@ -42,9 +42,10 @@ class Raid
     protected $editionNumber;
 
     /**
-     * @ORM\Column(name="organizer_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organizer")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $organizerId;
+    protected $organizer;
 
     /**
      * @ORM\Column(type="string", length=256)
@@ -57,16 +58,16 @@ class Raid
      * @param $date
      * @param $place
      * @param $editionNumber
-     * @param $organizerId
+     * @param $organizer
      * @param $picture
      */
-    public function __construct($name, $date, $place, $editionNumber, $organizerId, $picture)
+    public function __construct($name, $date, $place, $editionNumber, $organizer, $picture)
     {
         $this->name = $name;
         $this->date = $date;
         $this->place = $place;
         $this->editionNumber = $editionNumber;
-        $this->organizerId = $organizerId;
+        $this->organizer = $organizer;
         $this->picture = $picture;
     }
 
@@ -151,19 +152,19 @@ class Raid
     }
 
     /**
-     * @return mixed
+     * @return Organizer
      */
-    public function getOrganizerId()
+    public function getOrganizer()
     {
-        return $this->organizerId;
+        return $this->organizer;
     }
 
     /**
-     * @param mixed $organizerId
+     * @param Organizer $organizer
      */
-    public function setOrganizerId($organizerId)
+    public function setOrganizer(Organizer $organizer)
     {
-        $this->organizerId = $organizerId;
+        $this->organizer = $organizer;
     }
 
     /**

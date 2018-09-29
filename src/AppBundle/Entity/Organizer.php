@@ -22,17 +22,18 @@ class Organizer
     protected $id;
 
     /**
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $userId;
+    protected $user;
 
     /**
      * Organizer constructor.
-     * @param $userId
+     * @param $user
      */
-    public function __construct($userId)
+    public function __construct($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
     }
 
     /**
@@ -52,19 +53,19 @@ class Organizer
     }
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * @param mixed $userId
+     * @param User $user
      */
-    public function setUserId($userId)
+    public function setUser(User $user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
     }
 
 

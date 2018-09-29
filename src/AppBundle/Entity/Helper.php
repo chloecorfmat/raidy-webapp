@@ -22,9 +22,10 @@ class Helper
     protected $id;
 
     /**
-     * @ORM\Column(name="user_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $userId;
+    protected $user;
 
     /**
      * @ORM\Column(name="is_checked_in", type="boolean")
@@ -32,14 +33,14 @@ class Helper
     protected $isCheckedIn;
 
     /**
-     * @ORM\Column(name="poi_id", type="integer")
-     */
-    protected $poiId;
+    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Poi")
+    */
+    protected $poi;
 
     /**
-     * @ORM\Column(name="favorite_poi_type_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PoiType")
      */
-    protected $favoritePoiTypeId;
+    protected $favoritePoiType;
 
     /**
      * @ORM\Column(name="check_in_time", type="date")
@@ -48,18 +49,18 @@ class Helper
 
     /**
      * Helper constructor.
-     * @param $userId
+     * @param $user
      * @param $isCheckedIn
-     * @param $poiId
-     * @param $favoritePoiTypeId
+     * @param $poi
+     * @param $favoritePoiType
      * @param $checkInTime
      */
-    public function __construct($userId, $isCheckedIn, $poiId, $favoritePoiTypeId, $checkInTime)
+    public function __construct($user, $isCheckedIn, $poi, $favoritePoiType, $checkInTime)
     {
-        $this->userId = $userId;
+        $this->user = $user;
         $this->isCheckedIn = $isCheckedIn;
-        $this->poiId = $poiId;
-        $this->favoritePoiTypeId = $favoritePoiTypeId;
+        $this->poi = $poi;
+        $this->favoritePoiType = $favoritePoiType;
         $this->checkInTime = $checkInTime;
     }
 
@@ -80,19 +81,19 @@ class Helper
     }
 
     /**
-     * @return mixed
+     * @return User
      */
-    public function getUserId()
+    public function getUser()
     {
-        return $this->userId;
+        return $this->user;
     }
 
     /**
-     * @param mixed $userId
+     * @param User $user
      */
-    public function setUserId($userId)
+    public function setUser($user)
     {
-        $this->userId = $userId;
+        $this->user = $user;
     }
 
     /**
@@ -112,35 +113,35 @@ class Helper
     }
 
     /**
-     * @return mixed
+     * @return Poi $poi
      */
-    public function getPoiId()
+    public function getPoi()
     {
-        return $this->poiId;
+        return $this->poi;
     }
 
     /**
-     * @param mixed $poiId
+     * @param Poi $poi
      */
-    public function setPoiId($poiId)
+    public function setPoi(Poi $poi = null)
     {
-        $this->poiId = $poiId;
+        $this->poi = $poi;
     }
 
     /**
-     * @return mixed
+     * @return PoiType $favoritePoiType
      */
-    public function getFavoritePoiTypeId()
+    public function getFavoritePoiType()
     {
-        return $this->favoritePoiTypeId;
+        return $this->favoritePoiType;
     }
 
     /**
-     * @param mixed $favoritePoiTypeId
+     * @param PoiType $favoritePoiType
      */
-    public function setFavoritePoiTypeId($favoritePoiTypeId)
+    public function setFavoritePoiType($favoritePoiType = null)
     {
-        $this->favoritePoiTypeId = $favoritePoiTypeId;
+        $this->favoritePoiType = $favoritePoiType;
     }
 
     /**

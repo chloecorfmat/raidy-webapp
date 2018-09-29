@@ -28,26 +28,28 @@ class Track
     protected $trackPoints;
 
     /**
-     * @ORM\Column(name="raid_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $raidId;
+    protected $raid;
 
     /**
-     * @ORM\Column(name="sport_type_id", type="string", length=45)
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SportType")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $sportTypeId;
+    protected $sportType;
 
     /**
      * Track constructor.
      * @param $trackPoints
-     * @param $raidId
-     * @param $sportTypeId
+     * @param $raid
+     * @param $sportType
      */
-    public function __construct($trackPoints, $raidId, $sportTypeId)
+    public function __construct($trackPoints, $raid, $sportType)
     {
         $this->trackPoints = $trackPoints;
-        $this->raidId = $raidId;
-        $this->sportTypeId = $sportTypeId;
+        $this->raid = $raid;
+        $this->sportType = $sportType;
     }
 
 
@@ -84,35 +86,35 @@ class Track
     }
 
     /**
-     * @return mixed
+     * @return Raid
      */
-    public function getRaidId()
+    public function getRaid()
     {
-        return $this->raidId;
+        return $this->raid;
     }
 
     /**
-     * @param mixed $raidId
+     * @param Raid $raid
      */
-    public function setRaidId($raidId)
+    public function setRaid($raid)
     {
-        $this->raidId = $raidId;
+        $this->raid = $raid;
     }
 
     /**
-     * @return mixed
+     * @return SportType
      */
-    public function getSportTypeId()
+    public function getSportType()
     {
-        return $this->sportTypeId;
+        return $this->sportType;
     }
 
     /**
-     * @param mixed $sportTypeId
+     * @param SportType $sportType
      */
-    public function setSportTypeId($sportTypeId)
+    public function setSportType($sportType)
     {
-        $this->sportTypeId = $sportTypeId;
+        $this->sportType = $sportType;
     }
 
 

@@ -32,28 +32,30 @@ class Poi
     protected $requiredHelpers;
 
     /**
-     * @ORM\Column(name="track_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Track")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $trackId;
+    protected $track;
 
     /**
-     * @ORM\Column(name="poi_type_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PoiType")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $poiTypeId;
+    protected $poiType;
 
     /**
      * Poi constructor.
      * @param $location
      * @param $requiredHelpers
-     * @param $trackId
-     * @param $poiTypeId
+     * @param $track
+     * @param $poiType
      */
-    public function __construct($location, $requiredHelpers, $trackId, $poiTypeId)
+    public function __construct($location, $requiredHelpers, $track, $poiType)
     {
         $this->location = $location;
         $this->requiredHelpers = $requiredHelpers;
-        $this->trackId = $trackId;
-        $this->poiTypeId = $poiTypeId;
+        $this->track = $track;
+        $this->poiType = $poiType;
     }
 
     /**
@@ -105,35 +107,35 @@ class Poi
     }
 
     /**
-     * @return mixed
+     * @return Track
      */
-    public function getTrackId()
+    public function getTrack()
     {
-        return $this->trackId;
+        return $this->track;
     }
 
     /**
-     * @param mixed $trackId
+     * @param Track $track
      */
-    public function setTrackId($trackId)
+    public function setTrack($track)
     {
-        $this->trackId = $trackId;
+        $this->track = $track;
     }
 
     /**
-     * @return mixed
+     * @return PoiType
      */
-    public function getPoiTypeId()
+    public function getPoiType()
     {
-        return $this->poiTypeId;
+        return $this->poiType;
     }
 
     /**
-     * @param mixed $poiTypeId
+     * @param PoiType $poiType
      */
-    public function setPoiTypeId($poiTypeId)
+    public function setPoiType($poiType)
     {
-        $this->poiTypeId = $poiTypeId;
+        $this->poiType = $poiType;
     }
 
 

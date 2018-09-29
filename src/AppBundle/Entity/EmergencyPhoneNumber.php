@@ -8,6 +8,7 @@
 
 namespace AppBundle\Entity;
 
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="emergency_phone_number")
@@ -26,21 +27,22 @@ class EmergencyPhoneNumber
     protected $phoneNumber;
 
     /**
-     * @ORM\Column(name="raid_id", type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
+     * @ORM\JoinColumn(nullable=false)
      */
-    protected $raidId;
+    protected $raid;
 
     /**
      * EmergencyPhoneNumber constructor.
      * @param $role
      * @param $phoneNumber
-     * @param $raidId
+     * @param $raid
      */
-    public function __construct($role, $phoneNumber, $raidId)
+    public function __construct($role, $phoneNumber, $raid)
     {
         $this->role = $role;
         $this->phoneNumber = $phoneNumber;
-        $this->raidId = $raidId;
+        $this->raid = $raid;
     }
 
     /**
@@ -76,18 +78,18 @@ class EmergencyPhoneNumber
     }
 
     /**
-     * @return mixed
+     * @return Raid
      */
-    public function getRaidId()
+    public function getRaid()
     {
-        return $this->raidId;
+        return $this->raid;
     }
 
     /**
-     * @param mixed $raidId
+     * @param Raid $raid
      */
-    public function setRaidId($raidId)
+    public function setRaid(Raid $raid)
     {
-        $this->raidId = $raidId;
+        $this->raid = $raid;
     }
 }
