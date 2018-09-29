@@ -19,23 +19,20 @@ gulp.task('lint', function() {
         .pipe(sassLint())
         .pipe(sassLint.format())
         .pipe(sassLint.failOnError());
+    return null;
 });
 
 gulp.task('styles', function() {
     // place code for your default task here
-    gulp.src('./scss/**/*.scss')
+    return gulp.src('./scss/**/*.scss')
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer({
             browsers: ['last 2 versions'],
             cascade: false,
         }))
-        .pipe(gulp.dest('./css'));
-
-    gulp.src('./css/styles.css')
+        .pipe(gulp.dest('./css'))
         .pipe(rename('../dist/css/styles.css'))
-        .pipe(gulp.dest('./css'));
-
-    gulp.src('./dist/css/styles.css')
+        .pipe(gulp.dest('./css'))
         // Comment the line below to have unminify files.
         .pipe(cleanCSS({compatibility: 'ie8'}))
         .pipe(rename('css/styles.min.css'))
@@ -43,18 +40,16 @@ gulp.task('styles', function() {
 });
 
 gulp.task('scripts', function() {
-    gulp.src('./js/**/*.js')
+    return gulp.src('./js/**/*.js')
         .pipe(concat('../dist/js/scripts.js'))
-        .pipe(gulp.dest('./js'));
-
-    gulp.src('./dist/js/scripts.js')
+        .pipe(gulp.dest('./js'))
         // Comment the line below to have unminify files.
         .pipe(uglify())
         .pipe(rename('js/scripts.min.js'))
         .pipe(gulp.dest('./dist'));
 });
 
-gulp.task('default', ['lint', 'scripts', 'styles'], function() {
+gulp.task('default', ['lint', 'styles', 'scripts'], function() {
     // place code for your default task here
     return null;
 });
