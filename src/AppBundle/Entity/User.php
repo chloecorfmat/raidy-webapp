@@ -1,6 +1,8 @@
 <?php
 
 namespace AppBundle\Entity;
+
+use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -36,11 +38,6 @@ class User extends BaseUser
      */
     protected $plainPassword;
 
-    /**
-     * @ORM\Column(type="string", length=45, unique=true)
-     */
-    protected $email;
-
     public function __construct($lastName, $firstName, $phone, $plainPassword)
     {
         parent::__construct();
@@ -48,24 +45,6 @@ class User extends BaseUser
         $this->firstName = $firstName;
         $this->phone = $phone;
         $this->plainPassword = $plainPassword;
-    }
-
-
-
-    /**
-     * @return mixed
-     */
-    public function getEmail()
-    {
-        return $this->email;
-    }
-
-    /**
-     * @param mixed $email
-     */
-    public function setEmail($email)
-    {
-        $this->email = $email;
     }
 
     /**
