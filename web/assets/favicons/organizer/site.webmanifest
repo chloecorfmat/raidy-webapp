@@ -1,0 +1,14 @@
+{
+    "name": "Organizer Raidy",
+    "short_name": "Organizer Raidy",
+    "icons": [
+        {
+            "src": "/android-chrome-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#78e08f",
+    "background_color": "#78e08f",
+    "display": "standalone"
+}

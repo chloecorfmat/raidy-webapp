@@ -1,0 +1,14 @@
+{
+    "name": "Helper Raidy",
+    "short_name": "Helper Raidy",
+    "icons": [
+        {
+            "src": "/android-chrome-144x144.png",
+            "sizes": "144x144",
+            "type": "image/png"
+        }
+    ],
+    "theme_color": "#a88f73",
+    "background_color": "#a88f73",
+    "display": "standalone"
+}
