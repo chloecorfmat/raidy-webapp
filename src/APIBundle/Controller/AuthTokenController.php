@@ -1,21 +1,24 @@
 <?php
+
 namespace APIBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
 use APIBundle\Form\Type\CredentialsType;
 use APIBundle\Entity\AuthToken;
 use APIBundle\Entity\Credentials;
-use FOS\RestBundle\View\View;
 
 class AuthTokenController extends Controller
 {
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
      * @Rest\Post("/api/auth-tokens")
+     *
+     * @param Request $request request
+     *
+     * @return response
      */
     public function postAuthTokensAction(Request $request)
     {
@@ -24,10 +27,9 @@ class AuthTokenController extends Controller
         $form->submit($request->request->all());
 
         if (!$form->isValid()) {
-
             $ret = [];
-            $ret["code"] = Response::HTTP_BAD_REQUEST;
-            $ret["message"] = "Invalid values";
+            $ret['code'] = Response::HTTP_BAD_REQUEST;
+            $ret['message'] = 'Invalid values';
 
             return new Response(json_encode($ret));
         }
@@ -61,6 +63,10 @@ class AuthTokenController extends Controller
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
      * @Rest\Delete("/api/auth-tokens")
+     *
+     * @param Request $request request
+     *
+     * @return response
      */
     public function deleteAuthTokensAction(Request $request)
     {
@@ -70,20 +76,19 @@ class AuthTokenController extends Controller
         $em = $this->get('doctrine.orm.entity_manager');
         $authToken = $em->getRepository('APIBundle:AuthToken')->findOneByValue($token);
 
-        if($authToken != null){
+        if (null != $authToken) {
             $em->remove($authToken);
             $em->flush();
 
             $ret = [];
-            $ret["code"] = Response::HTTP_OK;
-            $ret["message"] = "deleted";
-
+            $ret['code'] = Response::HTTP_OK;
+            $ret['message'] = 'deleted';
 
             return new Response(json_encode($ret));
-        }else{
+        } else {
             $ret = [];
-            $ret["code"] = Response::HTTP_BAD_REQUEST;
-            $ret["message"] = "Unknow token";
+            $ret['code'] = Response::HTTP_BAD_REQUEST;
+            $ret['message'] = 'Unknow token';
 
             $res = new Response(json_encode($ret));
             $res->setStatusCode(Response::HTTP_BAD_REQUEST);
@@ -92,14 +97,18 @@ class AuthTokenController extends Controller
         }
     }
 
+    /**
+     * @return response
+     */
     public function invalidCredentials()
     {
         $ret = [];
-        $ret["code"] = Response::HTTP_BAD_REQUEST;
-        $ret["message"] = "Bad credentials";
+        $ret['code'] = Response::HTTP_BAD_REQUEST;
+        $ret['message'] = 'Bad credentials';
 
         $res = new Response(json_encode($ret));
         $res->setStatusCode(Response::HTTP_BAD_REQUEST);
+
         return $res;
     }
 }

@@ -1,11 +1,11 @@
 <?php
+
 namespace APIBundle\Security;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\PreAuthenticatedToken;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Exception\AuthenticationException;
-use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
 use Symfony\Component\Security\Core\Exception\BadCredentialsException;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationFailureHandlerInterface;
@@ -15,22 +15,35 @@ use Symfony\Component\Security\Http\HttpUtils;
 class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, AuthenticationFailureHandlerInterface
 {
     /**
-     * Durée de validité du token en secondes -> 7 jours (24*3600*7)
+     * Token duration validation in seconds -> 7 days (24*3600*7).
      */
     const TOKEN_VALIDITY_DURATION = 604800;
 
     protected $httpUtils;
 
+    /**
+     * AuthTokenAuthenticator constructor.
+     *
+     * @param httpUtils $httpUtils HTTP utils
+     */
     public function __construct(HttpUtils $httpUtils)
     {
         $this->httpUtils = $httpUtils;
     }
 
+    /**
+     * Create token.
+     *
+     * @param Request $request     request
+     * @param mixed   $providerKey provider key
+     *
+     * @return PreAuthenticatedToken|void
+     */
     public function createToken(Request $request, $providerKey)
     {
         $targetUrl = '/api/auth-tokens';
         // Si la requête est une création de token, aucune vérification n'est effectuée
-        if ($request->getMethod() === "POST" && $this->httpUtils->checkRequestPath($request, $targetUrl)) {
+        if ('POST' === $request->getMethod() && $this->httpUtils->checkRequestPath($request, $targetUrl)) {
             return;
         }
 
@@ -47,6 +60,13 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
         );
     }
 
+    /**
+     * @param TokenInterface        $token        token
+     * @param UserProviderInterface $userProvider user provider
+     * @param mixed                 $providerKey  provider key
+     *
+     * @return PreAuthenticatedToken
+     */
     public function authenticateToken(TokenInterface $token, UserProviderInterface $userProvider, $providerKey)
     {
         if (!$userProvider instanceof AuthTokenUserProvider) {
@@ -78,22 +98,36 @@ class AuthTokenAuthenticator implements SimplePreAuthenticatorInterface, Authent
         return $pre;
     }
 
+    /**
+     * @param TokenInterface $token       token interface
+     * @param mixed          $providerKey provider key
+     *
+     * @return bool
+     */
     public function supportsToken(TokenInterface $token, $providerKey)
     {
         return $token instanceof PreAuthenticatedToken && $token->getProviderKey() === $providerKey;
     }
 
     /**
-     * Vérifie la validité du token
+     * @param Request                 $request   request
+     * @param AuthenticationException $exception exception
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|void
      */
-    private function isTokenValid($authToken)
-    {
-        return (time() - $authToken->getCreatedAt()->getTimestamp()) < self::TOKEN_VALIDITY_DURATION;
-    }
-
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         // Si les données d'identification ne sont pas correctes, une exception est levée
         throw $exception;
+    }
+
+    /**
+     * @param mixed $authToken auth token
+     *
+     * @return bool
+     */
+    private function isTokenValid($authToken)
+    {
+        return (time() - $authToken->getCreatedAt()->getTimestamp()) < self::TOKEN_VALIDITY_DURATION;
     }
 }

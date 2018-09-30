@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 27/09/2018
- * Time: 17:09
+ * Time: 17:09.
  */
 
 namespace AppBundle\Entity;
@@ -47,10 +47,11 @@ class Poi
 
     /**
      * Poi constructor.
-     * @param $location
-     * @param $requiredHelpers
-     * @param $track
-     * @param $poiType
+     *
+     * @param mixed $location        location
+     * @param mixed $requiredHelpers required helpers
+     * @param mixed $track           track
+     * @param mixed $poiType         POI type
      */
     public function __construct($location, $requiredHelpers, $track, $poiType)
     {
@@ -139,8 +140,4 @@ class Poi
     {
         $this->poiType = $poiType;
     }
-
-
-
-
 }

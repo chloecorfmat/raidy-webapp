@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 27/09/2018
- * Time: 17:09
+ * Time: 17:09.
  */
 
 namespace AppBundle\Entity;
@@ -30,7 +30,8 @@ class PoiType
 
     /**
      * PoiType constructor.
-     * @param $type
+     *
+     * @param mixed $type type
      */
     public function __construct($type)
     {
@@ -68,5 +69,4 @@ class PoiType
     {
         $this->type = $type;
     }
-
 }

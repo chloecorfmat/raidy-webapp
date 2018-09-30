@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 27/09/2018
- * Time: 17:09
+ * Time: 17:09.
  */
 
 namespace AppBundle\Entity;
@@ -35,15 +35,15 @@ class SportType
 
     /**
      * SportType constructor.
-     * @param $sport
-     * @param $icon
+     *
+     * @param mixed $sport sport
+     * @param mixed $icon  icon
      */
     public function __construct($sport, $icon)
     {
         $this->sport = $sport;
         $this->icon = $icon;
     }
-
 
     /**
      * @return mixed
@@ -92,6 +92,4 @@ class SportType
     {
         $this->icon = $icon;
     }
-
-
 }

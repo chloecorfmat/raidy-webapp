@@ -9,6 +9,8 @@ class DefaultController extends Controller
 {
     /**
      * @Route("/helper")
+     *
+     * @return template
      */
     public function indexAction()
     {

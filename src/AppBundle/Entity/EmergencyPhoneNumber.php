@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 27/09/2018
- * Time: 17:08
+ * Time: 17:08.
  */
 
 namespace AppBundle\Entity;
@@ -35,9 +35,10 @@ class EmergencyPhoneNumber
 
     /**
      * EmergencyPhoneNumber constructor.
-     * @param $role
-     * @param $phoneNumber
-     * @param $raid
+     *
+     * @param mixed $role        role
+     * @param mixed $phoneNumber phone number
+     * @param mixed $raid        raid
      */
     public function __construct($role, $phoneNumber, $raid)
     {
