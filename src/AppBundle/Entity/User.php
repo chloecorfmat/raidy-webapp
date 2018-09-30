@@ -33,26 +33,15 @@ class User extends BaseUser
      */
     protected $phone;
 
-    /**
-     * @ORM\Column(name="plain_password", type="string", length=45)
-     */
     protected $plainPassword;
 
     /**
      * User constructor.
      *
-     * @param string $lastName      user lastname
-     * @param string $firstName     user firstname
-     * @param mixed  $phone         user phone
-     * @param string $plainPassword user password
      */
-    public function __construct($lastName, $firstName, $phone, $plainPassword)
+    public function __construct()
     {
         parent::__construct();
-        $this->lastName = $lastName;
-        $this->firstName = $firstName;
-        $this->phone = $phone;
-        $this->plainPassword = $plainPassword;
     }
 
     /**

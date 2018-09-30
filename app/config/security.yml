@@ -49,6 +49,7 @@ security:
         ROLE_SUPER_ADMIN: ROLE_SUPER_ADMIN
 
     access_control:
+    - { path: ^/admin, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/organizer$, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/api/auth-tokens, role: IS_AUTHENTICATED_ANONYMOUSLY }

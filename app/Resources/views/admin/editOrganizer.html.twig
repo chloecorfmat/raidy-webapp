@@ -1,0 +1,17 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block title Admin %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('deleteOrganizer', {'id': userId}) }}">Supprimer l'organisateur</a>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
