@@ -1,0 +1,13 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block body %}
+    <h1>{{ user.username }}</h1>
+
+    {{ user.id }} <br>
+    {{ user.username }} <br>
+    {{ user.email }} <br>
+    {{ user.phone }} <br>
+    <a href="{{ path('editOrganizer', {'id': user.id}) }}">Editer</a>
+    <a href="{{ path('deleteOrganizer', {'id': user.id}) }}">Supprimer</a>
+
+{% endblock %}

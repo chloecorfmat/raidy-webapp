@@ -21,10 +21,11 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrganizerAdminController extends Controller
 {
 
+
     /**
      * @Route("/admin/organizer/new", name="addOrganizer")
      * @param Request $request Request.
-     * @return Template.
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addOrganizer(Request $request)
     {
@@ -67,8 +68,22 @@ class OrganizerAdminController extends Controller
             }
         }
 
-        return $this->render('admin/addOrganizer.html.twig', [
+        return $this->render('AppBundle:Admin:addOrganizer.html.twig', [
             'form' => $form->createView(),
+        ]);
+    }
+
+    /**
+     * @Route("/admin/organizer/{id}", name="displayOrganizer")
+     * @param Request $request Request.
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function displayOrganizer(Request $request, $id){
+        $userManager = $this->get('fos_user.user_manager');
+        $user = $userManager->findUserBy(["id" => $id]);
+
+        return $this->render('AppBundle:Admin:organizer.html.twig', [
+            'user' => $user,
         ]);
     }
 
@@ -76,7 +91,7 @@ class OrganizerAdminController extends Controller
      * @Route("/admin/organizer/edit/{id}", name="editOrganizer")
      * @param Request $request Request.
      * @param mixed   $id      Id.
-     * @return Template.
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editOrganizer(Request $request, $id)
     {
@@ -93,7 +108,7 @@ class OrganizerAdminController extends Controller
             ->add('username', TextType::class)
             ->add('phone', TextType::class)
             ->add('email', EmailType::class)
-            ->add('submit', SubmitType::class, array('label' => 'Ajouter un organisateur'))
+            ->add('submit', SubmitType::class, array('label' => 'Editer un organisateur'))
             ->getForm();
 
         $form->handleRequest($request);
@@ -110,13 +125,13 @@ class OrganizerAdminController extends Controller
 
                 $userManager->updateUser($user);
 
-                return $this->redirectToRoute('editOrganizer');
+                return $this->redirectToRoute('displayOrganizer', ["id"=>$id]);
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
         }
 
-        return $this->render('admin/editOrganizer.html.twig', [
+        return $this->render('AppBundle:Admin:editOrganizer.html.twig', [
             'form' => $form->createView(),
             'userId' => $id,
         ]);
@@ -126,7 +141,7 @@ class OrganizerAdminController extends Controller
      * @Route("/admin/organizer/delete/{id}", name="deleteOrganizer")
      * @param Request $request Request.
      * @param mixed   $id      Id.
-     * @return Redirection.
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteOrganizer(Request $request, $id)
     {
@@ -134,13 +149,12 @@ class OrganizerAdminController extends Controller
         $user = $userManager->findUserBy(["id" => $id]);
         $userManager->deleteUser($user);
 
-        return $this->redirectToRoute('/admin/organizer');
+        return $this->redirectToRoute('organizerList');
     }
 
     /**
-     * @Route("/admin/organizer")
-     *
-     * @return Template.
+     * @Route("/admin/organizer", name="organizerList")
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listOrganizers()
     {
@@ -152,7 +166,7 @@ class OrganizerAdminController extends Controller
         $users = $query->getResult();
 
         return $this->render(
-            'AppBundle:Default:list.html.twig',
+            'AppBundle:Admin:listOrganizer.html.twig',
             [
                 'users' => $users,
             ]
