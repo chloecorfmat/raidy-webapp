@@ -8,7 +8,6 @@
 
 namespace AppBundle\Controller;
 
-
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
@@ -19,12 +18,16 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class OrganizerAdminController extends Controller {
+class OrganizerAdminController extends Controller
+{
 
     /**
      * @Route("/admin/organizer/new", name="addOrganizer")
+     * @param Request $request Request.
+     * @return Template.
      */
-    public function addOrganizer(Request $request) {
+    public function addOrganizer(Request $request)
+    {
 
         $formUser = new User();
 
@@ -39,13 +42,10 @@ class OrganizerAdminController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            dump($formUser->getPlainPassword());
-
             $userManager = $this->get('fos_user.user_manager');
-            $email_exist = $userManager->findUserByEmail($formUser->getEmail());
+            $emailExist = $userManager->findUserByEmail($formUser->getEmail());
 
-            if(!$email_exist) {
+            if (!$emailExist) {
                 $formUser = $form->getData();
 
                 $user = $userManager->createUser();
@@ -65,7 +65,6 @@ class OrganizerAdminController extends Controller {
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
-
         }
 
         return $this->render('admin/addOrganizer.html.twig', [
@@ -73,17 +72,20 @@ class OrganizerAdminController extends Controller {
         ]);
     }
 
-
     /**
      * @Route("/admin/organizer/edit/{id}", name="editOrganizer")
+     * @param Request $request Request.
+     * @param mixed   $id      Id.
+     * @return Template.
      */
-    public function editOrganizer(Request $request, $id) {
+    public function editOrganizer(Request $request, $id)
+    {
 
         $userManager = $this->get('fos_user.user_manager');
 
         $formUser = $userManager->findUserBy(["id" => $id]);
 
-        if($formUser == null){
+        if ($formUser == null) {
             throw $this->createNotFoundException('The organizer does not exist');
         }
 
@@ -97,13 +99,11 @@ class OrganizerAdminController extends Controller {
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $emailExist = $userManager->findUserByEmail($formUser->getEmail());
 
-
-            $email_exist = $userManager->findUserByEmail($formUser->getEmail());
-
-            if(!$email_exist || $email_exist->getId() == $formUser->getId()){
+            if (!$emailExist || $emailExist->getId() == $formUser->getId()) {
                 $formUser = $form->getData();
-                $user = $userManager->findUserBy(array('id'=> $formUser->getId()));
+                $user = $userManager->findUserBy(array('id' => $formUser->getId()));
                 $user->setUsername($formUser->getUsername());
                 $user->setPhone($formUser->getPhone());
                 $user->setEmail($formUser->getEmail());
@@ -111,7 +111,6 @@ class OrganizerAdminController extends Controller {
                 $userManager->updateUser($user);
 
                 return $this->redirectToRoute('editOrganizer');
-
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
@@ -125,13 +124,38 @@ class OrganizerAdminController extends Controller {
 
     /**
      * @Route("/admin/organizer/delete/{id}", name="deleteOrganizer")
+     * @param Request $request Request.
+     * @param mixed   $id      Id.
+     * @return Redirection.
      */
-    public function deleteOrganizer(Request $request, $id) {
+    public function deleteOrganizer(Request $request, $id)
+    {
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(["id" => $id]);
         $userManager->deleteUser($user);
 
-        //@todo : redirect to the organizer list
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('/admin/organizer');
+    }
+
+    /**
+     * @Route("/admin/organizer")
+     *
+     * @return Template.
+     */
+    public function listOrganizers()
+    {
+        $query = $this->getDoctrine()->getEntityManager()
+            ->createQuery(
+                'SELECT u FROM AppBundle:User u WHERE u.roles LIKE :role'
+            )->setParameter('role', '%"ROLE_ORGANIZER"%');
+
+        $users = $query->getResult();
+
+        return $this->render(
+            'AppBundle:Default:list.html.twig',
+            [
+                'users' => $users,
+            ]
+        );
     }
 }

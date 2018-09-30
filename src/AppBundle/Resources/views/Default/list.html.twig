@@ -1,0 +1,22 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block body %}
+    <h1>Liste des organisateurs</h1>
+    <table>
+        <caption>Liste des organisateurs</caption>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Adresse e-mail</th>
+            <th scope="col">Téléphone</th>
+        </tr>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.id }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.phone }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
