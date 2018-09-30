@@ -21,7 +21,6 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrganizerAdminController extends Controller
 {
 
-
     /**
      * @Route("/admin/organizer/new", name="addOrganizer")
      * @param Request $request Request.
@@ -76,9 +75,11 @@ class OrganizerAdminController extends Controller
     /**
      * @Route("/admin/organizer/{id}", name="displayOrganizer")
      * @param Request $request Request.
+     * @param int     $id      Organizer identifier.
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function displayOrganizer(Request $request, $id){
+    public function displayOrganizer(Request $request, $id)
+    {
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(["id" => $id]);
 
@@ -125,7 +126,7 @@ class OrganizerAdminController extends Controller
 
                 $userManager->updateUser($user);
 
-                return $this->redirectToRoute('displayOrganizer', ["id"=>$id]);
+                return $this->redirectToRoute('displayOrganizer', ["id" => $id]);
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
