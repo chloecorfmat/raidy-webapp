@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 27/09/2018
- * Time: 17:09
+ * Time: 17:09.
  */
 
 namespace AppBundle\Entity;
@@ -42,9 +42,10 @@ class Track
 
     /**
      * Track constructor.
-     * @param $trackPoints
-     * @param $raid
-     * @param $sportType
+     *
+     * @param mixed $trackPoints track points
+     * @param int   $raid        raid id
+     * @param mixed $sportType   sport
      */
     public function __construct($trackPoints, $raid, $sportType)
     {
@@ -52,7 +53,6 @@ class Track
         $this->raid = $raid;
         $this->sportType = $sportType;
     }
-
 
     /**
      * @return mixed
@@ -117,6 +117,4 @@ class Track
     {
         $this->sportType = $sportType;
     }
-
-
 }

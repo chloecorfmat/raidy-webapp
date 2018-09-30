@@ -38,6 +38,14 @@ class User extends BaseUser
      */
     protected $plainPassword;
 
+    /**
+     * User constructor.
+     *
+     * @param string $lastName      user lastname
+     * @param string $firstName     user firstname
+     * @param mixed  $phone         user phone
+     * @param string $plainPassword user password
+     */
     public function __construct($lastName, $firstName, $phone, $plainPassword)
     {
         parent::__construct();
@@ -104,7 +112,7 @@ class User extends BaseUser
     }
 
     /**
-     * @param mixed $password
+     * @param mixed $plainPassword
      */
     public function setPlainPassword($plainPassword)
     {
@@ -126,5 +134,4 @@ class User extends BaseUser
     {
         $this->phone = $phone;
     }
-
 }

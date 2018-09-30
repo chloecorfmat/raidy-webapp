@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 27/09/2018
- * Time: 17:08
+ * Time: 17:08.
  */
 
 namespace AppBundle\Entity;
@@ -56,12 +56,13 @@ class Raid
 
     /**
      * Raid constructor.
-     * @param $name
-     * @param $date
-     * @param $place
-     * @param $editionNumber
-     * @param $organizer
-     * @param $picture
+     *
+     * @param string $name          name
+     * @param mixed  $date          date
+     * @param mixed  $place         place
+     * @param int    $editionNumber edition number
+     * @param mixed  $organizer     organizer
+     * @param mixed  $picture       picture
      */
     public function __construct($name, $date, $place, $editionNumber, $organizer, $picture)
     {

@@ -3,12 +3,13 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 27/09/2018
- * Time: 17:08
+ * Time: 17:08.
  */
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+
 /**
  * @ORM\Entity
  * @ORM\Table(name="organizer")
@@ -30,7 +31,8 @@ class Organizer
 
     /**
      * Organizer constructor.
-     * @param $user
+     *
+     * @param mixed $user user
      */
     public function __construct($user)
     {
@@ -68,6 +70,4 @@ class Organizer
     {
         $this->user = $user;
     }
-
-
 }

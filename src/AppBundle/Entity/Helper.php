@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 27/09/2018
- * Time: 17:08
+ * Time: 17:08.
  */
 
 namespace AppBundle\Entity;
@@ -35,8 +35,8 @@ class Helper
     protected $isCheckedIn;
 
     /**
-    * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Poi")
-    */
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Poi")
+     */
     protected $poi;
 
     /**
@@ -51,11 +51,12 @@ class Helper
 
     /**
      * Helper constructor.
-     * @param $user
-     * @param $isCheckedIn
-     * @param $poi
-     * @param $favoritePoiType
-     * @param $checkInTime
+     *
+     * @param mixed $user            user
+     * @param mixed $isCheckedIn     is checked in
+     * @param mixed $poi             POI
+     * @param mixed $favoritePoiType favorite POI type
+     * @param mixed $checkInTime     check-in time
      */
     public function __construct($user, $isCheckedIn, $poi, $favoritePoiType, $checkInTime)
     {

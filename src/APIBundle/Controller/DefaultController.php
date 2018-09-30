@@ -3,17 +3,18 @@
 namespace APIBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 
 class DefaultController extends Controller
 {
-
     /**
      * @Rest\View(serializerGroups={"secured"})
      * @Rest\Get("/api/users")
-     * @deprecated Useless and dangerous to expose users - for API test purpose only
+     *
+     * @deprecated useless and dangerous to expose users - for API test purpose only
+     *
+     * @return view
      */
     public function indexAction()
     {
