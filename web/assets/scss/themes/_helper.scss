@@ -4,4 +4,11 @@ $theme-color: $helper-color;
   h1 {
     color: $theme-color;
   }
+
+  footer,
+  header,
+  .btn,
+  .table--headers {
+    background: $theme-color;
+  }
 }

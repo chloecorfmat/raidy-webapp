@@ -1,0 +1,13 @@
+{%- block form_row -%}
+    <div class="form--item">
+        {{- form_label(form) -}}
+        {{- form_errors(form) -}}
+        {{- form_widget(form) -}}
+    </div>
+{%- endblock form_row -%}
+
+
+{% block text_widget %}
+    {% set type = type|default('text') %}
+    {{ block('form_widget_simple') }}
+{% endblock %}

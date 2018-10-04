@@ -2,11 +2,15 @@
 
 {% block body %}
 
-    {{ form_start(form) }}
-    {{ form_widget(form) }}
-    {{ form_end(form) }}
-
-    <a href="{{ path('deleteOrganizer', {'id': userId}) }}">Supprimer l'organisateur</a>
+    <div class="main-form">
+        <h1>Modifier le profil</h1>
+        <div>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        <a href="{{ path('deleteOrganizer', {'id': userId}) }}" class="btn btn--danger btn--full-width">Supprimer l'organisateur</a>
+    </div>
 
 {% endblock %}
 
