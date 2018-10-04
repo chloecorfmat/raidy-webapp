@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -32,10 +33,10 @@ class OrganizerAdminController extends Controller
         $formUser = new User();
 
         $form = $this->createFormBuilder($formUser)
-            ->add('username', TextType::class)
-            ->add('phone', TextType::class)
-            ->add('email', EmailType::class)
-            ->add('plainPassword', PasswordType::class)
+            ->add('username', TextType::class, array('label' => 'Nom d\'utilisateur'))
+            ->add('phone', TelType::class, array('label' => 'Numéro de téléphone'))
+            ->add('email', EmailType::class, array('label' => 'Adresse e-mail'))
+            ->add('plainPassword', PasswordType::class, array('label' => 'Mot de passe'))
             ->add('submit', SubmitType::class, array('label' => 'Ajouter un organisateur'))
             ->getForm();
 
@@ -106,9 +107,9 @@ class OrganizerAdminController extends Controller
         }
 
         $form = $this->createFormBuilder($formUser)
-            ->add('username', TextType::class)
-            ->add('phone', TextType::class)
-            ->add('email', EmailType::class)
+            ->add('username', TextType::class, array('label' => 'Nom d\'utilisateur'))
+            ->add('phone', TelType::class, array('label' => 'Numéro de téléphone'))
+            ->add('email', EmailType::class, array('label' => 'Adresse e-mail'))
             ->add('submit', SubmitType::class, array('label' => 'Editer un organisateur'))
             ->getForm();
 

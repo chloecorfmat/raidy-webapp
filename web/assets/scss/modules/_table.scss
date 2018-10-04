@@ -1,0 +1,19 @@
+td,
+th {
+  padding: .5rem;
+  border: 1px solid $tertiary-color-3;
+}
+
+tr:nth-child(2n+1):not(.table--headers) {
+  background: #f4f4f4;
+}
+
+.table {
+  border-collapse: collapse;
+  text-align: left;
+  width: 100%;
+}
+
+.table--headers {
+  color: $white;
+}

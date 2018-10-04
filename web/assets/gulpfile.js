@@ -13,7 +13,7 @@ gulp.task('lint', function() {
     gulp.src('./js/**/*.js')
         .pipe(esLint())
         .pipe(esLint.format())
-        .pipe(esLint.failAfterError());
+        //.pipe(esLint.failAfterError());
 
     gulp.src('./scss/**/*.scss')
         .pipe(sassLint())
@@ -44,7 +44,7 @@ gulp.task('scripts', function() {
         .pipe(concat('../dist/js/scripts.js'))
         .pipe(gulp.dest('./js'))
         // Comment the line below to have unminify files.
-        .pipe(uglify())
+        //.pipe(uglify())
         .pipe(rename('js/scripts.min.js'))
         .pipe(gulp.dest('./dist'));
 });

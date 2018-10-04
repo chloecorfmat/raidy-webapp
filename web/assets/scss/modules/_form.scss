@@ -1,0 +1,58 @@
+.main-form {
+  display: block;
+  width: 100%;
+
+  @media screen and (min-width: $breakpoint-large) {
+    margin: auto;
+    width: 33%;
+  }
+}
+
+.form--item {
+  margin-top: .5rem;
+}
+
+form {
+  button,
+  input {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  button {
+    margin-top: 1.5rem;
+  }
+
+  input {
+    border-bottom: 1px solid $tertiary-color-3;
+    border-left: 0;
+    border-right: 0;
+    border-top: 0;
+    font-size: 1rem;
+    position: relative;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  label {
+    bottom: -1.2rem;
+    color: $tertiary-color-1;
+    position: relative;
+    z-index: 1;
+  }
+}
+
+.form--input-focused {
+  label {
+    bottom: -.2rem;
+    color: $organizer-color;
+    font-size: .7rem;
+    font-weight: bold;
+  }
+
+  input {
+    border-bottom-color: $organizer-color;
+  }
+}

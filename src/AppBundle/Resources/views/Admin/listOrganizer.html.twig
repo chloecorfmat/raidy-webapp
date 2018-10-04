@@ -2,16 +2,14 @@
 
 {% block body %}
     <h1>Liste des organisateurs</h1>
-    <table>
-        <caption>Liste des organisateurs</caption>
-        <tr>
+    <table class="table">
+        <caption class="sr-only">Liste des organisateurs</caption>
+        <tr class="table--headers">
             <th scope="col">Id</th>
             <th scope="col">Nom</th>
             <th scope="col">Adresse e-mail</th>
             <th scope="col">Téléphone</th>
-            <td></td>
-            <td></td>
-            <td></td>
+            <th scope="col">Actions</th>
         </tr>
         {% for user in users %}
         <tr>
@@ -19,9 +17,10 @@
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
             <td>{{ user.phone }}</td>
-            <td><a href="{{ path('displayOrganizer', {'id': user.id}) }}">Voir</a></td>
-            <td><a href="{{ path('editOrganizer', {'id': user.id}) }}">Editer</a></td>
-            <td><a href="{{ path('deleteOrganizer', {'id': user.id}) }}">Supprimer</a></td>
+            <td>
+                <a href="{{ path('editOrganizer', {'id': user.id}) }}" class="btn">Editer</a>
+                <a href="{{ path('deleteOrganizer', {'id': user.id}) }}" class="btn btn--danger">Supprimer</a>
+            </td>
         </tr>
         {% endfor %}
     </table>
