@@ -1,11 +1,15 @@
 td,
 th {
-  padding: .5rem;
   border: 1px solid $tertiary-color-3;
+  padding: .5rem;
 }
 
-tr:nth-child(2n+1):not(.table--headers) {
-  background: #f4f4f4;
+tr {
+  &:nth-child(2n+1) {
+    &:not(.table--headers) {
+      background: $grey-light;
+    }
+  }
 }
 
 .table {

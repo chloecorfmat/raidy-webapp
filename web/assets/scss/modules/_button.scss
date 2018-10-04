@@ -30,7 +30,7 @@ button {
 }
 
 .btn--danger {
-  background: $secondary-color-2 !important;
+  background: $secondary-color-2 !important; // sass-lint:disable-line no-important
 }
 
 .btn--full-width {
