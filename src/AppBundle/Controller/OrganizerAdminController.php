@@ -74,22 +74,6 @@ class OrganizerAdminController extends Controller
     }
 
     /**
-     * @Route("/admin/organizer/{id}", name="displayOrganizer")
-     * @param Request $request Request.
-     * @param int     $id      Organizer identifier.
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function displayOrganizer(Request $request, $id)
-    {
-        $userManager = $this->get('fos_user.user_manager');
-        $user = $userManager->findUserBy(["id" => $id]);
-
-        return $this->render('AppBundle:Admin:organizer.html.twig', [
-            'user' => $user,
-        ]);
-    }
-
-    /**
      * @Route("/admin/organizer/edit/{id}", name="editOrganizer")
      * @param Request $request Request.
      * @param mixed   $id      Id.
@@ -126,8 +110,6 @@ class OrganizerAdminController extends Controller
                 $user->setEmail($formUser->getEmail());
 
                 $userManager->updateUser($user);
-
-                return $this->redirectToRoute('displayOrganizer', ["id" => $id]);
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
