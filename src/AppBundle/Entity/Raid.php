@@ -9,6 +9,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -36,7 +37,22 @@ class Raid
     /**
      * @ORM\Column(type="string", length=45)
      */
-    protected $place;
+    protected $address;
+
+    /**
+     * @ORM\Column(name="address_addition", type="string", length=45, nullable=true)
+     */
+    protected $addressAddition;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    protected $postCode;
+
+    /**
+     * @ORM\Column(type="string", length=45)
+     */
+    protected $city;
 
     /**
      * @ORM\Column(name="edition_number", type="integer")
@@ -44,34 +60,27 @@ class Raid
     protected $editionNumber;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Organizer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $organizer;
+    protected $user;
 
     /**
-     * @ORM\Column(type="string", length=256)
+     * @ORM\Column(type="string")
+     * @Assert\Image(
+     *     minWidth = 50,
+     *     maxWidth = 700,
+     *     minHeight = 50,
+     *     maxHeight = 700
+     *    )
      */
     protected $picture;
 
     /**
      * Raid constructor.
-     *
-     * @param string $name          name
-     * @param mixed  $date          date
-     * @param mixed  $place         place
-     * @param int    $editionNumber edition number
-     * @param mixed  $organizer     organizer
-     * @param mixed  $picture       picture
      */
-    public function __construct($name, $date, $place, $editionNumber, $organizer, $picture)
+    public function __construct()
     {
-        $this->name = $name;
-        $this->date = $date;
-        $this->place = $place;
-        $this->editionNumber = $editionNumber;
-        $this->organizer = $organizer;
-        $this->picture = $picture;
     }
 
     /**
@@ -125,17 +134,65 @@ class Raid
     /**
      * @return mixed
      */
-    public function getPlace()
+    public function getAddress()
     {
-        return $this->place;
+        return $this->address;
     }
 
     /**
-     * @param mixed $place
+     * @param mixed $address
      */
-    public function setPlace($place)
+    public function setAddress($address = null)
     {
-        $this->place = $place;
+        $this->address = $address;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAddressAddition()
+    {
+        return $this->addressAddition;
+    }
+
+    /**
+     * @param mixed $addressAddition
+     */
+    public function setAddressAddition($addressAddition)
+    {
+        $this->addressAddition = $addressAddition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostCode()
+    {
+        return $this->postCode;
+    }
+
+    /**
+     * @param mixed $postCode
+     */
+    public function setPostCode($postCode)
+    {
+        $this->postCode = $postCode;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    /**
+     * @param mixed $city
+     */
+    public function setCity($city)
+    {
+        $this->city = $city;
     }
 
     /**
@@ -155,19 +212,19 @@ class Raid
     }
 
     /**
-     * @return Organizer
+     * @return User
      */
-    public function getOrganizer()
+    public function getUser()
     {
-        return $this->organizer;
+        return $this->user;
     }
 
     /**
-     * @param Organizer $organizer
+     * @param User $user
      */
-    public function setOrganizer(Organizer $organizer)
+    public function setUser($user)
     {
-        $this->organizer = $organizer;
+        $this->user = $user;
     }
 
     /**
@@ -181,7 +238,7 @@ class Raid
     /**
      * @param mixed $picture
      */
-    public function setPicture($picture)
+    public function setPicture($picture = null)
     {
         $this->picture = $picture;
     }

@@ -1,0 +1,21 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block body %}
+    <h1>{{ raid.name }}</h1>
+
+    {{ raid.id }} <br>
+    {{ raid.name }} <br>
+    {{ raid.date|date("m/d/Y") }} <br>
+    {{ raid.address }} <br>
+    {{ raid.addressAddition }} <br>
+    {{ raid.postCode }} <br>
+    {{ raid.city }} <br>
+    {{ raid.editionNumber }} <br>
+    {{ raid.user }} <br>
+    <img src="{{ asset('uploads/raids/' ~ raid.picture) }}" /> <br>
+
+
+    <a href="{{ path('editRaid', {'id': raid.id}) }}">Editer</a>
+    <a href="{{ path('deleteRaid', {'id': raid.id}) }}">Supprimer</a>
+
+{% endblock %}

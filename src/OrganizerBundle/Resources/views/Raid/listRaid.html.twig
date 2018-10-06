@@ -1,0 +1,38 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block body %}
+    <h1>Liste des raids</h1>
+    <table>
+        <caption>Liste des raids</caption>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Date</th>
+            <th scope="col">Adresse</th>
+            <th scope="col">Code postal</th>
+            <th scope="col">Ville</th>
+            <th scope="col">Edition n°</th>
+            <th scope="col">Organisateur</th>
+            <th scope="col">Photo</th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% for raid in raids %}
+            <tr>
+                <td>{{ raid.id }} </td>
+                <td>{{ raid.name }} </td>
+                <td>{{ raid.date|date("m/d/Y") }} </td>
+                <td>{{ raid.address }} {{ raid.addressAddition }}</td>
+                <td>{{ raid.postCode }}</td>
+                <td>{{ raid.city }}</td>
+                <td>{{ raid.editionNumber }} </td>
+                <td>{{ raid.user }} </td>
+                <td><img src="{{ asset('uploads/raids/' ~ raid.picture) }}" /></td>
+                <td><a href="{{ path('displayRaid', {'id': raid.id}) }}">Voir</a></td>
+                <td><a href="{{ path('editRaid', {'id': raid.id}) }}">Editer</a></td>
+                <td><a href="{{ path('deleteRaid', {'id': raid.id}) }}">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}
