@@ -203,7 +203,7 @@ class OrganizerRaidController extends Controller
     }
 
     /**
-     * @Route("/raids", name="raidList")
+     * @Route("/raid", name="raidList")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
