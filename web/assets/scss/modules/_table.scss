@@ -6,14 +6,32 @@ th {
 .table--container {
   border: 1px solid $grey-light;
   border-radius: 10px;
-  overflow: hidden;
+  overflow-x: scroll;
+  overflow-y: hidden;
   padding: 0;
+
+  @media screen and (min-width: $breakpoint-large) {
+    overflow-x: hidden;
+  }
 }
 
 .table {
   border-collapse: collapse;
   text-align: left;
   width: 100%;
+
+  a {
+    display: block;
+    margin-top: .5rem;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    @media screen and (min-width: $breakpoint-large) {
+      display: inline-block;
+    }
+  }
 }
 
 .table--headers {

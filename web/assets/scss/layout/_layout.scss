@@ -21,7 +21,7 @@ main {
   .content--part {
     width: 100%;
 
-    @media (min-width: $breakpoint-large) {
+    @media screen and (min-width: $breakpoint-large) {
       width: 33%;
     }
   }

@@ -1,3 +1,7 @@
+{% if form is defined %}
+    {% form_theme form 'form/fields.html.twig' %}
+{% endif %}
+
 {% if base_class is not defined %}
     {% set base_class = 'default' %}
 {% endif %}

@@ -1,5 +1,12 @@
 {% extends 'default/organizer.html.twig' %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="">Administration</a></li>
+        <li class="breadcrumb--list-item">Liste des organisateurs</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
     <h1>Liste des organisateurs</h1>
     <div class="table--container">
