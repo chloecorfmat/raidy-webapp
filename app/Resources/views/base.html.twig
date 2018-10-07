@@ -28,13 +28,23 @@
                     </li>
                     <li class="header--nav-item">
                         <a href="" aria-label="Déconnexion">
-                            <i aria-hidden="true" class="fas fa-sign-out-alt fa-lg"></i>
+                            <i aria-hidden="true" class="fas fa-power-off fa-lg"></i>
                         </a>
                     </li>
                 </ul>
             </nav>
         </header>
         <main>
+            <div class="breadcrumb">
+                {% block breadcrumb %}
+                    <!--<ol class="breadcrumb--list">
+                        <li class="breadcrumb--list-item"><a href="">Mes raids</a></li>
+                        <li class="breadcrumb--list-item"><a href="">Mes raids</a></li>
+                        <li class="breadcrumb--list-item">Ajouter un organisateur</li>
+                    </ol>-->
+                {% endblock %}
+            </div>
+
             {% block body %}{% endblock %}
         </main>
         <footer>
