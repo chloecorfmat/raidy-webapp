@@ -1,21 +1,23 @@
 {% extends 'default/organizer.html.twig' %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="#">Mes raids</a></li>
+        <li class="breadcrumb--list-item">{{ raid.name }}</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
     <h1>{{ raid.name }}</h1>
 
-    {{ raid.id }} <br>
-    {{ raid.name }} <br>
-    {{ raid.date|date("m/d/Y") }} <br>
-    {{ raid.address }} <br>
-    {{ raid.addressAddition }} <br>
-    {{ raid.postCode }} <br>
-    {{ raid.city }} <br>
-    {{ raid.editionNumber }} <br>
-    {{ raid.user }} <br>
-    <img src="{{ asset('uploads/raids/' ~ raid.picture) }}" /> <br>
+    <div class="content">
+        <div class="content--part">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
 
-
-    <a href="{{ path('editRaid', {'id': raid.id}) }}">Editer</a>
-    <a href="{{ path('deleteRaid', {'id': raid.id}) }}">Supprimer</a>
+            <a href="{{ path('deleteRaid', {'id': raid.id}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
+        </div>
+    </div>
 
 {% endblock %}

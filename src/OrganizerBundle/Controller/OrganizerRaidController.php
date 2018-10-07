@@ -102,7 +102,64 @@ class OrganizerRaidController extends Controller
 
         $raid = $raidManager->find($id);
 
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $formRaid = $raidManager->findOneBy(['id' => $id]);
+
+        if (null == $formRaid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        $form = $this->createFormBuilder($formRaid)
+            ->add('name', TextType::class)
+            ->add('date', DateType::class)
+            ->add('address', TextType::class)
+            ->add('addressAddition', TextType::class, array('required' => false))
+            ->add('postCode', IntegerType::class)
+            ->add('city', TextType::class)
+            ->add('editionNumber', IntegerType::class)
+            ->add('picture', FileType::class, array('required' => false, 'data_class' => null))
+            ->add('submit', SubmitType::class, array('label' => 'Editer un raid'))
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $raidExist = $raidManager->findOneBy(
+                array('name' => $formRaid->getName(), 'editionNumber' => $formRaid->getEditionNumber())
+            );
+
+            if (!$raidExist || $raidExist->getId() == $formRaid->getId()) {
+                $formRaid = $form->getData();
+
+                $raid = $raidManager->findOneBy(array('id' => $formRaid->getId()));
+
+                $raid->setName($formRaid->getName());
+                $raid->setDate($formRaid->getDate());
+                $raid->setAddress($formRaid->getAddress());
+                if ($formRaid->getAddressAddition()) {
+                    $raid->setAddressAddition($formRaid->getAddressAddition());
+                }
+                $raid->setPostCode($formRaid->getPostCode());
+                $raid->setCity($formRaid->getCity());
+                $raid->setEditionNumber($formRaid->getEditionNumber());
+                if (null != $formRaid->getPicture()) {
+                    $fileName = $this->saveFile($formRaid->getPicture());
+                    $raid->setPicture($fileName);
+                } else {
+                    $raid->setPicture(
+                        new File($this->getParameter('raids_img_directory') . '/' . $raid->getPicture())
+                    );
+                }
+
+                $em->persist($raid);
+                $em->flush();
+            }
+        }
+
         return $this->render('OrganizerBundle:Raid:raid.html.twig', [
+            'form' => $form->createView(),
             'raid' => $raid,
         ]);
     }
