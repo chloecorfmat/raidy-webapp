@@ -10,12 +10,22 @@ security:
             entity: { class: AppBundle\Entity\User, property: email }
         fos_userbundle:
             id: fos_user.user_provider.username
+        auth_token_user_provider:
+            id: auth_token_user_provider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+
+        api:
+            pattern: ^/api
+            stateless: true
+            simple_preauth:
+                authenticator: auth_token_authenticator
+            provider: auth_token_user_provider
+            anonymous: ~
 
         main:
             pattern: ^/
@@ -29,12 +39,19 @@ security:
 
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
+        AppBundle\Entity\User:
+            algorithm: bcrypt
+            cost: 12
 
     role_hierarchy:
-        ROLE_VOLUNTEER:   ROLE_USER
-        ROLE_ADMIN:       ROLE_ADMIN
+        ROLE_VOLUNTEER: ROLE_USER
+        ROLE_ORGANIZER: ROLE_ADMIN
         ROLE_SUPER_ADMIN: ROLE_SUPER_ADMIN
 
     access_control:
+    - { path: ^/admin, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/organizer$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/auth-tokens, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/organizer, role: ROLE_ORGANIZER }
+    - { path: ^/api/helper, role: ROLE_VOLUNTEER }
