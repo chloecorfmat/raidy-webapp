@@ -1,18 +1,23 @@
 window.addEventListener('load', initForm)
 
 function initForm (e) {
+  var exceptedInputs = ['hidden', 'date', 'file']
   var forms = Array.prototype.slice.call(document.getElementsByTagName('form'))
   Array.prototype.slice.call(forms).forEach(function (form) {
     var inputs = Array.prototype.slice.call(form.getElementsByTagName('input'))
 
     inputs.forEach(function (input) {
-      if (input.type !== 'hidden' && input.value !== '') {
-        console.log(input.parentNode)
-        input.parentNode.classList.add('form--input-focused')
-      }
+      console.log(exceptedInputs.indexOf(input.type))
+      if (exceptedInputs.indexOf(input.type) === -1) {
+        if (input.value !== '') {
+          input.parentNode.classList.add('form--input-focused')
+        }
 
-      input.addEventListener('focusin', inputFocusIn)
-      input.addEventListener('focusout', inputFocusOut)
+        input.addEventListener('focusin', inputFocusIn)
+        input.addEventListener('focusout', inputFocusOut)
+        input.addEventListener('change', inputFocusIn)
+        input.addEventListener('change', inputFocusOut)
+      }
     })
   })
 }
