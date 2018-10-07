@@ -1,15 +1,13 @@
 td,
 th {
-  border: 1px solid $tertiary-color-3;
   padding: .5rem;
 }
 
-tr {
-  &:nth-child(2n+1) {
-    &:not(.table--headers) {
-      background: $grey-light;
-    }
-  }
+.table--container {
+  border: 1px solid $grey-light;
+  border-radius: 10px;
+  overflow: hidden;
+  padding: 0;
 }
 
 .table {
@@ -19,5 +17,17 @@ tr {
 }
 
 .table--headers {
-  color: $white;
+  box-shadow: 0 0 40px 0 rgba(0, 0, 0, .15); // sass-lint:disable-line no-color-literals
+  color: $tertiary-color-1;
+  text-transform: uppercase;
+}
+
+.table--line {
+  &:not(:last-child) {
+    border-bottom: 1px solid $grey-light;
+  }
+
+  &:hover {
+    background: $grey-light;
+  }
 }
