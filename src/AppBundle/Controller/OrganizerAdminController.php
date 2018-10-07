@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 30/09/18
- * Time: 14:26
+ * Time: 14:26.
  */
 
 namespace AppBundle\Controller;
@@ -21,15 +21,15 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class OrganizerAdminController extends Controller
 {
-
     /**
      * @Route("/admin/organizer/new", name="addOrganizer")
-     * @param Request $request Request.
+     *
+     * @param Request $request request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addOrganizer(Request $request)
     {
-
         $formUser = new User();
 
         $form = $this->createFormBuilder($formUser)
@@ -51,8 +51,8 @@ class OrganizerAdminController extends Controller
 
                 $user = $userManager->createUser();
                 $user->setUsername($formUser->getUsername());
-                $user->setLastName("");
-                $user->setFirstName("");
+                $user->setLastName('');
+                $user->setFirstName('');
                 $user->setPhone($formUser->getPhone());
                 $user->setEmail($formUser->getEmail());
                 $user->setEmailCanonical($formUser->getEmail());
@@ -75,18 +75,19 @@ class OrganizerAdminController extends Controller
 
     /**
      * @Route("/admin/organizer/edit/{id}", name="editOrganizer")
-     * @param Request $request Request.
-     * @param mixed   $id      Id.
+     *
+     * @param Request $request request
+     * @param mixed   $id      id
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editOrganizer(Request $request, $id)
     {
-
         $userManager = $this->get('fos_user.user_manager');
 
-        $formUser = $userManager->findUserBy(["id" => $id]);
+        $formUser = $userManager->findUserBy(['id' => $id]);
 
-        if ($formUser == null) {
+        if (null == $formUser) {
             throw $this->createNotFoundException('The organizer does not exist');
         }
 
@@ -123,14 +124,16 @@ class OrganizerAdminController extends Controller
 
     /**
      * @Route("/admin/organizer/delete/{id}", name="deleteOrganizer")
-     * @param Request $request Request.
-     * @param mixed   $id      Id.
+     *
+     * @param Request $request request
+     * @param mixed   $id      id
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteOrganizer(Request $request, $id)
     {
         $userManager = $this->get('fos_user.user_manager');
-        $user = $userManager->findUserBy(["id" => $id]);
+        $user = $userManager->findUserBy(['id' => $id]);
         $userManager->deleteUser($user);
 
         return $this->redirectToRoute('organizerList');
@@ -138,6 +141,7 @@ class OrganizerAdminController extends Controller
 
     /**
      * @Route("/admin/organizer", name="organizerList")
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listOrganizers()
