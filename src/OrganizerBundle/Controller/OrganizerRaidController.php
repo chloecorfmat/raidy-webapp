@@ -173,7 +173,7 @@ class OrganizerRaidController extends Controller
                 $em->persist($raid);
                 $em->flush();
 
-               return $this->redirectToRoute('displayRaid', ['id' => $id]);
+                return $this->redirectToRoute('displayRaid', ['id' => $id]);
             } else {
                 $form->addError(new FormError('Un raid avec ce nom a été trouvé.'));
             }
