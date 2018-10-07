@@ -30,7 +30,6 @@
                 <td>{{ raid.user }} </td>
                 <td><img src="{{ asset('uploads/raids/' ~ raid.picture) }}" /></td>
                 <td><a href="{{ path('displayRaid', {'id': raid.id}) }}">Voir</a></td>
-                <td><a href="{{ path('editRaid', {'id': raid.id}) }}">Editer</a></td>
                 <td><a href="{{ path('deleteRaid', {'id': raid.id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}

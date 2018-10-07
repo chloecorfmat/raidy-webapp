@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lucas
- * Date: 27/09/18
- * Time: 16:10
- */
 
 namespace Tests\APIBundle\Controller;
 

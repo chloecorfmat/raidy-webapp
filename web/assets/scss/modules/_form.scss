@@ -8,10 +8,6 @@
   }
 }
 
-.form--item {
-  margin-top: .5rem;
-}
-
 form {
   button,
   input {
@@ -23,12 +19,18 @@ form {
     margin-top: 1.5rem;
   }
 
-  input {
+  .form--input-date,
+  .form--input-email,
+  .form--input-password,
+  .form--input-number,
+  .form--input-tel,
+  .form--input-text {
     border-bottom: 1px solid $tertiary-color-3;
     border-left: 0;
     border-right: 0;
     border-top: 0;
     font-size: 1rem;
+    margin-top: .7rem;
     position: relative;
 
     &:focus {
@@ -37,18 +39,26 @@ form {
   }
 
   label {
-    bottom: -1.2rem;
+    bottom: -1.9rem;
     color: $tertiary-color-1;
     position: relative;
     z-index: 1;
   }
+
+  .form--fixed-label {
+    bottom: 0;
+    display: inline-block;
+    margin-top: 1.9rem;
+  }
 }
 
 .form--input-focused {
+  margin-top: .7rem;
+
   label {
     bottom: -.2rem;
     color: $organizer-color;
-    font-size: .7rem;
+    font-size: .8rem;
     font-weight: bold;
   }
 

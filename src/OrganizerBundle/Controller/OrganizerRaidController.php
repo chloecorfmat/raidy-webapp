@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: anais
- * Date: 01/10/2018
- * Time: 13:29.
- */
 
 namespace OrganizerBundle\Controller;
 
@@ -126,6 +120,7 @@ class OrganizerRaidController extends Controller
             ->add('city', TextType::class, array('label' => 'Ville'))
             ->add('editionNumber', IntegerType::class, array('label' => 'Numéro d\'édition'))
             ->add('picture', FileType::class, array(
+                'label_attr' => array('class' => 'form--fixed-label'),
                 'label' => 'Photo',
                 'required' => false,
                 'data_class' => null,
@@ -175,84 +170,6 @@ class OrganizerRaidController extends Controller
     }
 
     /**
-     * @Route("/raid/edit/{id}", name="editRaid")
-     *
-     * @param Request $request request
-     * @param mixed   $id      id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function editRaid(Request $request, $id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $raidManager = $em->getRepository('AppBundle:Raid');
-
-        $formRaid = $raidManager->findOneBy(['id' => $id]);
-
-        if (null == $formRaid) {
-            throw $this->createNotFoundException('Ce raid n\'existe pas');
-        }
-        // Get the previous picture in case a new one is not submitted
-        $myPicture = $formRaid->getPicture();
-
-        $form = $this->createFormBuilder($formRaid)
-            ->add('name', TextType::class)
-            ->add('date', DateType::class)
-            ->add('address', TextType::class)
-            ->add('addressAddition', TextType::class, array('required' => false))
-            ->add('postCode', IntegerType::class)
-            ->add('city', TextType::class)
-            ->add('editionNumber', IntegerType::class)
-            ->add('picture', FileType::class, array('required' => false, 'data_class' => null))
-            ->add('submit', SubmitType::class, array('label' => 'Editer un raid'))
-            ->getForm();
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $raidExist = $raidManager->findOneBy(
-                array('name' => $formRaid->getName(), 'editionNumber' => $formRaid->getEditionNumber())
-            );
-
-            if (!$raidExist || $raidExist->getId() == $formRaid->getId()) {
-                $formRaid = $form->getData();
-
-                $raid = $raidManager->findOneBy(array('id' => $formRaid->getId()));
-
-                $raid->setName($formRaid->getName());
-                $raid->setDate($formRaid->getDate());
-                $raid->setAddress($formRaid->getAddress());
-                if ($formRaid->getAddressAddition()) {
-                    $raid->setAddressAddition($formRaid->getAddressAddition());
-                }
-                $raid->setPostCode($formRaid->getPostCode());
-                $raid->setCity($formRaid->getCity());
-                $raid->setEditionNumber($formRaid->getEditionNumber());
-                if (null != $formRaid->getPicture()) {
-                    $fileName = $this->saveFile($formRaid->getPicture());
-                    $raid->setPicture($fileName);
-                } else {
-                    $picturePath = $this->getParameter('raids_img_directory') . '/' . $myPicture;
-                    $fileName = $this->saveFile(new File($picturePath));
-                    $raid->setPicture($fileName);
-                }
-
-                $em->persist($raid);
-                $em->flush();
-
-                return $this->redirectToRoute('displayRaid', ['id' => $id]);
-            } else {
-                $form->addError(new FormError('Un raid avec ce nom a été trouvé.'));
-            }
-        }
-
-        return $this->render('OrganizerBundle:Raid:editRaid.html.twig', [
-            'form' => $form->createView(),
-            'raidId' => $id,
-        ]);
-    }
-
-    /**
      * @Route("/raid/delete/{id}", name="deleteRaid")
      *
      * @param Request $request request
@@ -277,7 +194,7 @@ class OrganizerRaidController extends Controller
     }
 
     /**
-     * @Route("/raid", name="raidList")
+     * @Route("/raids", name="raidList")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
