@@ -18,6 +18,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\File\File;
 
 class OrganizerRaidController extends Controller
 {
@@ -124,6 +125,8 @@ class OrganizerRaidController extends Controller
         if (null == $formRaid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
+        // Get the previous picture in case a new one is not submitted
+        $myPicture = $formRaid->getPicture();
 
         $form = $this->createFormBuilder($formRaid)
             ->add('name', TextType::class)
@@ -162,15 +165,15 @@ class OrganizerRaidController extends Controller
                     $fileName = $this->saveFile($formRaid->getPicture());
                     $raid->setPicture($fileName);
                 } else {
-                    $raid->setPicture(
-                        new File($this->getParameter('raids_img_directory') . '/' . $raid->getPicture())
-                    );
+                    $picturePath = $this->getParameter('raids_img_directory') . '/' . $myPicture;
+                    $fileName = $this->saveFile(new File($picturePath));
+                    $raid->setPicture($fileName);
                 }
 
                 $em->persist($raid);
                 $em->flush();
 
-                return $this->redirectToRoute('displayRaid', ['id' => $id]);
+               return $this->redirectToRoute('displayRaid', ['id' => $id]);
             } else {
                 $form->addError(new FormError('Un raid avec ce nom a été trouvé.'));
             }
