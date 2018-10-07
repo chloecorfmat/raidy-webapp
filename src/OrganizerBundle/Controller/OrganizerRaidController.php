@@ -113,13 +113,23 @@ class OrganizerRaidController extends Controller
 
         $form = $this->createFormBuilder($formRaid)
             ->add('name', TextType::class, array('label' => 'Nom du raid'))
-            ->add('date', DateType::class, array('label' => 'Date'))
+            ->add('date', DateType::class, array(
+                'label' => 'Date',
+                'widget' => 'single_text',
+
+                // prevents rendering it as type="date", to avoid HTML5 date pickers
+                'html5' => true,
+            ))
             ->add('address', TextType::class, array('label' => 'Adresse'))
             ->add('addressAddition', TextType::class, array('required' => false, 'label' => 'Complément d\'adresse'))
             ->add('postCode', IntegerType::class, array('label' => 'Code postal'))
             ->add('city', TextType::class, array('label' => 'Ville'))
             ->add('editionNumber', IntegerType::class, array('label' => 'Numéro d\'édition'))
-            ->add('picture', FileType::class, array('required' => false, 'data_class' => null, 'label' => 'Photo'))
+            ->add('picture', FileType::class, array(
+                'label' => 'Photo',
+                'required' => false,
+                'data_class' => null,
+            ))
             ->add('submit', SubmitType::class, array('label' => 'Editer un raid'))
             ->getForm();
 
