@@ -20,6 +20,7 @@
 /web/assets/node_modules
 /web/assets/css
 /web/assets/dist
+/web/uploads
 
 .php_cs.cache
 
