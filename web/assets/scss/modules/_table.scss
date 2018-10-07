@@ -30,6 +30,7 @@ th {
 
     @media screen and (min-width: $breakpoint-large) {
       display: inline-block;
+      margin-bottom: .5rem;
     }
   }
 }
@@ -45,7 +46,12 @@ th {
     border-bottom: 1px solid $grey-light;
   }
 
-  &:hover {
+  // sass-lint:disable no-css-comments
+  /**&:hover {
+    background: $grey-light;
+  }**/
+
+  &:nth-child(2n+1) {
     background: $grey-light;
   }
 }

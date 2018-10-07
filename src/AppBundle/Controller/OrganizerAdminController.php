@@ -78,7 +78,6 @@ class OrganizerAdminController extends Controller
     public function editOrganizer(Request $request, $id)
     {
         $userManager = $this->get('fos_user.user_manager');
-
         $formUser = $userManager->findUserBy(['id' => $id]);
 
         if (null == $formUser) {
@@ -112,6 +111,7 @@ class OrganizerAdminController extends Controller
 
         return $this->render('AppBundle:Admin:editOrganizer.html.twig', [
             'form' => $form->createView(),
+            'username' => $formUser->getUsername() ?? '',
             'userId' => $id,
         ]);
     }

@@ -1,5 +1,12 @@
 {% extends 'default/organizer.html.twig' %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item">Liste des raids</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
     <h1>Liste des raids</h1>
     <table>
