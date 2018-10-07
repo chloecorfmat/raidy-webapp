@@ -34,14 +34,14 @@ class OrganizerRaidController extends Controller
         $formRaid = new Raid();
 
         $form = $this->createFormBuilder($formRaid)
-            ->add('name', TextType::class)
-            ->add('date', DateType::class)
-            ->add('address', TextType::class)
-            ->add('addressAddition', TextType::class, array('required' => false))
-            ->add('postCode', IntegerType::class)
-            ->add('city', TextType::class)
-            ->add('editionNumber', IntegerType::class)
-            ->add('picture', FileType::class)
+            ->add('name', TextType::class, array('label' => 'Nom du raid'))
+            ->add('date', DateType::class, array('label' => 'Date'))
+            ->add('address', TextType::class, array('label' => 'Adresse'))
+            ->add('addressAddition', TextType::class, array('required' => false, 'label' => 'Complément d\'adresse'))
+            ->add('postCode', IntegerType::class, array('label' => 'Code postal'))
+            ->add('city', TextType::class, array('label' => 'Ville'))
+            ->add('editionNumber', IntegerType::class, array('label' => 'Numéro d\'édition'))
+            ->add('picture', FileType::class, array('label' => 'Photo'))
             ->add('submit', SubmitType::class, array('label' => 'Créer un raid'))
             ->getForm();
 
@@ -112,14 +112,14 @@ class OrganizerRaidController extends Controller
         }
 
         $form = $this->createFormBuilder($formRaid)
-            ->add('name', TextType::class)
-            ->add('date', DateType::class)
-            ->add('address', TextType::class)
-            ->add('addressAddition', TextType::class, array('required' => false))
-            ->add('postCode', IntegerType::class)
-            ->add('city', TextType::class)
-            ->add('editionNumber', IntegerType::class)
-            ->add('picture', FileType::class, array('required' => false, 'data_class' => null))
+            ->add('name', TextType::class, array('label' => 'Nom du raid'))
+            ->add('date', DateType::class, array('label' => 'Date'))
+            ->add('address', TextType::class, array('label' => 'Adresse'))
+            ->add('addressAddition', TextType::class, array('required' => false, 'label' => 'Complément d\'adresse'))
+            ->add('postCode', IntegerType::class, array('label' => 'Code postal'))
+            ->add('city', TextType::class, array('label' => 'Ville'))
+            ->add('editionNumber', IntegerType::class, array('label' => 'Numéro d\'édition'))
+            ->add('picture', FileType::class, array('required' => false, 'data_class' => null, 'label' => 'Photo'))
             ->add('submit', SubmitType::class, array('label' => 'Editer un raid'))
             ->getForm();
 
