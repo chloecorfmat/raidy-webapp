@@ -161,6 +161,10 @@ class OrganizerRaidController extends Controller
                 if (null != $formRaid->getPicture()) {
                     $fileName = $this->saveFile($formRaid->getPicture());
                     $raid->setPicture($fileName);
+                } else {
+                    $raid->setPicture(
+                        new File($this->getParameter('raids_img_directory') . '/' . $raid->getPicture())
+                    );
                 }
 
                 $em->persist($raid);
@@ -233,11 +237,15 @@ class OrganizerRaidController extends Controller
         return md5(uniqid());
     }
 
+    /**
+     * @param mixed $file the file to save
+     * @return string
+     */
     private function saveFile($file)
     {
         // $file stores the uploaded file
         /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-        $fileName = $this->generateUniqueFileName().'.'.$file->guessExtension();
+        $fileName = $this->generateUniqueFileName() . '.' . $file->guessExtension();
 
         // Move the file to the directory where brochures are stored
         try {

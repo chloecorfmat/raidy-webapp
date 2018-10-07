@@ -66,7 +66,8 @@ class Raid
     protected $user;
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", nullable=true)
+     * @Assert\NotBlank(message="Insérez une image.")
      * @Assert\Image(
      *     minWidth = 50,
      *     maxWidth = 700,
