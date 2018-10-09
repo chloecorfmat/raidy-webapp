@@ -110,6 +110,8 @@ class OrganizerRaidController extends Controller
 
         $formRaid = $raidManager->findOneBy(['id' => $id]);
 
+        $oldPicture = $formRaid->getPicture();
+
         if (null == $formRaid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
@@ -158,13 +160,12 @@ class OrganizerRaidController extends Controller
                 $raid->setPostCode($formRaid->getPostCode());
                 $raid->setCity($formRaid->getCity());
                 $raid->setEditionNumber($formRaid->getEditionNumber());
+
                 if (null != $formRaid->getPicture()) {
                     $fileName = $this->saveFile($formRaid->getPicture());
                     $raid->setPicture($fileName);
                 } else {
-                    $raid->setPicture(
-                        new File($this->getParameter('raids_img_directory') . '/' . $raid->getPicture())
-                    );
+                    $raid->setPicture($oldPicture);
                 }
 
                 $em->persist($raid);
