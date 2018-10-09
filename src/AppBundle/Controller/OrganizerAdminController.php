@@ -16,7 +16,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrganizerAdminController extends Controller
 {
     /**
-     * @Route("/admin/organizer/new", name="addOrganizer")
+     * @Route("/admin/organizer/add", name="addOrganizer")
      *
      * @param Request $request request
      *
@@ -134,7 +134,7 @@ class OrganizerAdminController extends Controller
     }
 
     /**
-     * @Route("/admin/organizer", name="organizerList")
+     * @Route("/admin/organizer", name="listOrganizer")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

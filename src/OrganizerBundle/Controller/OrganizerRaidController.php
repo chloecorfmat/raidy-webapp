@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\File\File;
 class OrganizerRaidController extends Controller
 {
     /**
-     * @Route("/raid/new", name="addRaid")
+     * @Route("/organizer/raid/add", name="addRaid")
      *
      * @param Request $request request
      *
@@ -90,7 +90,7 @@ class OrganizerRaidController extends Controller
     }
 
     /**
-     * @Route("/raid/{id}", name="displayRaid")
+     * @Route("/organizer/raid/{id}", name="displayRaid")
      *
      * @param Request $request request
      * @param int     $id      raid identifier
@@ -180,7 +180,7 @@ class OrganizerRaidController extends Controller
     }
 
     /**
-     * @Route("/raid/delete/{id}", name="deleteRaid")
+     * @Route("/organizer/raid/delete/{id}", name="deleteRaid")
      *
      * @param Request $request request
      * @param mixed   $id      id
@@ -204,7 +204,7 @@ class OrganizerRaidController extends Controller
     }
 
     /**
-     * @Route("/raid", name="raidList")
+     * @Route("/organizer/raid", name="listRaid")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
