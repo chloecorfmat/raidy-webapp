@@ -3,6 +3,7 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Entity\Raid;
+use OrganizerBundle\Security\RaidVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormError;
@@ -99,11 +100,17 @@ class OrganizerRaidController extends Controller
      */
     public function displayRaid(Request $request, $id)
     {
+
         $raidManager = $this->getDoctrine()
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
         $raid = $raidManager->find($id);
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
+        }
 
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -190,11 +197,16 @@ class OrganizerRaidController extends Controller
     public function deleteRaid(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $raidManager = $em
-            ->getRepository('AppBundle:Raid');
+        $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->findOneBy(array('id' => $id));
+
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $em->remove($raid);

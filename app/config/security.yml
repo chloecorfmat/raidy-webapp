@@ -2,6 +2,8 @@
 # https://symfony.com/doc/current/security.html
 security:
 
+    access_denied_url: /
+
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         in_memory:
@@ -9,7 +11,7 @@ security:
         our_users:
             entity: { class: AppBundle\Entity\User, property: email }
         fos_userbundle:
-            id: fos_user.user_provider.username
+            id: fos_user.user_provider.username_email
         auth_token_user_provider:
             id: auth_token_user_provider
 
@@ -49,9 +51,10 @@ security:
         ROLE_SUPER_ADMIN: ROLE_SUPER_ADMIN
 
     access_control:
-    - { path: ^/admin, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/admin, role: ROLE_SUPER_ADMIN }
     - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/organizer$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/organizer$, role: [ROLE_ORGANIZER, ROLE_SUPER_ADMIN] }
+    - { path: ^/helper$, role: [ROLE_HELPER, ROLE_SUPER_ADMIN] }
     - { path: ^/api/auth-tokens, role: IS_AUTHENTICATED_ANONYMOUSLY }
-    - { path: ^/api/organizer, role: ROLE_ORGANIZER }
-    - { path: ^/api/helper, role: ROLE_VOLUNTEER }
+    - { path: ^/api/organizer$, role: ROLE_ORGANIZER }
+    - { path: ^/api/helper$, role: ROLE_VOLUNTEER }

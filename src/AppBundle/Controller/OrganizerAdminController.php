@@ -56,7 +56,7 @@ class OrganizerAdminController extends Controller
 
                 $userManager->updateUser($user);
 
-                return $this->redirectToRoute('organizerList');
+                return $this->redirectToRoute('listOrganizer');
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
@@ -130,7 +130,7 @@ class OrganizerAdminController extends Controller
         $user = $userManager->findUserBy(['id' => $id]);
         $userManager->deleteUser($user);
 
-        return $this->redirectToRoute('organizerList');
+        return $this->redirectToRoute('listOrganizer');
     }
 
     /**
