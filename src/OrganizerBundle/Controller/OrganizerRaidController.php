@@ -236,6 +236,7 @@ class OrganizerRaidController extends Controller
 
     /**
      * @param mixed $file the file to save
+     *
      * @return string
      */
     private function saveFile($file)

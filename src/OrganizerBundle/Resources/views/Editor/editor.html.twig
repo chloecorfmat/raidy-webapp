@@ -1,0 +1,50 @@
+{% extends 'default/organizer.html.twig' %}
+
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+
+{% endblock %}
+
+{% block body %}
+    <style>#mapid { height: 70vh; width: 70vw }</style>
+    <div>
+        <nav>
+            <ul>
+                <li><button>Tracés</button></li>
+                <li><button>Points d'intéret</button></li>
+            </ul>
+        </nav>
+        <div>
+
+        </div>
+        <div>
+            <div id="mapid"></div>
+        </div>
+        <a> Retour</a>
+    </div>
+    <div>
+    <!-- Leaflet -->
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+            integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+            crossorigin=""></script>
+    <script>
+        //var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+        this.map       = L.map('mapid').setView([48.729644, -3.462390], 15);
+        this.line      = L.polyline([]).addTo(this.map);
+        this.waypoints = [];
+        this.distance  = 0;
+
+        L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        }).addTo(this.map);
+    </script>
+{% endblock %}
+

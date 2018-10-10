@@ -1,4 +1,5 @@
 <?php
+
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -10,6 +11,7 @@ class RedirectingController extends Controller
     /**
      * @Route("/{url}", name="remove_trailing_slash",
      *     requirements={"url" = ".*\/$"})
+     *
      * @param Request $request request
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
