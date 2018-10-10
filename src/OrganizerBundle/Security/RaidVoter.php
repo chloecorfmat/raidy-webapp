@@ -22,11 +22,10 @@ class RaidVoter implements VoterInterface
      */
     public function vote(TokenInterface $token, $raid, array $attributes)
     {
-
         if ($this->supports($attributes, $raid)) {
             $user = $token->getUser();
-
-            if ($user->getId() ==  $raid->getUser()->getId()) {
+            // If current user is the creator or a Super Admin
+            if ($user->getId() ==  $raid->getUser()->getId() || in_array('ROLE_SUPER_ADMIN', $user->getRoles())) {
                 return VoterInterface::ACCESS_GRANTED;
             } else {
                 return Voter::ACCESS_DENIED;
