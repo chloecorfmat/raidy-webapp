@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\File\File;
@@ -79,7 +80,7 @@ class OrganizerRaidController extends Controller
                 $em->persist($raid);
                 $em->flush();
 
-                return $this->redirectToRoute('raidList');
+                return $this->redirectToRoute('listRaid');
             } else {
                 $form->addError(new FormError('Ce raid existe déjà.'));
             }
@@ -109,7 +110,12 @@ class OrganizerRaidController extends Controller
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            throw $this->createAccessDeniedException();
+            $referer = $request->headers->get('referer');
+            if ($referer != null) {
+                return new RedirectResponse($referer);
+            } else {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $em = $this->getDoctrine()->getManager();
@@ -206,13 +212,18 @@ class OrganizerRaidController extends Controller
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            throw $this->createAccessDeniedException();
+            $referer = $request->headers->get('referer');
+            if ($referer != null) {
+                return new RedirectResponse($referer);
+            } else {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $em->remove($raid);
         $em->flush();
 
-        return $this->redirectToRoute('raidList');
+        return $this->redirectToRoute('listRaid');
     }
 
     /**
