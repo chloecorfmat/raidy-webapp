@@ -90,3 +90,10 @@ form {
     width: 45%;
   }
 }
+
+.form--error {
+  font-size: .8rem;
+  font-style: italic;
+  font-weight: 700;
+  color: $secondary-color-2;
+}
