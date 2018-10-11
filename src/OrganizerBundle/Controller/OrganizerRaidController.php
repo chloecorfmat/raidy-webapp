@@ -236,6 +236,8 @@ class OrganizerRaidController extends Controller
         );
     }
 
+    /* @todo : Refactor to make an UploadedFileService */
+
     /**
      * @return string
      */
