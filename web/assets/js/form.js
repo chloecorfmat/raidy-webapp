@@ -1,13 +1,12 @@
 window.addEventListener('load', initForm)
 
 function initForm (e) {
-  var exceptedInputs = ['hidden', 'date', 'file']
+  var exceptedInputs = ['hidden', 'date', 'file', 'checkbox']
   var forms = Array.prototype.slice.call(document.getElementsByTagName('form'))
   Array.prototype.slice.call(forms).forEach(function (form) {
     var inputs = Array.prototype.slice.call(form.getElementsByTagName('input'))
 
     inputs.forEach(function (input) {
-      console.log(exceptedInputs.indexOf(input.type))
       if (exceptedInputs.indexOf(input.type) === -1) {
         if (input.value !== '') {
           input.parentNode.classList.add('form--input-focused')
