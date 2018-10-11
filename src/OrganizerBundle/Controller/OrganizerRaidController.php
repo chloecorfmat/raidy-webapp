@@ -3,6 +3,7 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Entity\Raid;
+use OrganizerBundle\Security\RaidVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormError;
@@ -10,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\File\File;
@@ -78,7 +80,7 @@ class OrganizerRaidController extends Controller
                 $em->persist($raid);
                 $em->flush();
 
-                return $this->redirectToRoute('raidList');
+                return $this->redirectToRoute('listRaid');
             } else {
                 $form->addError(new FormError('Ce raid existe déjà.'));
             }
@@ -99,11 +101,22 @@ class OrganizerRaidController extends Controller
      */
     public function displayRaid(Request $request, $id)
     {
+
         $raidManager = $this->getDoctrine()
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
         $raid = $raidManager->find($id);
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            $referer = $request->headers->get('referer');
+            if ($referer != null) {
+                return new RedirectResponse($referer);
+            } else {
+                throw $this->createAccessDeniedException();
+            }
+        }
 
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -190,17 +203,27 @@ class OrganizerRaidController extends Controller
     public function deleteRaid(Request $request, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $raidManager = $em
-            ->getRepository('AppBundle:Raid');
+        $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->findOneBy(array('id' => $id));
+
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            $referer = $request->headers->get('referer');
+            if ($referer != null) {
+                return new RedirectResponse($referer);
+            } else {
+                throw $this->createAccessDeniedException();
+            }
         }
 
         $em->remove($raid);
         $em->flush();
 
-        return $this->redirectToRoute('raidList');
+        return $this->redirectToRoute('listRaid');
     }
 
     /**
@@ -223,6 +246,8 @@ class OrganizerRaidController extends Controller
             ]
         );
     }
+
+    /* @todo : Refactor to make an UploadedFileService */
 
     /**
      * @return string

@@ -18,4 +18,8 @@ app:
     type: annotation
 
 fos_user:
-    resource: "@FOSUserBundle/Resources/config/routing/all.xml"
+    resource: "@FOSUserBundle/Resources/config/routing/security.xml"
+
+fos_user_reset:
+    prefix:   /reset-password
+    resource: "@FOSUserBundle/Resources/config/routing/resetting.xml"
