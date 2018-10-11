@@ -3,22 +3,22 @@
   display: flex;
 
   main {
-    background: rgba(255, 255, 255, .7);
-    margin: auto;
-    overflow: hidden;
-    padding: 5rem;
+    background: $white07;
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    width: 100vw;
+    margin: auto;
     min-height: 100vh;
-    box-sizing: border-box;
+    overflow: hidden;
+    padding: 5rem;
+    width: 100vw;
 
     @media screen and (min-width: $breakpoint-medium) {
-      width: 70vh;
-      min-height: initial;
-      max-height: 70vh;
       border-radius: 50%;
+      max-height: 70vh;
+      min-height: initial;
+      width: 70vh;
     }
   }
 
@@ -33,11 +33,10 @@
   }
 
   .logo {
-    width: 8rem;
     display: inline-block;
+    margin-bottom: 1rem;
     text-align: center;
     width: 100%;
-    margin-bottom: 1rem;
   }
 
   input {
