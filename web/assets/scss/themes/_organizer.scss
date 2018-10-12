@@ -1,9 +1,10 @@
 $theme-color: $organizer-color;
+$theme-color-secondary: $tertiary-color-1;
 
 .default,
 .organizer {
   h1 {
-    color: $theme-color;
+    color: $theme-color-secondary;
   }
 
   footer,

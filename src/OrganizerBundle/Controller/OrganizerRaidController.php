@@ -227,22 +227,28 @@ class OrganizerRaidController extends Controller
     }
 
     /**
-     * @Route("/organizer/raid", name="listRaid")
+     * @Route("/organizer", name="listRaid")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listRaids()
     {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
         $raidManager = $this->getDoctrine()
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        $raids = $raidManager->findAll();
+        //$raids = $raidManager->findAll();
+        $raids = $raidManager->findBy([
+            'user' => $user,
+        ]);
 
         return $this->render(
             'OrganizerBundle:Raid:listRaid.html.twig',
             [
                 'raids' => $raids,
+                'user' => $user,
             ]
         );
     }
