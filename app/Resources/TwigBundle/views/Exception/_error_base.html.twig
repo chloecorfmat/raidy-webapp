@@ -1,0 +1,24 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Mes raids</a></li>
+        <li class="breadcrumb--list-item">{% block title %}{% endblock %}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="content--error">
+        <div class="content--error-image">
+            <img src="{{ asset('assets/images/illus-bike.svg') }}" alt="">
+        </div>
+        <div class="content--error-text">
+            <h1>Oups !</h1>
+            <p>{% block text %}{% endblock %}</p>
+            <a href="{{ path('listRaid') }}" class="btn btn--action">Retour à l'accueil</a>
+        </div>
+        <div class="content--error-image">
+            <img src="{{ asset('assets/images/illus-kayak.svg') }}" alt="">
+        </div>
+    </div>
+{% endblock %}
