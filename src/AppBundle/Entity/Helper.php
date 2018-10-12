@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -39,26 +49,20 @@ class Helper
     protected $favoritePoiType;
 
     /**
-     * @ORM\Column(name="check_in_time", type="date")
+     * @ORM\Column(name="check_in_time", type="date", nullable=true)
      */
     protected $checkInTime;
 
     /**
-     * Helper constructor.
-     *
-     * @param mixed $user            user
-     * @param mixed $isCheckedIn     is checked in
-     * @param mixed $poi             POI
-     * @param mixed $favoritePoiType favorite POI type
-     * @param mixed $checkInTime     check-in time
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
      */
-    public function __construct($user, $isCheckedIn, $poi, $favoritePoiType, $checkInTime)
+    protected $raid;
+
+    /**
+     * Helper constructor.
+     */
+    public function __construct()
     {
-        $this->user = $user;
-        $this->isCheckedIn = $isCheckedIn;
-        $this->poi = $poi;
-        $this->favoritePoiType = $favoritePoiType;
-        $this->checkInTime = $checkInTime;
     }
 
     /**
@@ -155,5 +159,21 @@ class Helper
     public function setCheckInTime($checkInTime)
     {
         $this->checkInTime = $checkInTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRaid()
+    {
+        return $this->raid;
+    }
+
+    /**
+     * @param mixed $raid
+     */
+    public function setRaid($raid)
+    {
+        $this->raid = $raid;
     }
 }
