@@ -24,6 +24,14 @@ class EditorController extends Controller
      */
     public function editorAction(Request $request, $id)
     {
-        return $this->render('OrganizerBundle:Editor:editor.html.twig');
+        $trackManager = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Track');
+
+        $tracks = $trackManager->findBy(['raid' => $id]);
+
+        return $this->render('OrganizerBundle:Editor:editor.html.twig', [
+            'key' => $tracks,
+        ]);
     }
 }
