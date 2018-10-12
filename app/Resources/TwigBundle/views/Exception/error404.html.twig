@@ -1,12 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends "@Twig/Exception/_error_base.html.twig" %}
 
 {% block title %}Page non trouvée{% endblock %}
-
-{% block body %}
-    <h1>Page not found</h1>
-
-    <p>
-        The requested page couldn't be located. Checkout for any URL
-        misspelling or <a href="{{ path('homepage') }}">return to the homepage</a>.
-    </p>
-{% endblock %}
+{% block text %}On dirait que vous êtes sortis du parcours !{% endblock %}
