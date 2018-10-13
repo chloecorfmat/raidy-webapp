@@ -1,3 +1,5 @@
+@import 'editor';
+
 body,
 ul {
   margin: 0;
@@ -25,4 +27,9 @@ main {
       width: 33%;
     }
   }
+}
+
+.full-content{
+  margin : 0;
+  padding: 0;
 }

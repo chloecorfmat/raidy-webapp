@@ -1,5 +1,5 @@
 {% extends 'default/organizer.html.twig' %}
-
+{% block main_attributes %}class="full-content"{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
@@ -10,27 +10,38 @@
 {% endblock %}
 
 {% block body %}
-    <style>#map { height: 70vh; width: 70vw }</style>
-    <div>
-        <nav>
-            <ul>
-                <li><button>Tracés</button></li>
-                <li><button>Points d'intéret</button></li>
-            </ul>
-        </nav>
+    <div class="editor--container">
         <div>
 
+            <div class="tab-bar">
+                <nav class="tab">
+                    <button class="tablinks active" onclick="openCity(event, 'tracks-pan')">Tracés</button>
+                    <button class="tablinks" onclick="openCity(event, 'pois-pan')">Points d'intéret</button>
+                </nav>
+                <div class="tabcontent" id="tracks-pan">
+                    <button class="btn--action" id="addTrackButton">Ajouter un parcours</button>
+                    <ul>
+                        <li><input type="checkbox" id="scales" name="feature" value="scales" checked /> Parcours VTT</li>
+                        <li><input type="checkbox" id="scales" name="feature" value="scales" checked /> Parcours Run</li>
+                        <li><input type="checkbox" id="scales" name="feature" value="scales" checked /> Parcours Kayak</li>
+                    </ul>
+                </div>
+                <div class="tabcontent" id="pois-pan">
+                    <p>Enssat 1 </p>
+                    <p>Enssat 2 </p>
+                    <p>Enssat 3 </p>
+
+                </div>
+            </div>
+            <a class="btn btn--action"> Retour</a>
         </div>
-        <div>
-            {{ dump(key) }}
+        <div class="map--container">
             <div id="map"></div>
-            <button id="addPoiButton">+</button>
+            <button id="addPoiButton"><div class="btn--editor"><span>+</span></div></button>
         </div>
-        <a> Retour</a>
     </div>
-    <div>
-    <!-- Leaflet -->
-    </div>
+
+
 {% endblock %}
 
 {% block javascripts %}
@@ -44,18 +55,48 @@
     <script type="text/javascript" src="{{ asset('assets/js/lib/MapManager.js') }}"></script>
 
     <script>
+
      //   document.addEventListener('DOMContentLoaded', function(){
-            var mapManager = new MapManager();
+     function openCity(evt, cityName) {
+         // Declare all variables
+         var i, tabcontent, tablinks;
+
+         // Get all elements with class="tabcontent" and hide them
+         tabcontent = document.getElementsByClassName("tabcontent");
+         for (i = 0; i < tabcontent.length; i++) {
+             tabcontent[i].style.display = "none";
+         }
+
+         // Get all elements with class="tablinks" and remove the class "active"
+         tablinks = document.getElementsByClassName("tablinks");
+         for (i = 0; i < tablinks.length; i++) {
+             tablinks[i].className = tablinks[i].className.replace(" active", "");
+         }
+
+         // Show the current tab, and add an "active" class to the button that opened the tab
+         document.getElementById(cityName).style.display = "block";
+         evt.currentTarget.className += " active";
+     }
+     document.getElementById("tracks-pan").click();
+
+     var mapManager = new MapManager();
             mapManager.markerIconUrl = '{{ asset('assets/images/map-marker-main.svg') }}';
             mapManager.initialize();
 
-            mapManager.map.addEventListener('click', function(e){
-                mapManager.addWaypoint(e);
-            });
             mapManager.addPoi("Enssat", [48.729644, -3.462390], '#78e08f');
             mapManager.addPoi("Enssat2", [48.729644, -3.463000], '#f74a45');
             mapManager.addPoi("Enssat3", [48.729644, -3.464000], '#a88f73');
 
+             document.getElementById('addPoiButton').addEventListener('click', function() {
+                 this.classList.toggle("add--poi");
+                 document.getElementById('map').style.cursor = "crosshair";
+                 mapManager.addPoiMode();
+             });
+
+             document.getElementById('addTrackButton').addEventListener('click', function() {
+                 document.getElementById('map').style.cursor = "crosshair";
+                 mapManager.addTrackMode();
+             });
 
             /*document.getElementById('exportToGPX').addEventListener('click', function() {
                 new GpxFactory(mapManager.waypoints, mapManager.map.getBounds());
