@@ -40,8 +40,7 @@ class SportType
     }
 
     /**
-     * SportType toString.
-     * @return mixed string
+     * @return string
      */
     public function __toString()
     {
