@@ -8,6 +8,11 @@ use Twig\TwigFilter;
 
 class AppExtension extends AbstractExtension
 {
+    /**
+     * Add filters on Twig.
+     *
+     * @return array|\Twig_SimpleFilter[]
+     */
     public function getFilters()
     {
         return array(
@@ -15,6 +20,11 @@ class AppExtension extends AbstractExtension
         );
     }
 
+    /**
+     * @param string $number
+     *    Phone number.
+     * @return string Phone number with spaces.
+     */
     public function telephoneFilter($number)
     {
         $str = str_split($number, 2);
