@@ -2,7 +2,6 @@
 
 namespace OrganizerBundle\Controller;
 
-use AppBundle\Entity\SportType;
 use AppBundle\Entity\Track;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
