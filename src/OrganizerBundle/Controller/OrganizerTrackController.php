@@ -262,7 +262,7 @@ class OrganizerTrackController extends Controller
         // Move the file to the directory where brochures are stored
         try {
             $file->move(
-                $this->getParameter('tracks_track_directory'),
+                $this->getParameter('tracks_gpx_directory'),
                 $fileName
             );
         } catch (FileException $e) {
