@@ -1,0 +1,34 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item">Liste des parcours</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des parcours</h1>
+    <table>
+        <caption>Liste des parcours</caption>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Raid</th>
+            <th scope="col">Sport</th>
+            <th scope="col">Parcours</th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% for track in tracks %}
+            <tr>
+                <td>{{ track.id }} </td>
+                <td>{{ track.raid.name }} </td>
+                <td><img src="{{ asset('uploads/tracks/' ~ track.sportType.icon) }}" /> {{ track.sportType.sport }} </td>
+                <td>{{ track.trackPoints }} </td>
+                <td><a href="{{ path('displayTrack', {'id': track.id}) }}">Voir</a></td>
+                <td><a href="{{ path('deleteTrack', {'id': track.id}) }}">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

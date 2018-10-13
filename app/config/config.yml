@@ -11,6 +11,7 @@ imports:
 parameters:
     locale: fr
     raids_img_directory: '%kernel.project_dir%/web/uploads/raids'
+    tracks_track_directory: '%kernel.project_dir%/web/uploads/tracks'
 
 framework:
     #esi: ~
