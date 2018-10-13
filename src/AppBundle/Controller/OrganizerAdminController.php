@@ -130,7 +130,7 @@ class OrganizerAdminController extends Controller
         $user = $userManager->findUserBy(['id' => $id]);
         $userManager->deleteUser($user);
 
-        return $this->redirectToRoute('organizerList');
+        return $this->redirectToRoute('listOrganizer');
     }
 
     /**

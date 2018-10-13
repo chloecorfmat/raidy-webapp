@@ -1,0 +1,81 @@
+.login {
+  background: $main-color;
+  display: flex;
+
+  main {
+    background: $white07;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    min-height: 100vh;
+    overflow: hidden;
+    padding: 5rem;
+    width: 100vw;
+
+    @media screen and (min-width: $breakpoint-medium) {
+      border-radius: 50%;
+      max-height: 70vh;
+      min-height: initial;
+      width: 70vh;
+    }
+  }
+
+  .login-information {
+    font-size: .8rem;
+    font-style: italic;
+    font-weight: 700;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .logo {
+    display: inline-block;
+    margin-bottom: 1rem;
+    text-align: center;
+    width: 100%;
+  }
+
+  input {
+    background: none;
+
+    &.btn {
+      background: $tertiary-color-1;
+    }
+  }
+
+  .form--input-focused {
+    margin-top: .7rem;
+
+    label {
+      bottom: -.2rem;
+      color: $tertiary-color-1;
+      font-size: .8rem;
+      font-weight: bold;
+    }
+
+    input {
+      border-bottom-color: $tertiary-color-1;
+    }
+  }
+
+  .form--item-checkbox {
+    margin-top: 1rem;
+
+    input {
+      width: auto;
+    }
+
+    label {
+      bottom: 0;
+      font-size: .9rem;
+    }
+  }
+
+  .form--item-submit {
+    margin-top: 0;
+  }
+}
