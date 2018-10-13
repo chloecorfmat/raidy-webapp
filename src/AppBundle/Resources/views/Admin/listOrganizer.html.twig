@@ -14,7 +14,6 @@
             <caption class="sr-only">Liste des organisateurs</caption>
             <thead class="table--headers">
                 <tr>
-                    <th scope="col">Id</th>
                     <th scope="col">Nom</th>
                     <th scope="col">Adresse e-mail</th>
                     <th scope="col">Téléphone</th>
@@ -24,10 +23,9 @@
 
             {% for user in users %}
                 <tr class="table--line">
-                    <td>{{ user.id }}</td>
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
-                    <td>{{ user.phone }}</td>
+                    <td>{{ user.phone|telephone }}</td>
                     <td>
                         <a href="{{ path('editOrganizer', {'id': user.id}) }}" class="btn">Editer</a>
                         <a href="{{ path('deleteOrganizer', {'id': user.id}) }}" class="btn btn--danger">Supprimer</a>

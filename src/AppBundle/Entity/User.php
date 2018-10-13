@@ -120,6 +120,11 @@ class User extends BaseUser
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $str = $phone;
+        $charToReplace = [' ', '-', '.'];
+        foreach ($charToReplace as $char) {
+            $str = str_replace($char, '', $str);
+        }
+        $this->phone = $str;
     }
 }
