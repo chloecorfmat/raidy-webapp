@@ -25,6 +25,12 @@ $theme-color: $helper-color;
       color: $text-color;
     }
 
+    input {
+      &.btn {
+        background-color: $tertiary-color-2;
+      }
+    }
+
     .form--input-focused {
       input {
         border-bottom-color: $tertiary-color-2;
