@@ -1,118 +1,263 @@
-/* Style the tab */
+// Style the tab.
 .tab {
-  overflow: hidden;
-  background-color: #78e08f;
+  background-color: $main-color;
   display: flex;
   flex-direction: row;
   justify-content: flex-start;
-}
-
-/* Style the buttons that are used to open the tab content */
-.tab button {
-  background-color: inherit;
-  border: none;
-  outline: none;
-  cursor: pointer;
-  padding: 14px 16px;
-  transition: 0.3s;
-}
-
-
-/* Style the tab content */
-.tabcontent {
-  display: none;
-  padding: 6px 12px;
-  border-top: none;
-}
-
-
-ul {
-  list-style-type: none;
-  padding: 0;
-}
-
-ul li {
-  padding: 8px 16px;
-}
-
-ul li:last-child {
-  border-bottom: none;
-}
-
-#addPoiButton{
-  width: 5rem;
-  height: 5rem;
-  border-radius: 3rem ;
-  font-size : 3rem;
-  position: absolute;
-  z-index: 1000;
-  text-align: center;
-  font-color: $tertiary-color-1;
-  bottom: 0;
-  right: 0;
-  vertical-align: middle;
-  padding: 1rem;
-  background-color: $tertiary-color-1;
   overflow: hidden;
-  transition : all 0.5s ease;
-  margin: 2.5rem;
-}
-.btn--editor{
-  background: url('../../images/map-marker-main-white.svg');
-  background-position: center;
-  background-size: contain;
-  background-repeat: no-repeat;
-  position: relative;
-  span{
-    display: block;
-    color: $tertiary-color-1;
-    font-family: Fontastique, SansSerif;
-    position: relative;
-    top : -0.75rem;
-    transition : all 0.5s ease;
 
+  // Style the buttons that are used to open the tab content.
+  button {
+    background-color: inherit;
+    border: 0;
+    cursor: pointer;
+    outline: none;
+    padding: 14px 16px;
+    transition: .3s;
   }
 }
-#addPoiButton.add--poi{
-  background-color: $secondary-color-2;
-  .btn--editor{
-    span{
-      transform: translateX(+10%) rotate(45deg) ;
-      color: $secondary-color-2;
+
+// Style the tab content.
+.tabcontent {
+  border-top: 0;
+  display: none;
+
+  .btn--action {
+    display: block;
+    margin: 1rem auto;
+  }
+}
+
+.editor--list {
+  list-style-type: none;
+  padding: 0;
+
+  li {
+    padding: 8px 16px;
+
+    &:last-child {
+      border-bottom: 0;
     }
   }
 }
 
-.map--container{
+.btn--editor {
+  background-image: url('../../images/map-marker-main-white.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: block;
   position: relative;
-  flex-grow: 1;
-}
 
-.editor--container{
-  display: flex;
-}
-
-#map {
-  min-height: 100%;
-  min-width: 100% ;
-}
-.tab-bar{
-  height: 37rem;
-}
-.tablinks{
-  position : relative;
-}
-.tablinks.active{
-
-  &::after{
-    content: "";
-    width: 1rem;
-    height: 1rem;
-    background: white;
-    position : absolute;
-    transform: translateY(50%) translateX(-50%) rotate(45deg);
-    bottom: 0;
-    left: 50%;
+  span {
+    color: $tertiary-color-1;
+    display: block;
+    font-family: 'Fontastique', 'SansSerif';
+    position: relative;
+    top: -.75rem;
+    transition: all .5s ease;
   }
 }
 
+.btn--add-poi {
+  background-color: $tertiary-color-1;
+  border-radius: 3rem ;
+  bottom: 0;
+  font-size: 3rem;
+  height: 5rem;
+  margin: 2.5rem;
+  overflow: hidden;
+  padding: 1rem;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  transition-duration: .5s;
+  transition-property: background-color, transform;
+  transition-timing-function: ease;
+  vertical-align: middle;
+  width: 5rem;
+  z-index: 1000;
+
+  &.add--poi {
+    background-color: $secondary-color-2;
+
+    .btn--editor {
+      span {
+        color: $secondary-color-2;
+        transform: rotate(50deg);
+      }
+    }
+  }
+}
+
+.map--container {
+  flex-grow: 1;
+  position: relative;
+}
+
+.editor--container {
+  //border-top: 1px solid $white;
+  display: flex;
+  width: 100%;
+}
+
+.map {
+  min-height: 100%;
+  min-width: 100%;
+}
+
+.tab-bar {
+  flex-grow: 1;
+  overflow: scroll;
+}
+
+.tablinks {
+  font-weight: 500;
+  position: relative;
+
+  &.active {
+    font-weight: 700;
+
+    &::after {
+      background: $white;
+      bottom: 0;
+      content: '';
+      height: 1rem;
+      left: 50%;
+      position: absolute;
+      transform: translateY(50%) translateX(-50%) rotate(45deg);
+      width: 1rem;
+    }
+  }
+}
+
+.bar {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+
+  &::after {
+    background-color: $tertiary-color-1;
+    content: '';
+    display: block;
+    height: 1rem;
+    position: absolute;
+    right: 100%;
+    width: 1rem;
+    z-index: 1000000;
+  }
+}
+
+.btn--laterale-bar {
+  background-color: $tertiary-color-1;
+  border-radius: 50%;
+  font-family: 'Fontastique', 'SansSerif';
+  font-size: 2rem;
+  height: 3rem;
+  margin: auto;
+  position: absolute;
+  right: 0;
+  text-align: center;
+  top: 50%;
+  transform: translateX(50%) translateY(-50%);
+  width: 3rem;
+  z-index: 1000;
+}
+
+.tab-bar--actions {
+  margin: auto;
+  padding-bottom: 1rem;
+}
+
+.list--pois {
+  font-size: .9rem;
+
+  .list--pois-items {
+    &::before {
+      background: $main-color; // @TODO : How to set background color ?
+      border-radius: 50%;
+      content: '';
+      display: inline-block;
+      height: 1rem;
+      margin-right: 1rem;
+      vertical-align: bottom;
+      width: 1rem;
+    }
+  }
+}
+
+.btn--return {
+  display: block;
+}
+
+.bar--invisible {
+  position: absolute;
+
+  .btn--laterale-bar {
+    left: -100%;
+    position: fixed;
+    top: 50%;
+    transform: translateY(1.5rem);
+  }
+}
+
+.checkbox-item {
+  input {
+    display: none;
+
+    &:checked {
+
+      + .checkmark {
+        background-color: $tertiary-color-1; // Set color by js.
+
+        .fa-check {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
+  .checkmark {
+    border: 2px solid $tertiary-color-1; // Set color by js.
+    border-radius: 50%;
+    display: inline-block;
+    height: .5rem;
+    margin-right: .5rem;
+    padding: .2rem;
+    vertical-align: middle;
+    width: .5rem;
+  }
+
+  .fa-check {
+    color: $white;
+    display: block;
+    font-size: .5rem;
+    opacity: 0;
+  }
+
+  .checkbox-item--label {
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}
+
+.checkbox-list {
+  margin-top: 1rem;
+}
+
+.track--edit {
+  background: $grey-light;
+}
+
+.btn--track--edit {
+  background: none;
+  color: $tertiary-color-1;
+  display: inline-block;
+  font-size: .75rem;
+  margin-left: .5rem;
+
+  &:hover {
+    opacity: .5;
+  }
+}
