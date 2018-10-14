@@ -18,9 +18,19 @@ class Poi
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=256)
+     * @ORM\Column(type="string", length=45)
      */
-    protected $location;
+    protected $name;
+
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
+    protected $longitude;
+
+    /**
+     * @ORM\Column(type="string", length=10)
+     */
+    protected $latitude;
 
     /**
      * @ORM\Column(name="required_helpers", type="integer")
@@ -41,18 +51,9 @@ class Poi
 
     /**
      * Poi constructor.
-     *
-     * @param mixed $location        location
-     * @param mixed $requiredHelpers required helpers
-     * @param mixed $track           track
-     * @param mixed $poiType         POI type
      */
-    public function __construct($location, $requiredHelpers, $track, $poiType)
+    public function __construct()
     {
-        $this->location = $location;
-        $this->requiredHelpers = $requiredHelpers;
-        $this->track = $track;
-        $this->poiType = $poiType;
     }
 
     /**
@@ -74,17 +75,49 @@ class Poi
     /**
      * @return mixed
      */
-    public function getLocation()
+    public function getName()
     {
-        return $this->location;
+        return $this->name;
     }
 
     /**
-     * @param mixed $location
+     * @param mixed $name
      */
-    public function setLocation($location)
+    public function setName($name)
     {
-        $this->location = $location;
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLongitude()
+    {
+        return $this->longitude;
+    }
+
+    /**
+     * @param mixed $longitude
+     */
+    public function setLongitude($longitude)
+    {
+        $this->longitude = $longitude;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLatitude()
+    {
+        return $this->latitude;
+    }
+
+    /**
+     * @param mixed $latitude
+     */
+    public function setLatitude($latitude)
+    {
+        $this->latitude = $latitude;
     }
 
     /**

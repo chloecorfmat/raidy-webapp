@@ -26,8 +26,8 @@
                 <td>{{ track.raid.name }} </td>
                 <td><img src="{{ asset('uploads/tracks/icons/' ~ track.sportType.icon) }}" /> {{ track.sportType.sport }} </td>
                 <td>{{ track.trackPoints }} </td>
-                <td><a href="{{ path('displayTrack', {'id': track.id}) }}">Voir</a></td>
-                <td><a href="{{ path('deleteTrack', {'id': track.id}) }}">Supprimer</a></td>
+                <td><a href="{{ path('displayTrack', {'id': track.id, 'raidId': track.raid.id}) }}">Voir</a></td>
+                <td><a href="{{ path('deleteTrack', {'id': track.id, 'raidId': track.raid.id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
     </table>

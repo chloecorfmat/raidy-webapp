@@ -62,7 +62,7 @@ class OrganizerTrackController extends Controller
             ->add('sportType', ChoiceType::class, array(
                 'choices' => $sportTypes,
                 'choice_label' => function ($sportType, $key, $value) {
-                    /** @var Raid $raid */
+                    /** @var SportType $sportType */
 
                     return $sportType->getSport();
                 },
@@ -89,7 +89,7 @@ class OrganizerTrackController extends Controller
 
                 $track = new Track();
 
-                $track->setRaid($raidId);
+                $track->setRaid($raid);
                 $track->setSportType($formTrack->getSportType());
                 $track->setTrackPoints($fileName);
 
@@ -153,7 +153,7 @@ class OrganizerTrackController extends Controller
             ->add('sportType', ChoiceType::class, array(
                 'choices' => $sportTypes,
                 'choice_label' => function ($sportType, $key, $value) {
-                    /** @var Raid $raid */
+                    /** @var SportType $sportType */
 
                     return $sportType->getSport();
                 },
@@ -166,7 +166,7 @@ class OrganizerTrackController extends Controller
 
         $form->handleRequest($request);
 
-        // Whenform is submitted, check datas and send it
+        // When form is submitted, check data and send it
         if ($form->isSubmitted() && $form->isValid()) {
             $trackExist = $trackManager->findOneBy(
                 array('raid' => $formTrack->getRaid(), 'sportType' => $formTrack->getSportType())

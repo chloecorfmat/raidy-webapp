@@ -6,7 +6,7 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
 
-    <a href="{{ path('deleteTrack', {'id': trackId, 'raidId': track.raid.id}) }}">Supprimer le parcours</a>
+    <a href="{{ path('deletePoi', {'id': poi.id, 'trackId': poi.track.id, 'raidId': poi.track.raid.id}) }}">Supprimer le POI</a>
 
 {% endblock %}
 
