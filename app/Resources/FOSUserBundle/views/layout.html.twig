@@ -1,21 +1,22 @@
+{% set background_url = '' %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <title>{% block title %}Welcome!{% endblock %} | Raidy</title>
+    <title>{% block title %}Connexion{% endblock %} | Raidy</title>
     {% block stylesheets %}{% endblock %}
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('assets/dist/css/styles.min.css') }}" />
 
     {% block favicon %}{% endblock %}
 </head>
-<body class="organizer login">
-
+<body class="{{ base_class }} login" style="background-image: url('{{ background_url }}');">
 <main>
 
-    <a href="" class="logo">
-        <img src="{{ asset('assets/images/logo-color.png') }}" alt="Logo Raidy">
+    <a href="." class="logo">
+        <img src="{{ asset('assets/images/logo-' ~ base_class ~ '.png') }}" alt="Logo Raidy">
     </a>
 
     <div class="login-information">
@@ -46,8 +47,6 @@
         {% endblock fos_user_content %}
     </div>
 </main>
-<footer>
-</footer>
 <script type="text/javascript" src="{{ asset('assets/dist/js/scripts.min.js') }}"></script>
 {% block javascripts %}{% endblock %}
 </body>

@@ -12,4 +12,8 @@ $theme-color-secondary: $tertiary-color-1;
   .btn {
     background: $theme-color;
   }
+
+  &.login {
+    background-color: $theme-color;
+  }
 }

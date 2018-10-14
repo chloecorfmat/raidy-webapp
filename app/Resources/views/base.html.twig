@@ -3,7 +3,7 @@
 {% endif %}
 
 {% if base_class is not defined %}
-    {% set base_class = 'default' %}
+    {% set base_class = 'organizer' %}
 {% endif %}
 
 <!DOCTYPE html>
@@ -16,7 +16,14 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ asset('assets/dist/css/styles.min.css') }}" />
 
-        {% block favicon %}{% endblock %}
+        {% block favicon %}
+            <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/favicons/' ~ base_class ~ '/apple-touch-icon.png') }}">
+            <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicons/' ~ base_class ~ '/favicon-32x32.png') }}">
+            <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicons/' ~ base_class ~ '/favicon-16x16.png') }}">
+            <link rel="manifest" href="{{ asset('assets/favicons/' ~ base_class ~ '/site.webmanifest') }}">
+            <meta name="msapplication-TileColor" content="#0f5e54">
+            <meta name="theme-color" content="#ffffff">
+        {% endblock %}
     </head>
     <body class="{{ base_class }} {% block body_class %}{% endblock %}">
         <header>

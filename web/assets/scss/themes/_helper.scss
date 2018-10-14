@@ -10,4 +10,24 @@ $theme-color: $helper-color;
   .btn {
     background: $theme-color;
   }
+
+  &.login {
+    background-color: $theme-color;
+
+    input {
+      &.btn {
+        background: $tertiary-color-2;
+      }
+    }
+
+    label {
+      color: $text-color;
+    }
+
+    .form--input-focused {
+      input {
+        border-bottom-color: $tertiary-color-2;
+      }
+    }
+  }
 }
