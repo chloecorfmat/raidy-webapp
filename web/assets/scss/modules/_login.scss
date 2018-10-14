@@ -4,7 +4,7 @@
   display: flex;
 
   main {
-    background: $white07;
+    background: $white09;
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -78,5 +78,52 @@
 
   .form--item-submit {
     margin-top: 0;
+  }
+
+  .centered--content {
+    text-align: center;
+
+    &.helper--join {
+      h1 {
+        font-size: 1.5rem;
+        margin-bottom: 0;
+      }
+    }
+
+    h1 {
+      font-size: 1rem;
+      margin-top: 0;
+    }
+
+    .form--item {
+      text-align: left;
+    }
+
+    .important {
+      font-size: 1.5rem;
+    }
+
+    p {
+      color: $secondary-color-1;
+      font-family: 'Fontastique', 'SansSerif';
+      font-size: 1rem;
+    }
+
+    .btn {
+      background: $tertiary-color-2;
+    }
+
+    .downloads--links {
+      a {
+        display: inline-block;
+        overflow: hidden;
+        vertical-align: middle;
+        width: 8rem;
+
+        img {
+          max-width: 100%;
+        }
+      }
+    }
   }
 }

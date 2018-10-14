@@ -85,7 +85,7 @@ class HelperRegisterController extends Controller
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
             ->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
-            ->add('submit', SubmitType::class, ['label' => 'Ajouter un organisateur'])
+            ->add('submit', SubmitType::class, ['label' => 'S\'inscrire', 'attr' => array('class' => 'btn'), ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -178,7 +178,7 @@ class HelperRegisterController extends Controller
             ->add('email', TextType::class, ['label' => 'Email'])
             ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
-            ->add('submit', SubmitType::class, ['label' => 'Se connecter'])
+            ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn'), ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -241,6 +241,7 @@ class HelperRegisterController extends Controller
 
         return $this->render('HelperBundle:Register:joinHelper.html.twig', [
             'form' => $form->createView(),
+            'raid' => $raid,
         ]);
     }
 
