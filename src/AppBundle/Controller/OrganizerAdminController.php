@@ -126,6 +126,15 @@ class OrganizerAdminController extends Controller
      */
     public function deleteOrganizer(Request $request, $id)
     {
+        // We have to delete raids about this user.
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raids = $raidManager->findBy(array('user' => $id));
+
+        foreach ($raids as $raid) {
+            $em->remove($raid);
+        }
+
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(['id' => $id]);
         $userManager->deleteUser($user);
