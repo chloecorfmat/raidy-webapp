@@ -19,13 +19,12 @@
                 </div>
                 {% for raid in raids %}
                     <div class="raid">
-                        <a href="./raid/{{ raid.id }}">
+                        <a href="{{ path('displayRaid', {'id': raid.id}) }}">
                             <img src="{{ asset('uploads/raids/' ~ raid.picture) }}" alt="">
                             <div class="raid--content">
                                 <p class="raid--name">{{ raid.name }}</p>
                                 <p class="raid--date">{{ raid.date|date("m/d/Y") }}</p>
                             </div>
-
                         </a>
                     </div>
                 {% endfor %}
