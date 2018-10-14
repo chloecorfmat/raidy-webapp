@@ -118,11 +118,6 @@ class OrganizerRaidController extends Controller
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            $referer = $request->headers->get('referer');
-            if (null !== $referer) {
-                return new RedirectResponse($referer);
-            }
-
             throw $this->createAccessDeniedException();
         }
 
@@ -220,11 +215,6 @@ class OrganizerRaidController extends Controller
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            $referer = $request->headers->get('referer');
-            if (null !== $referer) {
-                return new RedirectResponse($referer);
-            }
-
             throw $this->createAccessDeniedException();
         }
 

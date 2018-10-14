@@ -33,6 +33,7 @@ class RaidVoter implements VoterInterface
     {
         if ($this->supports($attributes, $raid)) {
             $user = $token->getUser();
+
             // If current user is the creator or a Super Admin
             if ($user->getId() === $raid->getUser()->getId()
                 || \in_array('ROLE_SUPER_ADMIN', $user->getRoles(), true)) {
