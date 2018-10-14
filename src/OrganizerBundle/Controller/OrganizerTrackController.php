@@ -226,7 +226,7 @@ class OrganizerTrackController extends Controller
 
         $em->remove($track);
         $em->flush();
-        
+
         return $this->redirectToRoute('listTrack', array('raidId' => $raidId));
     }
 
