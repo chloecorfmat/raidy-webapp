@@ -47,15 +47,9 @@ class Track
     /**
      * Track constructor.
      *
-     * @param mixed $trackPoints track points
-     * @param int   $raid        raid id
-     * @param mixed $sportType   sport
      */
-    public function __construct($trackPoints, $raid, $sportType)
+    public function __construct()
     {
-        $this->trackPoints = $trackPoints;
-        $this->raid = $raid;
-        $this->sportType = $sportType;
     }
 
     /**

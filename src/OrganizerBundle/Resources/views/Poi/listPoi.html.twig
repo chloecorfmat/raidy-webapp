@@ -1,0 +1,38 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item">Liste des pois</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des pois</h1>
+    <table>
+        <caption>Liste des pois</caption>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Nom</th>
+            <th scope="col">Coordonnées</th>
+            <th scope="col">Nombre de bénévoles</th>
+            <th scope="col">Type de bénévoles</th>
+            <th scope="col">Parcours</th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% for poi in pois %}
+            <tr>
+                <td>{{ poi.id }}</td>
+                <td>{{ poi.name }}</td>
+                <td>{{ poi.longitude}}, {{ poi.latitude}}</td>
+                <td>{{ poi.requiredHelpers }} </td>
+                <td>{{ poi.poiType.type }} </td>
+                <td>{{ poi.track.id }} </td>
+                <td><a href="{{ path('displayPoi', {'id': poi.id, 'trackId': poi.track.id, 'raidId': poi.track.raid.id}) }}">Voir</a></td>
+                <td><a href="{{ path('deletePoi', {'id': poi.id, 'trackId': poi.track.id, 'raidId': poi.track.raid.id}) }}">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

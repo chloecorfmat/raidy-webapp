@@ -1,0 +1,23 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="#">Mes pois</a></li>
+        <li class="breadcrumb--list-item">{{ poi.name }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ poi.name }}</h1>
+
+    <div class="content">
+        <div class="content--part">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+
+            <a href="{{ path('deletePoi', {'id': poi.id, 'trackId': poi.track.id, 'raidId': poi.track.raid.id}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
+        </div>
+    </div>
+
+{% endblock %}

@@ -50,6 +50,14 @@ class SportType
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return (string) $this->getSport();
+    }
+
+    /**
      * @return mixed
      */
     public function getId()

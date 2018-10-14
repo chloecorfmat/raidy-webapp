@@ -1,0 +1,15 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('deleteTrack', {'id': trackId, 'raidId': track.raid.id}) }}">Supprimer le parcours</a>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}
