@@ -55,6 +55,7 @@ security:
     - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/admin, role: ROLE_SUPER_ADMIN }
     - { path: ^/organizer, role: [ROLE_ORGANIZER, ROLE_SUPER_ADMIN] }
+    - { path: ^/helper/invite/, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/helper/register/, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/helper/join/, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/helper, role: [ROLE_HELPER, ROLE_SUPER_ADMIN] }

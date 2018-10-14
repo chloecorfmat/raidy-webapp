@@ -1,15 +1,5 @@
 <?php
 
-/*
- * This file is part of PHP CS Fixer.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
@@ -38,6 +28,8 @@ class OrganizerAdminController extends Controller
 
         $form = $this->createFormBuilder($formUser)
             ->add('username', TextType::class, ['label' => 'Nom d\'utilisateur'])
+            ->add('firstName', TextType::class, ['label' => 'Prénom'])
+            ->add('lastName', TextType::class, ['label' => 'Nom'])
             ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
@@ -55,8 +47,8 @@ class OrganizerAdminController extends Controller
 
                 $user = $userManager->createUser();
                 $user->setUsername($formUser->getUsername());
-                $user->setLastName('');
-                $user->setFirstName('');
+                $user->setLastName($formUser->getLastName());
+                $user->setFirstName($formUser->getFirstName());
                 $user->setPhone($formUser->getPhone());
                 $user->setEmail($formUser->getEmail());
                 $user->setEmailCanonical($formUser->getEmail());
@@ -95,6 +87,8 @@ class OrganizerAdminController extends Controller
 
         $form = $this->createFormBuilder($formUser)
             ->add('username', TextType::class, ['label' => 'Nom d\'utilisateur'])
+            ->add('firstName', TextType::class, ['label' => 'Prénom'])
+            ->add('lastName', TextType::class, ['label' => 'Nom'])
             ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
             ->add('submit', SubmitType::class, ['label' => 'Editer un organisateur'])
@@ -109,6 +103,8 @@ class OrganizerAdminController extends Controller
                 $formUser = $form->getData();
                 $user = $userManager->findUserBy(['id' => $formUser->getId()]);
                 $user->setUsername($formUser->getUsername());
+                $user->setLastName($formUser->getLastName());
+                $user->setFirstName($formUser->getFirstName());
                 $user->setPhone($formUser->getPhone());
                 $user->setEmail($formUser->getEmail());
 

@@ -1,15 +1,5 @@
 <?php
 
-/*
- * This file is part of PHP CS Fixer.
- *
- * (c) Fabien Potencier <fabien@symfony.com>
- *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
- *
- * This source file is subject to the MIT license that is bundled
- * with this source code in the file LICENSE.
- */
-
 namespace HelperBundle\Controller;
 
 use AppBundle\Entity\Helper;
@@ -93,6 +83,7 @@ class HelperRegisterController extends Controller
             ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
+            ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
             ->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un organisateur'])
             ->getForm();
@@ -105,43 +96,56 @@ class HelperRegisterController extends Controller
             $userManager = $this->get('fos_user.user_manager');
             $emailExist = $userManager->findUserByEmail($formData['email']);
 
-            if (!$emailExist) {
-                $user = $userManager->createUser();
-                $user->setUsername($formData['email']);
-                $user->setLastName($formData['lastName']);
-                $user->setFirstName($formData['firstName']);
-                $user->setPhone($formData['phone']);
-                $user->setEmail($formData['email']);
-                $user->setEmailCanonical($formData['email']);
-                $user->setEnabled(1);
-                $user->setPlainPassword($formData['plainPassword']);
-                $user->addRole('ROLE_HELPER');
+            if ($formData['plainPassword'] == $formData['repeatPassword']) {
+                if (!$emailExist) {
+                    $user = $userManager->createUser();
+                    $user->setUsername($formData['email']);
+                    $user->setLastName($formData['lastName']);
+                    $user->setFirstName($formData['firstName']);
+                    $user->setPhone($formData['phone']);
+                    $user->setEmail($formData['email']);
+                    $user->setEmailCanonical($formData['email']);
+                    $user->setEnabled(1);
+                    $user->setPlainPassword($formData['plainPassword']);
+                    $user->addRole('ROLE_HELPER');
 
-                $userManager->updateUser($user);
+                    $userManager->updateUser($user);
 
-                $helperManager = $em->getRepository('AppBundle:Helper');
-                $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
+                    // Connect the user manually
+                    $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+                    $this->get('security.token_storage')->setToken($token);
 
-                if ($alreadyRegistered) {
-                    $form->addError(new FormError('Vous êtes déjà enregistré sur ce raid'));
+                    $this->get('session')->set('_security_main', serialize($token));
+
+                    $event = new InteractiveLoginEvent($request, $token);
+                    $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+
+                    $helperManager = $em->getRepository('AppBundle:Helper');
+                    $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
+
+                    if ($alreadyRegistered) {
+                        return $this->redirectToRoute('helper');
+                    } else {
+                        $poitype = new PoiType($formData['poitype']);
+                        $em->persist($poitype);
+                        $em->flush();
+
+                        $helper = new Helper();
+                        $helper->setRaid($raid);
+                        $helper->setFavoritePoiType($poitype); // @todo : Use list instead of raw data
+                        $helper->setUser($user);
+                        $helper->setIsCheckedIn(false);
+
+                        $em->persist($helper);
+                        $em->flush();
+
+                        return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                    }
                 } else {
-                    $poitype = new PoiType($formData['poitype']);
-                    $em->persist($poitype);
-                    $em->flush();
-
-                    $helper = new Helper();
-                    $helper->setRaid($raid);
-                    $helper->setFavoritePoiType($poitype); // @todo : Use list instead of raw data
-                    $helper->setUser($user);
-                    $helper->setIsCheckedIn(false);
-
-                    $em->persist($helper);
-                    $em->flush();
-
-                    return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                    $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
                 }
             } else {
-                $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
+                $form->addError(new FormError('Le champ Répéter le mot de passe n\'est pas rempli correctectement'));
             }
         }
 
@@ -182,41 +186,22 @@ class HelperRegisterController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
 
-            $userManager = $this->get('fos_user.user_manager');
-            $user = $userManager->findUserByEmail($formData['email']);
-            if (!$user) {
-                $form->addError(new FormError('Identifiants invalides'));
-            } else {
-                $encoder = $this->get('security.password_encoder');
-                $isPasswordValid = $encoder->isPasswordValid($user, $formData['password']);
+            if ($this->areNotEmpty($formData)) {
+                $userManager = $this->get('fos_user.user_manager');
+                $user = $userManager->findUserByEmail($formData['email']);
 
-                if (!$isPasswordValid) { // Le mot de passe n'est pas correct
+                //Reject Organizer accounts
+                if (!$user) {
                     $form->addError(new FormError('Identifiants invalides'));
                 } else {
-                    if (!$this->get('security.authorization_checker')->isGranted('ROLE_HELPER')) {
-                        $user->addRole('ROLE_HELPER');
-                        $userManager->updateUser($user);
-                    }
+                    $form->addError(new FormError('Un compte organisateur existe déjà avec cette adresse email'));
 
-                    $helperManager = $em->getRepository('AppBundle:Helper');
-                    $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
+                    $encoder = $this->get('security.password_encoder');
+                    $isPasswordValid = $encoder->isPasswordValid($user, $formData['password']);
 
-                    if ($alreadyRegistered) {
-                        $form->addError(new FormError('Vous êtes déjà enregistré sur ce raid'));
+                    if (!$isPasswordValid) { // Le mot de passe n'est pas correct
+                        $form->addError(new FormError('Identifiants invalides'));
                     } else {
-                        $poitype = new PoiType($formData['poitype']);
-                        $em->persist($poitype);
-                        $em->flush();
-
-                        $helper = new Helper();
-                        $helper->setRaid($raid);
-                        $helper->setFavoritePoiType($poitype); // @todo : Use list instead of raw data
-                        $helper->setUser($user);
-                        $helper->setIsCheckedIn(false);
-
-                        $em->persist($helper);
-                        $em->flush();
-
                         // Connect the user manually
                         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
                         $this->get('security.token_storage')->setToken($token);
@@ -226,14 +211,51 @@ class HelperRegisterController extends Controller
                         $event = new InteractiveLoginEvent($request, $token);
                         $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
 
-                        return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                        $helperManager = $em->getRepository('AppBundle:Helper');
+                        $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
+
+                        if ($alreadyRegistered) {
+                            return $this->redirectToRoute('helper');
+                        } else {
+                            $poitype = new PoiType($formData['poitype']);
+                            $em->persist($poitype);
+                            $em->flush();
+
+                            $helper = new Helper();
+                            $helper->setRaid($raid);
+                            $helper->setFavoritePoiType($poitype); // @todo : Use list instead of raw data
+                            $helper->setUser($user);
+                            $helper->setIsCheckedIn(false);
+
+                            $em->persist($helper);
+                            $em->flush();
+
+                            return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                        }
                     }
                 }
+            } else {
+                $form->addError(new FormError('Tous les champs doivent être remplis.'));
             }
         }
 
         return $this->render('HelperBundle:Register:joinHelper.html.twig', [
             'form' => $form->createView(),
         ]);
+    }
+
+    /**
+     * @param mixed $formdata data from form
+     * @return bool
+     */
+    private function areNotEmpty($formdata)
+    {
+        foreach ($formdata as $field) {
+            if ($field == null) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

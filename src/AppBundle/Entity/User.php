@@ -14,6 +14,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -30,19 +31,25 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(name="last_name", type="string", length=45)
+     * @Assert\NotBlank(groups={"editProfile"})
      */
     protected $lastName;
 
     /**
      * @ORM\Column(name="first_name", type="string", length=45)
+     * @Assert\NotBlank(groups={"editProfile"})
      */
     protected $firstName;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\NotBlank(groups={"editProfile"})
      */
     protected $phone;
 
+    /**
+     * @Assert\NotBlank(groups={"changePassword"})
+     */
     protected $plainPassword;
 
     /**
