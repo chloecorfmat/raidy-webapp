@@ -1,13 +1,15 @@
 {% extends 'default/external.html.twig' %}
 
-{% block body %}
-    <h1>Rejoindre {{ raid.name }}</h1>
+{% block title %}Être bénévole au raid "{{ raid.name }}"{% endblock %}
 
+{% block content %}
+    <div class="centered--content">
+        <h1>{{ raid.name }}</h1>
+        <p class="important">Enregistrez-vous en tant que bénévole pour le raid "{{ raid.name }}" !</p>
 
-    <a href="{{ path('joinHelper', {'id':raid.id}) }}">J'ai déjà un compte</a>
-    <a href="{{ path('registerHelper', {'id':raid.id}) }}">Je crée un compte</a>
-
+        <div class="actions">
+            <a href="{{ path('joinHelper', {'id': raid.id }) }}" class="btn">Se connecter</a>
+            <a href="{{ path('registerHelper', {'id': raid.id }) }}" class="btn">Se créer un compte</a>
+        </div>
+    </div>
 {% endblock %}
-
-
-

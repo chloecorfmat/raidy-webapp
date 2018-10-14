@@ -1,9 +1,27 @@
 {% extends 'default/external.html.twig' %}
 
-{% block body %}
-    Félicitations vous êtes inscrit en tant que bénévole pour le raid {{ raid.name }}
+{% block content %}
+<div class="centered--content">
+    <h1>Mon super raid</h1>
+    <p class="important">Vous avez bien été enregistré en tant que bénévole pour ce raid !</p>
 
-    <a href="{{ path("helper") }}">Accéder à mon compte</a>
+    <div class="actions">
+        <div class="downloads">
+            <p>Téléchargez dès maintenant l'application Raidy</p>
+            <div class="downloads--links">
+                <a href="#">
+                    <img src="{{ asset('assets/images/app-store-badge.svg') }}" alt="">
+                </a>
+                <a href="#">
+                    <img src="{{ asset('assets/images/google-play-badge.png') }}" alt="">
+                </a>
+            </div>
+            <p>ou</p>
+            <a href="{{ path('fos_user_security_login') }}" class="btn">Accéder à mon compte</a>
+        </div>
+
+    </div>
+</div>
 {% endblock %}
 
 
