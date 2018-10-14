@@ -3,7 +3,7 @@ button {
   border: 0;
   box-sizing: border-box;
   color: $white;
-  display: block;
+  //display: block;
   font-size: .9rem;
   font-weight: 700;
   padding: .5rem;
@@ -29,6 +29,11 @@ button {
   }
 }
 
+.btn--full-width {
+  display: block;
+  width: 100%;
+}
+
 .btn--danger {
   background: $secondary-color-2 !important; // sass-lint:disable-line no-important
 }
@@ -37,7 +42,8 @@ button {
   background: $tertiary-color-1 !important; // sass-lint:disable-line no-important
 }
 
-.btn--full-width {
-  display: block;
-  width: 100%;
+.btn--cancel {
+  background: $white !important; // sass-lint:disable-line no-important
+  border: 1px solid $secondary-color-2;
+  color: $secondary-color-2;
 }

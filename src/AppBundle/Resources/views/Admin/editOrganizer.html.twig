@@ -17,7 +17,33 @@
             {{ form_widget(form) }}
             {{ form_end(form) }}
         </div>
-        <a href="{{ path('deleteOrganizer', {'id': userId}) }}" class="btn btn--danger btn--full-width">Supprimer l'organisateur</a>
+        <button data-organizer-id="{{ userId }}" class="btn btn--danger btn--delete-organizer btn--full-width">Supprimer l'organisateur</button>
+    </div>
+
+    <div id="delete-organizer" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-organizer-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-organizer-title">
+                            Supprimer un organisateur
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-organizer-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer cet organisateur ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <a href="" id="btn--delete-organizer" class="btn btn--danger" data-base-url="/admin/organizer/delete/">Supprimer</a>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 {% endblock %}

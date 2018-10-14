@@ -1,0 +1,25 @@
+{% extends 'default/helper.html.twig' %}
+
+{% if editPasswordForm is defined %}
+    {% form_theme editPasswordForm 'form/fields.html.twig' %}
+{% endif %}
+
+{% block body %}
+    <div class="main-form">
+        <h1>Modifier son profil</h1>
+        <div>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+
+        <div>
+            {{ form_start(editPasswordForm) }}
+            {{ form_widget(editPasswordForm) }}
+            {{ form_end(editPasswordForm) }}
+        </div>
+    </div>
+{% endblock %}
+
+
+

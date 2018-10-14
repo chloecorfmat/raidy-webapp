@@ -1,30 +1,30 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lucas
- * Date: 10/10/18
- * Time: 18:55
+
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
  */
 
 namespace AppBundle\Command;
 
 use FOS\UserBundle\Model\UserManagerInterface;
-use FOS\UserBundle\Util\UserManipulator;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 
 class CreateSuperAdminCommand extends ContainerAwareCommand
 {
-
     private $userManager;
 
     /**
      * @param UserManagerInterface $userManager
-    */
+     */
     public function __construct(UserManagerInterface $userManager)
     {
         $this->userManager = $userManager;
@@ -32,7 +32,7 @@ class CreateSuperAdminCommand extends ContainerAwareCommand
     }
 
     /**
-     * Configure the command
+     * Configure the command.
      */
     protected function configure()
     {
@@ -42,7 +42,8 @@ class CreateSuperAdminCommand extends ContainerAwareCommand
     }
 
     /**
-     * Execution of the command
+     * Execution of the command.
+     *
      * @param InputInterface  $input
      * @param OutputInterface $output
      */

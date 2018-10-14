@@ -3,5 +3,14 @@
 {% block body %}
 
     <h1>Raidy - Helper</h1>
+    <ul>
+        {% for raid in raids %}
+            <li>{{ raid.name }}</li>
+        {% endfor %}
+    </ul>
+
+    {{ dump(user) }}
+
+    <a href="{{ path('editHelperProfile') }}">Editer le profil</a>
 
 {% endblock %}

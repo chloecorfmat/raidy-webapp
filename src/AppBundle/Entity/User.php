@@ -1,9 +1,20 @@
 <?php
 
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace AppBundle\Entity;
 
-use FOS\UserBundle\Model\User as BaseUser;
 use Doctrine\ORM\Mapping as ORM;
+use FOS\UserBundle\Model\User as BaseUser;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -20,19 +31,25 @@ class User extends BaseUser
 
     /**
      * @ORM\Column(name="last_name", type="string", length=45)
+     * @Assert\NotBlank(groups={"editProfile"})
      */
     protected $lastName;
 
     /**
      * @ORM\Column(name="first_name", type="string", length=45)
+     * @Assert\NotBlank(groups={"editProfile"})
      */
     protected $firstName;
 
     /**
      * @ORM\Column(type="string", length=20)
+     * @Assert\NotBlank(groups={"editProfile"})
      */
     protected $phone;
 
+    /**
+     * @Assert\NotBlank(groups={"changePassword"})
+     */
     protected $plainPassword;
 
     /**
@@ -120,6 +137,11 @@ class User extends BaseUser
      */
     public function setPhone($phone)
     {
-        $this->phone = $phone;
+        $str = $phone;
+        $charToReplace = [' ', '-', '.'];
+        foreach ($charToReplace as $char) {
+            $str = str_replace($char, '', $str);
+        }
+        $this->phone = $str;
     }
 }

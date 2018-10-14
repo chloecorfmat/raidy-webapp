@@ -19,13 +19,14 @@
                 </div>
                 {% for raid in raids %}
                     <div class="raid">
-                        <a href="./raid/{{ raid.id }}">
+                        <a href="{{ path('displayRaid', {'id': raid.id}) }}">
                             <img src="{{ asset('uploads/raids/' ~ raid.picture) }}" alt="">
                             <div class="raid--content">
-                                <p class="raid--name">{{ raid.name }}</p>
-                                <p class="raid--date">{{ raid.date|date("m/d/Y") }}</p>
+                                <div class="raid--content-container">
+                                    <p class="raid--name">{{ raid.name }}</p>
+                                    <p class="raid--date">{{ raid.date|date("m/d/Y") }}</p>
+                                </div>
                             </div>
-
                         </a>
                     </div>
                 {% endfor %}
@@ -37,7 +38,7 @@
             <h2>{{ user.username }}</h2>
             <div class="profile--contact-information">
                 <h3>Coordonnées <a href="{{ path('editOrganizer', {'id': user.id}) }}"><i aria-hidden="true" class="fas fa-pen"></i></a></h3>
-                <p>Téléphone : <a href="tel:{{ user.phone }}">{{ user.phone }}</a></p>
+                <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
                 <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             </div>
         </div>

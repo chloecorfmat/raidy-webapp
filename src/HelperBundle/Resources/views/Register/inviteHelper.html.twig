@@ -1,0 +1,13 @@
+{% extends 'default/external.html.twig' %}
+
+{% block body %}
+    <h1>Rejoindre {{ raid.name }}</h1>
+
+
+    <a href="{{ path('joinHelper', {'id':raid.id}) }}">J'ai déjà un compte</a>
+    <a href="{{ path('registerHelper', {'id':raid.id}) }}">Je crée un compte</a>
+
+{% endblock %}
+
+
+
