@@ -17,22 +17,39 @@ use Symfony\Component\HttpFoundation\Request;
 class OrganizerTrackController extends Controller
 {
     /**
-     * @Route("/organizer/track/add", name="addTrack")
+     * @Route("/organizer/raid/{raidId}/track/add", name="addTrack")
      *
      * @param Request $request request
+     * @param int     $raidId  raidId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addTrack(Request $request)
+    public function addTrack(Request $request, $raidId)
     {
+        // Set up managers
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $sportTypeManager = $em->getRepository('AppBundle:SportType');
 
-        $raids = $raidManager->findAll();
+        // Find the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $raidId = (int) $raidId;
+
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        if (null == $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        if ($raid->getUser()->getId() != $user->getId()) {
+            throw $this->createNotFoundException('Ce raid ne vous appartient pas');
+        }
+
         $sportTypes = $sportTypeManager->findAll();
 
+        // Create form
         $formTrack = new Track();
 
         $form = $this->createFormBuilder($formTrack)
@@ -41,19 +58,6 @@ class OrganizerTrackController extends Controller
                 'label_attr' => array('class' => 'form--fixed-label'),
                 'required' => false,
                 'data_class' => null,
-            ))
-            // AddTrackCode
-            ->add('raid', ChoiceType::class, array(
-                'choices' => $raids,
-                'choice_label' => function ($raid, $key, $value) {
-                    /** @var Raid $raid */
-
-                    return $raid->getName();
-                },
-                'choice_attr' => function ($raid, $key, $value) {
-
-                    return ['class' => 'raid_s' . strtolower($raid->getName())];
-                },
             ))
             ->add('sportType', ChoiceType::class, array(
                 'choices' => $sportTypes,
@@ -72,6 +76,7 @@ class OrganizerTrackController extends Controller
 
         $form->handleRequest($request);
 
+        // Form submission
         if ($form->isSubmitted() && $form->isValid()) {
             $trackManager = $em->getRepository('AppBundle:Track');
             $trackExist = $trackManager->findBy(
@@ -84,66 +89,66 @@ class OrganizerTrackController extends Controller
 
                 $track = new Track();
 
-                $track->setRaid($formTrack->getRaid());
+                $track->setRaid($raidId);
                 $track->setSportType($formTrack->getSportType());
                 $track->setTrackPoints($fileName);
 
                 $em->persist($track);
                 $em->flush();
 
-                return $this->redirectToRoute('listTrack');
+                return $this->redirectToRoute('listTrack', array('raidId' => $raidId));
             } else {
                 $form->addError(new FormError('Ce parcours existe déjà.'));
             }
         }
 
-        return $this->render('OrganizerBundle:Track:addTrack.html.twig', [
+        return $this->render('OrganizerBundle:Track:addTrack.html.twig', array(
             'form' => $form->createView(),
-        ]);
+            'raidId' => $raidId,
+        ));
     }
 
     /**
-     * @Route("/organizer/track/{id}", name="displayTrack")
+     * @Route("/organizer/raid/{raidId}/track/{id}", name="displayTrack")
      *
      * @param Request $request request
+     * @param int     $raidId  raidId
      * @param int     $id      track identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function displayTrack(Request $request, $id)
+    public function displayTrack(Request $request, $raidId, $id)
     {
-
+        // Get managers
         $em = $this->getDoctrine()->getManager();
         $trackManager = $em->getRepository('AppBundle:Track');
         $raidManager = $em->getRepository('AppBundle:Raid');
         $sportTypeManager = $em->getRepository('AppBundle:SportType');
 
+        // Get values from database
         $track = $trackManager->find($id);
-
         $sportTypes = $sportTypeManager->findAll();
-
         $formTrack = $trackManager->findOneBy(['id' => $id]);
-
-        $raid = $raidManager->find($formTrack->getRaid());
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         $oldTrackPoints = $formTrack->getTrackPoints();
 
+        if (null == $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        // Check if track exists
         if (null == $formTrack) {
             throw $this->createNotFoundException('Ce parcours n\'existe pas');
         }
 
+        // Create form
         $form = $this->createFormBuilder($formTrack)
             ->add('trackPoints', FileType::class, array(
                 'label' => 'Fichier GPX',
                 'label_attr' => array('class' => 'form--fixed-label'),
                 'required' => false,
                 'data_class' => null,
-            ))
-            //EditTrackCode
-            ->add('raid', TextType::class, array(
-                'disabled' => 'true',
-                'label' => 'Nom du raid',
-                'data' => $raid->getName(),
             ))
             ->add('sportType', ChoiceType::class, array(
                 'choices' => $sportTypes,
@@ -161,6 +166,7 @@ class OrganizerTrackController extends Controller
 
         $form->handleRequest($request);
 
+        // Whenform is submitted, check datas and send it
         if ($form->isSubmitted() && $form->isValid()) {
             $trackExist = $trackManager->findOneBy(
                 array('raid' => $formTrack->getRaid(), 'sportType' => $formTrack->getSportType())
@@ -192,41 +198,57 @@ class OrganizerTrackController extends Controller
     }
 
     /**
-     * @Route("/organizer/track/delete/{id}", name="deleteTrack")
+     * @Route("/organizer/raid/{raidId}/track/delete/{id}", name="deleteTrack")
      *
      * @param Request $request request
+     * @param mixed   $raidId  raidId
      * @param mixed   $id      id
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deleteTrack(Request $request, $id)
+    public function deleteTrack(Request $request, $raidId, $id)
     {
         $em = $this->getDoctrine()->getManager();
-        $trackManager = $em
-            ->getRepository('AppBundle:Track');
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $trackManager = $em->getRepository('AppBundle:Track');
         $track = $trackManager->findOneBy(array('id' => $id));
+
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        if (null == $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
         if (null == $track) {
             throw $this->createNotFoundException('Ce parcours n\'existe pas');
         }
 
         $em->remove($track);
         $em->flush();
-
-        return $this->redirectToRoute('listTrack');
+        
+        return $this->redirectToRoute('listTrack', array('raidId' => $raidId));
     }
 
     /**
-     * @Route("/organizer/track", name="listTrack")
+     * @Route("/organizer/raid/{raidId}/track", name="listTrack")
      *
+     * @param mixed $raidId raidId
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listTracks()
+    public function listTracks($raidId)
     {
-        $trackManager = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('AppBundle:Track');
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $trackManager = $em->getRepository('AppBundle:Track');
 
-        $tracks = $trackManager->findAll();
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        if (null == $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        $tracks = $trackManager->findBy(array('raid' => $raidId));
 
         return $this->render(
             'OrganizerBundle:Track:listTrack.html.twig',
