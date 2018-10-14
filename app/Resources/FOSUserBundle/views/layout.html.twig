@@ -1,4 +1,7 @@
-{% set background_url = '' %}
+
+{% if background_url is not defined %}
+    {% set background_url = '' %}
+{% endif %}
 
 <!DOCTYPE html>
 <html lang="fr">
