@@ -18,9 +18,8 @@
                     </a>
                 </div>
                 {% for raid in raids %}
-                    <div class="raid">
+                    <div class="raid" style="background-image: url('{{ asset('uploads/raids/' ~ raid.picture) }}');">
                         <a href="{{ path('displayRaid', {'id': raid.id}) }}">
-                            <img src="{{ asset('uploads/raids/' ~ raid.picture) }}" alt="">
                             <div class="raid--content">
                                 <div class="raid--content-container">
                                     <p class="raid--name">{{ raid.name }}</p>
