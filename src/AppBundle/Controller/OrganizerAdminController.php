@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OrganizerAdminController extends Controller
@@ -82,7 +83,8 @@ class OrganizerAdminController extends Controller
         $formUser = $userManager->findUserBy(['id' => $id]);
 
         if (null === $formUser) {
-            throw $this->createNotFoundException('The organizer does not exist');
+            //throw $this->createNotFoundException('The organizer does not exist');
+            throw new NotFoundHttpException("Not found");
         }
 
         $form = $this->createFormBuilder($formUser)
