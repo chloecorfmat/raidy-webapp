@@ -53,12 +53,15 @@ class OrganizerTrackController extends Controller
         $formTrack = new Track();
 
         $form = $this->createFormBuilder($formTrack)
+            /* TODO Uncomment for GPX import
             ->add('trackPoints', FileType::class, array(
                 'label' => 'Fichier GPX',
                 'label_attr' => array('class' => 'form--fixed-label'),
                 'required' => false,
                 'data_class' => null,
             ))
+            */
+            ->add('color', TextType::class, array('label' => 'Couleur'))
             ->add('sportType', ChoiceType::class, array(
                 'choices' => $sportTypes,
                 'choice_label' => function ($sportType, $key, $value) {
@@ -85,13 +88,19 @@ class OrganizerTrackController extends Controller
             if (!$trackExist) {
                 $formTrack = $form->getData();
 
+                /* TODO Uncomment for GPX import
                 $fileName = $this->saveFile($formTrack->getTrackPoints());
+                */
 
                 $track = new Track();
 
                 $track->setRaid($raid);
+                $track->setColor($formTrack->getColor());
                 $track->setSportType($formTrack->getSportType());
+
+                /* TODO Uncomment for GPX import
                 $track->setTrackPoints($fileName);
+                */
 
                 $em->persist($track);
                 $em->flush();
@@ -128,10 +137,12 @@ class OrganizerTrackController extends Controller
         // Get values from database
         $track = $trackManager->find($id);
         $sportTypes = $sportTypeManager->findAll();
-        $formTrack = $trackManager->findOneBy(['id' => $id]);
+        $formTrack = $trackManager->findOneBy(array('id' => $id));
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
+        /* TODO Uncomment for GPX import
         $oldTrackPoints = $formTrack->getTrackPoints();
+        */
 
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -144,12 +155,14 @@ class OrganizerTrackController extends Controller
 
         // Create form
         $form = $this->createFormBuilder($formTrack)
-            ->add('trackPoints', FileType::class, array(
+            /* TODO Uncomment for GPX import
+             * ->add('trackPoints', FileType::class, array(
                 'label' => 'Fichier GPX',
                 'label_attr' => array('class' => 'form--fixed-label'),
                 'required' => false,
                 'data_class' => null,
-            ))
+            ))*/
+            ->add('color', TextType::class, array('label' => 'Couleur'))
             ->add('sportType', ChoiceType::class, array(
                 'choices' => $sportTypes,
                 'choice_label' => function ($sportType, $key, $value) {
@@ -178,13 +191,15 @@ class OrganizerTrackController extends Controller
                 $track = $trackManager->findOneBy(array('id' => $formTrack->getId()));
 
                 $track->setRaid($formTrack->getRaid());
+                $track->setColor($formTrack->getColor());
                 $track->setSportType($formTrack->getSportType());
+                /* TODO Uncomment for GPX import
                 if (null != $formTrack->getTrackPoints()) {
                     $fileName = $this->saveFile($formTrack->getTrackPoints());
                     $track->setTrackPoints($fileName);
                 } else {
                     $track->setTrackPoints($oldTrackPoints);
-                }
+                }*/
 
                 $em->persist($track);
                 $em->flush();

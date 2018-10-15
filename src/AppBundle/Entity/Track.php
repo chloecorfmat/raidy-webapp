@@ -28,9 +28,14 @@ class Track
     protected $id;
 
     /**
-     * @ORM\Column(name="track_points", type="string", length=45)
+     * @ORM\Column(name="track_points", type="string", length=45, nullable=true)
      */
     protected $trackPoints;
+
+    /**
+     * @ORM\Column(name="color", type="string", length=9)
+     */
+    protected $color;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
@@ -66,6 +71,22 @@ class Track
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param mixed $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
     }
 
     /**
