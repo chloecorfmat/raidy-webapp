@@ -2,8 +2,7 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
-        <li class="breadcrumb--list-item">Liste des raids</li>
+        <li class="breadcrumb--list-item">Organizer</li>
     </ol>
 {% endblock %}
 
@@ -36,7 +35,7 @@
             <h1>Mon profil</h1>
             <h2>{{ user.username }}</h2>
             <div class="profile--contact-information">
-                <h3>Coordonnées <a href="{{ path('editOrganizer', {'id': user.id}) }}"><i aria-hidden="true" class="fas fa-pen"></i></a></h3>
+                <h3>Coordonnées <a href="{{ path('editOrganizerProfile') }}"><i aria-hidden="true" class="fas fa-pen"></i></a></h3>
                 <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
                 <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             </div>
