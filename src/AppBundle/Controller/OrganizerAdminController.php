@@ -83,8 +83,7 @@ class OrganizerAdminController extends Controller
         $formUser = $userManager->findUserBy(['id' => $id]);
 
         if (null === $formUser) {
-            //throw $this->createNotFoundException('The organizer does not exist');
-            throw new NotFoundHttpException("Not found");
+            throw $this->createNotFoundException('The organizer does not exist');
         }
 
         $form = $this->createFormBuilder($formUser)
