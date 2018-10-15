@@ -44,7 +44,7 @@ class OrganizerTrackController extends Controller
         }
 
         if ($raid->getUser()->getId() != $user->getId()) {
-            throw $this->createNotFoundException('Ce raid ne vous appartient pas');
+            throw $this->createAccessDeniedException();
         }
 
         $sportTypes = $sportTypeManager->findAll();
@@ -212,9 +212,14 @@ class OrganizerTrackController extends Controller
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $trackManager = $em->getRepository('AppBundle:Track');
+        $poiManager = $em->getRepository('AppBundle:Poi');
+
         $track = $trackManager->findOneBy(array('id' => $id));
 
         $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        // Find the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -222,6 +227,19 @@ class OrganizerTrackController extends Controller
 
         if (null == $track) {
             throw $this->createNotFoundException('Ce parcours n\'existe pas');
+        }
+
+        if ($raid->getUser()->getId() != $user->getId()) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $pois = $poiManager->findBy(array('track' => $track->getId()));
+
+        if (null != $pois) {
+            foreach ($pois as $poi) {
+                $em->remove($poi);
+                $em->flush();
+            }
         }
 
         $em->remove($track);

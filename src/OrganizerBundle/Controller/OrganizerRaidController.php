@@ -207,6 +207,9 @@ class OrganizerRaidController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
+        $trackManager = $em->getRepository('AppBundle:Track');
+        $poiManager = $em->getRepository('AppBundle:Poi');
+
         $raid = $raidManager->findOneBy(['id' => $id]);
 
         if (null === $raid) {
@@ -216,6 +219,23 @@ class OrganizerRaidController extends Controller
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
             throw $this->createAccessDeniedException();
+        }
+
+        $tracks = $trackManager->findBy(array('raid' => $raid->getId()));
+
+        if (null != $tracks) {
+            foreach ($tracks as $track) {
+                $pois = $poiManager->findBy(array('track' => $track->getId()));
+                if (null != $pois) {
+                    foreach ($pois as $poi) {
+                        $em->remove($poi);
+                        $em->flush();
+                    }
+                }
+
+                $em->remove($track);
+                $em->flush();
+            }
         }
 
         $em->remove($raid);

@@ -56,7 +56,7 @@ class OrganizerPOIController extends Controller
         }
 
         if ($raid->getUser()->getId() != $user->getId()) {
-            throw $this->createNotFoundException('Ce raid ne vous appartient pas');
+            throw $this->createAccessDeniedException();
         }
 
         if (null == $track) {
@@ -64,7 +64,7 @@ class OrganizerPOIController extends Controller
         }
 
         if ($track->getRaid()->getId() != $raid->getId()) {
-            throw $this->createNotFoundException('Ce parcours n\'est pas lié à ce raid');
+            throw $this->createAccessDeniedException();
         }
 
         $poiTypes = $poiTypeManager->findAll();
@@ -98,7 +98,7 @@ class OrganizerPOIController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $poiManager = $em->getRepository('AppBundle:Poi');
             $poiExist = $poiManager->findBy(
-                array('longitude' => $formPoi->getLongitude(), 'latitude' => $formPoi->getLatitude())
+                array('track' => $track, 'longitude' => $formPoi->getLongitude(), 'latitude' => $formPoi->getLatitude())
             );
             if (!$poiExist) {
                 $formPoi = $form->getData();
@@ -163,7 +163,7 @@ class OrganizerPOIController extends Controller
         }
 
         if ($raid->getUser()->getId() != $user->getId()) {
-            throw $this->createNotFoundException('Ce raid ne vous appartient pas');
+            throw $this->createAccessDeniedException();
         }
 
         if (null == $track) {
@@ -171,7 +171,7 @@ class OrganizerPOIController extends Controller
         }
 
         if ($track->getRaid()->getId() != $raid->getId()) {
-            throw $this->createNotFoundException('Ce parcours n\'est pas lié à ce raid');
+            throw $this->createAccessDeniedException();
         }
 
         // Check if Poi exists
@@ -205,7 +205,7 @@ class OrganizerPOIController extends Controller
         // When form is submitted, check data and send it
         if ($form->isSubmitted() && $form->isValid()) {
             $poiExist = $poiManager->findOneBy(
-                array('longitude' => $formPoi->getLongitude(), 'latitude' => $formPoi->getLatitude())
+                array('track' => $track, 'longitude' => $formPoi->getLongitude(), 'latitude' => $formPoi->getLatitude())
             );
 
             if (!$poiExist || $poiExist->getId() == $formPoi->getId()) {
@@ -262,7 +262,7 @@ class OrganizerPOIController extends Controller
         }
 
         if ($raid->getUser()->getId() != $user->getId()) {
-            throw $this->createNotFoundException('Ce raid ne vous appartient pas');
+            throw $this->createAccessDeniedException();
         }
 
         if (null == $track) {
@@ -270,7 +270,7 @@ class OrganizerPOIController extends Controller
         }
 
         if ($track->getRaid()->getId() != $raid->getId()) {
-            throw $this->createNotFoundException('Ce parcours n\'est pas lié à ce raid');
+            throw $this->createAccessDeniedException();
         }
 
         // Check if Poi exists
