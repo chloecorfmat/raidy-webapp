@@ -102,4 +102,8 @@ fos_rest:
   routing_loader:
     include_format: false
   exception:
-    enabled: true
+    codes:
+      'Symfony\Component\HttpKernel\Exception\NotFoundHttpException': 404
+    messages:
+      'Symfony\Component\HttpKernel\Exception\NotFoundHttpException': true
+      'Symfony\Component\HttpKernel\Exception\BadRequestHttpException': true
