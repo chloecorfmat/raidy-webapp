@@ -15,7 +15,7 @@
     padding: 5rem;
     width: 100vw;
 
-    @media screen and (min-width: $breakpoint-medium) {
+    @media screen and (min-width: $breakpoint-mediumlarge) {
       border-radius: 50%;
       max-height: 70vh;
       min-height: initial;
@@ -123,6 +123,16 @@
         img {
           max-width: 100%;
         }
+      }
+    }
+  }
+
+  .actions {
+    .btn {
+      display: block;
+
+      @media screen and (min-width: $breakpoint-mediumlarge) {
+        display: inline-block;
       }
     }
   }
