@@ -83,7 +83,7 @@ class DefaultController extends Controller
         ->add('lastName', TextType::class, ['label' => 'Nom'])
         ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
         ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
-        ->add('submit', SubmitType::class, ['label' => 'Modifier le profil'])
+        ->add('submit', SubmitType::class, ['label' => 'Modifier le profil', 'attr' => array('class' => 'btn'), ])
         ->getForm();
 
         $data = [];
@@ -102,7 +102,7 @@ class DefaultController extends Controller
             'first_options'  => array('label' => 'Nouveau mot de passe'),
             'second_options' => array('label' => 'Répétez le mot de passe'),
         ))
-        ->add('submit', SubmitType::class, ['label' => 'Modifier le mot de passe'])
+        ->add('submit', SubmitType::class, ['label' => 'Modifier le mot de passe', 'attr' => array('class' => 'btn'), ])
         ->getForm();
 
         $form->handleRequest($request);
