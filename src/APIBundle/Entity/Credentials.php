@@ -14,24 +14,24 @@ namespace APIBundle\Entity;
 
 class Credentials
 {
-    protected $login;
+    protected $email;
 
     protected $password;
 
     /**
      * @return mixed
      */
-    public function getLogin()
+    public function getEmail()
     {
-        return $this->login;
+        return $this->email;
     }
 
     /**
-     * @param mixed $login login
+     * @param mixed $email email
      */
-    public function setLogin($login)
+    public function setEmail($email)
     {
-        $this->login = $login;
+        $this->email = $email;
     }
 
     /**

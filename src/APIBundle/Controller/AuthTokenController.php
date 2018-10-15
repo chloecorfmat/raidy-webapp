@@ -47,7 +47,7 @@ class AuthTokenController extends Controller
 
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $user = $em->getRepository('AppBundle:User')->findOneByUsername($credentials->getLogin());
+        $user = $em->getRepository('AppBundle:User')->findOneByEmail($credentials->getEmail());
 
         if (!$user) { // L'utilisateur n'existe pas
             return $this->invalidCredentials();
