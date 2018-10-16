@@ -30,7 +30,6 @@ class RaidController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        //$raids = $raidManager->findAll();
         $raids = $raidManager->findBy([
             'user' => $user,
         ]);
