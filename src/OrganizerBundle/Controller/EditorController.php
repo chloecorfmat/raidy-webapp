@@ -32,6 +32,7 @@ class EditorController extends Controller
 
         return $this->render('OrganizerBundle:Editor:editor.html.twig', [
             'key' => $tracks,
+            'id' => $id
         ]);
     }
 }
