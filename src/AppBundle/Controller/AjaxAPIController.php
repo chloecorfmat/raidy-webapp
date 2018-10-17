@@ -25,7 +25,7 @@ class AjaxAPIController extends Controller
         $ret['message'] = $message;
 
         $res = new Response(json_encode($ret));
-        $res->setStatusCode(Response::HTTP_BAD_REQUEST);
+        $res->setStatusCode($code);
         $res->headers->set('Content-Type', 'application/json');
 
         return $res;
@@ -33,14 +33,13 @@ class AjaxAPIController extends Controller
 
     /**
      * @param int   $code
-     * @param mixed $message
      * @param mixed $data
      * @return Response
      */
-    public function buildJSONReturn($code, $message, $data)
+    public function buildJSONReturn($code, $data)
     {
         $res = new Response(json_encode($data));
-        $res->setStatusCode(Response::HTTP_BAD_REQUEST);
+        $res->setStatusCode($code);
         $res->headers->set('Content-Type', 'application/json');
 
         return $res;
