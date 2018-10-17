@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Nico
- * Date: 10/10/2018
- * Time: 09:53.
- */
 
 namespace OrganizerBundle\Controller;
 
@@ -32,7 +26,7 @@ class EditorController extends Controller
 
         return $this->render('OrganizerBundle:Editor:editor.html.twig', [
             'key' => $tracks,
-            'id' => $id
+            'id' => $id,
         ]);
     }
 }
