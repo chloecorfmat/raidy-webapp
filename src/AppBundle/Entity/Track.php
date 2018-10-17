@@ -28,7 +28,12 @@ class Track
     protected $id;
 
     /**
-     * @ORM\Column(name="track_points", type="string", length=45, nullable=true)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     */
+    protected $name;
+
+    /**
+     * @ORM\Column(name="track_points", type="string", nullable=true)
      */
     protected $trackPoints;
 
@@ -45,9 +50,14 @@ class Track
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SportType")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $sportType;
+
+    /**
+     * @ORM\Column(name="isVisible", type="boolean", nullable=false)
+     */
+    protected $isVisible;
 
     /**
      * Track constructor.
@@ -135,5 +145,37 @@ class Track
     public function setSportType($sportType)
     {
         $this->sportType = $sportType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisVisible()
+    {
+        return $this->isVisible;
+    }
+
+    /**
+     * @param mixed $isVisible
+     */
+    public function setIsVisible($isVisible)
+    {
+        $this->isVisible = $isVisible;
     }
 }
