@@ -202,6 +202,11 @@ class HelperRegisterController extends Controller
                     if (!$isPasswordValid) { // Le mot de passe n'est pas correct
                         $form->addError(new FormError('Identifiants invalides'));
                     } else {
+                        if (!$user->hasRole("ROLE_HELPER")) {
+                            $user->addRole('ROLE_HELPER');
+                            $em->flush();
+                        }
+
                         // Connect the user manually
                         $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
                         $this->get('security.token_storage')->setToken($token);
