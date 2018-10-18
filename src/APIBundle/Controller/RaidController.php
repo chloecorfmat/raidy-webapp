@@ -20,9 +20,10 @@ class RaidController extends Controller
      * @Rest\View(serializerGroups={"secured"})
      * @Rest\Get("/api/organizer/raids")
      *
+     * @param Request $request
      * @return JsonResponse
      */
-    public function listRaid()
+    public function listRaid(Request $request)
     {
         $user = $this->getUser();
 
@@ -34,12 +35,16 @@ class RaidController extends Controller
             'user' => $user,
         ]);
 
+        $assetsManager = $this->get('assets.packages');
+        $baseUrl = $request->getSchemeAndHttpHost();
+
         $dataRaids = [];
         foreach ($raids as $raid) {
             $raidArr = [];
             $raidArr['id'] = $raid->getId();
             $raidArr['name'] = $raid->getName();
             $raidArr['date'] = $raid->getDate();
+            $raidArr['picture'] = $baseUrl . "/" . $assetsManager->getUrl('uploads/raids/' . $raid->getPicture());
             $raidArr['address'] = $raid->getAddress();
             $raidArr['addressAddition'] = $raid->getAddressAddition();
             $raidArr['postCode'] = $raid->getPostCode();
