@@ -42,7 +42,10 @@ class AuthTokenController extends Controller
             $ret['code'] = Response::HTTP_BAD_REQUEST;
             $ret['message'] = 'Invalid values';
 
-            return new Response(json_encode($ret));
+            $res = new Response(json_encode($ret));
+            $res->setStatusCode(Response::HTTP_BAD_REQUEST);
+
+            return $res;
         }
 
         $em = $this->get('doctrine.orm.entity_manager');
@@ -68,7 +71,11 @@ class AuthTokenController extends Controller
         $em->persist($authToken);
         $em->flush();
 
-        return new Response($authToken->getValue());
+        $ret = [];
+        $ret['token'] = $authToken->getValue();
+        $ret['code'] = Response::HTTP_OK;
+
+        return new Response(json_encode($ret));
     }
 
     /**

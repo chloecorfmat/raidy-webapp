@@ -35,3 +35,7 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
+    TrackService:
+        class: AppBundle\Service\TrackService
+        autowire: true
+        public: true
