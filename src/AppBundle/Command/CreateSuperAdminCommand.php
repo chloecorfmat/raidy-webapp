@@ -82,7 +82,7 @@ class CreateSuperAdminCommand extends ContainerAwareCommand
         $user->setEmailCanonical($email);
         $user->setEnabled(1);
         $user->setPlainPassword($plainPassword);
-        $user->setRoles(['ROLE_SUPER_ADMIN', 'ROLE_ORGANIZER', 'ROLE_HELPER']);
+        $user->setRoles(['ROLE_SUPER_ADMIN']);
 
         $output->writeln("\r\n<fg=white;bg=green;options=bold>A new Super Admin has been created !</>");
 

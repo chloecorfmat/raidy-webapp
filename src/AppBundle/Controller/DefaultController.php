@@ -14,20 +14,29 @@ namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class DefaultController extends Controller
 {
     /**
      * @Route("/", name="homepage")
      *
-     * @param Request $request request
-     *
-     * @return template
+     * @return Response
      */
-    public function indexAction(Request $request)
+    public function indexAction()
     {
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', []);
+        $user = $this->getUser();
+
+        if ($user->hasRole("ROLE_SUPER_ADMIN")) {
+            return $this->redirectToRoute('listOrganizer');
+        } elseif ($user->hasRole("ROLE_ORGANIZER")) {
+            return $this->redirectToRoute('listRaid');
+        } elseif ($user->hasRole("ROLE_HELPER")) {
+            return $this->redirectToRoute('helper');
+        } else {
+            return $this->redirectToRoute('fos_user_security_logout');
+        }
     }
 }

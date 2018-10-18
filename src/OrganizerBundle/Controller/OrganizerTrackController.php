@@ -91,7 +91,7 @@ class OrganizerTrackController extends AjaxAPIController
         $trackManager = $em->getRepository('AppBundle:Track');
         $track = $trackManager->find($trackId);
 
-        if ($track == null) {
+        if ($track != null) {
             $track = $trackService->updateTrackFromArray($track, $raidId, $data);
             $em->flush();
         } else {
@@ -164,7 +164,7 @@ class OrganizerTrackController extends AjaxAPIController
         $trackManager = $em->getRepository('AppBundle:Track');
         $track = $trackManager->find($trackId);
 
-        if ($track == null) {
+        if ($track != null) {
             $track = $trackService->updateTrackFromArray($track, $raidId, $data);
             $em->remove($track);
             $em->flush();

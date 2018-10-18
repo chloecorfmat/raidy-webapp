@@ -33,11 +33,10 @@ class AjaxAPIController extends Controller
 
     /**
      * @param int   $code
-     * @param mixed $message
      * @param mixed $data
      * @return Response
      */
-    public function buildJSONReturn($code, $message, $data)
+    public function buildJSONReturn($code, $data)
     {
         $res = new Response(json_encode($data));
         $res->setStatusCode($code);
