@@ -38,33 +38,8 @@ window.addEventListener('load', function() {
     document.querySelector('.tab .tablinks').classList.add('active');
 });
 
-document.querySelectorAll('.btn--track--edit').forEach(function (btn) {
-    btn.addEventListener('click', function () {
-        if (!this.parentElement.classList.contains('track--edit')) {
-            document.querySelectorAll('.track--edit').forEach(function (el) {
-                el.classList.remove('track--edit')
-            })
-        }
-        mapManager.currentEditID = parseInt(btn.id) ;
-        mapManager.switchMode(EditorMode.TRACK_EDIT);
-        this.parentElement.classList.toggle('track--edit');
-    })
-});
-document.querySelectorAll('.checkbox-item input').forEach(function(input){
-    input.addEventListener('change', function () {
-       if(input.checked){
-           mapManager.showTrack(parseInt(input.id))
-       }else{
-           if(mapManager.currentEditID == input.id){
-               document.querySelectorAll('.track--edit').forEach(function (el) {
-                   el.classList.remove('track--edit')
-               })
-               mapManager.switchMode(EditorMode.READING);
-           }
-           mapManager.hideTrack(parseInt(input.id))
-       }
-    });
-});
+
+
 document.getElementById('addPoiButton').addEventListener('click', function () {
     this.classList.toggle("add--poi");
     document.getElementById('map').style.cursor = "crosshair";

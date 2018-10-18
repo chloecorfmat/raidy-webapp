@@ -97,7 +97,38 @@ MapManager.prototype.addTrack = function (track) {
             <i class="fas fa-pen"></i>
         </button>`;
     document.getElementById('editor--list').appendChild(li);
-
+    console.log(li);
+    // TRACK SELECTION LISTENER
+    li.querySelectorAll('input').forEach(function(input){
+        input.addEventListener('change', function () {
+            if(input.checked){
+                mapManager.showTrack(parseInt(input.id));
+                li.querySelector('.btn--track--edit').style.display = "inline-block";
+            }else{
+                if(mapManager.currentEditID == input.id){
+                    document.querySelectorAll('.track--edit').forEach(function (el) {
+                        el.classList.remove('track--edit')
+                    })
+                    mapManager.switchMode(EditorMode.READING);
+                }
+                mapManager.hideTrack(parseInt(input.id))
+                li.querySelector('.btn--track--edit').style.display = "none";
+            }
+        });
+    });
+    //TRACK EDIT PENCIL
+    li.querySelectorAll('.btn--track--edit').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            if (!this.parentElement.classList.contains('track--edit')) {
+                document.querySelectorAll('.track--edit').forEach(function (el) {
+                    el.classList.remove('track--edit')
+                })
+            }
+            mapManager.currentEditID = parseInt(btn.id) ;
+            mapManager.switchMode(EditorMode.TRACK_EDIT);
+            this.parentElement.classList.toggle('track--edit');
+        })
+    });
 }
 
 MapManager.prototype.showTrack = function(id){
@@ -121,16 +152,7 @@ MapManager.prototype.addPoi = function (id, name, loc, color) {
 
 
 
-MapManager.prototype.findMarkerById = function (markers, leafletId) {
-    var data = [];
-    for (var marker in markers) {
-        if (markers[marker]._leaflet_id == leafletId) {
-            data['targetMarker'] = markers[marker];
-            data['targetMarkerId'] = marker;
-        }
-    }
-    return data;
-};
+
 
 
 MapManager.prototype.setPoiEditable = function(b){
@@ -195,24 +217,31 @@ MapManager.prototype.requestNewTrack = function(){
     var track = new Track();
     track.toJSON();
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open("PUT", "/organizer/raid/"+raidID+"/track", false);
+    xhr_object.open("PUT", "/organizer/raid/"+raidID+"/track", true);
+    xhr_object.setRequestHeader("Content-Type","application/json"),
     xhr_object.send(track.toJSON());
 }
 
 MapManager.prototype.loadTracks =  function(){
 
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open("GET", "/organizer/raid/"+raidID+"/track", false);
+    xhr_object.open("GET", "/organizer/raid/"+raidID+"/track", true);
     xhr_object.send(null);
-
-    if (xhr_object.status === 200) {
-        // console.log("Réponse reçue: %s", xhr_object.responseText);
-        var tracks = JSON.parse(xhr_object.responseText);
-        for(track of tracks){
-            mapManager.addTrack(track);
-            console.log(track);
+    xhr_object.onreadystatechange = function(event) {
+        // XMLHttpRequest.DONE === 4
+        if (this.readyState === XMLHttpRequest.DONE) {
+            if (xhr_object.status === 200) {
+                // console.log("Réponse reçue: %s", xhr_object.responseText);
+                var tracks = JSON.parse(xhr_object.responseText);
+                for(track of tracks){
+                    mapManager.addTrack(track);
+                  //  console.log(track);
+                }
+            } else {
+                console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
+            }
         }
-    } else {
-        console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
-    }
+        mapManager.switchMode(EditorMode.READING);
+    };
+
 }

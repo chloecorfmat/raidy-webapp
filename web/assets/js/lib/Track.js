@@ -8,6 +8,7 @@ var Track = function (map) {
     this.color = "";
     this.sportType = 0;
 
+    this.visible = true;
     this.waypoints = [];
 
 }
@@ -16,12 +17,12 @@ Track.prototype.addPoint = function (lat, lng) {
 
     const markerHtmlStyles = `
           background-color: `+this.color +`;
-          width: 1rem;
-          height: 1rem;
+          width: 0.75rem;
+          height: 0.75rem;
           display: block;
           position: relative;
           border-radius: 3rem ;
-          transform: translateY(-0.5rem) translateX(-0.5rem);
+          transform: translateY(-0.375rem) translateX(-0.375rem);
           border: 0px solid #FFFFFF`;
 
     const icon = L.divIcon({
@@ -52,6 +53,7 @@ Track.prototype.addPoint = function (lat, lng) {
     });
     this.line.addLatLng(marker.getLatLng());
     this.waypoints.push(marker);
+    this.push();
     // this.calculDistance();
 };
 
@@ -79,6 +81,16 @@ Track.prototype.calculDistance = function () {
     this.updateData();
 };
 
+Track.prototype.findMarkerById = function (markers, leafletId) {
+    var data = [];
+    for (var marker in markers) {
+        if (markers[marker]._leaflet_id == leafletId) {
+            data['targetMarker'] = markers[marker];
+            data['targetMarkerId'] = marker;
+        }
+    }
+    return data;
+};
 
 Track.prototype.removeMarker = function (marker) {
     var leafletId = marker._leaflet_id;
@@ -131,8 +143,8 @@ Track.prototype.toJSON = function(){
         name : this.name,
         color : this.color,
         sportType : this.sportType,
-        trackpoints :  this.line != null ? this.line.getLatLngs() : null,
-        isVisible:  this.visible
+        isVisible:  this.visible,
+        trackpoints :  this.line != null ? JSON.stringify(this.line.getLatLngs()) : null
     }
     var json = JSON.stringify(track)
     return json;
@@ -160,7 +172,8 @@ Track.prototype.fromJSON = function(json){
 
 Track.prototype.push = function(){
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open("PATCH", "/organizer/raid/"+raidID+"/track/"+this.id, false);
+    xhr_object.open("PATCH", "/organizer/raid/"+raidID+"/track/"+this.id, true);
+    xhr_object.setRequestHeader("Content-Type","application/json");
     xhr_object.send(this.toJSON());
     console.log("pushed: "+this.toJSON());
 }
