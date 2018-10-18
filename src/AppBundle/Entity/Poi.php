@@ -54,6 +54,12 @@ class Poi
     protected $poiType;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $raid;
+
+    /**
      * Poi constructor.
      */
     public function __construct()
@@ -154,5 +160,21 @@ class Poi
     public function setPoiType($poiType)
     {
         $this->poiType = $poiType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRaid()
+    {
+        return $this->raid;
+    }
+
+    /**
+     * @param mixed $raid
+     */
+    public function setRaid($raid)
+    {
+        $this->raid = $raid;
     }
 }
