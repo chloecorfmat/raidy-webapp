@@ -33,7 +33,7 @@ class Track
     protected $name;
 
     /**
-     * @ORM\Column(name="track_points", type="string", nullable=true)
+     * @ORM\Column(name="track_points", type="text", nullable=true)
      */
     protected $trackPoints;
 
