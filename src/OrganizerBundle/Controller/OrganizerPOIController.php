@@ -1,16 +1,11 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: anais
- * Date: 13/10/2018
- * Time: 19:33
- */
 
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Poi;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,7 +25,6 @@ class OrganizerPOIController extends AjaxAPIController
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
-        $poiTypeManager = $em->getRepository('AppBundle:PoiType');
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -59,7 +53,7 @@ class OrganizerPOIController extends AjaxAPIController
         $em->persist($poi);
         $em->flush();
 
-        return new Response($poiService->trackToJson($poi));
+        return new Response($poiService->poiToJson($poi));
     }
 
     /**
@@ -111,11 +105,11 @@ class OrganizerPOIController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/poi/{poiId}", name="deletePoi", method={"DELETE"})
+     * @Route("/organizer/raid/{raidId}/poi/{poiId}", name="deletePoi", methods={"DELETE"})
      *
      * @param Request $request request
      * @param mixed   $raidId  raid identifier
-     * @param mixed   $poiId   poi identifier
+     * @param id      $poiId   poi identifier
      *
      * @return Response
      */
@@ -157,7 +151,7 @@ class OrganizerPOIController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/poi", name="listPoi", method={"GET"})
+     * @Route("/organizer/raid/{raidId}/poi", name="listPoi", methods={"GET"})
      *
      * @param mixed $raidId raid identifier
      * @return \Symfony\Component\HttpFoundation\Response

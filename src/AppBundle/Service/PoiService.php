@@ -8,7 +8,7 @@
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\POI;
+use AppBundle\Entity\Poi;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PoiService
@@ -30,10 +30,6 @@ class PoiService
     public function poiFromArray($obj, $raidId)
     {
         $poi = new Poi();
-
-        if ($obj['id'] != '') {
-            $poi->setId($obj['id']);
-        }
 
         $poi->setName($obj['name']);
 
@@ -82,7 +78,7 @@ class PoiService
      * @param mixed $obj
      * @return mixed
      */
-    public function updateTrackFromArray($poi, $raidId, $obj)
+    public function updatePoiFromArray($poi, $raidId, $obj)
     {
 
         $poi->setName($obj['name']);
@@ -130,5 +126,43 @@ class PoiService
         }
 
         return json_encode($poisObj);
+    }
+
+    /**
+     * @param mixed $obj
+     * @param bool  $checkId
+     * @return bool
+     */
+    public function checkDataArray($obj, $checkId)
+    {
+        $status = true;
+
+        if ($checkId) {
+            if ($obj["id"] == null || $obj["id"] == "") {
+                $status = false;
+            }
+        }
+
+        if ($obj["name"] == null || $obj["name"] == "") {
+            $status = false;
+        }
+
+        if ($obj["longitude"] == null || $obj["longitude"] == "") {
+            $status = false;
+        }
+
+        if ($obj["latitude"] == null || $obj["latitude"] == "") {
+            $status = false;
+        }
+
+        if ($obj["requiredHelpers"] == null || $obj["requiredHelpers"] == "") {
+            $status = false;
+        }
+
+        if ($obj["poiType"] == null || $obj["poiType"] == "") {
+            $status = false;
+        }
+
+        return $status;
     }
 }
