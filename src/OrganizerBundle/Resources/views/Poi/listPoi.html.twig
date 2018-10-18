@@ -17,7 +17,7 @@
             <th scope="col">Coordonnées</th>
             <th scope="col">Nombre de bénévoles</th>
             <th scope="col">Type de bénévoles</th>
-            <th scope="col">Parcours</th>
+            <th scope="col">Raid</th>
             <td></td>
             <td></td>
             <td></td>
@@ -29,9 +29,9 @@
                 <td>{{ poi.longitude}}, {{ poi.latitude}}</td>
                 <td>{{ poi.requiredHelpers }} </td>
                 <td>{{ poi.poiType.type }} </td>
-                <td>{{ poi.track.id }} </td>
-                <td><a href="{{ path('displayPoi', {'id': poi.id, 'trackId': poi.track.id, 'raidId': poi.track.raid.id}) }}">Voir</a></td>
-                <td><a href="{{ path('deletePoi', {'id': poi.id, 'trackId': poi.track.id, 'raidId': poi.track.raid.id}) }}">Supprimer</a></td>
+                <td>{{ poi.raid.id }} </td>
+                <td><a href="{{ path('displayPoi', {'id': poi.id, 'raidId': poi.raid.id}) }}">Voir</a></td>
+                <td><a href="{{ path('deletePoi', {'id': poi.id, 'raidId': poi.raid.id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
     </table>
