@@ -73,9 +73,7 @@ class Raid
      * @ORM\Column(type="string", nullable=true)
      * @Assert\Image(
      *     minWidth = 50,
-     *     maxWidth = 700,
-     *     minHeight = 50,
-     *     maxHeight = 700
+     *     minHeight = 50
      *    )
      */
     protected $picture;
