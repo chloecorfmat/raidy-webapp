@@ -44,3 +44,8 @@ services:
         class: AppBundle\Service\PoiService
         autowire: true
         public: true
+
+    PoiTypeService:
+        class: AppBundle\Service\PoiTypeService
+        autowire: true
+        public: true

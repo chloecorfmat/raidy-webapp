@@ -98,7 +98,7 @@ class PoiService
         return $poi;
     }
 
-/**
+    /**
      * @param array $pois
      * @return false|string
      */
