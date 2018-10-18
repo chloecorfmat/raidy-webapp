@@ -10,7 +10,6 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Entity\Poi;
 use AppBundle\Entity\Raid;
-use AppBundle\Entity\Track;
 use AppBundle\Entity\PoiType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -25,15 +24,14 @@ use Symfony\Component\HttpFoundation\Request;
 class OrganizerPOIController extends Controller
 {
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}/poi/add", name="addPoi")
+     * @Route("/organizer/raid/{raidId}/poi", name="addPoi", methods={"PUT"})
      *
      * @param Request $request request
-     * @param int     $raidId  raidId
-     * @param int     $trackId trackId
+     * @param int     $raidId  raid identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addPoi(Request $request, $raidId, $trackId)
+    public function addPoi(Request $request, $raidId)
     {
         // Set up managers
         $em = $this->getDoctrine()->getManager();
@@ -129,16 +127,15 @@ class OrganizerPOIController extends Controller
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}/poi/{id}", name="displayPoi")
+     * @Route("/organizer/raid/{raidId}/poi/{id}", name="displayPoi", methods={"PATCH"})
      *
      * @param Request $request request
-     * @param int     $raidId  raidId
-     * @param int     $trackId trackId
+     * @param int     $raidId  raid identifier
      * @param int     $id      poi identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function displayPoi(Request $request, $raidId, $trackId, $id)
+    public function displayPoi(Request $request, $raidId, $id)
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
@@ -234,16 +231,15 @@ class OrganizerPOIController extends Controller
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}/poi/delete/{id}", name="deletePoi")
+     * @Route("/organizer/raid/{raidId}/poi/{id}", name="deletePoi", method={"DELETE"})
      *
      * @param Request $request request
-     * @param mixed   $raidId  raidId
-     * @param int     $trackId trackId
-     * @param mixed   $id      id
+     * @param mixed   $raidId  raid identifier
+     * @param mixed   $id      poi identifier
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
-    public function deletePoi(Request $request, $raidId, $trackId, $id)
+    public function deletePoi(Request $request, $raidId, $id)
     {
         $em = $this->getDoctrine()->getManager();
         $poiManager = $em->getRepository('AppBundle:Poi');
@@ -285,13 +281,12 @@ class OrganizerPOIController extends Controller
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}/poi", name="listPoi")
+     * @Route("/organizer/raid/{raidId}/poi", name="listPoi", method={"GET"})
      *
-     * @param mixed $raidId  raidId
-     * @param int   $trackId trackId
+     * @param mixed $raidId raid identifier
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listPois($raidId, $trackId)
+    public function listPois($raidId)
     {
         $em = $this->getDoctrine()->getManager();
         $poiManager = $em->getRepository('AppBundle:Poi');

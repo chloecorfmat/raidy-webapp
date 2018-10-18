@@ -48,12 +48,6 @@ class Poi
     protected $requiredHelpers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Track")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    protected $track;
-
-    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PoiType")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -147,23 +141,7 @@ class Poi
     }
 
     /**
-     * @return Track
-     */
-    public function getTrack()
-    {
-        return $this->track;
-    }
-
-    /**
-     * @param Track $track
-     */
-    public function setTrack($track)
-    {
-        $this->track = $track;
-    }
-
-    /**
-     * @return PoiType
+     * @return mixed
      */
     public function getPoiType()
     {
@@ -171,7 +149,7 @@ class Poi
     }
 
     /**
-     * @param PoiType $poiType
+     * @param mixed $poiType
      */
     public function setPoiType($poiType)
     {
