@@ -48,16 +48,16 @@ class Poi
     protected $requiredHelpers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Track")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    protected $track;
-
-    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PoiType")
      * @ORM\JoinColumn(nullable=false)
      */
     protected $poiType;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $raid;
 
     /**
      * Poi constructor.
@@ -147,23 +147,7 @@ class Poi
     }
 
     /**
-     * @return Track
-     */
-    public function getTrack()
-    {
-        return $this->track;
-    }
-
-    /**
-     * @param Track $track
-     */
-    public function setTrack($track)
-    {
-        $this->track = $track;
-    }
-
-    /**
-     * @return PoiType
+     * @return mixed
      */
     public function getPoiType()
     {
@@ -171,10 +155,26 @@ class Poi
     }
 
     /**
-     * @param PoiType $poiType
+     * @param mixed $poiType
      */
     public function setPoiType($poiType)
     {
         $this->poiType = $poiType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRaid()
+    {
+        return $this->raid;
+    }
+
+    /**
+     * @param mixed $raid
+     */
+    public function setRaid($raid)
+    {
+        $this->raid = $raid;
     }
 }
