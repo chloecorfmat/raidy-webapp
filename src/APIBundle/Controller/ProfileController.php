@@ -8,13 +8,15 @@
 
 namespace APIBundle\Controller;
 
+use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class ProfileController extends Controller
+class ProfileController extends AjaxAPIController
 {
     /**
      * @Rest\View(serializerGroups={"secured"})
@@ -34,5 +36,16 @@ class ProfileController extends Controller
         $data['phone'] = $user->getPhone();
 
         return new JsonResponse($data);
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"secured"})
+     * @Rest\Patch("/api/profile")
+     *
+     * @return Response
+     */
+    public function editProfileAction()
+    {
+        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, "Not implemented");
     }
 }

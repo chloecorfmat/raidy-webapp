@@ -60,5 +60,6 @@ security:
     - { path: ^/helper/join/, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/helper, role: [ROLE_HELPER, ROLE_SUPER_ADMIN] }
     - { path: ^/api/auth-tokens, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/profile, role: [ROLE_ORGANIZER,ROLE_HELPER] }
     - { path: ^/api/organizer, role: ROLE_ORGANIZER }
     - { path: ^/api/helper, role: ROLE_HELPER }
