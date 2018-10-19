@@ -157,15 +157,10 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "You are not allowed to access this raid");
         }
 
-        $data = $request->request->all();
-
-        $trackService = $this->container->get('TrackService');
-
         $trackManager = $em->getRepository('AppBundle:Track');
         $track = $trackManager->find($trackId);
 
         if ($track != null) {
-            $track = $trackService->updateTrackFromArray($track, $raidId, $data);
             $em->remove($track);
             $em->flush();
         } else {
