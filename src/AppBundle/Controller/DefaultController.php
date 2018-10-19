@@ -28,15 +28,14 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $user = $this->getUser();
-
-        if ($user->hasRole("ROLE_SUPER_ADMIN")) {
+        if ($user == null) {
+            return $this->redirectToRoute('fos_user_security_login');
+        } elseif ($user->hasRole("ROLE_SUPER_ADMIN")) {
             return $this->redirectToRoute('listOrganizer');
         } elseif ($user->hasRole("ROLE_ORGANIZER")) {
             return $this->redirectToRoute('listRaid');
         } elseif ($user->hasRole("ROLE_HELPER")) {
             return $this->redirectToRoute('helper');
-        } else {
-            return $this->redirectToRoute('fos_user_security_logout');
         }
     }
 }
