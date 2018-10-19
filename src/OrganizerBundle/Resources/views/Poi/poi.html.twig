@@ -16,7 +16,7 @@
             {{ form_widget(form) }}
             {{ form_end(form) }}
 
-            <a href="{{ path('deletePoi', {'id': poi.id, 'trackId': poi.track.id, 'raidId': poi.track.raid.id}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
+            <a href="{{ path('deletePoi', {'id': poi.id, 'raidId': poi.raid.id}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
         </div>
     </div>
 

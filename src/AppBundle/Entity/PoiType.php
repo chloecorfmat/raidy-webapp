@@ -33,13 +33,16 @@ class PoiType
     protected $type;
 
     /**
+     * @ORM\Column(name="color", type="string", length=9)
+     */
+    protected $color;
+
+/**
      * PoiType constructor.
      *
-     * @param mixed $type type
      */
-    public function __construct($type)
+    public function __construct()
     {
-        $this->type = $type;
     }
 
     /**
@@ -72,5 +75,21 @@ class PoiType
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param mixed $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
     }
 }

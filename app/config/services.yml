@@ -39,3 +39,13 @@ services:
         class: AppBundle\Service\TrackService
         autowire: true
         public: true
+
+    PoiService:
+        class: AppBundle\Service\PoiService
+        autowire: true
+        public: true
+
+    PoiTypeService:
+        class: AppBundle\Service\PoiTypeService
+        autowire: true
+        public: true
