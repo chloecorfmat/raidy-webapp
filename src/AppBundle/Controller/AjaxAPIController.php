@@ -8,6 +8,7 @@
 
 namespace AppBundle\Controller;
 
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -24,9 +25,8 @@ class AjaxAPIController extends Controller
         $ret['code'] = $code;
         $ret['message'] = $message;
 
-        $res = new Response(json_encode($ret));
+        $res = new JsonResponse($ret);
         $res->setStatusCode($code);
-        $res->headers->set('Content-Type', 'application/json');
 
         return $res;
     }
@@ -38,9 +38,8 @@ class AjaxAPIController extends Controller
      */
     public function buildJSONReturn($code, $data)
     {
-        $res = new Response(json_encode($data));
+        $res = new JsonResponse($data);
         $res->setStatusCode($code);
-        $res->headers->set('Content-Type', 'application/json');
 
         return $res;
     }

@@ -1,25 +1,64 @@
 <?php
+/**
+ * Created by PhpStorm.
+ * User: lucas
+ * Date: 15/10/18
+ * Time: 14:57
+ */
 
-namespace OrganizerBundle\Controller;
+namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
-use AppBundle\Entity\Track;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrganizerTrackController extends AjaxAPIController
+class TrackController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/track", name="addTrack", methods={"PUT"})
+     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\Get("/api/organizer/raid/{raidId}/track")
+     * @Rest\Get("/api/helper/raid/{raidId}/track")
      *
      * @param Request $request request
-     * @param int     $raidId  raidId
-     *
+     * @param int     $raidId  raid id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addTrack(Request $request, $raidId)
+    public function getTrackAction(Request $request, $raidId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $trackManager = $em->getRepository('AppBundle:Track');
+
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "This raid does not exist");
+        }
+
+        if ($raid->getUser()->getId() != $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "You are not allowed to access this raid");
+        }
+
+        $tracks = $trackManager->findBy(array('raid' => $raidId));
+        $trackService = $this->container->get('TrackService');
+
+        return new Response($trackService->tracksArrayToJson($tracks));
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\Put("/api/organizer/raid/{raidId}/track")
+     *
+     * @param Request $request request
+     * @param int     $raidId  raid id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function addTrackAction(Request $request, $raidId)
     {
         // Set up managers
         $em = $this->getDoctrine()->getManager();
@@ -54,15 +93,15 @@ class OrganizerTrackController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}", name="editTrack", methods={"PATCH"})
+     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
+     * @Rest\Patch("/api/organizer/raid/{raidId}/track/{trackId}")
      *
      * @param Request $request request
-     * @param int     $raidId  raidId
-     * @param int     $trackId track id
-     *
+     * @param int     $raidId  raid id
+     * @param int     $trackId raid id
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editTrack(Request $request, $raidId, $trackId)
+    public function editTrackAction(Request $request, $raidId, $trackId)
     {
         // Set up managers
         $em = $this->getDoctrine()->getManager();
@@ -102,41 +141,13 @@ class OrganizerTrackController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track", name="listTrack", methods={"GET"})
-     *
-     * @param mixed $raidId raidId
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function listTracks($raidId)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $raidManager = $em->getRepository('AppBundle:Raid');
-        $trackManager = $em->getRepository('AppBundle:Track');
-
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
-        $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "This raid does not exist");
-        }
-
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "You are not allowed to access this raid");
-        }
-
-        $tracks = $trackManager->findBy(array('raid' => $raidId));
-        $trackService = $this->container->get('TrackService');
-
-        return new Response($trackService->tracksArrayToJson($tracks));
-    }
-
-    /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}", name="deleteTrack", methods={"DELETE"})
+     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
+     * @Rest\Delete("/api/organizer/raid/{raidId}/track/{trackId}")
      *
      * @param Request $request request
-     * @param mixed   $raidId  raidId
-     * @param id      $trackId track id
-     * @return Response
+     * @param int     $raidId  raid id
+     * @param int     $trackId track id
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteTrack(Request $request, $raidId, $trackId)
     {

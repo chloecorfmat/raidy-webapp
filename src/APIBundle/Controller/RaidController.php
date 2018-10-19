@@ -8,13 +8,14 @@
 
 namespace APIBundle\Controller;
 
+use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
-class RaidController extends Controller
+class RaidController extends AjaxAPIController
 {
     /**
      * @Rest\View(serializerGroups={"secured"})
@@ -52,5 +53,19 @@ class RaidController extends Controller
         }
 
         return new JsonResponse($dataRaids);
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"secured"})
+     * @Rest\Get("/api/helper/raid/{id}")
+     * @Rest\Get("/api/organizer/raid/{id}")
+     *
+     * @param Request $request
+     * @param int     $raidId  raid id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getRaidAction(Request $request, $raidId)
+    {
+        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, "Not implemented");
     }
 }

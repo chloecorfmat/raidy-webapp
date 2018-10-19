@@ -67,7 +67,6 @@ class DefaultController extends Controller
      */
     public function editHelperProfile(Request $request)
     {
-
         $user = $this->getUser();
 
         $formFactory = $this->get('form.factory');
@@ -110,7 +109,20 @@ class DefaultController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager = $this->get('fos_user.user_manager');
-            $userManager->updateUser($user);
+            $formatService = $this->container->get('FormatService');
+            $phone = $formatService->mobilePhoneNumber($user->getPhone());
+            if (!is_null($phone)) {
+                $user->setPhone($phone);
+                $userManager->updateUser($user);
+
+                return $this->redirectToRoute('editHelperProfile');
+            } else {
+                $form->addError(
+                    new FormError(
+                        'Le numéro de téléphone d\'un bénévole doit être un mobile et commencer par 06 ou 07.'
+                    )
+                );
+            }
         }
 
         if ($editPasswordform->isSubmitted() && $editPasswordform->isValid()) {

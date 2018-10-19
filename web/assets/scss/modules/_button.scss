@@ -47,3 +47,50 @@ button {
   border: 1px solid $secondary-color-2;
   color: $secondary-color-2;
 }
+
+.btn--fab-content {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  vertical-align: middle;
+
+  span {
+    color: $white;
+    display: block;
+    font-family: 'Fontastique', 'SansSerif';
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    display: block;
+  }
+}
+
+.btn--fab {
+  background-color: $tertiary-color-1;
+  border-radius: 3rem ;
+  box-sizing: border-box;
+  display: block;
+  font-size: 5rem;
+  height: 5rem;
+  margin: 1.5rem auto;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  width: 5rem;
+  z-index: 1000;
+
+  &:hover {
+    opacity: .8;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    bottom: 0;
+    margin: 2.5rem;
+    position: absolute;
+    right: 0;
+  }
+}
+
+
