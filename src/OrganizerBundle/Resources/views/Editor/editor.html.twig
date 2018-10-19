@@ -30,7 +30,7 @@
             </div>
             <div class="tab-bar--actions">
                 <a class="btn btn--action btn--return">Retour</a>
-                <button aria-label="Fermer la barre latérale" class="btn--laterale-bar" id="btn--laterale-bar">x
+                <button aria-label="Fermer la barre latérale" class="btn--laterale-bar" id="btn--laterale-bar"><span class="fas fa-caret-right"></span>
                 </button>
             </div>
         </div>
@@ -161,12 +161,11 @@
                                         <input class="form--input-text" type="number" id="addPoi_nbhelper" required="required">
                                     </div>
                                     <div class="form--item">
-                                        <label for="addPoi_nbhelper" class="required">Type du point d'intérêt</label>
-                                        <select id="monselect">
-                                            <option value="danger">Point dangereux</option>
-                                            <option value="croisement" >Croisement</option>
-                                            <option value="buvette">Buvette</option>
-                                            <option value="parking">Parking</option>
+                                        <label for="addPoi_type" class="required">Type du point d'intérêt</label>
+                                        <select id="addPoi_type">
+                                            <option value="1">Parking</option>
+                                            <option value="2" >Point dangereux</option>
+                                            <option value="3">Restauration</option>
                                         </select>
                                     </div>
                                     <button type="button" id="addPoi_submit"> Ajouter </button>
@@ -245,9 +244,9 @@
             mapManager = new MapManager();
             mapManager.markerIconUrl = '{{ asset('assets/images/map-marker-main.svg') }}';
             mapManager.initialize();
-            mapManager.addPoi(0, "Enssat", [48.729644, -3.462390], '#78e08f');
+            /*mapManager.addPoi(0, "Enssat", [48.729644, -3.462390], '#78e08f');
             mapManager.addPoi(1, "Enssat2", [48.729644, -3.463000], '#f74a45');
-            mapManager.addPoi(2, "Enssat3", [48.729644, -3.464000], '#a88f73');
+            mapManager.addPoi(2, "Enssat3", [48.729644, -3.464000], '#a88f73');*/
 
         });
     </script>

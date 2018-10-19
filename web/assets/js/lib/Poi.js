@@ -1,10 +1,10 @@
 var Poi = function (map) {
     this.map = map;
-
-    this.id = 0;
+    this.marker = L.marker([0, 0]);
+    this.id = "";
     this.name = "";
-    this.poiType = 0;
-    this.helperCount = 0;
+    this.poiType = null;
+    this.requiredHelpers = 0;
 
     this.color = "#000000";
 
@@ -15,11 +15,10 @@ Poi.prototype.toJSON = function(){
         {
             id : this.id !=null ? this.id : null,
             name : this.name,
-            lat : this.marker.getLatLng().lat,
-            lng : this.marker.getLatLng().lng,
-            HelperCount : this.helperCount,
-            POIType:  this.poiType,
-            Color : this.color,
+            latitude : this.marker.getLatLng().lat,
+            longitude : this.marker.getLatLng().lng,
+            requiredHelpers : this.helperCount,
+            poiType:  this.poiType.id,
         }
     var json = JSON.stringify(poi);
     return json;
@@ -27,13 +26,13 @@ Poi.prototype.toJSON = function(){
 Poi.prototype.fromObj = function(poi){
 
     this.id = poi.id;
-    this.color = poi.Color;
     this.name = poi.name;
-    this.poiType = poi.POIType;
-    this.helperCount = poi.HelperCount;
+    this.poiType = mapManager.poiTypesMap.get(poi.poiType);
+    this.color = poiType.color;
+    this.requiredHelpers = poi.requiredHelpers;
 
     const markerHtmlStyles = `
-  background-color: ${color};
+  background-color: `+this.color +`;
   width: 2rem;
   height: 2rem;
   display: block;
@@ -51,26 +50,26 @@ Poi.prototype.fromObj = function(poi){
         html: `<span style="${markerHtmlStyles}" />`
     });
 
-    this.marker = L.marker([poi.lat, poi.lng], {draggable: 'true', icon: icon});
-    this.marker.dragging;
-
-    this.marker.addTo(mapManager.map)
+    console.log(poi);
+    this.marker = L.marker([poi.longitude, poi.latitude], {icon: icon});
+    this.marker.addTo(this.map)
         .bindPopup('' +
             '<header style="' +
-            'background: ' + color + ' ;' +
+            'background: ' + this.color + ' ;' +
             'color: #ffffff ;' +
             'padding: 0rem 3rem;">' +
-            '<h3>' + name + '</h3>' +
+            '<h3>' + this.name + '</h3>' +
             '</header>' +
             '<div> ' +
             '<h4>Bénévoles</h4>' +
             '<p>Besoin de 3 bénévoles</p>' +
-            '</div>')
-        .openPopup();
+            '</div>');
 
+
+    this.marker.disableEdit();
     var li = document.createElement('li');
     li.classList.add("list--pois-items");
-    li.innerHTML = name
+    li.innerHTML = this.name
         +`<button data-id = "`+this.id+`" class="btn--poi--settings">
            <i class="fas fa-cog"></i>
        </button>`;
@@ -79,10 +78,10 @@ Poi.prototype.fromObj = function(poi){
 
 }
 Poi.prototype.fromJSON = function(json){
-    var track = JSON.parse(json);
-    this.fromObj(track);
+    var poi = JSON.parse(json);
+    this.fromObj(poi);
 }
 Poi.prototype.setEditable = function (b) {
-     b ? this.marker.dragging.enable() : this.marker.dragging.disable();
+    b ? this.marker.enableEdit() : this.marker.disableEdit();
 }
 

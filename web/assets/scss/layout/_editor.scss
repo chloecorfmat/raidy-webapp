@@ -160,7 +160,7 @@
 
 .btn--laterale-bar {
   background-color: $tertiary-color-1;
-  border-radius: 50%;
+  border-radius: 0rem 10rem 10rem 0rem;
   font-family: 'Fontastique', 'SansSerif';
   font-size: 2rem;
   height: 3rem;
@@ -169,8 +169,8 @@
   right: 0;
   text-align: center;
   top: 50%;
-  transform: translateX(50%) translateY(-50%);
-  width: 3rem;
+  transform: translateX(100%) translateY(-50%);
+  width: 1.5rem;
   z-index: 1000;
 }
 

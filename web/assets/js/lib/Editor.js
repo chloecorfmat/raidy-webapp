@@ -94,6 +94,17 @@ document.getElementById('TrackSettings_submit').addEventListener('click', functi
 
 });
 
+document.getElementById('addPoi_submit').addEventListener('click', function () {
+    console.log("nbfjklxwi:kvh;")
+    poiName = document.getElementById('addPoi_name').value;
+    poiType = document.getElementById('addPoi_type').value;
+    poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
+
+    MicroModal.close('add-poi-popin');
+    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount);
+
+});
+
 document.getElementById('TrackSettings_delete').addEventListener('click', function () {
     trId = document.getElementById('TrackSettings_id').value;
 

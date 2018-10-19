@@ -17,6 +17,8 @@ var EditorMode = Object.freeze({"READING":0, "ADD_POI":1, "TRACK_EDIT":2,"POI_ED
 var MapManager = function () {
     this.map = L.map('map', {editable: true}).setView([48.742917, -3.459180], 15);
 
+    this.waitingPoi = null;
+    this.poiTypesMap = new Map();
     this.tracksMap = new Map();
     this.poiMap = new Map();
 
@@ -46,7 +48,8 @@ MapManager.prototype.initialize = function () {
                 break;
             case EditorMode.ADD_POI:
                 MicroModal.show('add-poi-popin');
-
+                keepThis.waitingPoi = new Poi(keepThis.map);
+                keepThis.waitingPoi.marker.setLatLng(e.latlng);
                 //mapManager.addPoiFromClick(e);
                 if(editor.activeTab = "pois-pan") keepThis.switchMode(EditorMode.POI_EDIT);
                 else keepThis.switchMode(EditorMode.READING);
@@ -81,8 +84,33 @@ MapManager.prototype.initialize = function () {
         track.push();
     });
 
-    this.loadTracks(); //Load tracks
 
+    this.loadRessources();
+    this.loadTracks(); //Load tracks
+    this.loadPois(); //Load PoiS
+
+}
+
+MapManager.prototype.loadRessources = function(){
+    var keepThis = this;
+    var xhr_object = new XMLHttpRequest();
+    xhr_object.open("GET", "/organizer/poitype", true);
+    xhr_object.send(null);
+    xhr_object.onreadystatechange = function(event) {
+        // XMLHttpRequest.DONE === 4
+        if (this.readyState === XMLHttpRequest.DONE) {
+            if (xhr_object.status === 200) {
+                // console.log("Réponse reçue: %s", xhr_object.responseText);
+                var poiTypes = JSON.parse(xhr_object.responseText);
+                for(poiType of poiTypes){
+                    keepThis.poiTypesMap.set(poiType.id, poiType);
+                    console.log(poiType);
+                }
+            } else {
+                console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
+            }
+        }
+    };
 }
 
 MapManager.prototype.switchMode = function (mode) {
@@ -121,7 +149,7 @@ MapManager.prototype.addTrack = function (track) {
     var li = document.createElement('li');
     li = newTrack.buildUI(li);
 
-    console.log(li);
+  //  console.log(li);
     document.getElementById('editor--list').appendChild(li);
 
 
@@ -138,6 +166,31 @@ MapManager.prototype.setTracksEditable = function(b){
         value.setEditable(b);
     })
 }
+MapManager.prototype.requestNewPoi = function(name, type, requiredHelpers){
+    var poi = this.waitingPoi;
+    poi.name = name;
+    poi.poiType = mapManager.poiTypesMap.get(parseInt(type));
+    poi.requiredHelpers = parseInt(requiredHelpers);
+
+    var xhr_object = new XMLHttpRequest();
+    xhr_object.open("PUT", "/organizer/raid/"+raidID+"/poi", true);
+    xhr_object.setRequestHeader("Content-Type","application/json");
+    xhr_object.send(poi.toJSON());
+    console.log(poi.toJSON());
+
+    xhr_object.onreadystatechange = function(event) {
+        // XMLHttpRequest.DONE === 4
+        if (this.readyState === XMLHttpRequest.DONE) {
+            if (xhr_object.status === 200) {
+                poi = JSON.parse(xhr_object.responseText);
+                mapManager.addPoi(poi);
+            } else {
+                console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
+            }
+        }
+    }
+}
+
 
 MapManager.prototype.requestNewTrack = function(name, color){
     var track = new Track();
@@ -196,7 +249,7 @@ MapManager.prototype.loadPois =  function(){
                 // console.log("Réponse reçue: %s", xhr_object.responseText);
                 var pois = JSON.parse(xhr_object.responseText);
                 for(poi of pois){
-                    mapManager.addPoi(poi);
+                     mapManager.addPoi(poi);
                 }
             } else {
                 console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
@@ -207,18 +260,14 @@ MapManager.prototype.loadPois =  function(){
 
 }
 
-MapManager.prototype.addPoiFromClick = function (e) {
-    var id = Math.floor(Math.random()*100);
-    this.addPoi(id, "Nouveau POI", [e.latlng.lat, e.latlng.lng], "#333333")
-    this.mode = EditorMode.READING;
-}
-MapManager.prototype.addPoi = function (id, name, loc, color) {
-  var poi = new Poi(id, name, loc, color, mapManager.map);
-  this.poiMap.set(id, poi);
+
+MapManager.prototype.addPoi = function (poi) {
+//  var poi = new Poi(id, name, loc, color, mapManager.map);
+ // this.poiMap.set(id, poi);
 
     newPoi = new Poi(this.map);
-    newPoi.fromObj(track);
-    this.tracksMap.set(poi.id, newPoi);
+    newPoi.fromObj(poi);
+    this.poiMap.set(poi.id, newPoi);
 
    /* var li = document.createElement('li');
     li = newTrack.buildUI(li);

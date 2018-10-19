@@ -192,7 +192,7 @@ Track.prototype.buildUI = function(li){
         var id = parseInt(btn.dataset.id);
         var track =  mapManager.tracksMap.get(id);
 
-        console.log(track);
+       // console.log(track);
 
         btn.addEventListener('click', function () {
 
