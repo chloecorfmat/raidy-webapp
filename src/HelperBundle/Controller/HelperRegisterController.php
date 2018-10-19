@@ -275,6 +275,33 @@ class HelperRegisterController extends Controller
     }
 
     /**
+     * @Route("/organizer", name="listRaidHelper")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listRaids()
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $raidManager = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Raid');
+
+        //$raids = $raidManager->findAll();
+        $raids = $raidManager->findBy([
+            'user' => $user,
+        ]);
+
+        return $this->render(
+            'OrganizerBundle:Raid:listRaid.html.twig',
+            [
+                'raids' => $raids,
+                'user' => $user,
+            ]
+        );
+    }
+
+    /**
      * @param mixed $formdata data from form
      * @return bool
      */
