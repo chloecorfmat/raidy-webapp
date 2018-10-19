@@ -1,17 +1,40 @@
 var Track = function (map) {
     this.map = map;
-    this.line = null;
+    this.line = [];
    //s this.line.addTo(this.map);
 
     this.id = "";
     this.name = "";
     this.color = "";
-    this.sportType = 0;
+    this.sportType = 1;
 
     this.visible = true;
     this.waypoints = [];
 
+    this.line = L.polyline([]);
+
+
 }
+
+Track.prototype.setName = function(name){
+    this.name = name;
+
+    li = document.getElementById("track-li-"+this.id);
+    li.querySelector("label > span:nth-child(3)").innerHTML = this.name;
+}
+
+Track.prototype.setColor = function(color){
+    this.color = color;
+    this.line.setStyle({
+        color: color
+    });
+
+    li = document.getElementById("track-li-"+this.id);
+    li.querySelector("label > span.checkmark").style.backgroundColor = this.color;
+    li.querySelector("label > span.checkmark").style.borderColor = this.color;
+}
+
+
 Track.prototype.addPoint = function (lat, lng) {
     var keepThis = this;
 
@@ -121,11 +144,12 @@ Track.prototype.show = function(){
 }
 
 Track.prototype.setEditable = function(b){
-    var points = this.waypoints;
-    for (var point in points) {
+    //var points = this.waypoints;
+    /*for (var point in points) {
         b ? points[point].setOpacity(1) : points[point].setOpacity(0);
         b ? points[point].dragging.enable() : points[point].dragging.disable() ;
-    }
+    }*/
+    b ? this.line.enableEdit() : this.line.disableEdit();
 }
 
 Track.prototype.load = function(){
@@ -137,6 +161,10 @@ Track.prototype.load = function(){
 }
 
 Track.prototype.toJSON = function(){
+    latlong =  [];
+    for(obj of this.line.getLatLngs() ){
+        latlong.push({lat : obj.lat, lng : obj.lng } );
+    }
     var track =
     {
         id : this.id !=null ? this.id : null,
@@ -144,26 +172,30 @@ Track.prototype.toJSON = function(){
         color : this.color,
         sportType : this.sportType,
         isVisible:  this.visible,
-        trackpoints :  this.line != null ? JSON.stringify(this.line.getLatLngs()) : null
+        trackpoints :  this.line != null ? JSON.stringify(latlong) : null
     }
     var json = JSON.stringify(track)
     return json;
 }
 
 Track.prototype.fromObj = function(track){
-   // console.log(this);
-    console.log(track);
+
     this.id = track.id;
     this.color = track.color;
     this.name = track.name;
     this.sportType = track.sportType;
     this.isVisible = track.isVisible;
-    this.line = L.polyline([], {color: this.color}).addTo(this.map);
     test = JSON.parse(track.trackpoints);
-    for (point of test ) {
-        console.log(point)
+
+
+    this.line = L.polyline(test, {color: this.color}).addTo(this.map);
+
+
+    this.line.enableEdit();
+    /*for (point of test ) {
+       // console.log(point)
         newTrack.addPoint(point.lat, point.lng);
-    }
+    }*/
 }
 Track.prototype.fromJSON = function(json){
    var track = JSON.parse(json);
@@ -175,5 +207,18 @@ Track.prototype.push = function(){
     xhr_object.open("PATCH", "/organizer/raid/"+raidID+"/track/"+this.id, true);
     xhr_object.setRequestHeader("Content-Type","application/json");
     xhr_object.send(this.toJSON());
-    console.log("pushed: "+this.toJSON());
+    //console.log("pushed: "+this.toJSON());
 }
+
+Track.prototype.remove = function(){
+    var xhr_object = new XMLHttpRequest();
+    xhr_object.open("DELETE", "/organizer/raid/"+raidID+"/track/"+this.id, true);
+    xhr_object.setRequestHeader("Content-Type","application/json");
+    xhr_object.send(null);
+
+    this.map.removeLayer(this.line);
+
+    li = document.getElementById("track-li-"+this.id);
+    document.getElementById('editor--list').removeChild(li);
+}
+

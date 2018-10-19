@@ -47,7 +47,35 @@ document.getElementById('addPoiButton').addEventListener('click', function () {
 });
 
 document.getElementById('addTrackButton').addEventListener('click', function () {
-    document.getElementById('map').style.cursor = "crosshair";
-    mapManager.currentEditID = mapManager.requestNewTrack();
-    mapManager.switchMode(EditorMode.TRACK_EDIT);
+    MicroModal.show('add-track-popin')
+});
+
+document.getElementById('addTrack_submit').addEventListener('click', function () {
+    trName = document.getElementById('addTrack_name').value;
+    trColor = document.getElementById('addTrack_color').value;
+    mapManager.requestNewTrack(trName, trColor);
+    MicroModal.close('add-track-popin');
+});
+
+document.getElementById('TrackSettings_submit').addEventListener('click', function () {
+    trName = document.getElementById('TrackSettings_name').value;
+    trColor = document.getElementById('TrackSettings_color').value;
+    trId = document.getElementById('TrackSettings_id').value;
+
+    track = mapManager.tracksMap.get(parseInt(trId));
+
+    track.setName(trName);
+    track.setColor(trColor);
+    MicroModal.close('track-settings-popin');
+
+});
+
+document.getElementById('TrackSettings_delete').addEventListener('click', function () {
+    trId = document.getElementById('TrackSettings_id').value;
+
+    track = mapManager.tracksMap.get(parseInt(trId));
+
+    track.remove();
+    MicroModal.close('track-settings-popin');
+
 });

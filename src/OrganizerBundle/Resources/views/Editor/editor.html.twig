@@ -44,38 +44,123 @@
         </div>
     </div>
 
+    <!-- [1] -->
+    <div id="add-track-popin" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-organizer-title">
+                <div class="modal-container">
+                    <header class="modal--header ">
+                        <h2 id="delete-organizer-title">
+                            Ajouter un parcours
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-organizer-content" class="modal--content">
+                        <div>
+                            <form name="addTrack">
+                                <div id="addTrack">
+                                    <div class="form--item">
+                                        <label for="addTrack_name" class="required">Nom du parcours</label>
+                                        <input class="form--input-text" type="text" id="addTrack_name"
+                                               required="required" >
+                                    </div>
+                                    <div class="form--item">
+                                        <label for="addTrack_color" class="required">Couleur</label> <input
+                                                class="form--input-text" type="color" id="addTrack_color"
+                                                required="required">
+                                    </div>
+                                    <button type="button" id="addTrack_submit" >
+                                        Ajouter un parcours
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- [1] -->
+    <div id="track-setting-popin" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-organizer-title">
+                <div class="modal-container">
+                    <header class="modal--header ">
+                        <h2 id="delete-organizer-title">
+                            Editer un parcours
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-organizer-content" class="modal--content">
+                        <div>
+                            <form name="TrackSettings">
+                                <div id="TrackSettings">
+                                    <div class="form--item  form--input-focused">
+                                        <label for="TrackSettings_name" class="required">Nom du parcours</label>
+                                        <input class="form--input-text" type="text" id="TrackSettings_name"
+                                               required="required" >
+                                    </div>
+                                    <div class="form--item  form--input-focused">
+                                        <label for="TrackSettings_color" class="required">Couleur</label> <input
+                                                class="form--input-text" type="color" id="TrackSettings_color"
+                                                required="required">
+                                    </div>
+                                    <input class="form--input-text" type="hidden" id="TrackSettings_id" >
+                                    <button type="button" class="btn btn--danger" id="TrackSettings_delete" >
+                                        Supprimer
+                                    </button>
+                                    <button type="button" id="TrackSettings_submit" >
+                                        mettre à jour
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}
 
 {% block javascripts %}
     <!-- Make sure you put this AFTER Leaflet's CSS -->
 
-    <script type="text/javascript" src="{{ asset('assets/js/lib/leaflet.js') }}"></script>
-
-    <script type="text/javascript" src="{{ asset('assets/js/lib/GpxFactory.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/lib/MapManager.js') }}"></script>
+    <!--script type="text/javascript" src="{#{ asset('assets/js/lib/leaflet.js') }#}"></script-->
+    <!--script-- type="text/javascript" src="{#{ asset('assets/js/lib/Leaflet.Editable.js') }#}"></script-->
+    <!--script-- type="text/javascript" src="{#{ asset('assets/js/lib/GpxFactory.js') }#}"></script-->
+    <!--script type="text/javascript" src="{#{ asset('assets/js/lib/MapManager.js') }#}"></script-->
 
 
     <script>
+        var mapManager;
+        var raidID;
+        document.addEventListener("DOMContentLoaded", function () {
+            raidID = parseInt({{ id }});
+            mapManager = new MapManager();
+            mapManager.markerIconUrl = '{{ asset('assets/images/map-marker-main.svg') }}';
+            mapManager.initialize();
+            mapManager.addPoi(0, "Enssat", [48.729644, -3.462390], '#78e08f');
+            mapManager.addPoi(1, "Enssat2", [48.729644, -3.463000], '#f74a45');
+            mapManager.addPoi(2, "Enssat3", [48.729644, -3.464000], '#a88f73');
 
-
-        var mapManager = new MapManager();
-        var raidID = parseInt({{ id }});
-        mapManager.markerIconUrl = '{{ asset('assets/images/map-marker-main.svg') }}';
-        mapManager.initialize();
-
-        mapManager.addPoi(0, "Enssat", [48.729644, -3.462390], '#78e08f');
-        mapManager.addPoi(1, "Enssat2", [48.729644, -3.463000], '#f74a45');
-        mapManager.addPoi(2, "Enssat3", [48.729644, -3.464000], '#a88f73');
-
-        //mapManager.addTrack(1, "Parcours course à pied ", [[48.753503, -3.236325], [48.601453, -3.544028], [48.905298, -3.356664]], '#78e08f');
-        //mapManager.addTrack(2, "Parcours kayak ", [[48.224669, -3.257484], [48.703163, -3.482751], [48.528878, -3.231008]], '#f74a45');
-        //mapManager.addTrack(3, "Parcours VTT ", [[48.735177, -3.409807], [48.502598, -3.445755], [48.103357, -3.519441]], '#a88f73');
-
-
+        });
     </script>
-    <script type="text/javascript" src="{{ asset('assets/js/lib/Editor.js') }}"></script>
-    <script type="text/javascript" src="{{ asset('assets/js/lib/Track.js') }}"></script>
+
+    <!--script type="text/javascript" src="{#{ asset('assets/js/lib/Editor.js') }#}"></script-->
+    <!--script type="text/javascript" src="{#{ asset('assets/js/lib/Track.js') }#}"></script-->
 
 {% endblock %}
 
