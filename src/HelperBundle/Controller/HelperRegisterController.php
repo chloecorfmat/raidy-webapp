@@ -5,6 +5,7 @@ namespace HelperBundle\Controller;
 use AppBundle\Entity\Helper;
 use AppBundle\Entity\PoiType;
 use AppBundle\Entity\User;
+use AppBundle\Service\FormatService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -92,60 +93,74 @@ class HelperRegisterController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $formData = $form->getData();
+            $formatService = $this->container->get('FormatService');
 
             $userManager = $this->get('fos_user.user_manager');
-            $emailExist = $userManager->findUserByEmail($formData['email']);
+            $phone = $formatService->mobilePhoneNumber($formData['phone']);
+            if (!is_null($phone)) {
+                $emailExist = $userManager->findUserByEmail($formData['email']);
 
-            if ($formData['plainPassword'] == $formData['repeatPassword']) {
-                if (!$emailExist) {
-                    $user = $userManager->createUser();
-                    $user->setUsername($formData['email']);
-                    $user->setLastName($formData['lastName']);
-                    $user->setFirstName($formData['firstName']);
-                    $user->setPhone($formData['phone']);
-                    $user->setEmail($formData['email']);
-                    $user->setEmailCanonical($formData['email']);
-                    $user->setEnabled(1);
-                    $user->setPlainPassword($formData['plainPassword']);
-                    $user->addRole('ROLE_HELPER');
+                if ($formData['plainPassword'] == $formData['repeatPassword']) {
+                    if (!$emailExist) {
+                        $user = $userManager->createUser();
+                        $user->setUsername($formData['email']);
+                        $user->setLastName($formData['lastName']);
+                        $user->setFirstName($formData['firstName']);
+                        $user->setPhone($phone);
+                        $user->setEmail($formData['email']);
+                        $user->setEmailCanonical($formData['email']);
+                        $user->setEnabled(1);
+                        $user->setPlainPassword($formData['plainPassword']);
+                        $user->addRole('ROLE_HELPER');
 
-                    $userManager->updateUser($user);
+                        $userManager->updateUser($user);
 
-                    // Connect the user manually
-                    $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                    $this->get('security.token_storage')->setToken($token);
+                        // Connect the user manually
+                        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+                        $this->get('security.token_storage')->setToken($token);
 
-                    $this->get('session')->set('_security_main', serialize($token));
+                        $this->get('session')->set('_security_main', serialize($token));
 
-                    $event = new InteractiveLoginEvent($request, $token);
-                    $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+                        $event = new InteractiveLoginEvent($request, $token);
+                        $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
 
-                    $helperManager = $em->getRepository('AppBundle:Helper');
-                    $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
+                        $helperManager = $em->getRepository('AppBundle:Helper');
+                        $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
 
-                    if ($alreadyRegistered) {
-                        return $this->redirectToRoute('helper');
+                        if ($alreadyRegistered) {
+                            return $this->redirectToRoute('helper');
+                        } else {
+                            $poitype = new PoiType($formData['poitype']);
+                            $em->persist($poitype);
+                            $em->flush();
+
+                            $helper = new Helper();
+                            $helper->setRaid($raid);
+                            $helper->setFavoritePoiType($poitype); // @todo : Use list instead of raw data
+                            $helper->setUser($user);
+                            $helper->setIsCheckedIn(false);
+
+                            $em->persist($helper);
+                            $em->flush();
+
+                            return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                        }
                     } else {
-                        $poitype = new PoiType($formData['poitype']);
-                        $em->persist($poitype);
-                        $em->flush();
-
-                        $helper = new Helper();
-                        $helper->setRaid($raid);
-                        $helper->setFavoritePoiType($poitype); // @todo : Use list instead of raw data
-                        $helper->setUser($user);
-                        $helper->setIsCheckedIn(false);
-
-                        $em->persist($helper);
-                        $em->flush();
-
-                        return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                        $form->addError(
+                            new FormError('Un utilisateur avec cette adresse email est déjà enregistré')
+                        );
                     }
                 } else {
-                    $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
+                    $form->addError(
+                        new FormError('Le champ Répéter le mot de passe n\'est pas rempli correctectement')
+                    );
                 }
             } else {
-                $form->addError(new FormError('Le champ Répéter le mot de passe n\'est pas rempli correctectement'));
+                $form->addError(
+                    new FormError(
+                        'Le numéro de téléphone d\'un bénévole doit être un mobile et commencer par 06 ou 07.'
+                    )
+                );
             }
         }
 

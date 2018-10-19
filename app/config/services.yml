@@ -49,3 +49,13 @@ services:
         class: AppBundle\Service\PoiTypeService
         autowire: true
         public: true
+
+    FormatService:
+        class: AppBundle\Service\FormatService
+        autowire: true
+        public: true
+
+    AccessDeniedService:
+      class: AppBundle\Security\AccessDeniedService
+      autowire: true
+      public: true

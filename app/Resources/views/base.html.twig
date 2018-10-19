@@ -6,6 +6,10 @@
     {% set base_class = 'organizer' %}
 {% endif %}
 
+{% if base_class is not defined %}
+    {% set user_edit_page = '' %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -35,7 +39,7 @@
             <nav class="header--nav">
                 <ul>
                     <li class="header--nav-item">
-                        <a href="" aria-label="Profil">
+                        <a href="{{ user_edit_page }}" aria-label="Profil">
                             <p class="header--profile-ico">
                                 {{ app.user.username }}
                             </p>

@@ -17,14 +17,25 @@ main {
 }
 
 .content {
-  display: flex;
+  display: block;
   width: 100%;
 
   .content--part {
+    box-sizing: border-box;
+    margin-top: 3rem;
     width: 100%;
+  }
 
-    @media screen and (min-width: $breakpoint-large) {
+  @media screen and (min-width: $breakpoint-large) {
+    display: flex;
+
+    .content--part {
+      margin-top: initial;
       width: 33%;
+
+      &:not(:first-child) {
+        margin-left: 2rem;
+      }
     }
   }
 }
