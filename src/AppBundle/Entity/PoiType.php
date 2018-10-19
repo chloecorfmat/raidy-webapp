@@ -43,6 +43,8 @@ class PoiType
      */
     public function __construct()
     {
+        $this->type = "test";
+        $this->color = "#123123";
     }
 
     /**

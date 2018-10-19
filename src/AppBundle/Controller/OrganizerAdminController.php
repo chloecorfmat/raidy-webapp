@@ -40,6 +40,7 @@ class OrganizerAdminController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $formatService = $this->container->get('FormatService');
             $userManager = $this->get('fos_user.user_manager');
             $emailExist = $userManager->findUserByEmail($formUser->getEmail());
 
@@ -50,7 +51,8 @@ class OrganizerAdminController extends Controller
                 $user->setUsername($formUser->getUsername());
                 $user->setLastName($formUser->getLastName());
                 $user->setFirstName($formUser->getFirstName());
-                $user->setPhone($formUser->getPhone());
+                $phone = $formatService->telephoneNumber($formUser->getPhone());
+                $user->setPhone($phone);
                 $user->setEmail($formUser->getEmail());
                 $user->setEmailCanonical($formUser->getEmail());
                 $user->setEnabled(1);
@@ -98,6 +100,7 @@ class OrganizerAdminController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $formatService = $this->container->get('FormatService');
             $emailExist = $userManager->findUserByEmail($formUser->getEmail());
 
             if (!$emailExist || $emailExist->getId() === $formUser->getId()) {
@@ -106,10 +109,13 @@ class OrganizerAdminController extends Controller
                 $user->setUsername($formUser->getUsername());
                 $user->setLastName($formUser->getLastName());
                 $user->setFirstName($formUser->getFirstName());
-                $user->setPhone($formUser->getPhone());
+                $phone = $formatService->telephoneNumber($formUser->getPhone());
+                $user->setPhone($phone);
                 $user->setEmail($formUser->getEmail());
 
                 $userManager->updateUser($user);
+                // To display the phone number correctly.
+                return $this->redirectToRoute('editOrganizer', ['id' => $id]);
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
