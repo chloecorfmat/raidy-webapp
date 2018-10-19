@@ -44,7 +44,7 @@
         </div>
     </div>
 
-    <!-- [1] -->
+    <!-- ADD TRACK  -->
     <div id="add-track-popin" aria-hidden="true" class="modal" data-micromodal-close>
         <!-- [2] -->
         <div tabindex="-1" data-micromodal-close>
@@ -88,7 +88,7 @@
 
 
 
-    <!-- [1] -->
+    <!-- TRACK SETTINGS -->
     <div id="track-setting-popin" aria-hidden="true" class="modal" data-micromodal-close>
         <!-- [2] -->
         <div tabindex="-1" data-micromodal-close>
@@ -123,6 +123,99 @@
                                     </button>
                                     <button type="button" id="TrackSettings_submit" >
                                         mettre à jour
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD POI  -->
+    <div id="add-poi-popin" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="add-poi-title">
+                <div class="modal-container">
+                    <header class="modal--header ">
+                        <h2 id="add-poi-title">
+                            Nouveau point d'intérêt
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="add-poi-content" class="modal--content">
+                        <div>
+                            <form name="addPoi">
+                                <div id="addPoi">
+                                    <div class="form--item">
+                                        <label for="addPoi_name" class="required">Nom du point d'intérêt</label>
+                                        <input class="form--input-text" type="text" id="addPoi_name" required="required" >
+                                    </div>
+                                    <div class="form--item">
+                                        <label for="addPoi_nbhelper" class="required">Nombre de bénévoles requis</label>
+                                        <input class="form--input-text" type="number" id="addPoi_nbhelper" required="required">
+                                    </div>
+                                    <div class="form--item">
+                                        <label for="addPoi_nbhelper" class="required">Type du point d'intérêt</label>
+                                        <select id="monselect">
+                                            <option value="danger">Point dangereux</option>
+                                            <option value="croisement" >Croisement</option>
+                                            <option value="buvette">Buvette</option>
+                                            <option value="parking">Parking</option>
+                                        </select>
+                                    </div>
+                                    <button type="button" id="addPoi_submit"> Ajouter </button>
+                                    <button type="button" id="addPoi_cancel"> Annuler </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- POI SETTINGS -->
+    <div id="edit-poi-popin" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="edit-poi-title">
+                <div class="modal-container">
+                    <header class="modal--header ">
+                        <h2 id="edit-poi-title">
+                            Éditer un point d'intéret
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-organizer-content" class="modal--content">
+                        <div>
+                            <form name="TrackSettings">
+                                <div id="TrackSettings">
+                                    <div class="form--item  form--input-focused">
+                                        <label for="TrackSettings_name" class="required">Nom du parcours</label>
+                                        <input class="form--input-text" type="text" id="TrackSettings_name"
+                                               required="required" >
+                                    </div>
+                                    <div class="form--item  form--input-focused">
+                                        <label for="editPoi_color" class="required">Couleur</label> <input
+                                                class="form--input-text" type="color" id="editPoi_color"
+                                                required="required">
+                                    </div>
+                                    <input class="form--input-text" type="hidden" id="editPoi_id" >
+                                    <button type="button" class="btn btn--danger" id="editPoi_delete" >
+                                        Supprimer
+                                    </button>
+                                    <button type="button" id="editPoi_submit" >
+                                        Mettre à jour
                                     </button>
                                 </div>
                             </form>

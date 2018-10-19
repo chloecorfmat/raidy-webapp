@@ -143,7 +143,7 @@
   display: flex;
   flex-direction: column;
   position: relative;
-  width : 20%;
+  //width : 20%;
 
   &::after {
     background-color: $tertiary-color-1;
@@ -184,14 +184,15 @@
 
   .list--pois-items {
     &::before {
-      background: $main-color; // @TODO : How to set background color ?
+     // background: $main-color; // @TODO : How to set background color ?
       border-radius: 50%;
+      //border: 2px solid #0f5e54;
       content: '';
       display: inline-block;
-      height: 1rem;
+      height: 1.25rem;
+      width: 1.25rem;
       margin-right: 1rem;
       vertical-align: bottom;
-      width: 1rem;
     }
   }
 }
@@ -260,14 +261,49 @@
   background: $grey-light;
 }
 
-.btn--track--edit {
+.btn--track--edit{
   background: none;
   color: $tertiary-color-1;
   display: inline-block;
-  font-size: .75rem;
-  margin-left: .5rem;
+  font-size: .65rem;
+  margin-left: .25rem;
 
   &:hover {
     opacity: .5;
   }
 }
+.btn--track--settings, .btn--poi--settings{
+  background: none;
+  color: $tertiary-color-1;
+  display: inline-block;
+  font-size: .95rem;
+  margin-left: .25rem;
+
+  &:hover {
+    opacity: .5;
+  }
+}
+
+
+// LEAF LET POP-UP
+.leaflet-popup-content-wrapper{
+  text-align: center;
+  border-radius: 12px;
+  padding: 0;
+  header{
+      display : block;
+      font-size : 0.75rem;
+  }
+  h4{
+    margin-block-start: 0;
+    margin-block-end: 0;
+  }
+}
+
+.leaflet-popup-content{
+  margin: 0;
+  p{
+    margin : 0;
+  }
+}
+

@@ -1,10 +1,10 @@
 <?php
-
 namespace OrganizerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use OrganizerBundle\Security\RaidVoter;
 
 class EditorController extends Controller
 {
@@ -18,14 +18,22 @@ class EditorController extends Controller
      */
     public function editorAction(Request $request, $id)
     {
-        $trackManager = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('AppBundle:Track');
 
-        $tracks = $trackManager->findBy(['raid' => $id]);
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(['id' => $id]);
+
+        if (null === $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
+        }
 
         return $this->render('OrganizerBundle:Editor:editor.html.twig', [
-            'key' => $tracks,
             'id' => $id,
         ]);
     }

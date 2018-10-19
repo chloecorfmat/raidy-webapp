@@ -12,8 +12,6 @@ var Track = function (map) {
     this.waypoints = [];
 
     this.line = L.polyline([]);
-
-
 }
 
 Track.prototype.setName = function(name){
@@ -34,97 +32,21 @@ Track.prototype.setColor = function(color){
     li.querySelector("label > span.checkmark").style.borderColor = this.color;
 }
 
+Track.prototype.setEditable = function(b){
+    b ? this.line.enableEdit() : this.line.disableEdit();
+}
 
-Track.prototype.addPoint = function (lat, lng) {
-    var keepThis = this;
-
-    const markerHtmlStyles = `
-          background-color: `+this.color +`;
-          width: 0.75rem;
-          height: 0.75rem;
-          display: block;
-          position: relative;
-          border-radius: 3rem ;
-          transform: translateY(-0.375rem) translateX(-0.375rem);
-          border: 0px solid #FFFFFF`;
-
-    const icon = L.divIcon({
-        className: "my-custom-pin",
-        iconAnchor: [0, 0],
-        labelAnchor: [-5, 0],
-        popupAnchor: [-8, -46],
-        html: `<span style="${markerHtmlStyles}" />`
-    });
-
-    var marker = L.marker([lat, lng], {draggable: 'true', icon: icon}).addTo(this.map);
-
-    marker.on('drag', function () {
-        keepThis.map.dragging.disable();
-        keepThis.reDrawLine();
-    });
-    marker.on('dragend', function () {
-        keepThis.map.dragging.enable();
-        keepThis.push();
-    });
-
-    marker.on('dblclick', function () {
-        keepThis.removeMarker(this);
-    });
-
-    marker.on('click', function () {
-        event.stopPropagation();
-    });
-    this.line.addLatLng(marker.getLatLng());
-    this.waypoints.push(marker);
-    this.push();
-    // this.calculDistance();
-};
-
-
-Track.prototype.reDrawLine = function () {
-    this.line.setLatLngs([]);
-    var points = this.waypoints;
-    for (var point in points) {
-        this.line.addLatLng(points[point].getLatLng());
-    }
-
-    // this.calculDistance();
-};
 
 Track.prototype.calculDistance = function () {
     var points = this.line.getLatLngs();
     this.distance = 0;
     if (points.length > 1) {
         for (i = 0; i < points.length - 1; i++) {
-
             this.distance += points[i].distanceTo(points[i + 1]);
-            this.waypoints[i + 1].bindPopup(this.formatDistance(this.distance)).openPopup();
         }
     }
-    this.updateData();
 };
 
-Track.prototype.findMarkerById = function (markers, leafletId) {
-    var data = [];
-    for (var marker in markers) {
-        if (markers[marker]._leaflet_id == leafletId) {
-            data['targetMarker'] = markers[marker];
-            data['targetMarkerId'] = marker;
-        }
-    }
-    return data;
-};
-
-Track.prototype.removeMarker = function (marker) {
-    var leafletId = marker._leaflet_id;
-    var markers = this.waypoints;
-    var marker = this.findMarkerById(markers, leafletId);
-
-    this.waypoints.splice(marker['targetMarkerId'], 1);
-    this.map.removeLayer(marker['targetMarker']);
-
-    this.reDrawLine();
-};
 Track.prototype.hide = function(){
     var points = this.waypoints;
     for (var point in points) {
@@ -143,22 +65,6 @@ Track.prototype.show = function(){
     this.visible = true;
 }
 
-Track.prototype.setEditable = function(b){
-    //var points = this.waypoints;
-    /*for (var point in points) {
-        b ? points[point].setOpacity(1) : points[point].setOpacity(0);
-        b ? points[point].dragging.enable() : points[point].dragging.disable() ;
-    }*/
-    b ? this.line.enableEdit() : this.line.disableEdit();
-}
-
-Track.prototype.load = function(){
-    var xhr_object = new XMLHttpRequest();
-    xhr_object.open("GET", "", false);
-    xhr_object.send(null);
-
-    if (xhr_object.readyState == 4) alert("Requête effectuée !");
-}
 
 Track.prototype.toJSON = function(){
     latlong =  [];
@@ -187,15 +93,10 @@ Track.prototype.fromObj = function(track){
     this.isVisible = track.isVisible;
     test = JSON.parse(track.trackpoints);
 
-
     this.line = L.polyline(test, {color: this.color}).addTo(this.map);
 
-
     this.line.enableEdit();
-    /*for (point of test ) {
-       // console.log(point)
-        newTrack.addPoint(point.lat, point.lng);
-    }*/
+
 }
 Track.prototype.fromJSON = function(json){
    var track = JSON.parse(json);
@@ -208,6 +109,10 @@ Track.prototype.push = function(){
     xhr_object.setRequestHeader("Content-Type","application/json");
     xhr_object.send(this.toJSON());
     //console.log("pushed: "+this.toJSON());
+
+    li = document.getElementById("track-li-"+this.id);
+    this.calculDistance();
+    li.querySelector("label > span:nth-child(4)").innerHTML = "("+Math.round(10 * this.distance / 1000) / 10 + " Km)";
 }
 
 Track.prototype.remove = function(){
@@ -221,4 +126,85 @@ Track.prototype.remove = function(){
     li = document.getElementById("track-li-"+this.id);
     document.getElementById('editor--list').removeChild(li);
 }
+
+
+Track.prototype.buildUI = function(li){
+    newTrack = this;
+    li.id = "track-li-"+newTrack.id;
+    li.classList.add("checkbox-item");
+    li.innerHTML = `
+       <label class="checkbox-item--label">
+           <input data-id = "`+newTrack.id+`" type="checkbox" checked="checked">
+           <span style ="background-color : `+newTrack.color+`; border-color :`+newTrack.color+`" class="checkmark">
+                <i class="fas fa-check"></i>
+           </span>
+           <span class="trackName-`+newTrack.name+`">`+newTrack.name+`</span>
+           <span style="font-size : 0.75rem;"></br>(150,0 km)</span>
+       </label>
+       <button data-id = "`+newTrack.id+`" class="btn--track--edit">
+           <i class="fas fa-pen"></i>
+       </button>
+       <button data-id = "`+newTrack.id+`" class="btn--track--settings">
+           <i class="fas fa-cog"></i>
+       </button>`;
+
+    newTrack.calculDistance();
+    li.querySelector("label > span:nth-child(4)").innerHTML = "("+Math.round(10 * newTrack.distance / 1000) / 10 + " Km)";
+
+    // TRACK SELECTION LISTENER
+    li.querySelectorAll('input').forEach(function(input){
+        input.addEventListener('change', function () {
+            if(input.checked){
+                mapManager.showTrack(parseInt(input.dataset.id));
+                li.querySelector('.btn--track--edit').style.display = "inline-block";
+                li.querySelector("label > span.checkmark").style.backgroundColor =  li.querySelector("label > span.checkmark").style.borderColor;
+            }else{
+                li.querySelector("label > span.checkmark").style.backgroundColor = "#ffffff";
+                if(mapManager.currentEditID == input.dataset.id){
+                    document.querySelectorAll('.track--edit').forEach(function (el) {
+                        el.classList.remove('track--edit')
+                    })
+                    mapManager.switchMode(EditorMode.READING);
+                }
+                mapManager.hideTrack(parseInt(input.dataset.id))
+                li.querySelector('.btn--track--edit').style.display = "none";
+            }
+        });
+    });
+
+    //TRACK EDIT PENCIL
+    li.querySelectorAll('.btn--track--edit').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            if (!this.parentElement.classList.contains('track--edit')) {
+                document.querySelectorAll('.track--edit').forEach(function (el) {
+                    el.classList.remove('track--edit')
+                })
+            }
+            // console.log(btn);
+            mapManager.currentEditID = parseInt(btn.dataset.id) ;
+            mapManager.switchMode(EditorMode.TRACK_EDIT);
+            this.parentElement.classList.toggle('track--edit');
+        })
+    });
+
+    //TRACK SETTINGS COG
+    li.querySelectorAll('.btn--track--settings').forEach(function (btn) {
+        var id = parseInt(btn.dataset.id);
+        var track =  mapManager.tracksMap.get(id);
+
+        console.log(track);
+
+        btn.addEventListener('click', function () {
+
+            document.querySelector('#TrackSettings_name').value  = track.name;
+            document.querySelector('#TrackSettings_color').value = track.color;
+            document.querySelector('#TrackSettings_id').value    = track.id;
+
+            MicroModal.show('track-setting-popin');
+
+        });
+    });
+    return li;
+}
+
 
