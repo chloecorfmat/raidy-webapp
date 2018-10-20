@@ -73,18 +73,18 @@ document.getElementById('addTrackButton').addEventListener('click', function () 
 });
 
 document.getElementById('addTrack_submit').addEventListener('click', function () {
-    trName = document.getElementById('addTrack_name').value;
-    trColor = document.getElementById('addTrack_color').value;
+    var trName = document.getElementById('addTrack_name').value;
+    var trColor = document.getElementById('addTrack_color').value;
     mapManager.requestNewTrack(trName, trColor);
     MicroModal.close('add-track-popin');
 });
 
 document.getElementById('TrackSettings_submit').addEventListener('click', function () {
-    trName = document.getElementById('TrackSettings_name').value;
-    trColor = document.getElementById('TrackSettings_color').value;
-    trId = document.getElementById('TrackSettings_id').value;
+    var trName = document.getElementById('TrackSettings_name').value;
+    var trColor = document.getElementById('TrackSettings_color').value;
+    var trId = document.getElementById('TrackSettings_id').value;
 
-    track = mapManager.tracksMap.get(parseInt(trId));
+    var track = mapManager.tracksMap.get(parseInt(trId));
 
     track.setName(trName);
     track.setColor(trColor);
@@ -94,23 +94,64 @@ document.getElementById('TrackSettings_submit').addEventListener('click', functi
 
 });
 
+document.getElementById('TrackSettings_delete').addEventListener('click', function () {
+    var trId = document.getElementById('TrackSettings_id').value;
+
+    var track = mapManager.tracksMap.get(parseInt(trId));
+
+    track.remove();
+    MicroModal.close('track-settings-popin');
+
+});
+
+// ADD POI SUBMIT
 document.getElementById('addPoi_submit').addEventListener('click', function () {
-    console.log("nbfjklxwi:kvh;")
-    poiName = document.getElementById('addPoi_name').value;
-    poiType = document.getElementById('addPoi_type').value;
-    poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
+    var poiName = document.getElementById('addPoi_name').value;
+    var poiType = document.getElementById('addPoi_type').value;
+    var poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
 
     MicroModal.close('add-poi-popin');
     mapManager.requestNewPoi(poiName, poiType, poiHelpersCount);
 
+    document.getElementById('addPoi_name').value = "";
+    document.getElementById('addPoi_type').value = "";
+    document.getElementById('addPoi_nbhelper').value = "";
+
 });
 
-document.getElementById('TrackSettings_delete').addEventListener('click', function () {
-    trId = document.getElementById('TrackSettings_id').value;
+// EDIT POI SUBMIT
+document.getElementById('editPoi_submit').addEventListener('click', function () {
+    var poiId = document.getElementById('editPoi_id').value;
+    var poi = mapManager.poiMap.get(parseInt(poiId));
 
-    track = mapManager.tracksMap.get(parseInt(trId));
+    poi.name = document.getElementById('editPoi_name').value;
+    poi.poiType = mapManager.poiTypesMap.get(parseInt(document.getElementById('addPoi_type').value));
+    console.log(poi.poiType);
+    console.log(document.getElementById('addPoi_type').value);
+    poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
 
-    track.remove();
-    MicroModal.close('track-settings-popin');
+    //poiType
+
+   // console.log(poi);
+    poi.push();
+
+    poi.buildUI();
+    MicroModal.close('edit-poi-popin');
+
+    document.getElementById('editPoi_name').value = "";
+    document.getElementById('editPoi_type').value = "";
+    document.getElementById('editPoi_nbhelper').value = "";
+
+
+});
+
+// EDIT POI DELETE
+document.getElementById('editPoi_delete').addEventListener('click', function () {
+   var poiId = document.getElementById('editPoi_id').value;
+
+   var poi = mapManager.poiMap.get(parseInt(poiId));
+
+    poi.remove();
+    MicroModal.close('edit-poi-popin');
 
 });

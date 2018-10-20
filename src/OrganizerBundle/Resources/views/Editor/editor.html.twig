@@ -85,9 +85,6 @@
         </div>
     </div>
 
-
-
-
     <!-- TRACK SETTINGS -->
     <div id="track-setting-popin" aria-hidden="true" class="modal" data-micromodal-close>
         <!-- [2] -->
@@ -152,15 +149,15 @@
                         <div>
                             <form name="addPoi">
                                 <div id="addPoi">
-                                    <div class="form--item">
+                                    <div class="form--item form--input-focused">
                                         <label for="addPoi_name" class="required">Nom du point d'intérêt</label>
                                         <input class="form--input-text" type="text" id="addPoi_name" required="required" >
                                     </div>
-                                    <div class="form--item">
+                                    <div class="form--item form--input-focused">
                                         <label for="addPoi_nbhelper" class="required">Nombre de bénévoles requis</label>
                                         <input class="form--input-text" type="number" id="addPoi_nbhelper" required="required">
                                     </div>
-                                    <div class="form--item">
+                                    <div class="form--item form--input-focused">
                                         <label for="addPoi_type" class="required">Type du point d'intérêt</label>
                                         <select id="addPoi_type">
                                             <option value="1">Parking</option>
@@ -179,8 +176,7 @@
         </div>
     </div>
 
-
-    <!-- POI SETTINGS -->
+    <!-- EDIT POI -->
     <div id="edit-poi-popin" aria-hidden="true" class="modal" data-micromodal-close>
         <!-- [2] -->
         <div tabindex="-1" data-micromodal-close>
@@ -195,19 +191,25 @@
                         <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i
                                     data-micromodal-close class="fas fa-times"></i></button>
                     </header>
-                    <div id="delete-organizer-content" class="modal--content">
+                    <div id="edit-poi-content" class="modal--content">
                         <div>
-                            <form name="TrackSettings">
-                                <div id="TrackSettings">
-                                    <div class="form--item  form--input-focused">
-                                        <label for="TrackSettings_name" class="required">Nom du parcours</label>
-                                        <input class="form--input-text" type="text" id="TrackSettings_name"
-                                               required="required" >
+                            <form name="editPoi">
+                                <div id="editPoi">
+                                    <div class="form--item">
+                                        <label for="editPoi_name" class="required">Nom du point d'intérêt</label>
+                                        <input class="form--input-text" type="text" id="editPoi_name" required="required" >
                                     </div>
-                                    <div class="form--item  form--input-focused">
-                                        <label for="editPoi_color" class="required">Couleur</label> <input
-                                                class="form--input-text" type="color" id="editPoi_color"
-                                                required="required">
+                                    <div class="form--item">
+                                        <label for="editPoi_nbhelper" class="required">Nombre de bénévoles requis</label>
+                                        <input class="form--input-text" type="number" id="editPoi_nbhelper" required="required">
+                                    </div>
+                                    <div class="form--item">
+                                        <label for="editPoi_type" class="required">Type du point d'intérêt</label>
+                                        <select id="editPoi_type">
+                                            <option value="1">Parking</option>
+                                            <option value="2" >Point dangereux</option>
+                                            <option value="3">Restauration</option>
+                                        </select>
                                     </div>
                                     <input class="form--input-text" type="hidden" id="editPoi_id" >
                                     <button type="button" class="btn btn--danger" id="editPoi_delete" >

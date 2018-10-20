@@ -269,11 +269,10 @@ MapManager.prototype.addPoi = function (poi) {
     newPoi.fromObj(poi);
     this.poiMap.set(poi.id, newPoi);
 
-   /* var li = document.createElement('li');
-    li = newTrack.buildUI(li);
+ //   var li = document.createElement('li');
+    //li = newTrack.buildUI(li);
 
-    console.log(li);
-    document.getElementById('editor--list').appendChild(li);*/
+  //  document.getElementById('editor--list').appendChild(li);
 
 
 
