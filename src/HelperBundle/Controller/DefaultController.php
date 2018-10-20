@@ -13,10 +13,8 @@
 namespace HelperBundle\Controller;
 
 use AppBundle\Entity\Helper;
-use AppBundle\Entity\Raid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -63,6 +61,7 @@ class DefaultController extends Controller
      * @Route("/helper/profile/edit", name="editHelperProfile")
      *
      * @param Request $request request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editHelperProfile(Request $request)
@@ -82,7 +81,7 @@ class DefaultController extends Controller
         ->add('lastName', TextType::class, ['label' => 'Nom'])
         ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
         ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
-        ->add('submit', SubmitType::class, ['label' => 'Modifier le profil', 'attr' => array('class' => 'btn'), ])
+        ->add('submit', SubmitType::class, ['label' => 'Modifier le profil', 'attr' => array('class' => 'btn')])
         ->getForm();
 
         $data = [];
@@ -98,10 +97,10 @@ class DefaultController extends Controller
             'invalid_message' => 'Les mots de passe doivent être identiques.',
             'options' => array('attr' => array('class' => 'password-field')),
             'required' => true,
-            'first_options'  => array('label' => 'Nouveau mot de passe'),
+            'first_options' => array('label' => 'Nouveau mot de passe'),
             'second_options' => array('label' => 'Répétez le mot de passe'),
         ))
-        ->add('submit', SubmitType::class, ['label' => 'Modifier le mot de passe', 'attr' => array('class' => 'btn'), ])
+        ->add('submit', SubmitType::class, ['label' => 'Modifier le mot de passe', 'attr' => array('class' => 'btn')])
         ->getForm();
 
         $form->handleRequest($request);

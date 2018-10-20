@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 18/10/2018
- * Time: 13:37
+ * Time: 13:37.
  */
 
 namespace AppBundle\Service;
@@ -15,6 +15,7 @@ class PoiService
 {
     /**
      * PoiService constructor.
+     *
      * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)
@@ -25,6 +26,7 @@ class PoiService
     /**
      * @param mixed $obj
      * @param mixed $raidId
+     *
      * @return Poi
      */
     public function poiFromArray($obj, $raidId)
@@ -50,6 +52,7 @@ class PoiService
 
     /**
      * @param Poi $poi
+     *
      * @return false|string
      */
     public function poiToJson($poi)
@@ -63,7 +66,7 @@ class PoiService
         $obj['requiredHelpers'] = $poi->getRequiredHelpers();
         $obj['raid'] = $poi->getRaid()->getId();
 
-        if ($poi->getPoiType() != null) {
+        if (null != $poi->getPoiType()) {
             $obj['poiType'] = $poi->getPoiType()->getId();
         } else {
             $obj['poiType'] = '';
@@ -76,11 +79,11 @@ class PoiService
      * @param Poi   $poi
      * @param int   $raidId
      * @param mixed $obj
+     *
      * @return mixed
      */
     public function updatePoiFromArray($poi, $raidId, $obj)
     {
-
         $poi->setName($obj['name']);
 
         $poi->setLongitude($obj['longitude']);
@@ -100,6 +103,7 @@ class PoiService
 
     /**
      * @param array $pois
+     *
      * @return false|string
      */
     public function poisArrayToJson($pois)
@@ -116,7 +120,7 @@ class PoiService
             $obj['requiredHelpers'] = $poi->getRequiredHelpers();
             $obj['raid'] = $poi->getRaid()->getId();
 
-            if ($poi->getPoiType() != null) {
+            if (null != $poi->getPoiType()) {
                 $obj['poiType'] = $poi->getPoiType()->getId();
             } else {
                 $obj['poiType'] = '';
@@ -131,6 +135,7 @@ class PoiService
     /**
      * @param mixed $obj
      * @param bool  $checkId
+     *
      * @return bool
      */
     public function checkDataArray($obj, $checkId)
@@ -138,28 +143,28 @@ class PoiService
         $status = true;
 
         if ($checkId) {
-            if ($obj["id"] == null || $obj["id"] == "") {
+            if (null == $obj['id'] || '' == $obj['id']) {
                 $status = false;
             }
         }
 
-        if ($obj["name"] == null || $obj["name"] == "") {
+        if (null == $obj['name'] || '' == $obj['name']) {
             $status = false;
         }
 
-        if ($obj["longitude"] == null || $obj["longitude"] == "") {
+        if (null == $obj['longitude'] || '' == $obj['longitude']) {
             $status = false;
         }
 
-        if ($obj["latitude"] == null || $obj["latitude"] == "") {
+        if (null == $obj['latitude'] || '' == $obj['latitude']) {
             $status = false;
         }
 
-        if ($obj["requiredHelpers"] == null || $obj["requiredHelpers"] == "") {
+        if (null == $obj['requiredHelpers'] || '' == $obj['requiredHelpers']) {
             $status = false;
         }
 
-        if ($obj["poiType"] == null || $obj["poiType"] == "") {
+        if (null == $obj['poiType'] || '' == $obj['poiType']) {
             $status = false;
         }
 

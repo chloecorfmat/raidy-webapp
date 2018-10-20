@@ -3,18 +3,18 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 18/10/2018
- * Time: 16:32
+ * Time: 16:32.
  */
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\PoiType;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PoiTypeService
 {
     /**
      * PoiTypeService constructor.
+     *
      * @param EntityManagerInterface $em
      */
     public function __construct(EntityManagerInterface $em)
@@ -24,6 +24,7 @@ class PoiTypeService
 
     /**
      * @param array $poiTypes
+     *
      * @return false|string
      */
     public function poisArrayToJson($poiTypes)

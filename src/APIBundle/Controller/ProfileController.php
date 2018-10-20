@@ -3,17 +3,14 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 15/10/18
- * Time: 13:58
+ * Time: 13:58.
  */
 
 namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends AjaxAPIController
@@ -46,6 +43,6 @@ class ProfileController extends AjaxAPIController
      */
     public function editProfileAction()
     {
-        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, "Not implemented");
+        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
     }
 }

@@ -90,6 +90,19 @@ form {
   }
 }
 
+.form--item-select {
+  margin-top: 1.5rem;
+
+  label {
+    position: initial;
+  }
+
+  select {
+    display: block;
+    margin-top: .5rem;
+  }
+}
+
 .form--error {
   color: $secondary-color-2;
   font-size: .8rem;

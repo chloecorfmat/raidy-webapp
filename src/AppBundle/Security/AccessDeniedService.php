@@ -12,6 +12,7 @@ class AccessDeniedService implements AccessDeniedHandlerInterface
     /**
      * @param Request               $request
      * @param AccessDeniedException $accessDeniedException
+     *
      * @return Response|AccessDeniedException
      */
     public function handle(Request $request, AccessDeniedException $accessDeniedException)

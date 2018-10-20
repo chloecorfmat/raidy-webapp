@@ -37,9 +37,8 @@ class PoiType
      */
     protected $color;
 
-/**
+    /**
      * PoiType constructor.
-     *
      */
     public function __construct()
     {

@@ -13,10 +13,8 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class DefaultController extends Controller
 {
@@ -28,13 +26,13 @@ class DefaultController extends Controller
     public function indexAction()
     {
         $user = $this->getUser();
-        if ($user == null) {
+        if (null == $user) {
             return $this->redirectToRoute('fos_user_security_login');
-        } elseif ($user->hasRole("ROLE_SUPER_ADMIN")) {
+        } elseif ($user->hasRole('ROLE_SUPER_ADMIN')) {
             return $this->redirectToRoute('listOrganizer');
-        } elseif ($user->hasRole("ROLE_ORGANIZER")) {
+        } elseif ($user->hasRole('ROLE_ORGANIZER')) {
             return $this->redirectToRoute('listRaid');
-        } elseif ($user->hasRole("ROLE_HELPER")) {
+        } elseif ($user->hasRole('ROLE_HELPER')) {
             return $this->redirectToRoute('helper');
         }
     }
