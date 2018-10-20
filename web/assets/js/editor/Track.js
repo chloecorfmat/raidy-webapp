@@ -59,9 +59,9 @@ Track.prototype.hide = function(){
 Track.prototype.show = function(){
     var points = this.waypoints;
     for (var point in points) {
-        this.map.addLayer(points[point]);
+        mapManager.group.addLayer(points[point]);
     }
-    this.map.addLayer(this.line);
+    mapManager.group.addLayer(this.line);
     this.visible = true;
 }
 
