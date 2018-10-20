@@ -81,7 +81,7 @@ document.getElementById('addTrack_submit').addEventListener('click', function ()
 
 
     document.getElementById('addTrack_name').value = "";
-    document.getElementById('addTrack_color').value = "";
+    document.getElementById('addTrack_color').value = "#000000";
 });
 
 document.getElementById('editTrack_submit').addEventListener('click', function () {

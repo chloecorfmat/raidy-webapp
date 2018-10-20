@@ -148,7 +148,8 @@ MapManager.prototype.switchMode = function (mode) {
             var res = this.tracksMap.get(this.currentEditID);
             currentTrack = this.tracksMap.get(this.currentEditID);
             currentTrack.setEditable(true);
-            this.map.fitBounds(currentTrack.line.getBounds());
+           // console.log(currentTrack.line.getBounds());
+            if(currentTrack.line.getLatLngs().length > 0) this.map.fitBounds(currentTrack.line.getBounds());
             currentTrack.line.editor.continueForward();
             this.setPoiEditable(false);
             break;
@@ -204,6 +205,7 @@ MapManager.prototype.requestNewPoi = function(name, type, requiredHelpers){
             if (xhr_object.status === 200) {
                 poi = JSON.parse(xhr_object.responseText);
                 mapManager.addPoi(poi);
+
             } else {
              //   console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
             }
@@ -228,6 +230,12 @@ MapManager.prototype.requestNewTrack = function(name, color){
             if (xhr_object.status === 200) {
                 track = JSON.parse(xhr_object.responseText);
                 mapManager.addTrack(track);
+                mapManager.currentEditID = track.id;
+                mapManager.switchMode(EditorMode.TRACK_EDIT);
+                document.querySelectorAll('.track--edit').forEach(function (el) {
+                    el.classList.remove('track--edit')
+                });
+                document.getElementById("track-li-"+track.id).classList.add("track--edit");
             } else {
               // console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
             }
