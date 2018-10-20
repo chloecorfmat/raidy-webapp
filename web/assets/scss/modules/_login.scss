@@ -113,9 +113,11 @@
       background: $tertiary-color-2;
     }
 
-    .downloads--links {
+    .downloads {
       width: 100%;
-      
+    }
+
+    .downloads--links {
       a {
         display: inline-block;
         overflow: hidden;

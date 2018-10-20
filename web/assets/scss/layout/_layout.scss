@@ -13,7 +13,11 @@ body {
 
 main {
   flex-grow: 1;
-  margin: 2rem 3rem;
+  margin: 2rem 1.5rem;
+
+  @media screen and (min-width: $breakpoint-large) {
+    margin: 2rem 3rem;
+  }
 }
 
 .content {
