@@ -83,20 +83,32 @@
   right: 0;
   text-align: center;
   transition-duration: .5s;
-  transition-property: background-color, transform;
+  transition-property: background-color;
   transition-timing-function: ease;
   vertical-align: middle;
   width: 5rem;
   z-index: 1000;
 
+  svg{
+    transition-duration: .5s;
+    transition-property:fill, transform;
+    transition-timing-function: ease;
+    width: 50%;
+    transform: translateY(-0.5rem);
+    fill : $tertiary-color-1;
+  }
   &.add--poi {
     background-color: $secondary-color-2;
 
     .btn--editor {
-      span { // sass-lint:disable-line nesting-depth
-        color: $secondary-color-2;
-        transform: rotate(50deg) translateX(.25rem) translateY(-.1rem);
-      }
+     // span { // sass-lint:disable-line nesting-depth
+       // color: $secondary-color-2;
+        svg{
+          transform: translateY(-0.5rem) rotate(50deg) ;//translateX(.25rem);
+          fill : $secondary-color-2;
+
+        }
+      //}
     }
   }
 }
@@ -318,6 +330,7 @@
 
 .leaflet-popup-content {
   margin: 0;
+  padding-bottom: 1rem;
 
   p {
     margin: 0;

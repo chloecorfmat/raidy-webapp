@@ -21,8 +21,8 @@ Poi.prototype.toJSON = function(){
             poiType: this.poiType.id
         }
     var json = JSON.stringify(poi);
-    console.log(this.requiredHelpers);
-    console.log(this.requiredHelpers);
+    //console.log(this.requiredHelpers);
+   // console.log(this.requiredHelpers);
     return json;
 }
 Poi.prototype.fromObj = function(poi) {
@@ -62,13 +62,13 @@ Poi.prototype.push = function () {
     xhr_object.open("PATCH", "/organizer/raid/"+raidID+"/poi/"+this.id, true);
     xhr_object.setRequestHeader("Content-Type","application/json");
     xhr_object.send(this.toJSON());
-    console.log(this.toJSON());
+    //console.log(this.toJSON());
 
 }
 
 Poi.prototype.buildUI= function (){
     var keepThis = this;
-
+    this.color  =this.poiType.color;
     const markerHtmlStyles = `
   background-color: ` + this.color + `;
   width: 2rem;
@@ -78,6 +78,7 @@ Poi.prototype.buildUI= function (){
   position: relative;
   border-radius: 3rem 3rem 0;
   transform: translateX(-1rem) translateY(-2rem) rotate(45deg);`;
+
     this.marker.bindPopup('' +
         '<header style="' +
         'background: ' + this.color + ' ;' +
@@ -107,15 +108,13 @@ Poi.prototype.buildUI= function (){
 
     document.getElementById("list--pois").appendChild(this.li);
     this.li.pseudoStyle("before", "background-color", this.color);
-
+    console.log(this.color);
     this.li.querySelector(".btn--poi--settings").addEventListener("click", function () {
 
         document.getElementById('editPoi_id').value = keepThis.id;
         document.getElementById('editPoi_name').value = keepThis.name;
-        document.getElementById('editPoi_type').value = keepThis.type;
         document.getElementById('editPoi_nbhelper').value = keepThis.requiredHelpers;
-
-
+        document.querySelector("#editPoi_type option[value='"+keepThis.poiType.id+"']").selected = "selected";
         MicroModal.show('edit-poi-popin');
     });
 }

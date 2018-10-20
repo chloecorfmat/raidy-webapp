@@ -138,7 +138,7 @@ Track.prototype.buildUI = function(li){
            <span style ="background-color : `+newTrack.color+`; border-color :`+newTrack.color+`" class="checkmark">
                 <i class="fas fa-check"></i>
            </span>
-           <span class="trackName-`+newTrack.name+`">`+newTrack.name+`</span>
+           <span>`+newTrack.name+`</span>
            <span style="font-size : 0.75rem;"></br>(150,0 km)</span>
        </label>
        <button data-id = "`+newTrack.id+`" class="btn--track--edit btn--editor-ico">

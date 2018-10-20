@@ -78,6 +78,10 @@ document.getElementById('addTrack_submit').addEventListener('click', function ()
     var trColor = document.getElementById('addTrack_color').value;
     mapManager.requestNewTrack(trName, trColor);
     MicroModal.close('add-track-popin');
+
+
+    document.getElementById('addTrack_name').value = "";
+    document.getElementById('addTrack_color').value = "";
 });
 
 document.getElementById('editTrack_submit').addEventListener('click', function () {
@@ -126,14 +130,8 @@ document.getElementById('editPoi_submit').addEventListener('click', function () 
     var poi = mapManager.poiMap.get(parseInt(poiId));
 
     poi.name = document.getElementById('editPoi_name').value;
-    poi.poiType = mapManager.poiTypesMap.get(parseInt(document.getElementById('addPoi_type').value));
-    console.log(poi.poiType);
-    console.log(document.getElementById('addPoi_type').value);
+    poi.poiType = mapManager.poiTypesMap.get(parseInt(document.querySelector('#editPoi_type').value));
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
-
-    //poiType
-
-   // console.log(poi);
     poi.push();
 
     poi.buildUI();

@@ -116,28 +116,33 @@ MapManager.prototype.loadRessources = function(){
 MapManager.prototype.switchMode = function (mode) {
     if(this.mode != mode) this.lastMode = this.mode;
     this.mode = mode;
-    console.log("Switch mode to : "+EditorMode.properties[mode].name);
+   // console.log("Switch mode to : "+EditorMode.properties[mode].name);
     switch (mode) {
         case  EditorMode.ADD_POI :
             this.setPoiEditable(false);
             document.getElementById('map').style.cursor = "crosshair";
             break;
         case  EditorMode.POI_EDIT :
+            document.getElementById('map').style.cursor = "grab";
+            document.getElementById('addPoiButton').classList.remove("add--poi");
+            this.setTracksEditable(false);
             this.setPoiEditable(true);
             break;
         case  EditorMode.TRACK_EDIT :
+            document.getElementById('map').style.cursor = "crosshair";
+            document.getElementById('addPoiButton').classList.remove("add--poi");
             this.setTracksEditable(false);
             var res = this.tracksMap.get(this.currentEditID);
             currentTrack = this.tracksMap.get(this.currentEditID);
             currentTrack.setEditable(true);
             currentTrack.line.editor.continueForward();
             this.setPoiEditable(false);
-            document.getElementById('map').style.cursor = "crosshair";
             break;
         case  EditorMode.READING :
+            document.getElementById('map').style.cursor = "grab";
+            document.getElementById('addPoiButton').classList.remove("add--poi");
             this.setPoiEditable(false);
             this.setTracksEditable(false);
-            document.getElementById('map').style.cursor = "grab";
             break;
     }
 }
