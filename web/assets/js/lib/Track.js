@@ -141,10 +141,10 @@ Track.prototype.buildUI = function(li){
            <span class="trackName-`+newTrack.name+`">`+newTrack.name+`</span>
            <span style="font-size : 0.75rem;"></br>(150,0 km)</span>
        </label>
-       <button data-id = "`+newTrack.id+`" class="btn--track--edit">
+       <button data-id = "`+newTrack.id+`" class="btn--track--edit btn--editor-ico">
            <i class="fas fa-pen"></i>
        </button>
-       <button data-id = "`+newTrack.id+`" class="btn--track--settings">
+       <button data-id = "`+newTrack.id+`" class="btn--track--settings btn--editor-ico">
            <i class="fas fa-cog"></i>
        </button>`;
 

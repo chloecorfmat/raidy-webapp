@@ -8,9 +8,7 @@
   min-width: 100%;
 }
 
-/*---------------*/
-/* LEFT TAB BAR  */
-/* --------------*/
+// LEFT TAB BAR.
 
 .tab {
   background-color: $main-color;
@@ -68,38 +66,36 @@
     font-family: 'Fontastique', 'SansSerif';
     position: relative;
     top: -.75rem;
-    transition: all .5s ease;
+    transition: all .5s ease; // sass-lint:disable-line no-transition-all
   }
 }
 
 .btn--add-poi {
   background-color: $tertiary-color-1;
-  font-size: 3rem;
   border-radius: 3rem ;
   bottom: 0;
-  right: 0;
+  font-size: 3rem;
+  height: 5rem;
   margin: 2.5rem;
   overflow: hidden;
   padding: 1rem;
   position: absolute;
+  right: 0;
   text-align: center;
-  vertical-align: middle;
-  width: 5rem;
-  height: 5rem;
-  z-index: 1000;
-
   transition-duration: .5s;
   transition-property: background-color, transform;
   transition-timing-function: ease;
+  vertical-align: middle;
+  width: 5rem;
+  z-index: 1000;
 
   &.add--poi {
     background-color: $secondary-color-2;
 
     .btn--editor {
-      span {
+      span { // sass-lint:disable-line nesting-depth
         color: $secondary-color-2;
-       // transform-origin: 0 0;
-        transform: rotate(50deg) translateX(0.25rem) translateY(-0.10rem) ;
+        transform: rotate(50deg) translateX(.25rem) translateY(-.1rem);
       }
     }
   }
@@ -142,25 +138,25 @@
 .bar {
   display: flex;
   flex-direction: column;
+  max-width: 30%;
   position: relative;
-  //width : 20%;
 
   &::after {
     background-color: $tertiary-color-1;
     content: '';
     display: block;
+    height: 1rem;
     position: absolute;
     right: 100%;
-    width: 1rem;
-    height: 1rem;
     vertical-align: middle;
+    width: 1rem;
     z-index: 1000000;
   }
 }
 
 .btn--laterale-bar {
   background-color: $tertiary-color-1;
-  border-radius: 0rem 10rem 10rem 0rem;
+  border-radius: 0 10rem 10rem 0;
   font-family: 'Fontastique', 'SansSerif';
   font-size: 2rem;
   height: 3rem;
@@ -169,7 +165,7 @@
   right: 0;
   text-align: center;
   top: 50%;
-  transform: translateX(100%) translateY(-50%);
+  transform: translateX(100%);
   width: 1.5rem;
   z-index: 1000;
 }
@@ -184,15 +180,14 @@
 
   .list--pois-items {
     &::before {
-     // background: $main-color; // @TODO : How to set background color ?
+      // background: $main-color; // @TODO : How to set background color ?
       border-radius: 50%;
-      //border: 2px solid #0f5e54;
       content: '';
       display: inline-block;
       height: 1.25rem;
-      width: 1.25rem;
       margin-right: 1rem;
-      vertical-align: bottom;
+      vertical-align: middle;
+      width: 1.25rem;
     }
   }
 }
@@ -205,11 +200,16 @@
   position: absolute;
 
   .btn--laterale-bar {
-    left: -100%;
+    left: 0;
+    margin-left: 0;
     position: fixed;
     top: 50%;
-    transform: translateY(1.5rem);
+    transform: translateX(0%) translateY(100%);
   }
+}
+
+.btn--editor-ico {
+  vertical-align: middle;
 }
 
 .checkbox-item {
@@ -217,11 +217,10 @@
     display: none;
 
     &:checked {
-
-      + .checkmark {
+      + .checkmark { // sass-lint:disable-line nesting-depth
         background-color: $tertiary-color-1; // Set color by js.
 
-        .fa-check {
+        .fa-check { // sass-lint:disable-line nesting-depth
           opacity: 1;
         }
       }
@@ -261,7 +260,7 @@
   background: $grey-light;
 }
 
-.btn--track--edit{
+.btn--track--edit {
   background: none;
   color: $tertiary-color-1;
   display: inline-block;
@@ -272,7 +271,9 @@
     opacity: .5;
   }
 }
-.btn--track--settings, .btn--poi--settings{
+
+.btn--track--settings,
+.btn--poi--settings {
   background: none;
   color: $tertiary-color-1;
   display: inline-block;
@@ -284,26 +285,42 @@
   }
 }
 
+.actions {
+  display: flex;
+  justify-content: space-between;
 
-// LEAF LET POP-UP
-.leaflet-popup-content-wrapper{
-  text-align: center;
-  border-radius: 12px;
-  padding: 0;
-  header{
-      display : block;
-      font-size : 0.75rem;
-  }
-  h4{
-    margin-block-start: 0;
-    margin-block-end: 0;
+  button {
+    flex-grow: 1;
+
+    &:not(:first-child) {
+      margin-left: .5rem;
+    }
   }
 }
 
-.leaflet-popup-content{
+
+// LEAF LET POP-UP
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 0;
+  text-align: center;
+
+  header {
+    display: block;
+    font-size: .75rem;
+  }
+
+  h4 {
+    margin-block-end: 0;
+    margin-block-start: 0;
+  }
+}
+
+.leaflet-popup-content {
   margin: 0;
-  p{
-    margin : 0;
+
+  p {
+    margin: 0;
   }
 }
 

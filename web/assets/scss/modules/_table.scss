@@ -49,11 +49,6 @@ th {
     border-bottom: 1px solid $grey-light;
   }
 
-  // sass-lint:disable no-css-comments
-  /**&:hover {
-    background: $grey-light;
-  }**/
-
   &:nth-child(2n+1) {
     background: $grey-light;
   }
