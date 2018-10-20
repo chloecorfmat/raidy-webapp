@@ -140,7 +140,6 @@ class OrganizerPOIController extends AjaxAPIController
         $poi = $poiManager->find($poiId);
 
         if ($poi != null) {
-            $poi = $poiService->updatePoiFromArray($poi, $raidId, $data);
             $em->remove($poi);
             $em->flush();
         } else {
