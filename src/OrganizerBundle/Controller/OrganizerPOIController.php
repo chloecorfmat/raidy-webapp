@@ -132,10 +132,6 @@ class OrganizerPOIController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé pour ce raid.');
         }
 
-        $data = $request->request->all();
-
-        $poiService = $this->container->get('PoiService');
-
         $poiManager = $em->getRepository('AppBundle:Poi');
         $poi = $poiManager->find($poiId);
 
