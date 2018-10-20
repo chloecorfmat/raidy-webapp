@@ -60,12 +60,13 @@ window.addEventListener('load', function() {
     document.querySelector('.tab .tablinks').classList.add('active');
 });
 
-
-
 document.getElementById('addPoiButton').addEventListener('click', function () {
     this.classList.toggle("add--poi");
-    document.getElementById('map').style.cursor = "crosshair";
-    mapManager.switchMode(EditorMode.ADD_POI);
+    if (this.classList.contains("add--poi")){
+        mapManager.switchMode(EditorMode.ADD_POI);
+    }else{
+        mapManager.switchMode(mapManager.lastMode);
+    }
 });
 
 document.getElementById('addTrackButton').addEventListener('click', function () {
@@ -79,10 +80,10 @@ document.getElementById('addTrack_submit').addEventListener('click', function ()
     MicroModal.close('add-track-popin');
 });
 
-document.getElementById('TrackSettings_submit').addEventListener('click', function () {
-    var trName = document.getElementById('TrackSettings_name').value;
-    var trColor = document.getElementById('TrackSettings_color').value;
-    var trId = document.getElementById('TrackSettings_id').value;
+document.getElementById('editTrack_submit').addEventListener('click', function () {
+    var trName = document.getElementById('editTrack_name').value;
+    var trColor = document.getElementById('editTrack_color').value;
+    var trId = document.getElementById('editTrack_id').value;
 
     var track = mapManager.tracksMap.get(parseInt(trId));
 
@@ -90,17 +91,17 @@ document.getElementById('TrackSettings_submit').addEventListener('click', functi
     track.setColor(trColor);
 
     track.push();
-    MicroModal.close('track-settings-popin');
+    MicroModal.close('edit-track-popin');
 
 });
 
-document.getElementById('TrackSettings_delete').addEventListener('click', function () {
-    var trId = document.getElementById('TrackSettings_id').value;
+document.getElementById('editTrack_delete').addEventListener('click', function () {
+    var trId = document.getElementById('editTrack_id').value;
 
     var track = mapManager.tracksMap.get(parseInt(trId));
 
     track.remove();
-    MicroModal.close('track-settings-popin');
+    MicroModal.close('edit-track-popin');
 
 });
 

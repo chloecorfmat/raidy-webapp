@@ -114,6 +114,7 @@ MapManager.prototype.loadRessources = function(){
 }
 
 MapManager.prototype.switchMode = function (mode) {
+    if(this.mode != mode) this.lastMode = this.mode;
     this.mode = mode;
     console.log("Switch mode to : "+EditorMode.properties[mode].name);
     switch (mode) {

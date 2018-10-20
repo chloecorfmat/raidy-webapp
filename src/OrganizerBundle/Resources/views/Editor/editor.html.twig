@@ -49,17 +49,17 @@
         <!-- [2] -->
         <div tabindex="-1" data-micromodal-close>
             <!-- [3] -->
-            <div role="dialog" aria-modal="true" aria-labelledby="delete-organizer-title">
+            <div role="dialog" aria-modal="true" aria-labelledby="add-track-title">
                 <div class="modal-container">
                     <header class="modal--header ">
-                        <h2 id="delete-organizer-title">
+                        <h2 id="add-track-title">
                             Ajouter un parcours
                         </h2>
                         <!-- [4] -->
                         <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i
                                     data-micromodal-close class="fas fa-times"></i></button>
                     </header>
-                    <div id="delete-organizer-content" class="modal--content">
+                    <div id="add-track-content" class="modal--content">
                         <div>
                             <form name="addTrack">
                                 <div id="addTrack">
@@ -86,39 +86,39 @@
     </div>
 
     <!-- TRACK SETTINGS -->
-    <div id="track-setting-popin" aria-hidden="true" class="modal" data-micromodal-close>
+    <div id="edit-track-popin" aria-hidden="true" class="modal" data-micromodal-close>
         <!-- [2] -->
         <div tabindex="-1" data-micromodal-close>
             <!-- [3] -->
-            <div role="dialog" aria-modal="true" aria-labelledby="delete-organizer-title">
+            <div role="dialog" aria-modal="true" aria-labelledby="edit-track-title">
                 <div class="modal-container">
                     <header class="modal--header ">
-                        <h2 id="delete-organizer-title">
+                        <h2 id="edit-track-title">
                             Editer un parcours
                         </h2>
                         <!-- [4] -->
                         <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i
                                     data-micromodal-close class="fas fa-times"></i></button>
                     </header>
-                    <div id="delete-organizer-content" class="modal--content">
+                    <div id="edit-track-content" class="modal--content">
                         <div>
-                            <form name="TrackSettings">
-                                <div id="TrackSettings">
+                            <form name="editTrack">
+                                <div id="editTrack">
                                     <div class="form--item  form--input-focused">
-                                        <label for="TrackSettings_name" class="required">Nom du parcours</label>
-                                        <input class="form--input-text" type="text" id="TrackSettings_name"
+                                        <label for="editTrack_name" class="required">Nom du parcours</label>
+                                        <input class="form--input-text" type="text" id="editTrack_name"
                                                required="required" >
                                     </div>
                                     <div class="form--item  form--input-focused">
-                                        <label for="TrackSettings_color" class="required">Couleur</label> <input
-                                                class="form--input-text" type="color" id="TrackSettings_color"
+                                        <label for="editTrack_color" class="required">Couleur</label> <input
+                                                class="form--input-text" type="color" id="editTrack_color"
                                                 required="required">
                                     </div>
-                                    <input class="form--input-text" type="hidden" id="TrackSettings_id" >
-                                    <button type="button" class="btn btn--danger" id="TrackSettings_delete" >
+                                    <input class="form--input-text" type="hidden" id="editTrack_id" >
+                                    <button type="button" class="btn btn--danger" id="editTrack_delete" >
                                         Supprimer
                                     </button>
-                                    <button type="button" id="TrackSettings_submit" >
+                                    <button type="button" id="editTrack_submit" >
                                         mettre à jour
                                     </button>
                                 </div>

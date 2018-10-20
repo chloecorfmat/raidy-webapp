@@ -196,9 +196,9 @@ Track.prototype.buildUI = function(li){
 
         btn.addEventListener('click', function () {
 
-            document.querySelector('#TrackSettings_name').value  = track.name;
-            document.querySelector('#TrackSettings_color').value = track.color;
-            document.querySelector('#TrackSettings_id').value    = track.id;
+            document.querySelector('#editTrack_name').value  = track.name;
+            document.querySelector('#editTrack_color').value = track.color;
+            document.querySelector('#editTrack_id').value    = track.id;
 
             MicroModal.show('track-setting-popin');
 
