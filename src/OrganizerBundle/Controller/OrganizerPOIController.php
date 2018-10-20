@@ -5,7 +5,6 @@ namespace OrganizerBundle\Controller;
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Poi;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -94,7 +93,7 @@ class OrganizerPOIController extends AjaxAPIController
         $poiManager = $em->getRepository('AppBundle:Poi');
         $poi = $poiManager->find($poiId);
 
-        if ($poi != null) {
+        if (null != $poi) {
             $poi = $poiService->updatePoiFromArray($poi, $raidId, $data);
             $em->flush();
         } else {
@@ -135,7 +134,7 @@ class OrganizerPOIController extends AjaxAPIController
         $poiManager = $em->getRepository('AppBundle:Poi');
         $poi = $poiManager->find($poiId);
 
-        if ($poi != null) {
+        if (null != $poi) {
             $em->remove($poi);
             $em->flush();
         } else {
@@ -149,6 +148,7 @@ class OrganizerPOIController extends AjaxAPIController
      * @Route("/organizer/raid/{raidId}/poi", name="listPoi", methods={"GET"})
      *
      * @param mixed $raidId raid identifier
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listPois($raidId)

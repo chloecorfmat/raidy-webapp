@@ -5,7 +5,6 @@ namespace HelperBundle\Controller;
 use AppBundle\Entity\Helper;
 use AppBundle\Entity\PoiType;
 use AppBundle\Entity\User;
-use AppBundle\Service\FormatService;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -14,7 +13,6 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -95,7 +93,7 @@ class HelperRegisterController extends Controller
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
             ->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
-            ->add('submit', SubmitType::class, ['label' => 'S\'inscrire', 'attr' => array('class' => 'btn'), ])
+            ->add('submit', SubmitType::class, ['label' => 'S\'inscrire', 'attr' => array('class' => 'btn')])
             ->getForm();
 
         $form->handleRequest($request);
@@ -202,7 +200,7 @@ class HelperRegisterController extends Controller
             ->add('email', TextType::class, ['label' => 'Email'])
             ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
-            ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn'), ])
+            ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
             ->getForm();
 
         $form->handleRequest($request);
@@ -226,7 +224,7 @@ class HelperRegisterController extends Controller
                     if (!$isPasswordValid) { // Le mot de passe n'est pas correct
                         $form->addError(new FormError('Identifiants invalides'));
                     } else {
-                        if (!$user->hasRole("ROLE_HELPER")) {
+                        if (!$user->hasRole('ROLE_HELPER')) {
                             $user->addRole('ROLE_HELPER');
                             $em->flush();
                         }
@@ -303,12 +301,13 @@ class HelperRegisterController extends Controller
 
     /**
      * @param mixed $formdata data from form
+     *
      * @return bool
      */
     private function areNotEmpty($formdata)
     {
         foreach ($formdata as $field) {
-            if ($field == null) {
+            if (null == $field) {
                 return false;
             }
         }

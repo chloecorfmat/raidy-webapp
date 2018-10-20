@@ -50,9 +50,9 @@ Track.prototype.calculDistance = function () {
 Track.prototype.hide = function(){
     var points = this.waypoints;
     for (var point in points) {
-        this.map.removeLayer(points[point]);
+        mapManager.group.removeLayer(points[point]);
     }
-    this.map.removeLayer(this.line);
+    mapManager.group.removeLayer(this.line);
     this.visible = false;
 }
 
@@ -93,7 +93,7 @@ Track.prototype.fromObj = function(track){
     this.isVisible = track.isVisible;
     test = JSON.parse(track.trackpoints);
 
-    this.line = L.polyline(test, {color: this.color}).addTo(this.map);
+    this.line = L.polyline(test, {color: this.color}).addTo(mapManager.group);
 
     this.line.enableEdit();
 
@@ -180,10 +180,16 @@ Track.prototype.buildUI = function(li){
                     el.classList.remove('track--edit')
                 })
             }
-            // console.log(btn);
-            mapManager.currentEditID = parseInt(btn.dataset.id) ;
-            mapManager.switchMode(EditorMode.TRACK_EDIT);
             this.parentElement.classList.toggle('track--edit');
+            if(this.parentElement.classList.contains('track--edit')){
+                // console.log(btn);
+                mapManager.currentEditID = parseInt(btn.dataset.id) ;
+
+                mapManager.switchMode(EditorMode.TRACK_EDIT);
+            }else{
+                mapManager.switchMode(EditorMode.READING);
+
+            }
         })
     });
 

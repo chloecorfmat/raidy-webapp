@@ -1,4 +1,5 @@
 <?php
+
 namespace OrganizerBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -9,7 +10,7 @@ use OrganizerBundle\Security\RaidVoter;
 class EditorController extends Controller
 {
     /**
-     * @Route("/organizer/editor/{id}")
+     * @Route("/organizer/editor/{id}", name="editor")
      *
      * @param Request $request request
      * @param mixed   $id      id
@@ -18,7 +19,6 @@ class EditorController extends Controller
      */
     public function editorAction(Request $request, $id)
     {
-
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');

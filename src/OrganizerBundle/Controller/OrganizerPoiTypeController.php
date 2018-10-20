@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 18/10/2018
- * Time: 16:28
+ * Time: 16:28.
  */
 
 namespace OrganizerBundle\Controller;
@@ -11,7 +11,6 @@ namespace OrganizerBundle\Controller;
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\PoiType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrganizerPoiTypeController extends AjaxAPIController

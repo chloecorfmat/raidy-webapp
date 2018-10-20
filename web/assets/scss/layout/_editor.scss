@@ -175,11 +175,16 @@
   margin: auto;
   position: absolute;
   right: 0;
-  text-align: center;
   top: 50%;
   transform: translateX(100%);
   width: 1.5rem;
   z-index: 1000;
+   i{
+     right: 15%;
+     top: 20%;
+     position: absolute;
+     transform: translateX(-75%);
+   }
 }
 
 .tab-bar--actions {

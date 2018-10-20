@@ -29,6 +29,7 @@ class AuthTokenController extends Controller
      * @param Request $request request
      *
      * @return response
+     *
      * @throws \Exception
      */
     public function postAuthTokensAction(Request $request)

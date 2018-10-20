@@ -61,7 +61,6 @@ class Track
 
     /**
      * Track constructor.
-     *
      */
     public function __construct()
     {

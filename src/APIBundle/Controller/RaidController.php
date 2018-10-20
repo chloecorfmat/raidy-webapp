@@ -3,15 +3,13 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 15/10/18
- * Time: 14:57
+ * Time: 14:57.
  */
 
 namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -22,6 +20,7 @@ class RaidController extends AjaxAPIController
      * @Rest\Get("/api/organizer/raids")
      *
      * @param Request $request
+     *
      * @return JsonResponse
      */
     public function listRaid(Request $request)
@@ -45,7 +44,7 @@ class RaidController extends AjaxAPIController
             $raidArr['id'] = $raid->getId();
             $raidArr['name'] = $raid->getName();
             $raidArr['date'] = $raid->getDate();
-            $raidArr['picture'] = $baseUrl . "/" . $assetsManager->getUrl('uploads/raids/' . $raid->getPicture());
+            $raidArr['picture'] = $baseUrl . '/' . $assetsManager->getUrl('uploads/raids/' . $raid->getPicture());
             $raidArr['address'] = $raid->getAddress();
             $raidArr['addressAddition'] = $raid->getAddressAddition();
             $raidArr['postCode'] = $raid->getPostCode();
@@ -62,10 +61,11 @@ class RaidController extends AjaxAPIController
      *
      * @param Request $request
      * @param int     $raidId  raid id
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getRaidAction(Request $request, $raidId)
     {
-        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, "Not implemented");
+        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
     }
 }

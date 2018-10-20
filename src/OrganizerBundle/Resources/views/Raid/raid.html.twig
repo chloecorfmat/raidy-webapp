@@ -18,9 +18,14 @@
         </div>
         <div class="content--part">
             <div>
+                <h2>Editeur</h2>
+                <a href="{{ path('editor', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('editor', {'id': raid.id}) }}</a>
+            </div>
+            <div>
                 <h2>Inviter des bénévoles</h2>
                 <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
             </div>
+
         </div>
     </div>
 

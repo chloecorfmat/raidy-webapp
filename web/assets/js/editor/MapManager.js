@@ -17,6 +17,9 @@ var EditorMode = Object.freeze({"READING":0, "ADD_POI":1, "TRACK_EDIT":2,"POI_ED
 var MapManager = function () {
     this.map = L.map('map', {editable: true}).setView([48.742917, -3.459180], 15);
 
+    this.group = new L.featureGroup();
+
+    this.group.addTo(this.map);
     this.waitingPoi = null;
     this.poiTypesMap = new Map();
     this.tracksMap = new Map();
@@ -28,10 +31,17 @@ var MapManager = function () {
     this.currentEditID = 0;
 
     this.mode = EditorMode.READING;
+   // L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png?{foo}', {foo: 'bar'}).addTo(this.map);
 
+  /*  L.mapboxGL({
+        accessToken: 'not-needed',
+        style: 'https://free.tilehosting.com/styles/bright/style.json?key=xiAp0GpigspvET4IucYN'
+    }).addTo(this.map);
+*/
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
+
 
     var keepThis = this;
 
@@ -42,7 +52,7 @@ MapManager.prototype.initialize = function () {
     var keepThis = this;
 
     this.map.addEventListener('click', function (e) {
-        console.log("Mode : "+EditorMode.properties[keepThis.mode].name);
+       // console.log("Mode : "+EditorMode.properties[keepThis.mode].name);
         switch (keepThis.mode) {
             case EditorMode.READING :
                 break;
@@ -60,19 +70,19 @@ MapManager.prototype.initialize = function () {
             case EditorMode.POI_EDIT :
                 break;
             default :
-                console.log("Something goes wrong with the map editor mode. " + this.mode);
+               // console.log("Something goes wrong with the map editor mode. " + this.mode);
         }
     });
 
     this.map.on('editable:middlemarker:mousedown', function (e) {
-        console.log("Handled : editable:shape:new");
-        console.log(e);
+       // console.log("Handled : editable:shape:new");
+      //  console.log(e);
         track = keepThis.tracksMap.get(keepThis.currentEditID);
         track.push();
     });
     this.map.on('editable:drawing:click', function (e) {
-        console.log("Handled : editable:shape:new");
-        console.log(e);
+    //    console.log("Handled : editable:shape:new");
+      //  console.log(e);
         track = keepThis.tracksMap.get(keepThis.currentEditID);
         track.push();
     });
@@ -104,10 +114,10 @@ MapManager.prototype.loadRessources = function(){
                 var poiTypes = JSON.parse(xhr_object.responseText);
                 for(poiType of poiTypes){
                     keepThis.poiTypesMap.set(poiType.id, poiType);
-                    console.log(poiType);
+                   // console.log(poiType);
                 }
             } else {
-                console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
+               // console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
             }
         }
     };
@@ -125,6 +135,9 @@ MapManager.prototype.switchMode = function (mode) {
         case  EditorMode.POI_EDIT :
             document.getElementById('map').style.cursor = "grab";
             document.getElementById('addPoiButton').classList.remove("add--poi");
+            document.querySelectorAll('.track--edit').forEach(function (el) {
+                el.classList.remove('track--edit')
+            })
             this.setTracksEditable(false);
             this.setPoiEditable(true);
             break;
@@ -135,6 +148,7 @@ MapManager.prototype.switchMode = function (mode) {
             var res = this.tracksMap.get(this.currentEditID);
             currentTrack = this.tracksMap.get(this.currentEditID);
             currentTrack.setEditable(true);
+            this.map.fitBounds(currentTrack.line.getBounds());
             currentTrack.line.editor.continueForward();
             this.setPoiEditable(false);
             break;
@@ -182,7 +196,7 @@ MapManager.prototype.requestNewPoi = function(name, type, requiredHelpers){
     xhr_object.open("PUT", "/organizer/raid/"+raidID+"/poi", true);
     xhr_object.setRequestHeader("Content-Type","application/json");
     xhr_object.send(poi.toJSON());
-    console.log(poi.toJSON());
+    //console.log(poi.toJSON());
 
     xhr_object.onreadystatechange = function(event) {
         // XMLHttpRequest.DONE === 4
@@ -191,7 +205,7 @@ MapManager.prototype.requestNewPoi = function(name, type, requiredHelpers){
                 poi = JSON.parse(xhr_object.responseText);
                 mapManager.addPoi(poi);
             } else {
-                console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
+             //   console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
             }
         }
     }
@@ -215,7 +229,7 @@ MapManager.prototype.requestNewTrack = function(name, color){
                 track = JSON.parse(xhr_object.responseText);
                 mapManager.addTrack(track);
             } else {
-                console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
+              // console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
             }
         }
     }
@@ -235,8 +249,10 @@ MapManager.prototype.loadTracks =  function(){
                 for(track of tracks){
                     mapManager.addTrack(track);
                 }
+                mapManager.map.fitBounds(mapManager.group.getBounds());
+
             } else {
-                console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
+              //  console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
             }
         }
         mapManager.switchMode(EditorMode.READING);
@@ -257,11 +273,14 @@ MapManager.prototype.loadPois =  function(){
                 for(poi of pois){
                      mapManager.addPoi(poi);
                 }
+                mapManager.map.fitBounds(mapManager.group.getBounds());
             } else {
-                console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
+               // console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
             }
         }
         mapManager.switchMode(EditorMode.READING);
+
+
     };
 
 }

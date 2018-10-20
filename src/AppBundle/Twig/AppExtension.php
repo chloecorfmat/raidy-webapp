@@ -1,6 +1,7 @@
 <?php
 
 // src/AppBundle/Twig/AppExtension.php
+
 namespace AppBundle\Twig;
 
 use Twig\Extension\AbstractExtension;
@@ -22,8 +23,9 @@ class AppExtension extends AbstractExtension
 
     /**
      * @param string $number
-     *    Phone number.
-     * @return string Phone number with spaces.
+     *                       Phone number
+     *
+     * @return string phone number with spaces
      */
     public function telephoneFilter($number)
     {

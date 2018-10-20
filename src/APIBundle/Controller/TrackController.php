@@ -3,16 +3,13 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 15/10/18
- * Time: 14:57
+ * Time: 14:57.
  */
 
 namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use FOS\RestBundle\View\View;
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,6 +22,7 @@ class TrackController extends AjaxAPIController
      *
      * @param Request $request request
      * @param int     $raidId  raid id
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getTrackAction(Request $request, $raidId)
@@ -37,11 +35,11 @@ class TrackController extends AjaxAPIController
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "This raid does not exist");
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
         if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "You are not allowed to access this raid");
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
         $tracks = $trackManager->findBy(array('raid' => $raidId));
@@ -56,6 +54,7 @@ class TrackController extends AjaxAPIController
      *
      * @param Request $request request
      * @param int     $raidId  raid id
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function addTrackAction(Request $request, $raidId)
@@ -70,18 +69,18 @@ class TrackController extends AjaxAPIController
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "This raid does not exist");
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
         if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "You are not allowed to access this raid");
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
         $data = $request->request->all();
         $trackService = $this->container->get('TrackService');
 
         if (!$trackService->checkDataArray($data, false)) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "Every fields must be filled");
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled');
         }
 
         $track = $trackService->trackFromArray($data, $raidId);
@@ -99,6 +98,7 @@ class TrackController extends AjaxAPIController
      * @param Request $request request
      * @param int     $raidId  raid id
      * @param int     $trackId raid id
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editTrackAction(Request $request, $raidId, $trackId)
@@ -113,28 +113,28 @@ class TrackController extends AjaxAPIController
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "This raid does not exist");
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
         if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "You are not allowed to access this raid");
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
         $data = $request->request->all();
         $trackService = $this->container->get('TrackService');
 
         if (!$trackService->checkDataArray($data, false)) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "Every fields must be filled");
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled');
         }
 
         $trackManager = $em->getRepository('AppBundle:Track');
         $track = $trackManager->find($trackId);
 
-        if ($track != null) {
+        if (null != $track) {
             $track = $trackService->updateTrackFromArray($track, $raidId, $data);
             $em->flush();
         } else {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "This track does not exist");
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
 
         return new Response($trackService->trackToJson($track));
@@ -147,6 +147,7 @@ class TrackController extends AjaxAPIController
      * @param Request $request request
      * @param int     $raidId  raid id
      * @param int     $trackId track id
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteTrack(Request $request, $raidId, $trackId)
@@ -161,23 +162,23 @@ class TrackController extends AjaxAPIController
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "This raid does not exist");
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
         if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "You are not allowed to access this raid");
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
         $trackManager = $em->getRepository('AppBundle:Track');
         $track = $trackManager->find($trackId);
 
-        if ($track != null) {
+        if (null != $track) {
             $em->remove($track);
             $em->flush();
         } else {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, "This track does not exist");
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
 
-        return parent::buildJSONStatus(Response::HTTP_OK, "Deleted");
+        return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
     }
 }

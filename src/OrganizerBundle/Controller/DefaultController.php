@@ -13,10 +13,8 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Entity\Organizer;
-use AppBundle\Entity\Raid;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
@@ -32,11 +30,11 @@ class DefaultController extends Controller
      * @Route("/organizer/profile/edit", name="editOrganizerProfile")
      *
      * @param Request $request request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function editOrganizerProfile(Request $request)
     {
-
         $user = $this->getUser();
 
         $formFactory = $this->get('form.factory');
@@ -68,7 +66,7 @@ class DefaultController extends Controller
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'options' => array('attr' => array('class' => 'password-field')),
                 'required' => true,
-                'first_options'  => array('label' => 'Nouveau mot de passe'),
+                'first_options' => array('label' => 'Nouveau mot de passe'),
                 'second_options' => array('label' => 'Répétez le mot de passe'),
             ))
             ->add('submit', SubmitType::class, ['label' => 'Modifier le mot de passe'])
@@ -80,7 +78,7 @@ class DefaultController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager = $this->get('fos_user.user_manager');
             $formatService = $this->container->get('FormatService');
-            $phone =  $formatService->telephoneNumber($user->getPhone());
+            $phone = $formatService->telephoneNumber($user->getPhone());
             $user->setPhone($phone);
             $userManager->updateUser($user);
 

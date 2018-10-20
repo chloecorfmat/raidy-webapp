@@ -37,7 +37,7 @@ Poi.prototype.fromObj = function(poi) {
 
     this.marker = L.marker([poi.latitude, poi.longitude]);
 
-    this.marker.addTo(this.map);
+    this.marker.addTo(mapManager.group);
 
 
     this.marker.disableEdit();
@@ -108,13 +108,14 @@ Poi.prototype.buildUI= function (){
 
     document.getElementById("list--pois").appendChild(this.li);
     this.li.pseudoStyle("before", "background-color", this.color);
-    console.log(this.color);
+    //console.log(this.color);
     this.li.querySelector(".btn--poi--settings").addEventListener("click", function () {
 
         document.getElementById('editPoi_id').value = keepThis.id;
         document.getElementById('editPoi_name').value = keepThis.name;
         document.getElementById('editPoi_nbhelper').value = keepThis.requiredHelpers;
         document.querySelector("#editPoi_type option[value='"+keepThis.poiType.id+"']").selected = "selected";
+
         MicroModal.show('edit-poi-popin');
     });
 }

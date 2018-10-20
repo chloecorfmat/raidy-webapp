@@ -6,6 +6,7 @@ class FormatService
 {
     /**
      * Delete special chars from phone number.
+     *
      * @param string $phone Phone number
      *
      * @return mixed
@@ -23,13 +24,14 @@ class FormatService
 
     /**
      * @param string $phone Phone number
+     *
      * @return mixed|null
      */
     public function mobilePhoneNumber($phone)
     {
         $number = $this->telephoneNumber($phone);
-        if (strpos($number, '06') === 0 ||
-            strpos($number, '07') === 0
+        if (0 === strpos($number, '06') ||
+            0 === strpos($number, '07')
         ) {
             return $number;
         }
