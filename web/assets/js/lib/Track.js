@@ -200,7 +200,7 @@ Track.prototype.buildUI = function(li){
             document.querySelector('#editTrack_color').value = track.color;
             document.querySelector('#editTrack_id').value    = track.id;
 
-            MicroModal.show('track-setting-popin');
+            MicroModal.show('edit-track-popin');
 
         });
     });
