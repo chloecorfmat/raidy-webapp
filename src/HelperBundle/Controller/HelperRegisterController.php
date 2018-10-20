@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
@@ -34,6 +35,10 @@ class HelperRegisterController extends Controller
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->find($id);
 
+        if (null === $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
         return $this->render('HelperBundle:Register:inviteHelper.html.twig', [
             'raid' => $raid,
         ]);
@@ -52,6 +57,10 @@ class HelperRegisterController extends Controller
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->find($id);
+
+        if (null === $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
 
         return $this->render('HelperBundle:Register:registerSuccessHelper.html.twig', [
             'raid' => $raid,
@@ -263,6 +272,33 @@ class HelperRegisterController extends Controller
             'form' => $form->createView(),
             'raid' => $raid,
         ]);
+    }
+
+    /**
+     * @Route("/organizer", name="listRaidHelper")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listRaids()
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $raidManager = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Raid');
+
+        //$raids = $raidManager->findAll();
+        $raids = $raidManager->findBy([
+            'user' => $user,
+        ]);
+
+        return $this->render(
+            'OrganizerBundle:Raid:listRaid.html.twig',
+            [
+                'raids' => $raids,
+                'user' => $user,
+            ]
+        );
     }
 
     /**

@@ -53,4 +53,28 @@ $theme-color: $helper-color;
       }
     }
   }
+
+  .raid {
+    &:not(.raid--add) {
+      &::before {
+        background-color: $secondary-color-1;
+      }
+
+      &:hover {
+        &::before {
+          background: $secondary-color-1-07;
+        }
+      }
+    }
+  }
+
+  .profile {
+    a {
+      color: $theme-color;
+
+      &:hover {
+        opacity: .7;
+      }
+    }
+  }
 }

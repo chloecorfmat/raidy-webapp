@@ -1,14 +1,35 @@
 {% extends 'default/helper.html.twig' %}
 
 {% block body %}
+    <div class="content-raids">
+        <div class="raids--list">
+            <h1>Mes raids</h1>
+            <div class="raids--list-items">
+                {% for raid in raids %}
+                    <div class="raid" style="background-image: url('{{ asset('uploads/raids/' ~ raid.picture) }}');">
+                        <a href="#">
+                            <div class="raid--content">
+                                <div class="raid--content-container">
+                                    <p class="raid--name">{{ raid.name }}</p>
+                                    <p class="raid--date">{{ raid.date|date("m/d/Y") }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
 
-    <h1>Raidy - Helper</h1>
-    <ul>
-        {% for raid in raids %}
-            <li>{{ raid.name }}</li>
-        {% endfor %}
-    </ul>
-
-    <a href="{{ path('editHelperProfile') }}">Editer le profil</a>
+        <div class="profile">
+            <h1>Mon profil</h1>
+            <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+            <div class="profile--contact-information">
+                <h3>Coordonnées <a href="{{ path('editHelperProfile') }}"><i aria-hidden="true" class="fas fa-pen"></i></a></h3>
+                <p>Login : {{ user.username }}</p>
+                <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
+                <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+            </div>
+        </div>
+    </div>
 
 {% endblock %}

@@ -43,6 +43,8 @@ class PoiType
      */
     public function __construct()
     {
+        $this->type = 'type';
+        $this->color = 'color';
     }
 
     /**
