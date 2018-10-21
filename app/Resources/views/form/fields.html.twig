@@ -15,6 +15,14 @@
     {{ block('form_widget_simple') }}
 {% endblock %}
 
+{% block file_widget %}
+    {% set type = type|default('file') %}
+    {{ block('form_widget_simple') }}
+    <div class="form--item-file-previews">
+        <img class="form--item-file-preview" src="{{ asset('uploads/raids/' ~ form.vars.data) }}" alt=""/>
+    </div>
+{% endblock %}
+
 {%- block form_widget_simple -%}
     {%- set type = type|default('text') -%}
     <input class="form--input-{{ type }}" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>

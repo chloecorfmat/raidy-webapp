@@ -2,7 +2,7 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item"><a href="#">Mes raids</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Organizer</a></li>
         <li class="breadcrumb--list-item">{{ raid.name }}</li>
     </ol>
 {% endblock %}
@@ -15,8 +15,17 @@
             {{ form_start(form) }}
             {{ form_widget(form) }}
             {{ form_end(form) }}
+        </div>
+        <div class="content--part">
+            <div>
+                <h2>Editeur</h2>
+                <a href="{{ path('editor', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('editor', {'id': raid.id}) }}</a>
+            </div>
+            <div>
+                <h2>Inviter des bénévoles</h2>
+                <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
+            </div>
 
-            <a href="{{ path('deleteRaid', {'id': raid.id}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
         </div>
     </div>
 

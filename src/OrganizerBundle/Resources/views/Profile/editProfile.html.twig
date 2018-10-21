@@ -1,0 +1,32 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% if editPasswordForm is defined %}
+    {% form_theme editPasswordForm 'form/fields.html.twig' %}
+{% endif %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item">Edition du profil</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="main-form">
+        <h1>Modifier son profil</h1>
+        <div>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+
+        <div>
+            {{ form_start(editPasswordForm) }}
+            {{ form_widget(editPasswordForm) }}
+            {{ form_end(editPasswordForm) }}
+        </div>
+    </div>
+{% endblock %}
+
+
+

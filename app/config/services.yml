@@ -34,3 +34,28 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    TrackService:
+        class: AppBundle\Service\TrackService
+        autowire: true
+        public: true
+
+    PoiService:
+        class: AppBundle\Service\PoiService
+        autowire: true
+        public: true
+
+    PoiTypeService:
+        class: AppBundle\Service\PoiTypeService
+        autowire: true
+        public: true
+
+    FormatService:
+        class: AppBundle\Service\FormatService
+        autowire: true
+        public: true
+
+    AccessDeniedService:
+      class: AppBundle\Security\AccessDeniedService
+      autowire: true
+      public: true

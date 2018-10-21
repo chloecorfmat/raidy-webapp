@@ -10,7 +10,7 @@ const cleanCSS = require('gulp-clean-css');
 
 // Linter.
 gulp.task('lint', function() {
-    gulp.src('./js/**/*.js')
+    gulp.src('./js/*.js')
         .pipe(esLint())
         .pipe(esLint.format())
         //.pipe(esLint.failAfterError());

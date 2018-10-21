@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -23,13 +33,17 @@ class PoiType
     protected $type;
 
     /**
-     * PoiType constructor.
-     *
-     * @param mixed $type type
+     * @ORM\Column(name="color", type="string", length=9)
      */
-    public function __construct($type)
+    protected $color;
+
+    /**
+     * PoiType constructor.
+     */
+    public function __construct()
     {
-        $this->type = $type;
+        $this->type = 'type';
+        $this->color = 'color';
     }
 
     /**
@@ -62,5 +76,21 @@ class PoiType
     public function setType($type)
     {
         $this->type = $type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param mixed $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
     }
 }

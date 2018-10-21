@@ -3,7 +3,11 @@
 {% endif %}
 
 {% if base_class is not defined %}
-    {% set base_class = 'default' %}
+    {% set base_class = 'organizer' %}
+{% endif %}
+
+{% if base_class is not defined %}
+    {% set user_edit_page = '' %}
 {% endif %}
 
 <!DOCTYPE html>
@@ -16,30 +20,42 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
         <link rel="stylesheet" href="{{ asset('assets/dist/css/styles.min.css') }}" />
 
-        {% block favicon %}{% endblock %}
+        {% block favicon %}
+            <link rel="apple-touch-icon" sizes="180x180" href="{{ asset('assets/favicons/' ~ base_class ~ '/apple-touch-icon.png') }}">
+            <link rel="icon" type="image/png" sizes="32x32" href="{{ asset('assets/favicons/' ~ base_class ~ '/favicon-32x32.png') }}">
+            <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/favicons/' ~ base_class ~ '/favicon-16x16.png') }}">
+            <link rel="manifest" href="{{ asset('assets/favicons/' ~ base_class ~ '/site.webmanifest') }}">
+            <meta name="msapplication-TileColor" content="#0f5e54">
+            <meta name="theme-color" content="#ffffff">
+        {% endblock %}
     </head>
-    <body class="{{ base_class }}">
+    <body class="{{ base_class }} {% block body_class %}{% endblock %}">
         <header>
             <a href="/" class="logo">
                 <img src="{{ asset('assets/images/logo-white.svg') }}" alt="Logo Raidy">
             </a>
 
+            {% if app.user is defined and app.user is not null %}
             <nav class="header--nav">
                 <ul>
                     <li class="header--nav-item">
-                        <a href="" aria-label="Paramètres">
-                            <i aria-hidden="true" class="fas fa-cog fa-lg"></i>
+                        <a href="{{ user_edit_page }}" aria-label="Profil">
+                            <p class="header--profile-ico">
+                                {{ app.user.username }}
+                            </p>
+                            <i aria-hidden="true" class="fas fa-user fa-lg"></i>
                         </a>
                     </li>
                     <li class="header--nav-item">
-                        <a href="" aria-label="Déconnexion">
+                        <a href="{{ path('fos_user_security_logout') }}" aria-label="Déconnexion">
                             <i aria-hidden="true" class="fas fa-power-off fa-lg"></i>
                         </a>
                     </li>
                 </ul>
             </nav>
+            {% endif %}
         </header>
-        <main>
+        <main {% block main_attributes %}{% endblock %} >
             <div class="breadcrumb">
                 {% block breadcrumb %}
                     <!--<ol class="breadcrumb--list">
@@ -52,8 +68,9 @@
 
             {% block body %}{% endblock %}
         </main>
-        <footer>
-        </footer>
+        {% block footer %}{% endblock %}
+        <script type="text/javascript" src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+        <!--script src="https://cdn.klokantech.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></--script-->
         <script type="text/javascript" src="{{ asset('assets/dist/js/scripts.min.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>

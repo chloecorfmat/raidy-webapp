@@ -1,14 +1,24 @@
 <?php
 
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace APIBundle\Controller;
 
-use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
-use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
-use APIBundle\Form\Type\CredentialsType;
 use APIBundle\Entity\AuthToken;
 use APIBundle\Entity\Credentials;
+use APIBundle\Form\Type\CredentialsType;
+use FOS\RestBundle\Controller\Annotations as Rest; // alias pour toutes les annotations
+use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class AuthTokenController extends Controller
 {
@@ -19,6 +29,8 @@ class AuthTokenController extends Controller
      * @param Request $request request
      *
      * @return response
+     *
+     * @throws \Exception
      */
     public function postAuthTokensAction(Request $request)
     {
@@ -31,12 +43,15 @@ class AuthTokenController extends Controller
             $ret['code'] = Response::HTTP_BAD_REQUEST;
             $ret['message'] = 'Invalid values';
 
-            return new Response(json_encode($ret));
+            $res = new Response(json_encode($ret));
+            $res->setStatusCode(Response::HTTP_BAD_REQUEST);
+
+            return $res;
         }
 
         $em = $this->get('doctrine.orm.entity_manager');
 
-        $user = $em->getRepository('AppBundle:User')->findOneByUsername($credentials->getLogin());
+        $user = $em->getRepository('AppBundle:User')->findOneByEmail($credentials->getEmail());
 
         if (!$user) { // L'utilisateur n'existe pas
             return $this->invalidCredentials();
@@ -57,7 +72,11 @@ class AuthTokenController extends Controller
         $em->persist($authToken);
         $em->flush();
 
-        return new Response($authToken->getValue());
+        $ret = [];
+        $ret['token'] = $authToken->getValue();
+        $ret['code'] = Response::HTTP_OK;
+
+        return new Response(json_encode($ret));
     }
 
     /**
@@ -76,7 +95,7 @@ class AuthTokenController extends Controller
         $em = $this->get('doctrine.orm.entity_manager');
         $authToken = $em->getRepository('APIBundle:AuthToken')->findOneByValue($token);
 
-        if (null != $authToken) {
+        if (null !== $authToken) {
             $em->remove($authToken);
             $em->flush();
 
@@ -85,16 +104,15 @@ class AuthTokenController extends Controller
             $ret['message'] = 'deleted';
 
             return new Response(json_encode($ret));
-        } else {
-            $ret = [];
-            $ret['code'] = Response::HTTP_BAD_REQUEST;
-            $ret['message'] = 'Unknow token';
-
-            $res = new Response(json_encode($ret));
-            $res->setStatusCode(Response::HTTP_BAD_REQUEST);
-
-            return $res;
         }
+        $ret = [];
+        $ret['code'] = Response::HTTP_BAD_REQUEST;
+        $ret['message'] = 'Unknow token';
+
+        $res = new Response(json_encode($ret));
+        $res->setStatusCode(Response::HTTP_BAD_REQUEST);
+
+        return $res;
     }
 
     /**

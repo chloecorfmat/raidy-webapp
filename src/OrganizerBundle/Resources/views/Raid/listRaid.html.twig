@@ -2,43 +2,44 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
-        <li class="breadcrumb--list-item">Liste des raids</li>
+        <li class="breadcrumb--list-item">Organizer</li>
     </ol>
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des raids</h1>
-    <table>
-        <caption>Liste des raids</caption>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nom</th>
-            <th scope="col">Date</th>
-            <th scope="col">Adresse</th>
-            <th scope="col">Code postal</th>
-            <th scope="col">Ville</th>
-            <th scope="col">Edition n°</th>
-            <th scope="col">Organisateur</th>
-            <th scope="col">Photo</th>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        {% for raid in raids %}
-            <tr>
-                <td>{{ raid.id }} </td>
-                <td>{{ raid.name }} </td>
-                <td>{{ raid.date|date("m/d/Y") }} </td>
-                <td>{{ raid.address }} {{ raid.addressAddition }}</td>
-                <td>{{ raid.postCode }}</td>
-                <td>{{ raid.city }}</td>
-                <td>{{ raid.editionNumber }} </td>
-                <td>{{ raid.user }} </td>
-                <td><img src="{{ asset('uploads/raids/' ~ raid.picture) }}" /></td>
-                <td><a href="{{ path('displayRaid', {'id': raid.id}) }}">Voir</a></td>
-                <td><a href="{{ path('deleteRaid', {'id': raid.id}) }}">Supprimer</a></td>
-            </tr>
-        {% endfor %}
-    </table>
+    <div class="content-raids">
+        <div class="raids--list">
+            <h1>Mes raids</h1>
+            <div class="raids--list-items">
+                <div class="raid raid--add">
+                    <a href="{{ path('addRaid') }}">
+                        <span>+</span>
+                    </a>
+                </div>
+                {% for raid in raids %}
+                    <div class="raid" style="background-image: url('{{ asset('uploads/raids/' ~ raid.picture) }}');">
+                        <a href="{{ path('displayRaid', {'id': raid.id}) }}">
+                            <div class="raid--content">
+                                <div class="raid--content-container">
+                                    <p class="raid--name">{{ raid.name }}</p>
+                                    <p class="raid--date">{{ raid.date|date("d/m/Y") }}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+
+        <div class="profile">
+            <h1>Mon profil</h1>
+            <h2>{{ user.firstname }} {{ user.lastname }}</h2>
+            <div class="profile--contact-information">
+                <h3>Coordonnées <a href="{{ path('editOrganizerProfile') }}"><i aria-hidden="true" class="fas fa-pen"></i></a></h3>
+                <p>Login : {{ user.username }}</p>
+                <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
+                <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
+            </div>
+        </div>
+    </div>
 {% endblock %}

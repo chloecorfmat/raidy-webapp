@@ -1,0 +1,15 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('deletePoi', {'id': poi.id, 'raidId': poi.raid.id}) }}">Supprimer le POI</a>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}

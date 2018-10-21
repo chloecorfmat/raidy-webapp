@@ -1,0 +1,17 @@
+{% extends 'default/external.html.twig' %}
+
+{% block title %}Rejoindre le raid "{{ raid.name }}"{% endblock %}
+
+{% block content %}
+    <div class="centered--content helper--join">
+        <h1>Rejoindre le raid "{{ raid.name }}"</h1>
+        <div>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+{% endblock %}
+
+
+

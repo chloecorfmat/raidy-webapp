@@ -1,5 +1,15 @@
 <?php
 
+/*
+ * This file is part of PHP CS Fixer.
+ *
+ * (c) Fabien Potencier <fabien@symfony.com>
+ *     Dariusz Rumiński <dariusz.ruminski@gmail.com>
+ *
+ * This source file is subject to the MIT license that is bundled
+ * with this source code in the file LICENSE.
+ */
+
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
@@ -18,9 +28,19 @@ class Track
     protected $id;
 
     /**
-     * @ORM\Column(name="track_points", type="string", length=45)
+     * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     */
+    protected $name;
+
+    /**
+     * @ORM\Column(name="track_points", type="text", nullable=true)
      */
     protected $trackPoints;
+
+    /**
+     * @ORM\Column(name="color", type="string", length=9)
+     */
+    protected $color;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
@@ -30,22 +50,20 @@ class Track
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SportType")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     protected $sportType;
 
     /**
-     * Track constructor.
-     *
-     * @param mixed $trackPoints track points
-     * @param int   $raid        raid id
-     * @param mixed $sportType   sport
+     * @ORM\Column(name="isVisible", type="boolean", nullable=false)
      */
-    public function __construct($trackPoints, $raid, $sportType)
+    protected $isVisible;
+
+    /**
+     * Track constructor.
+     */
+    public function __construct()
     {
-        $this->trackPoints = $trackPoints;
-        $this->raid = $raid;
-        $this->sportType = $sportType;
     }
 
     /**
@@ -62,6 +80,22 @@ class Track
     public function setId($id)
     {
         $this->id = $id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getColor()
+    {
+        return $this->color;
+    }
+
+    /**
+     * @param mixed $color
+     */
+    public function setColor($color)
+    {
+        $this->color = $color;
     }
 
     /**
@@ -110,5 +144,37 @@ class Track
     public function setSportType($sportType)
     {
         $this->sportType = $sportType;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param mixed $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisVisible()
+    {
+        return $this->isVisible;
+    }
+
+    /**
+     * @param mixed $isVisible
+     */
+    public function setIsVisible($isVisible)
+    {
+        $this->isVisible = $isVisible;
     }
 }
