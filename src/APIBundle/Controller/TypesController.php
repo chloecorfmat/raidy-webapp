@@ -17,7 +17,7 @@ class TypesController extends AjaxAPIController
 {
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED)
-     * @Rest\Get("/api/poitype")
+     * @Rest\Get("/api/organizer/poitype")
      *
      * @param Request $request
      *
@@ -25,7 +25,21 @@ class TypesController extends AjaxAPIController
      */
     public function getPOITypesAction(Request $request)
     {
-        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+
+        // Get the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
+        }
+
+        $poiTypes = $poiTypeManager->findAll();
+        $poiTypesService = $this->container->get('PoiTypeService');
+
+        return new Response($poiTypesService->poisArrayToJson($poiTypes));
     }
 
     /**
