@@ -12,8 +12,13 @@ const cleanCSS = require('gulp-clean-css');
 gulp.task('lint', function() {
     gulp.src('./js/*.js')
         .pipe(esLint())
-        .pipe(esLint.format())
+        .pipe(esLint.format());
         //.pipe(esLint.failAfterError());
+
+      gulp.src('./js/editor/*.js')
+        .pipe(esLint())
+        .pipe(esLint.format());
+      //.pipe(esLint.failAfterError());
 
     gulp.src('./scss/**/*.scss')
         .pipe(sassLint())
