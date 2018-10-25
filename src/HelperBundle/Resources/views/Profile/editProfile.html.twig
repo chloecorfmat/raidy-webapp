@@ -4,6 +4,13 @@
     {% form_theme editPasswordForm 'form/fields.html.twig' %}
 {% endif %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('helper') }}">Administration</a></li>
+        <li class="breadcrumb--list-item">Édition du profil</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
     <div class="main-form">
         <h1>Modifier son profil</h1>
