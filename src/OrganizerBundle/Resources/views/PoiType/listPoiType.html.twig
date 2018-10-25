@@ -1,0 +1,34 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item">Liste des type de points d'intérêt </li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des types de points d'intérêt</h1>
+    <table>
+        <caption>Liste des type de points d'intérêt</caption>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Type</th>
+            <th scope="col">Couleur</th>
+            <th scope="col">Raid</th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        {% for poiType in poiTypes %}
+            <tr>
+                <td>{{ poiType.id }}</td>
+                <td>{{ poiType.type }}</td>
+                <td>{{ poiType.color}}</td>
+                <td>{{ poiType.raid.id }} </td>
+                <td><a href="{{ path('displayPoiType', {'poiTypeId': poiType.id, 'raidId': poiType.raid.id}) }}">Voir</a></td>
+                <td><a href="{{ path('deletePoiType', {'poiTypeId': poiType.id, 'raidId': poiType.raid.id}) }}">Supprimer</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

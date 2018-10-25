@@ -1,0 +1,23 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="#">Mes types de points d'intérêts</a></li>
+        <li class="breadcrumb--list-item">{{ poiType.type }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ poiType.type }}</h1>
+
+    <div class="content">
+        <div class="content--part">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+
+            <a href="{{ path('deletePoiType', {'poiTypeId': poiType.id, 'raidId': poiType.raid.id}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
+        </div>
+    </div>
+
+{% endblock %}

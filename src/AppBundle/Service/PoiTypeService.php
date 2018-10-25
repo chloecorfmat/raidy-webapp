@@ -1,13 +1,8 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: anais
- * Date: 18/10/2018
- * Time: 16:32.
- */
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\PoiType;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PoiTypeService
@@ -23,11 +18,50 @@ class PoiTypeService
     }
 
     /**
+     * @param mixed $obj
+     * @param mixed $raidId
+     *
+     * @return PoiType
+     */
+    public function poiTypeFromForm($obj, $raidId)
+    {
+        $poiType = new PoiType();
+
+        $poiType->setType($obj->getType());
+        $poiType->setColor($obj->getColor());
+
+        $raidRepository = $this->em->getRepository('AppBundle:Raid');
+        $raid = $raidRepository->find($raidId);
+        $poiType->setRaid($raid);
+
+        return $poiType;
+    }
+
+    /**
+     * @param PoiType $poiType
+     * @param int     $raidId
+     * @param mixed   $obj
+     *
+     * @return mixed
+     */
+    public function updatePoiTypeFromForm($poiType, $raidId, $obj)
+    {
+        $poiType->setType($obj->getType());
+        $poiType->setColor($obj->getColor());
+
+        $raidRepository = $this->em->getRepository('AppBundle:Raid');
+        $raid = $raidRepository->find($raidId);
+        $poiType->setRaid($raid);
+
+        return $poiType;
+    }
+
+    /**
      * @param array $poiTypes
      *
      * @return false|string
      */
-    public function poisArrayToJson($poiTypes)
+    public function poiTypesArrayToJson($poiTypes)
     {
         $poiTypesObj = [];
 
@@ -37,6 +71,7 @@ class PoiTypeService
             $obj['id'] = $poiType->getId();
             $obj['type'] = $poiType->getType();
             $obj['color'] = $poiType->getColor();
+            $obj['raid'] = $poiType->getRaid()->getId();
 
             $poiTypesObj[] = $obj;
         }

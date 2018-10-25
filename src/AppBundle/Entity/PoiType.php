@@ -33,9 +33,15 @@ class PoiType
     protected $type;
 
     /**
-     * @ORM\Column(name="color", type="string", length=9)
+     * @ORM\Column(type="string", length=9)
      */
     protected $color;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    protected $raid;
 
     /**
      * PoiType constructor.
@@ -92,5 +98,21 @@ class PoiType
     public function setColor($color)
     {
         $this->color = $color;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRaid()
+    {
+        return $this->raid;
+    }
+
+    /**
+     * @param mixed $raid
+     */
+    public function setRaid($raid)
+    {
+        $this->raid = $raid;
     }
 }
