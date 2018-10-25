@@ -124,9 +124,10 @@ class OrganizerPoiTypeController extends AjaxAPIController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $poiTypeManager = $em->getRepository('AppBundle:PoiType');
-            $poiTypeExist = $poiTypeManager->findBy(
+            $poiTypeExist = $poiTypeManager->findOneBy(
                 ['type' => $formPoiType->getType(), 'raid' => $formPoiType->getRaid()]
             );
+
             if (!$poiTypeExist || $poiTypeExist->getId() === $formPoiType->getId()) {
                 $formPoiType = $form->getData();
 
@@ -191,7 +192,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
     }
 
 /**
-     * @Route("/organizer/raid/{raidId}/poitype", name="listPoiType")
+     * @Route("/organizer/raid/{raidId}/poitypes", name="listPoiType")
      *
      * @param mixed $raidId raid identifier
      *
@@ -231,5 +232,34 @@ class OrganizerPoiTypeController extends AjaxAPIController
         );
     }
 
-    // TODO API route for Raid Editor
+    // API route for Raid Editor
+    /**
+     * @Route("/organizer/raid/{raidId}/poitype", name="listPoiTypeAPI", methods={"GET"})
+     *
+     * @param mixed $raidId raid identifier
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listPoiTypeAPI($raidId)
+    {
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST,'Ce raid n\'existe pas');
+        }
+        // Get the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
+        }
+        $poiTypes = $poiTypeManager->findAll();
+        $poiTypesService = $this->container->get('PoiTypeService');
+
+        return new Response($poiTypesService->poiTypesArrayToJson($poiTypes));
+    }
 }
