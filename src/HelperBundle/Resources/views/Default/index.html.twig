@@ -25,7 +25,6 @@
             <h2>{{ user.firstname }} {{ user.lastname }}</h2>
             <div class="profile--contact-information">
                 <h3>Coordonnées <a href="{{ path('editHelperProfile') }}"><i aria-hidden="true" class="fas fa-pen"></i></a></h3>
-                <p>Login : {{ user.username }}</p>
                 <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
                 <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             </div>
