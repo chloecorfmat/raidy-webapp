@@ -233,6 +233,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
     }
 
     // API route for Raid Editor
+
     /**
      * @Route("/organizer/raid/{raidId}/poitype", name="listPoiTypeAPI", methods={"GET"})
      *
@@ -250,7 +251,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST,'Ce raid n\'existe pas');
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Ce raid n\'existe pas');
         }
         // Get the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
