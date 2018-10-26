@@ -35,6 +35,11 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
+    RaidService:
+        class: AppBundle\Service\RaidService
+        autowire: true
+        public: true
+
     TrackService:
         class: AppBundle\Service\TrackService
         autowire: true
