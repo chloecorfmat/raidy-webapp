@@ -18,7 +18,7 @@ class RaidController extends AjaxAPIController
 {
     /**
      * @Rest\View(serializerGroups={"secured"})
-     * @Rest\Get("/api/organizer/raids")
+     * @Rest\Get("/api/organizer/raid")
      *
      * @param Request $request
      *
@@ -57,7 +57,7 @@ class RaidController extends AjaxAPIController
 
     /**
      * @Rest\View(serializerGroups={"secured"})
-     * @Rest\Get("/api/helper/raids")
+     * @Rest\Get("/api/helper/raid")
      *
      * @param Request $request
      *
