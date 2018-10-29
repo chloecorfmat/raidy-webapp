@@ -116,3 +116,8 @@ form {
     list-style-type: none;
   }
 }
+
+.input--required {
+  color: $secondary-color-2;
+  font-weight: 700;
+}
