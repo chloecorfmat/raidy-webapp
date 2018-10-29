@@ -107,4 +107,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     mapManager.editorUI.removePoi(this)
   }
+
+  console.log("Track POI loaded")
+
 }

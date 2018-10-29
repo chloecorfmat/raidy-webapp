@@ -127,6 +127,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   Track.prototype.buildUI = function (li) {
     mapManager.editorUI.updatePoi()
   }
+  console.log("Track JS loaded")
 
 
 }

@@ -1,4 +1,4 @@
-if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
+if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
   var UID = {
     _current: 0,
     getNew: function () {
@@ -224,6 +224,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   })
 
 
+  console.log("Editor JS loaded")
 
 
 

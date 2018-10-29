@@ -1,4 +1,5 @@
 if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
+
   /*
   * Map editor mode :
   * 0 = reading
@@ -159,7 +160,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         break
       case EditorMode.READING :
         document.getElementById('map').style.cursor = 'grab'
-        document.getElementById('addPoiButton').classList.remove('add--poi')
+        //document.getElementById('addPoiButton').classList.remove('add--poi')
         this.setPoiEditable(false)
         this.setTracksEditable(false)
         break
@@ -299,6 +300,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       value.setEditable(b)
     })
   }
+
+  console.log("MapManager loaded")
 }
 
 

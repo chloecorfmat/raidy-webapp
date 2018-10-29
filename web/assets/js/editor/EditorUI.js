@@ -1,4 +1,4 @@
-if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
+if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
   function EditorUI () {
     this.trackElements = new Map();
     this.poiElements = new Map();
@@ -169,6 +169,7 @@ toggle between hiding and showing the dropdown content */
       document.getElementById('editor--list').removeChild(li)
     }
   }
+  console.log("Editor UI for editor loaded")
 
 }else{
   var EditorUI = function () {}
@@ -178,4 +179,7 @@ toggle between hiding and showing the dropdown content */
   EditorUI.prototype.addTrack = function(poi){}
   EditorUI.prototype.updateTrack = function(id, poi){}
   EditorUI.prototype.removeTrack = function(id){}
+
+  console.log("Editor UI for display only loaded")
+
 }
