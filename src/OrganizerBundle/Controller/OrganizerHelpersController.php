@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 class OrganizerHelpersController extends Controller
 {
     /**
-     * @Route("/organizer/raid/{id}/helpers", name="listHelpers")
+     * @Route("/organizer/raid/helpers/{id}", name="listHelpers")
      *
      * @param Request $request request
      * @param mixed   $id      id
