@@ -1,6 +1,8 @@
 {% block form_row %}
     {% if form.vars.type is defined and form.vars.type == 'date' %}
         <div class="form--item form--input-focused">
+    {% elseif form.vars.choices is defined %}
+        <div class="form--item form--item-select">
     {% else %}
         <div class="form--item">
     {% endif %}

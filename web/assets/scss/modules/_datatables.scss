@@ -1,0 +1,38 @@
+.dataTable-sorter { // sass-lint:disable-line class-name-format
+  &::after {
+    display: none;
+
+    @media screen and (min-width: $breakpoint-mediumlarge) {
+      display: block;
+      right: 2rem;
+    }
+
+    @media screen and (min-width: $breakpoint-large) {
+      right: -2rem;
+    }
+  }
+
+  &::before {
+    display: none;
+    top: 12px;
+
+    @media screen and (min-width: $breakpoint-mediumlarge) {
+      display: block;
+      right: 2rem;
+    }
+
+    @media screen and (min-width: $breakpoint-large) {
+      right: -2rem;
+    }
+  }
+}
+
+.dataTable-info { // sass-lint:disable-line class-name-format
+  font-family: 'Proxima Nova', SansSerif;
+}
+
+.dataTable-search { // sass-lint:disable-line class-name-format
+  ::placeholder {
+    font-family: 'Proxima Nova', SansSerif;
+  }
+}
