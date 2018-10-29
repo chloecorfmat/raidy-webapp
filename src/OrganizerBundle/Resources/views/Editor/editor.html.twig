@@ -12,25 +12,26 @@
     <div class="editor--container">
         <div class="bar">
             <div class="tab-bar">
-                <nav class="tab">
+                <!--nav class="tab">
                     <button class="tablinks" onclick="openTab(event, 'tracks-pan')">Tracés</button>
                     <button class="tablinks" onclick="openTab(event, 'pois-pan')">Points d'intéret</button>
-                </nav>
-
-                <div class="tabcontent" id="tracks-pan">
+                </nav-->
+                <button class="active accordion">Tracés</button>
+                <div class="active panel tabcontent" id="tracks-pan">
                     <button class="btn--action" id="addTrackButton">Ajouter un parcours</button>
                     <ul id="editor--list" class="editor--list checkbox-list">
                         <!-- FILLED IN JS-->
                     </ul>
                 </div>
-                <div class="tabcontent" id="pois-pan">
+                <button class="active accordion">Points d'intéret</button>
+                <div class=" panel tabcontent" id="pois-pan">
                     <ul id="list--pois" class="editor--list list--pois">
                         <!-- FILLED IN JS-->
                     </ul>
                 </div>
             </div>
             <div class="tab-bar--actions">
-                <a href="{{ path('displayRaid', {'id': id}) }}" class="btn btn--action btn--return">Retour</a>
+                <!--a href="{{ path('displayRaid', {'id': id}) }}" class="btn btn--action btn--return">Retour</a-->
                 <button aria-label="Fermer la barre latérale" class="btn--laterale-bar" id="btn--laterale-bar">
                     <i class="fas fa-caret-right"></i>
                 </button>
@@ -247,13 +248,10 @@
         var mapManager;
         var raidID;
         document.addEventListener("DOMContentLoaded", function () {
-            raidID = parseInt({{ id }});
             mapManager = new MapManager();
+            raidID = parseInt({{ id }});
             mapManager.markerIconUrl = '{{ asset('assets/images/map-marker-main.svg') }}';
             mapManager.initialize();
-            /*mapManager.addPoi(0, "Enssat", [48.729644, -3.462390], '#78e08f');
-            mapManager.addPoi(1, "Enssat2", [48.729644, -3.463000], '#f74a45');
-            mapManager.addPoi(2, "Enssat3", [48.729644, -3.464000], '#a88f73');*/
 
         });
     </script>
