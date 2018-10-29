@@ -12,7 +12,12 @@ var options = {
 
 function organizersList (e) {
   if (document.getElementById('organizersList') != null) {
-    new DataTable('#organizersList', options) // eslint-disable-line no-undef, no-new
+    var dataTableOrganizer = new DataTable('#organizersList', options) // eslint-disable-line no-undef, no-new
+
+    dataTableOrganizer.on('datatable.page', function (page) {
+      // Needed to display modal to delete organizer.
+      displayModalToDelete() // eslint-disable-line no-undef
+    })
   }
 }
 

@@ -1,4 +1,6 @@
-window.addEventListener('load', function () {
+window.addEventListener('load', displayModalToDelete)
+
+function displayModalToDelete () {
   MicroModal.init() // eslint-disable-line no-undef
 
   document.querySelectorAll('.btn--delete-organizer').forEach(function (btn) {
@@ -9,4 +11,4 @@ window.addEventListener('load', function () {
       MicroModal.show('delete-organizer') // eslint-disable-line no-undef
     })
   })
-})
+}

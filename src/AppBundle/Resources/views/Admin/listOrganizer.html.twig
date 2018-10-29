@@ -9,6 +9,16 @@
 
 {% block body %}
     <h1>Liste des organisateurs</h1>
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert--success">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('danger') %}
+        <div class="alert alert--danger">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
     <div class="table--container">
         <table class="table" id="organizersList">
             <caption class="sr-only">Liste des organisateurs</caption>
