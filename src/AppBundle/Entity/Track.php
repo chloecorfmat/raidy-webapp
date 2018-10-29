@@ -44,13 +44,13 @@ class Track
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     protected $raid;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SportType")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="cascade")
      */
     protected $sportType;
 
