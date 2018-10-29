@@ -1,6 +1,8 @@
 {% block form_row %}
     {% if form.vars.type is defined and form.vars.type == 'date' %}
         <div class="form--item form--input-focused">
+    {% elseif form.vars.choices is defined %}
+        <div class="form--item form--item-select">
     {% else %}
         <div class="form--item">
     {% endif %}
@@ -22,6 +24,16 @@
         <img class="form--item-file-preview" src="{{ asset('uploads/raids/' ~ form.vars.data) }}" alt=""/>
     </div>
 {% endblock %}
+
+{% block form_errors %}
+    {%- if errors|length > 0 -%}
+    <ul class="form--error">
+        {%- for error in errors -%}
+            <li>{{ error.message }}</li>
+        {%- endfor -%}
+    </ul>
+    {%- endif -%}
+{% endblock form_errors %}
 
 {%- block form_widget_simple -%}
     {%- set type = type|default('text') -%}

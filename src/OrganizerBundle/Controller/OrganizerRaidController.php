@@ -185,6 +185,8 @@ class OrganizerRaidController extends Controller
 
                 $em->persist($raid);
                 $em->flush();
+
+                $this->addFlash('success', 'Le raid a bien été mis à jour.');
             }
         }
 

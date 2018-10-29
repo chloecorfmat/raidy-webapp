@@ -1,0 +1,25 @@
+.alert {
+  border: 1px solid;
+  border-radius: 5px;
+  font-size: .8rem;
+  margin-bottom: 1rem;
+  padding: .5rem 1rem;
+}
+
+.alert--danger {
+  background: $secondary-color-2-light;
+  border-color: $secondary-color-2;
+  color: $secondary-color-2;
+}
+
+.alert--success {
+  background: $tertiary-color-1-light;
+  border-color: $tertiary-color-1;
+  color: $tertiary-color-1;
+}
+
+.alert--info {
+  background: $secondary-color-1-light;
+  border-color: $secondary-color-1;
+  color: $secondary-color-1;
+}

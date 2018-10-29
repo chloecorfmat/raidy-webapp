@@ -26,7 +26,28 @@ class POIController extends AjaxAPIController
      */
     public function getPOIAction(Request $request, $raidId)
     {
-        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $poiManager = $em->getRepository('AppBundle:Poi');
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        // Get the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
+        }
+
+        if ($raid->getUser()->getId() != $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé pour ce raid.');
+        }
+
+        $pois = $poiManager->findBy(array('raid' => $raidId));
+        $poiService = $this->container->get('PoiService');
+
+        return new Response($poiService->poisArrayToJson($pois));
     }
 
     /**

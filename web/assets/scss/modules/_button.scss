@@ -68,13 +68,14 @@ button {
 .btn--fab {
   background-color: $tertiary-color-1;
   border-radius: 3rem ;
+  bottom: 2rem;
   box-sizing: border-box;
   display: block;
   font-size: 5rem;
   height: 5rem;
   margin: 1.5rem auto;
   overflow: hidden;
-  position: absolute;
+  position: fixed;
   right: 1.5rem;
   text-align: center;
   text-decoration: none;
@@ -87,11 +88,7 @@ button {
   }
 
   @media screen and (min-width: $breakpoint-large) {
-    bottom: 0;
     margin: 2.5rem;
-    position: absolute;
     right: 0;
   }
 }
-
-

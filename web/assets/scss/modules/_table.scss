@@ -3,6 +3,10 @@ th {
   padding: .5rem;
 }
 
+td {
+  vertical-align: middle !important;
+}
+
 .table--container {
   border: 1px solid $grey-light;
   border-radius: 10px;

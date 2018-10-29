@@ -35,6 +35,11 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
+    RaidService:
+        class: AppBundle\Service\RaidService
+        autowire: true
+        public: true
+
     TrackService:
         class: AppBundle\Service\TrackService
         autowire: true
@@ -47,6 +52,11 @@ services:
 
     PoiTypeService:
         class: AppBundle\Service\PoiTypeService
+        autowire: true
+        public: true
+
+    SportTypeService:
+        class: AppBundle\Service\SportTypeService
         autowire: true
         public: true
 
