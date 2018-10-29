@@ -22,9 +22,9 @@ class RaidController extends AjaxAPIController
      *
      * @param Request $request
      *
-     * @return JsonResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listRaid(Request $request)
+    public function listRaidOrganizer(Request $request)
     {
         $user = $this->getUser();
 
@@ -32,27 +32,10 @@ class RaidController extends AjaxAPIController
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        $raids = $raidManager->findBy([
-            'user' => $user,
-        ]);
+        $raids = $raidManager->findBy(array('user' => $user));
+        $raidService = $this->container->get('RaidService');
 
-        $assetsManager = $this->get('assets.packages');
-        $baseUrl = $request->getSchemeAndHttpHost();
-
-        $dataRaids = [];
-        foreach ($raids as $raid) {
-            $raidArr = [];
-            $raidArr['id'] = $raid->getId();
-            $raidArr['name'] = $raid->getName();
-            $raidArr['date'] = $raid->getDate();
-            $raidArr['picture'] = $baseUrl . '/' . $assetsManager->getUrl('uploads/raids/' . $raid->getPicture());
-            $raidArr['address'] = $raid->getAddress();
-            $raidArr['addressAddition'] = $raid->getAddressAddition();
-            $raidArr['postCode'] = $raid->getPostCode();
-            $dataRaids[] = $raidArr;
-        }
-
-        return new JsonResponse($dataRaids);
+        return new Response($raidService->raidsArrayToJson($raids));
     }
 
     /**
@@ -61,7 +44,7 @@ class RaidController extends AjaxAPIController
      *
      * @param Request $request
      *
-     * @return JsonResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listRaidHelper(Request $request)
     {
@@ -73,33 +56,16 @@ class RaidController extends AjaxAPIController
 
         $helpers = $helperManager->findBy(array('user' => $user));
 
-        $assetsManager = $this->get('assets.packages');
-        $baseUrl = $request->getSchemeAndHttpHost();
-
         $raidIds = [];
         foreach ($helpers as $h) {
             $rid = $h->getRaid()->getId();
             $raidIds[] = $rid;
         }
 
-        $raids = $raidManager->findBy([
-            'id' => $raidIds,
-        ]);
+        $raids = $raidManager->findBy(array('id' => $raidIds));
+        $raidService = $this->container->get('RaidService');
 
-        $dataRaids = [];
-        foreach ($raids as $raid) {
-            $raidArr = [];
-            $raidArr['id'] = $raid->getId();
-            $raidArr['name'] = $raid->getName();
-            $raidArr['date'] = $raid->getDate();
-            $raidArr['picture'] = $baseUrl . '/' . $assetsManager->getUrl('uploads/raids/' . $raid->getPicture());
-            $raidArr['address'] = $raid->getAddress();
-            $raidArr['addressAddition'] = $raid->getAddressAddition();
-            $raidArr['postCode'] = $raid->getPostCode();
-            $dataRaids[] = $raidArr;
-        }
-
-        return new JsonResponse($dataRaids);
+        return new Response($raidService->raidsArrayToJson($raids));
     }
 
     /**
@@ -109,7 +75,7 @@ class RaidController extends AjaxAPIController
      * @param Request $request
      * @param int     $raidId  raid id
      *
-     * @return JsonResponse
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getRaidHelper(Request $request, $raidId)
     {
@@ -122,28 +88,17 @@ class RaidController extends AjaxAPIController
 
         $helper = $helperManager->findOneBy(array('user' => $user, 'raid' => $raidId));
 
-        $assetsManager = $this->get('assets.packages');
-        $baseUrl = $request->getSchemeAndHttpHost();
-
         if (null == $helper) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
         }
 
         $raid = $raidManager->findOneBy(array('id' => $helper->getRaid()->getId()));
+        $raidService = $this->container->get('RaidService');
 
-        $dataRaid = [];
-        $dataRaid['id'] = $raid->getId();
-        $dataRaid['name'] = $raid->getName();
-        $dataRaid['date'] = $raid->getDate();
-        $dataRaid['picture'] = $baseUrl . '/' . $assetsManager->getUrl('uploads/raids/' . $raid->getPicture());
-        $dataRaid['address'] = $raid->getAddress();
-        $dataRaid['addressAddition'] = $raid->getAddressAddition();
-        $dataRaid['postCode'] = $raid->getPostCode();
-
-        return new JsonResponse($dataRaid);
+        return new Response($raidService->raidToJson($raid));
     }
 
-/**
+    /**
      * @Rest\View(serializerGroups={"secured"})
      * @Rest\Get("/api/organizer/raid/{id}")
      *
@@ -152,7 +107,7 @@ class RaidController extends AjaxAPIController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getRaidAction(Request $request, $raidId)
+    public function getRaidOrganizer(Request $request, $raidId)
     {
         return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
     }

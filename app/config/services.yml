@@ -55,6 +55,11 @@ services:
         autowire: true
         public: true
 
+    SportTypeService:
+        class: AppBundle\Service\SportTypeService
+        autowire: true
+        public: true
+
     FormatService:
         class: AppBundle\Service\FormatService
         autowire: true

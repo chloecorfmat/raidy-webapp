@@ -47,4 +47,34 @@ class RaidService
 
         return json_encode($raidsObj);
     }
+
+    /**
+     * @param Raid $raid
+     *
+     * @return false|string
+     */
+    public function raidToJson($raid)
+    {
+        $obj = [];
+
+        $obj['id'] = $raid->getId();
+        $obj['name'] = $raid->getName();
+        $obj['date'] = $raid->getDate();
+        $obj['address'] = $raid->getAddress();
+
+        if (null != $raid->getAddressAddition()) {
+            $obj['addressAddition'] = $raid->getAddressAddition();
+        } else {
+            $obj['addressAddition'] = '';
+        }
+
+        $obj['postCode'] = $raid->getPostCode();
+        $obj['city'] = $raid->getCity();
+        $obj['editionNumber'] = $raid->getEditionNumber();
+        $obj['picture'] = $raid->getPicture();
+
+        $raidsObj[] = $obj;
+
+        return json_encode($obj);
+    }
 }
