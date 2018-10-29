@@ -104,8 +104,15 @@ form {
 }
 
 .form--error {
+  background: $secondary-color-2-light;
+  border: 1px solid $secondary-color-2;
+  border-radius: 5px;
   color: $secondary-color-2;
   font-size: .8rem;
-  font-style: italic;
-  font-weight: 700;
+  //font-weight: 700;
+  padding: 1rem;
+
+  li {
+    list-style-type: none;
+  }
 }
