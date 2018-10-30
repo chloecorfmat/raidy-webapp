@@ -17,7 +17,7 @@ class PoiController extends AjaxAPIController
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getPOIAction(Request $request, $raidId)
+    public function getPoisAction(Request $request, $raidId)
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
@@ -204,5 +204,45 @@ class PoiController extends AjaxAPIController
         }
 
         return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_OK)
+     * @Rest\Get("/api/organizer/raid/{raidId}/poi/{poiId}")
+     *
+     * @param Request $request
+     * @param int     $raidId  raid id
+     * @param int     $poiId   poi id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getPoiAction(Request $request, $raidId, $poiId)
+    {
+        // Set up managers
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        // Find the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
+        }
+
+        if ($raid->getUser()->getId() != $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        }
+
+        $poiService = $this->container->get('PoiService');
+        $poiManager = $em->getRepository('AppBundle:Poi');
+        $poi = $poiManager->find($poiId);
+
+        if (null != $poi) {
+            return new Response($poiService->poiToJson($poi));
+        } else {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This poi does not exist');
+        }
     }
 }
