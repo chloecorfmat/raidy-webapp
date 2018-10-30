@@ -1,16 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lucas
- * Date: 15/10/18
- * Time: 13:58.
- */
 
 namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProfileController extends AjaxAPIController
@@ -19,30 +13,42 @@ class ProfileController extends AjaxAPIController
      * @Rest\View(serializerGroups={"secured"})
      * @Rest\Get("/api/profile")
      *
-     * @return JsonResponse
+     * @return Response
      */
     public function profileInfo()
     {
         $user = $this->getUser();
 
-        $data = [];
-        $data['username'] = $user->getUsername();
-        $data['firstname'] = $user->getFirstName();
-        $data['lastname'] = $user->getLastName();
-        $data['email'] = $user->getEmail();
-        $data['phone'] = $user->getPhone();
+        $profileService = $this->container->get('ProfileService');
 
-        return new JsonResponse($data);
+        return new Response($profileService->profileToJson($user));
     }
 
     /**
      * @Rest\View(serializerGroups={"secured"})
      * @Rest\Patch("/api/profile")
      *
+     * @param Request $request request
+     *
      * @return Response
      */
-    public function editProfileAction()
+    public function editProfileAction(Request $request)
     {
-        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
+        // Set up managers
+        $em = $this->getDoctrine()->getManager();
+
+        $user = $this->getUser();
+
+        if (null != $user) {
+            $data = $request->request->all();
+            $profileService = $this->container->get('ProfileService');
+
+            $profile = $profileService->updateProfileFromArray($user, $data);
+            $em->flush();
+        } else {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This user does not exist');
+        }
+
+        return new Response($profileService->profileToJson($profile));
     }
 }

@@ -55,6 +55,11 @@ services:
         autowire: true
         public: true
 
+    ProfileService:
+        class: AppBundle\Service\ProfileService
+        autowire: true
+        public: true
+
     SportTypeService:
         class: AppBundle\Service\SportTypeService
         autowire: true
