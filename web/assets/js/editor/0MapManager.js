@@ -28,15 +28,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
 
-    this.map.on('editable:vertex:mousedown ', function (e) {
-      e.vertex.continue();
-    });
-    this.map.on('editable:drawing:end', function (e) {
-      document.getElementById('map').style.cursor = 'grab';
-    });
-    this.map.on('editable:drawing:start', function (e) {
-      document.getElementById('map').style.cursor = 'crosshair';
-    })
+
 
 
     // this.map.addControl(new  L.TrackEditControl())
@@ -99,11 +91,22 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
 
     this.map.on('editable:vertex:dragend', function (e) {
-      console.log('Handled : editable:dragend');
-      console.log(e);
+    //  console.log('Handled : editable:dragend');
+    //  console.log(e);
       track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.push();
     });
+
+
+    this.map.on('editable:vertex:mousedown ', function (e) {
+      e.vertex.continue();
+    });
+    this.map.on('editable:drawing:end', function (e) {
+      document.getElementById('map').style.cursor = 'grab';
+    });
+    this.map.on('editable:drawing:start', function (e) {
+      document.getElementById('map').style.cursor = 'crosshair';
+    })
 
     this.loadRessources()
 
@@ -162,7 +165,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           el.classList.remove('track--edit');
         });
         this.setTracksEditable(false);
-        this.setPoiEditable(true);
+       // this.setPoiEditable(true);
         break;
       case EditorMode.TRACK_EDIT :
         this.displayTrackButton(true);
@@ -174,8 +177,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         currentTrack.setEditable(true);
         // console.log(currentTrack.line.getBounds());
        // if (currentTrack.line.getLatLngs().length > 0) this.map.fitBounds(currentTrack.line.getBounds());
-        currentTrack.line.editor.continueForward();
-        this.setPoiEditable(false);
+        //
+        //currentTrack.line.editor.continueForward();
+       // this.setPoiEditable(false);
         break;
       case EditorMode.READING :
         document.getElementById('map').style.cursor = 'grab';
@@ -193,6 +197,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     mapManager.editorUI.addTrack(newTrack)
     //  console.log(li);
+    return newTrack;
   };
   MapManager.prototype.showTrack = function (id) {
     this.tracksMap.get(id).show();
@@ -249,13 +254,14 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           mapManager.addTrack(track);
           mapManager.currentEditID = track.id;
           mapManager.switchMode(EditorMode.TRACK_EDIT);
-          document.querySelectorAll('.track--edit').forEach(function (el) {
-            el.classList.remove('track--edit');
-          });
-          document.getElementById('track-li-' + track.id).classList.add('track--edit');
+          currentTrack.line.editor.continueForward();
+          //document.querySelectorAll('.track--edit').forEach(function (el) {
+            //el.classList.remove('track--edit');
+          //});
+          //document.getElementById('track-li-' + track.id).classList.add('track--edit');
         } else {
           // console.log("Status de la réponse: %d (%s)", xhr_object.status, xhr_object.statusText);
-        }
+        } 
       }
     }
   };

@@ -208,7 +208,7 @@ button.active:after {
 
   /* Track */
   ::-webkit-scrollbar-track {
-    border-radius: 10px;
+    background:#eeeeee;
   }
 
   /* Handle */
@@ -659,6 +659,7 @@ input:focus + .slider-alternative {
   width: 0;
   height: 0;
 }
+
 
 
 /* FAB */

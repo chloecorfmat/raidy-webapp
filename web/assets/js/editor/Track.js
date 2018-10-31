@@ -1,8 +1,8 @@
 if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
+
   var Track = function (map) {
     this.map = map;
     this.line = [];
-    // s this.line.addTo(this.map);
 
     this.id = '';
     this.name = '';
@@ -121,6 +121,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
 
   Track.prototype.push = function () {
+    console.log("editor: "+this.line.editor);
+
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/organizer/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');

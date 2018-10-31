@@ -147,7 +147,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
         controlElement.innerHTML =
           '<div class="map-controller-container" >' +
-          '    <span class="switch-label">Édition du tracé</span>' +
+          '    <span class="switch-label">Édition du parcours</span>' +
           '    <label class="switch">' +
           '        <input type="checkbox">' +
           '         <span class="slider round"></span>' +
