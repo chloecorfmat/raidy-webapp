@@ -48,14 +48,14 @@ class Poi
     protected $requiredHelpers;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PoiType", cascade={"remove"})
-     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PoiType")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $poiType;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid", cascade={"remove"})
-     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
+     * @ORM\JoinColumn(nullable=false)
      */
     protected $raid;
 

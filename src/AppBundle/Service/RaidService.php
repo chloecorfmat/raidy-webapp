@@ -73,8 +73,6 @@ class RaidService
         $obj['editionNumber'] = $raid->getEditionNumber();
         $obj['picture'] = $raid->getPicture();
 
-        $raidsObj[] = $obj;
-
         return json_encode($obj);
     }
 }

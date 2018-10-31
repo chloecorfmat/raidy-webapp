@@ -35,6 +35,11 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
+    HelperService:
+        class: AppBundle\Service\HelperService
+        autowire: true
+        public: true
+
     RaidService:
         class: AppBundle\Service\RaidService
         autowire: true
@@ -52,6 +57,11 @@ services:
 
     PoiTypeService:
         class: AppBundle\Service\PoiTypeService
+        autowire: true
+        public: true
+
+    ProfileService:
+        class: AppBundle\Service\ProfileService
         autowire: true
         public: true
 
