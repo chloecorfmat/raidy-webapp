@@ -55,6 +55,7 @@ class Helper
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
+     * @ORM\JoinColumn(onDelete="cascade")
      */
     protected $raid;
 

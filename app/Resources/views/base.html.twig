@@ -6,7 +6,7 @@
     {% set base_class = 'organizer' %}
 {% endif %}
 
-{% if base_class is not defined %}
+{% if user_edit_page is not defined %}
     {% set user_edit_page = '' %}
 {% endif %}
 
@@ -18,6 +18,7 @@
         <title>{% block title %}Welcome!{% endblock %} | Raidy</title>
         {% block stylesheets %}{% endblock %}
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+        <link href="https://unpkg.com/vanilla-datatables@latest/dist/vanilla-dataTables.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="{{ asset('assets/dist/css/styles.min.css') }}" />
 
         {% block favicon %}
@@ -41,7 +42,7 @@
                     <li class="header--nav-item">
                         <a href="{{ user_edit_page }}" aria-label="Profil">
                             <p class="header--profile-ico">
-                                Bonjour {{ app.user.firstname }} {{ app.user.lastname }}
+                                Bonjour {{ app.user.firstname }}
                             </p>
                             <i aria-hidden="true" class="fas fa-user fa-lg"></i>
                         </a>
@@ -71,6 +72,7 @@
         {% block footer %}{% endblock %}
         <script type="text/javascript" src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
         <!--script src="https://cdn.klokantech.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></--script-->
+        <script src="https://unpkg.com/vanilla-datatables@latest/dist/vanilla-dataTables.min.js" type="text/javascript"></script>
         <script type="text/javascript" src="{{ asset('assets/dist/js/scripts.min.js') }}"></script>
         {% block javascripts %}{% endblock %}
     </body>
