@@ -1,11 +1,35 @@
 .map--container {
-  flex-grow: 1;
+  width: 80%;
   position: relative;
+  transition: width 1s linear;
 }
 
 .map {
   min-height: 100%;
   min-width: 100%;
+}
+.map-tooltip {
+  display: none;
+  position: absolute;
+  background: #666;
+  color: white;
+  opacity: 0.5;
+  padding: 10px;
+  border: 1px dashed #999;
+  font-family: sans-serif;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  z-index: 1000;
+}
+
+.poi-marker{
+  width: 2rem;
+  height: 2rem;
+  display: block;
+  position: relative;
+  border-radius: 3rem 3rem 0;
+  transform: translateX(-1rem) translateY(-2rem) rotate(45deg);
 }
 
 //ACCORDION
@@ -89,7 +113,7 @@ button.active:after {
 .track--text{
   display: flex;
   flex-direction: column;
-
+  width: 90%;
 }
 .checkbox-item--label > div > span:nth-child(1){
   display: inline-block;
@@ -152,6 +176,8 @@ button.active:after {
   vertical-align: middle;
   width: 5rem;
   z-index: 1000;
+  border: 2px solid rgba(0,0,0,0.2);
+  background-clip: padding-box;
 
   svg {
     fill: $tertiary-color-1;
@@ -175,7 +201,29 @@ button.active:after {
 }
 
 .editor--container {
+
+  ::-webkit-scrollbar {
+    width: 0.75rem;
+  }
+
+  /* Track */
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #CCCCCC;
+  }
+
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #DDDDDD;
+  }
+
   display: flex;
+  //justify-content: flex-end;
+  justify-content: space-between;
   width: 100%;
 }
 
@@ -208,9 +256,11 @@ button.active:after {
 .bar {
   display: flex;
   flex-direction: column;
-  max-width: 30%;
-  min-width: 20%;
+  width: 20%;
   position: relative;
+  left : 0;
+  transition : width 1s ease;
+  z-index: 1000;
 
   &::after {
     background-color: $tertiary-color-1;
@@ -274,8 +324,16 @@ button.active:after {
 }
 
 .bar--invisible {
-  position: absolute;
+  /**position: absolute;
+  left : -100%;**/
+  position: relative;
+  width: 0;
+  transition : width 1s ease;
 
+  & + .map--container{
+    width: 100%;
+    transition: width .5s linear;
+  }
   .btn--laterale-bar {
     left: 0;
     margin-left: 0;
@@ -354,17 +412,19 @@ button.active:after {
 
 /* The container <div> - needed to position the dropdown content */
 .dropdown {
-  position: relative;
+  position: absolute;
   display: inline-block;
+
 }
 
 /* Dropdown Content (Hidden by Default) */
 .dropdown-content {
-  left : 200px;
+  cursor: pointer;
+  left : 100%;
   display: none;
   position: absolute;
-  background-color: #f1f1f1;
-  min-width: 160px;
+  background-color: #FFFFFF;
+  min-width: 12rem ;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 99999999999;
 }
@@ -372,13 +432,13 @@ button.active:after {
 /* Links inside the dropdown */
 .dropdown-content a {
  // color: black;
-  padding: 12px 16px;
+  padding: 1.2rem 1.5rem;
   text-decoration: none;
   display: block;
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #ddd}
+.dropdown-content a:hover {background-color: #f4f4f4}
 
 /* Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button) */
 .show {display:block;}
@@ -450,3 +510,269 @@ button.active:after {
     margin: 0;
   }
 }
+
+/* TOGGLE */
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 2.4rem;
+  height: 1.4rem;
+  margin-left: 0.5rem;
+}
+
+/* Hide default HTML checkbox */
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1rem;
+  width: 1rem;
+  left: 0.16rem;
+  bottom: 0.16rem;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+#map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-in, #map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-out{
+  color : $tertiary-color-1;
+}
+
+input:checked + .slider {
+  background-color: $tertiary-color-1;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 0.08rem $tertiary-color-1;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(1rem);
+  -ms-transform: translateX(1rem);
+  transform: translateX(1rem);
+}
+
+.switch-label{
+  text-align: center;
+  padding: 0;
+  display: inline;
+  font-weight: bold;
+  font-family: 'Proxima Nova', 'SansSerif';
+  font-size: .75rem;
+  color : $tertiary-color-1;
+}
+
+.map-controller-container{
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  padding: 0.4rem;
+  border: 2px solid rgba(0,0,0,0.2);
+  background-clip: padding-box;
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 1.4rem;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+
+// alternative
+
+.slider-alternative {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider-alternative:before {
+  position: absolute;
+  font-family: Fontastique;
+  content: "X";
+  height: 0.5rem;
+  width: 0.5rem;
+  right: 0.25rem;
+  top: 0.25rem;
+ // background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+
+input:checked + .slider-alternative {
+  background-color: $tertiary-color-1;
+}
+
+input:focus + .slider-alternative {
+  box-shadow: 0 0 0.08rem $tertiary-color-1;
+}
+
+/* Rounded sliders */
+.slider-alternative.round {
+  border-radius: 1.4rem;
+}
+
+.slider-alternative.round:before {
+  border-radius: 50%;
+}
+
+
+.switch-alternative {
+  position: relative;
+  display: inline-block;
+  width: 1.4rem;
+  height: 1.4rem;
+}
+
+/* Hide default HTML checkbox */
+.switch-alternative input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+
+/* FAB */
+/*
+
+.fab {
+  position: fixed;
+  width: 56px;
+  left: 50%;
+  bottom: 15px;
+  margin-left: -28px;
+}
+
+.fab:hover .fab-buttons {
+  opacity: 1;
+  visibility: visible;
+}
+
+.fab:hover .fab-buttons__link {
+  transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0px);
+}
+
+.fab-action-button:hover + .fab-buttons .fab-buttons__link:before {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: right center 0;
+  transition-delay: 0.3s;
+}
+
+.fab-action-button {
+  position: absolute;
+  bottom: 0;
+  display: block;
+  width: 56px;
+  height: 56px;
+  background-color: #29B6F6;
+  border-radius: 50%;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+}
+
+.fab-buttons {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s;
+}
+
+.fab-action-button__icon {
+  display: inline-block;
+  width: 56px;
+  height: 56px;
+  background: url("data:image/svg+xml;base64,PHN2ZyBmaWxsPSIjZmZmZmZmIiBoZWlnaHQ9IjI0IiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KICAgIDxwYXRoIGQ9Ik0wIDBoMjR2MjRIMHoiIGZpbGw9Im5vbmUiLz4KICAgIDxwYXRoIGQ9Ik0xOCAxNi4wOGMtLjc2IDAtMS40NC4zLTEuOTYuNzdMOC45MSAxMi43Yy4wNS0uMjMuMDktLjQ2LjA5LS43cy0uMDQtLjQ3LS4wOS0uN2w3LjA1LTQuMTFjLjU0LjUgMS4yNS44MSAyLjA0LjgxIDEuNjYgMCAzLTEuMzQgMy0zcy0xLjM0LTMtMy0zLTMgMS4zNC0zIDNjMCAuMjQuMDQuNDcuMDkuN0w4LjA0IDkuODFDNy41IDkuMzEgNi43OSA5IDYgOWMtMS42NiAwLTMgMS4zNC0zIDNzMS4zNCAzIDMgM2MuNzkgMCAxLjUtLjMxIDIuMDQtLjgxbDcuMTIgNC4xNmMtLjA1LjIxLS4wOC40My0uMDguNjUgMCAxLjYxIDEuMzEgMi45MiAyLjkyIDIuOTIgMS42MSAwIDIuOTItMS4zMSAyLjkyLTIuOTJzLTEuMzEtMi45Mi0yLjkyLTIuOTJ6Ii8+Cjwvc3ZnPg==") center no-repeat;
+}
+
+.fab-buttons__item {
+  display: block;
+  text-align: center;
+  margin: 12px 0;
+}
+
+.fab-buttons__link {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  text-decoration: none;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  transform: scaleY(0.5) scaleX(0.5) translateY(0px) translateX(0px);
+  -moz-transition: .3s;
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+}
+
+[data-tooltip]:before {
+  top: 50%;
+  margin-top: -11px;
+  font-weight: 600;
+  border-radius: 2px;
+  background: #585858;
+  color: #fff;
+  content: attr(data-tooltip);
+  font-size: 12px;
+  text-decoration: none;
+  visibility: hidden;
+  opacity: 0;
+  padding: 4px 7px;
+  margin-right: 12px;
+  position: absolute;
+  transform: scale(0);
+  right: 100%;
+  white-space: nowrap;
+  transform-origin: top right;
+  transition: all .3s cubic-bezier(.25, .8, .25, 1);
+}
+
+[data-tooltip]:hover:before {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: right center 0;
+}
+
+.icon-material {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+*/

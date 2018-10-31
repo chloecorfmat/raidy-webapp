@@ -1,4 +1,30 @@
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
+
+  let moreButtonBehaviour =  function (e){
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+      disableScroll()
+    }
+
+    let dpdwn = this.nextElementSibling;
+    console.log(dpdwn);
+    //  console.log(convertRem(12))
+    // console.log(e.view.screen.height +" - "+ e.screenY+" = "+(e.view.screen.height - e.screenY ))
+    if((e.view.screen.height - e.screenY ) < convertRem(12) ){
+      console.log("nope")
+      dpdwn.style.top =  'calc(${e.pageY}px - 17.0rem)' ;
+    }else{
+      dpdwn.style.top =  'calc(${e.pageY}px - 7.0rem)' ;
+    }
+
+    dpdwn.classList.toggle("show");
+  }
+
   function EditorUI () {
     this.trackElements = new Map();
     this.poiElements = new Map();
@@ -16,10 +42,28 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       this.addPoi(poi);
     }
     let li = this.poiElements.get(poi.id)
-    li.innerHTML = poi.name +
-      `<button data-id = "` + poi.id + `" class="btn--poi--settings">
-           <i class="fa fa-cog"></i>
-       </button>`
+
+    li.innerHTML =
+      '             <div class="track--text">' +
+      '                <span>' + poi.name + '</span>' +
+      '            </div>' +
+      '         </label>' +
+      '         <button id="moreButton" data-id = "' + poi.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
+      '             <i class="fas fa-ellipsis-v"></i>' +
+      '         </button>' +
+      '         <div id="myDropdown" class="dropdown-content">' +
+      '            <a class="btn--poi--settings" data-id = "' + poi.id + '"> <i class="fas fa-cog"></i> Modifier les infos</a>' +
+      '            <a class="btn--poi--delete" data-id = "' + poi.id +'"><i class="fas fa-trash"></i> Supprimer</a>' +
+      '          </div>';
+
+    li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
+
+    let btnDelete = li.querySelector('.btn--poi--delete');
+    btnDelete.addEventListener("click", function () {
+      document.getElementById("btn--delete-poi").dataset.id = poi.id;
+      MicroModal.show('delete-poi')
+    })
+
     document.getElementById('list--pois').appendChild(li)
     li.pseudoStyle('before', 'background-color', poi.color)
     li.querySelector('.btn--poi--settings').addEventListener('click', function () {
@@ -55,50 +99,31 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       let li = this.trackElements.get(track.id)
 
       li.id = 'track-li-' + newTrack.id
-      li.innerHTML = `
-         <label class="checkbox-item--label">
-             <input data-id = "` + newTrack.id + `" type="checkbox" checked="checked">
-             
-             <span style ="background-color : ` + newTrack.color + `; border-color :` + newTrack.color + `" class="checkmark">
-                  <i class="fas fa-check"></i>
-             </span>
-             <div class="track--text">
-                <span>` + newTrack.name + `</span>
-                <span style="font-size : 0.75rem;"></br>(150,0 km)</span>
-            </div>
-         </label>
-         <button id="moreButton" data-id = "` + newTrack.id + `" class="dropbtn btn--track--more btn--editor-ico">
-             <i class="fas fa-ellipsis-v"></i>
-         </button>
-         <div id="myDropdown" class="dropdown-content">
-            <a class="btn--track--edit" data-id = "` + newTrack.id + `"> <i class="fas fa-pen"></i> Éditer le tracé</a>
-            <a class="btn--track--settings" data-id = "` + newTrack.id + `"> <i class="fas fa-cog"></i> Modifier les infos</a>
+      li.innerHTML = '<label class="checkbox-item--label">' +
+        '             <input data-id = "' + newTrack.id + '" type="checkbox" checked="checked">' +
+        '             ' +
+        '             <span style ="background-color : ' + newTrack.color + '; border-color :' + newTrack.color + '" class="checkmark">' +
+        '                  <i class="fas fa-check"></i>' +
+        '             </span>' +
+        '             <div class="track--text">' +
+        '                <span>' + newTrack.name + '</span>' +
+        '                <span style="font-size : 0.75rem;"></br>(150,0 km)</span>' +
+        '            </div>' +
+        '         </label>' +
+        '         <button id="moreButton" data-id = "' + newTrack.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
+        '             <i class="fas fa-ellipsis-v"></i>' +
+        '         </button>' +
+        '         <div id="myDropdown" class="dropdown-content">' +
+        '            <a class="btn--track--edit" data-id = "' + newTrack.id + '"> <i class="fas fa-pen"></i> Éditer le tracé</a>' +
+        '            <a class="btn--track--settings" data-id = "' + newTrack.id + '"> <i class="fas fa-cog"></i> Modifier les infos</a>' +
+        '            <a class="btn--track--delete" data-id = "' + newTrack.id +'"><i class="fas fa-trash"></i> Supprimer</a.btn--track--delete>' +
+        '            <!-- a><i class="fas fa-clone"></i> Dupliquer</a-->' +
+        '          </div>'
 
-            <a href="#"><i class="fas fa-trash"></i> Supprimer</a>
-            <a href="#"><i class="fas fa-clone"></i> Dupliquer</a>
-          </div>
-         <!--button data-id = "` + newTrack.id + `" class="btn--track--edit btn--editor-ico">
-             
-         </button>
-         <button data-id = "` + newTrack.id + `" class="btn--track--settings btn--editor-ico">
-             
-         </button-->`
+       
+      /* When the user clicks on the button, toggle between hiding and showing the dropdown content */
 
-      /* When the user clicks on the button,
-toggle between hiding and showing the dropdown content */
-
-      li.querySelector("#moreButton").addEventListener("click", function(e){
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-          var openDropdown = dropdowns[i];
-          if (openDropdown.classList.contains('show')) {
-            openDropdown.classList.remove('show');
-          }
-          disableScroll()
-        }
-        li.querySelector("#myDropdown").classList.toggle("show");
-      })
+      li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
       newTrack.calculDistance()
       li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)'
 
@@ -121,6 +146,12 @@ toggle between hiding and showing the dropdown content */
           //  li.querySelector('.btn--track--edit').style.display = 'none'
           }
         })
+      })
+
+      let btnDelete = li.querySelector('.btn--track--delete');
+      btnDelete.addEventListener("click", function () {
+        document.getElementById("btn--delete-track").dataset.id = newTrack.id;
+        MicroModal.show('delete-track')
       })
 
       // TRACK EDIT PENCIL
@@ -164,10 +195,11 @@ toggle between hiding and showing the dropdown content */
 
       return li
     }
-    EditorUI.prototype.removeTrack = function(track) {
-      let li = this.trackElements.get(track.id)//document.getElementById('track-li-' + this.id)
-      document.getElementById('editor--list').removeChild(li)
-    }
+
+  }
+  EditorUI.prototype.removeTrack = function(track) {
+    let li = this.trackElements.get(track.id)//document.getElementById('track-li-' + this.id)
+    document.getElementById('editor--list').removeChild(li)
   }
   console.log("Editor UI for editor loaded")
 

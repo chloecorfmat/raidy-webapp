@@ -39,13 +39,29 @@
         </div>
         <div class="map--container">
             <div id="map" class="map"></div>
-            <button id="addPoiButton" class="btn--add-poi">
+
+            <div class="fab">
+                <button id="addPoiButton" class="btn--add-poi">
                 <span class="btn--editor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.85 122.85">
                        <path d="M122.85,48.06q0,12.15-6.75,19.44T96.93,74.79H74.79v48.06q-12.15,0-19.44-6.75T48.06,96.93V74.79H0Q0,62.64,6.75,55.35t19.17-7.29H48.06V0Q60.21,0,67.5,6.75t7.29,19.17V48.06Z" />
                     </svg>
                 </span>
-            </button>
+                </button>
+                <ul class="fab-buttons">
+                    <li class="fab-buttons__item">
+                        <a href="#" class="fab-buttons__link" data-tooltip="Ajouter un tracé">
+                            <i class="icon-material icon-material_timeline">        </i>
+                        </a>
+                    </li>
+                    <li class="fab-buttons__item">
+                        <a href="#" class="fab-buttons__link" data-tooltip="Ajouter un point d'intérêt">
+                            <i class="icon-material icon-material_gp"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
 
@@ -224,6 +240,61 @@
                                     </div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [1] -->
+    <div id="delete-track" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-track-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-track-title">
+                            Supprimer un parcours
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-track-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer ce parcours ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <button type="button" class="btn btn--danger" id="btn--delete-track"  data-id="">Supprimer</button>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- [1] -->
+    <div id="delete-poi" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-poi-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-poi-title">
+                            Supprimer un point d'intérêt
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-poi-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer ce point d'intérêt ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <button type="button" class="btn btn--danger" id="btn--delete-poi"  data-id="">Supprimer</button>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
                         </div>
                     </div>
                 </div>
