@@ -4,7 +4,7 @@ th {
 }
 
 td {
-  vertical-align: middle !important;
+  vertical-align: middle !important; // sass-lint:disable-line no-important
 }
 
 .table--container {

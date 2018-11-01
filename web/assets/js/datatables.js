@@ -12,17 +12,17 @@ var options = {
 
 function organizersList (e) {
   if (document.getElementById('organizersList') != null) {
-    var dataTableOrganizer = new DataTable('#organizersList', options) // eslint-disable-line no-undef, no-new
+    var dataTableOrganizer = new DataTable('#organizersList', options);
 
     dataTableOrganizer.on('datatable.page', function (page) {
       // Needed to display modal to delete organizer.
-      displayModalToDelete() // eslint-disable-line no-undef
+      displayModalToDelete();
     })
   }
 }
 
 function helpers (e) {
   if (document.getElementById('helpersList') != null) {
-    new DataTable('#helpersList', options) // eslint-disable-line no-undef, no-new
+    new DataTable('#helpersList', options);
   }
 }
