@@ -2,8 +2,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
   let moreButtonBehaviour =  function (e){
     var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
+    for (var i = 0; i < dropdowns.length; i++) {
       var openDropdown = dropdowns[i];
       if (openDropdown.classList.contains('show')) {
         openDropdown.classList.remove('show');
@@ -12,14 +11,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     }
 
     let dpdwn = this.nextElementSibling;
-    console.log(dpdwn);
-    //  console.log(convertRem(12))
-    // console.log(e.view.screen.height +" - "+ e.screenY+" = "+(e.view.screen.height - e.screenY ))
-    if((e.view.screen.height - e.screenY ) < convertRem(12) ){
-      console.log("nope")
-      dpdwn.style.top =  'calc(${e.pageY}px - 17.0rem)' ;
-    }else{
-      dpdwn.style.top =  'calc(${e.pageY}px - 7.0rem)' ;
+    if ((e.view.screen.height - e.screenY ) < convertRem(12) ){
+      dpdwn.style.top = 'calc(${e.pageY}px - 17.0rem)';
+    } else {
+      dpdwn.style.top = 'calc(${e.pageY}px - 7.0rem)';
     }
 
     dpdwn.classList.toggle("show");
@@ -30,18 +25,17 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     this.poiElements = new Map();
   }
   EditorUI.prototype.addPoi = function(poi){
-    let li = document.createElement('li')
-    li.classList.add('list--pois-items')
+    let li = document.createElement('li');
+    li.classList.add('list--pois-items');
     this.poiElements.set(poi.id, li);
     this.updatePoi(poi);
   }
   EditorUI.prototype.updatePoi = function(poi){
-
     let keepThis = this;
     if(!this.poiElements.has(poi.id)) {
       this.addPoi(poi);
     }
-    let li = this.poiElements.get(poi.id)
+    let li = this.poiElements.get(poi.id);
 
     li.innerHTML =
       '             <div class="track--text">' +
@@ -61,18 +55,17 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     let btnDelete = li.querySelector('.btn--poi--delete');
     btnDelete.addEventListener("click", function () {
       document.getElementById("btn--delete-poi").dataset.id = poi.id;
-      MicroModal.show('delete-poi')
+      MicroModal.show('delete-poi');
     })
 
-    document.getElementById('list--pois').appendChild(li)
-    li.pseudoStyle('before', 'background-color', poi.color)
+    document.getElementById('list--pois').appendChild(li);
+    li.pseudoStyle('before', 'background-color', poi.color);
     li.querySelector('.btn--poi--settings').addEventListener('click', function () {
-      console.log(poi);
-      document.getElementById('editPoi_id').value = poi.id
-      document.getElementById('editPoi_name').value = poi.name
+      document.getElementById('editPoi_id').value = poi.id;
+      document.getElementById('editPoi_name').value = poi.name;
       document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
-      (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected')
-      MicroModal.show('edit-poi-popin')
+      (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
+      MicroModal.show('edit-poi-popin');
     })
     let panel = document.getElementById("pois-pan");
     if (panel.style.maxHeight){
@@ -80,23 +73,24 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     }
   }
   EditorUI.prototype.removePoi = function(poi){
-    let li = this.poiElements.get(poi.id)
+    let li = this.poiElements.get(poi.id);
     document.getElementById('list--pois').removeChild(li)
   }
-  EditorUI.prototype.addTrack = function(track){
-    let li = document.createElement('li')
-    li.classList.add('checkbox-item')
-    this.trackElements.set(track.id, li);
-    document.getElementById('editor--list').appendChild(li)
-    this.updateTrack(track);
 
+  EditorUI.prototype.addTrack = function(track){
+    let li = document.createElement('li');
+    li.classList.add('checkbox-item');
+    this.trackElements.set(track.id, li);
+    document.getElementById('editor--list').appendChild(li);
+    this.updateTrack(track);
   }
+
   EditorUI.prototype.updateTrack = function(track){
-    if(!this.trackElements.has(track.id)){
-      this.addTrack(track)
-    }else{
-      let newTrack = track
-      let li = this.trackElements.get(track.id)
+    if (!this.trackElements.has(track.id)){
+      this.addTrack(track);
+    } else {
+      let newTrack = track;
+      let li = this.trackElements.get(track.id);
 
       li.id = 'track-li-' + newTrack.id
       li.innerHTML = '<label class="checkbox-item--label">' +
