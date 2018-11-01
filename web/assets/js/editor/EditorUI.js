@@ -92,7 +92,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       let newTrack = track;
       let li = this.trackElements.get(track.id);
 
-      li.id = 'track-li-' + newTrack.id
+      li.id = 'track-li-' + newTrack.id;
       li.innerHTML = '<label class="checkbox-item--label">' +
         '             <input data-id = "' + newTrack.id + '" type="checkbox" checked="checked">' +
         '             ' +
@@ -116,88 +116,81 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
        
       /* When the user clicks on the button, toggle between hiding and showing the dropdown content */
-
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
-      newTrack.calculDistance()
-      li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)'
+      newTrack.calculDistance();
+      li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
 
       // TRACK SELECTION LISTENER
       li.querySelectorAll('input').forEach(function (input) {
         input.addEventListener('change', function () {
           if (input.checked) {
-            mapManager.showTrack(parseInt(input.dataset.id))
-           // li.querySelector('.btn--track--edit').style.display = 'inline-block'
-            li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor
+            mapManager.showTrack(parseInt(input.dataset.id));
+            li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor;
           } else {
-            li.querySelector('label > span.checkmark').style.backgroundColor = '#ffffff'
+            li.querySelector('label > span.checkmark').style.backgroundColor = '#ffffff';
             if (mapManager.currentEditID == input.dataset.id) {
               document.querySelectorAll('.track--edit').forEach(function (el) {
-                el.classList.remove('track--edit')
+                el.classList.remove('track--edit');
               })
-              mapManager.switchMode(EditorMode.READING)
+              mapManager.switchMode(EditorMode.READING);
             }
-            mapManager.hideTrack(parseInt(input.dataset.id))
-          //  li.querySelector('.btn--track--edit').style.display = 'none'
+            mapManager.hideTrack(parseInt(input.dataset.id));
           }
         })
-      })
+      });
 
       let btnDelete = li.querySelector('.btn--track--delete');
       btnDelete.addEventListener("click", function () {
         document.getElementById("btn--delete-track").dataset.id = newTrack.id;
-        MicroModal.show('delete-track')
-      })
+        MicroModal.show('delete-track');
+      });
 
       // TRACK EDIT PENCIL
      let btn = li.querySelector('.btn--track--edit');
      btn.addEventListener('click', function () {
      if (!this.parentElement.classList.contains('track--edit')) {
        document.querySelectorAll('.track--edit').forEach(function (el) {
-         el.classList.remove('track--edit')
-       })
+         el.classList.remove('track--edit');
+       });
       }
       this.parentElement.classList.toggle('track--edit')
        if (this.parentElement.classList.contains('track--edit')) {
-         // console.log(btn);
-         mapManager.currentEditID = parseInt(btn.dataset.id)
-         console.log(btn.dataset.id)
-         mapManager.switchMode(EditorMode.TRACK_EDIT)
+         mapManager.currentEditID = parseInt(btn.dataset.id);
+         console.log(btn.dataset.id);
+         mapManager.switchMode(EditorMode.TRACK_EDIT);
        } else {
-         mapManager.switchMode(EditorMode.READING)
+         mapManager.switchMode(EditorMode.READING);
        }
-     })
-
+     });
 
       // TRACK SETTINGS COG
       li.querySelectorAll('.btn--track--settings').forEach(function (btn) {
-        let id = parseInt(btn.dataset.id)
-        let track = mapManager.tracksMap.get(id)
+        let id = parseInt(btn.dataset.id);
+        let track = mapManager.tracksMap.get(id);
 
         btn.addEventListener('click', function () {
-          document.querySelector('#editTrack_name').value = track.name
-          document.querySelector('#editTrack_color').value = track.color
-          document.querySelector('#editTrack_id').value = track.id
+          document.querySelector('#editTrack_name').value = track.name;
+          document.querySelector('#editTrack_color').value = track.color;
+          document.querySelector('#editTrack_id').value = track.id;
 
-          MicroModal.show('edit-track-popin')
-        })
-      })
+          MicroModal.show('edit-track-popin');
+        });
+      });
 
       let panel = document.getElementById("tracks-pan");
       if (panel.style.maxHeight){
         panel.style.maxHeight = panel.scrollHeight + "px";
       }
-
-      return li
+      return li;
     }
-
   }
+
   EditorUI.prototype.removeTrack = function(track) {
-    let li = this.trackElements.get(track.id)//document.getElementById('track-li-' + this.id)
-    document.getElementById('editor--list').removeChild(li)
+    let li = this.trackElements.get(track.id);
+    document.getElementById('editor--list').removeChild(li);
   }
-  console.log("Editor UI for editor loaded")
-
-}else{
+  console.log("Editor UI for editor loaded");
+} else {
   var EditorUI = function () {}
   EditorUI.prototype.addPoi = function(poi){}
   EditorUI.prototype.updatePoi = function(id, poi){}
@@ -206,6 +199,5 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
   EditorUI.prototype.updateTrack = function(id, poi){}
   EditorUI.prototype.removeTrack = function(id){}
 
-  console.log("Editor UI for display only loaded")
-
+  console.log("Editor UI for display only loaded");
 }
