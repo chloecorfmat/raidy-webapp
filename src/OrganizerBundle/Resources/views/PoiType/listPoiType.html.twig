@@ -3,40 +3,81 @@
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
-        <li class="breadcrumb--list-item">Liste des type de points d'intérêt </li>
+        <li class="breadcrumb--list-item">Liste des type de points d'intérêt</li>
     </ol>
 {% endblock %}
 
 {% block body %}
-    <div>
-        <h1>Liste des types de points d'intérêt</h1>
-        <div class="table--container">
-            <table class="table" id="helpersList">
-                <caption class="sr-only">Liste des types de points d'intérêt</caption>
-                <thead class="table--headers">
-                <tr>
-                    <th scope="col">Type</th>
-                    <th scope="col">Couleur</th>
-                </tr>
-                </thead>
-                {% for poiType in poiTypes %}
-                    <tr class="table--line">
-                        <td>{{ poiType.type }}</td>
-                        <td>{{ poiType.color }}</td>
-                        <td><a href="{{ path('displayPoiType', {'poiTypeId': poiType.id}) }}">Voir</a></td>
-                        <td><a href="{{ path('deletePoiType', {'poiTypeId': poiType.id}) }}">Supprimer</a></td>
-                    </tr>
-                {% endfor %}
-            </table>
+    <h1>Liste des types de points d'intérêt</h1>
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert--success">
+            <p>{{ flash_message }}</p>
         </div>
-        <button id="addPoiButton" class="btn--add-poi">
-                <span class="btn--editor">
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('danger') %}
+        <div class="alert alert--danger">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
+    <div class="table--container">
+        <table class="table" id="helpersList">
+            <caption class="sr-only">Liste des types de points d'intérêt</caption>
+            <thead class="table--headers">
+            <tr>
+                <th scope="col">Type</th>
+                <th scope="col">Couleur</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
 
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.85 122.85">
-                          <path d="M122.85,48.06q0,12.15-6.75,19.44T96.93,74.79H74.79v48.06q-12.15,0-19.44-6.75T48.06,96.93V74.79H0Q0,62.64,6.75,55.35t19.17-7.29H48.06V0Q60.21,0,67.5,6.75t7.29,19.17V48.06Z" />
-                        </svg>
-
-                </span>
-        </button>
+            {% for poiType in poiTypes %}
+                <tr class="table--line">
+                    <td>{{ poiType.type }}</td>
+                    <td><span class="char--poitype" id="char--poitype-{{ poiType.id }}" style="color:{{ poiType.color }}" data-poitype-color="{{ poiType.color }}">■</span></td>
+                    <td><a href="{{ path('displayPoiType', {'poiTypeId': poiType.id}) }}" class="btn">Editer</a>
+                        <button data-poitype-id="{{ poiType.id }}" class="btn btn--danger btn--delete-poitype">
+                            Supprimer
+                        </button> {#data-micromodal-trigger="delete-poitype" #}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
     </div>
+    <a href="{{ path('addPoiType') }}" class="btn--fab">
+        <span class="btn--fab-content">
+            <span>+</span>
+        </span>
+    </a>
+
+    <!-- [1] -->
+    <div id="delete-poitype" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-poitype-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-poitype-title">
+                            Supprimer un type de point d'intérêt
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-poitype-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer ce type de point d'intérêt ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <a href="" id="btn--delete-poitype" class="btn btn--danger" data-base-url="/organizer/poitype/delete/">Supprimer</a>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+    </script>
 {% endblock %}

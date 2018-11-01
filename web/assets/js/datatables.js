@@ -30,6 +30,19 @@ function helpers (e) {
 
 function poiTypesList (e) {
   if (document.getElementById('poiTypesList') != null) {
-    new DataTable('#poiTypesList', options) // eslint-disable-line no-undef, no-new
+    var dataTablePoiType = new DataTable('#poiTypesList', options) // eslint-disable-line no-undef, no-new
+
+    dataTablePoiType.on('datatable.page', function (page) {
+      /* document.getElementsByClassName('char--poitype').forEach(function () {
+        console.log('salut')
+        var id = this.dataset.poitypeId
+        console.log(id)
+        var colorId = document.getElementById('char--poitype-') + id
+        colorId.color = this.dataset.poitypecolor
+        console.log(this.dataset)
+      }) */
+      // Needed to display modal to delete poi type.
+      displayModalToDelete() // eslint-disable-line no-undef
+    })
   }
 }
