@@ -38,10 +38,11 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     let li = this.poiElements.get(poi.id);
 
     li.innerHTML =
+      //'<span class="test">' +
       '             <div class="track--text">' +
       '                <span>' + poi.name + '</span>' +
       '            </div>' +
-      '         </label>' +
+      //'         </span>' +
       '         <button id="moreButton" data-id = "' + poi.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
       '             <i class="fas fa-ellipsis-v"></i>' +
       '         </button>' +
