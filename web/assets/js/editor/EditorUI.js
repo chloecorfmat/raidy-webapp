@@ -192,13 +192,15 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
   }
   console.log("Editor UI for editor loaded");
 } else {
-  var EditorUI = function () {}
-  EditorUI.prototype.addPoi = function(poi){}
-  EditorUI.prototype.updatePoi = function(id, poi){}
-  EditorUI.prototype.removePoi = function(id){}
-  EditorUI.prototype.addTrack = function(poi){}
-  EditorUI.prototype.updateTrack = function(id, poi){}
-  EditorUI.prototype.removeTrack = function(id){}
+  if (document.querySelector('#map') != undefined) {
+    var EditorUI = function () {}
+    EditorUI.prototype.addPoi = function(poi){}
+    EditorUI.prototype.updatePoi = function(id, poi){}
+    EditorUI.prototype.removePoi = function(id){}
+    EditorUI.prototype.addTrack = function(poi){}
+    EditorUI.prototype.updateTrack = function(id, poi){}
+    EditorUI.prototype.removeTrack = function(id){}
 
-  console.log("Editor UI for display only loaded");
+    console.log("Editor UI for display only loaded");
+  }
 }
