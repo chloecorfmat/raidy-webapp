@@ -143,28 +143,28 @@ class PoiService
         $status = true;
 
         if ($checkId) {
-            if (null == $obj['id'] || '' == $obj['id']) {
+            if (!isset($obj['id']) || '' == $obj['id']) {
                 $status = false;
             }
         }
 
-        if (null == $obj['name'] || '' == $obj['name']) {
+        if (!isset($obj['name']) || '' == $obj['name']) {
             $status = false;
         }
 
-        if (null == $obj['longitude'] || '' == $obj['longitude']) {
+        if (!isset($obj['longitude']) || '' == $obj['longitude']) {
             $status = false;
         }
 
-        if (null == $obj['latitude'] || '' == $obj['latitude']) {
+        if (!isset($obj['latitude']) || '' == $obj['latitude']) {
             $status = false;
         }
 
-        if (null == $obj['requiredHelpers'] || '' == $obj['requiredHelpers']) {
+        if (!isset($obj['requiredHelpers']) || $obj['requiredHelpers'] < 0) {
             $status = false;
         }
 
-        if (null == $obj['poiType'] || '' == $obj['poiType']) {
+        if (!isset($obj['poiType']) || '' == $obj['poiType']) {
             $status = false;
         }
 
