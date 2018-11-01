@@ -19,39 +19,39 @@ class PoiTypeService
 
     /**
      * @param mixed $obj
-     * @param mixed $raidId
+     * @param mixed $userId
      *
      * @return PoiType
      */
-    public function poiTypeFromForm($obj, $raidId)
+    public function poiTypeFromForm($obj, $userId)
     {
         $poiType = new PoiType();
 
         $poiType->setType($obj->getType());
         $poiType->setColor($obj->getColor());
 
-        $raidRepository = $this->em->getRepository('AppBundle:Raid');
-        $raid = $raidRepository->find($raidId);
-        $poiType->setRaid($raid);
+        $userRepository = $this->em->getRepository('AppBundle:User');
+        $user = $userRepository->find($userId);
+        $poiType->setUser($user);
 
         return $poiType;
     }
 
     /**
      * @param PoiType $poiType
-     * @param int     $raidId
+     * @param int     $userId
      * @param mixed   $obj
      *
      * @return mixed
      */
-    public function updatePoiTypeFromForm($poiType, $raidId, $obj)
+    public function updatePoiTypeFromForm($poiType, $userId, $obj)
     {
         $poiType->setType($obj->getType());
         $poiType->setColor($obj->getColor());
 
-        $raidRepository = $this->em->getRepository('AppBundle:Raid');
-        $raid = $raidRepository->find($raidId);
-        $poiType->setRaid($raid);
+        $userRepository = $this->em->getRepository('AppBundle:User');
+        $user = $userRepository->find($userId);
+        $poiType->setUser($user);
 
         return $poiType;
     }
@@ -71,7 +71,7 @@ class PoiTypeService
             $obj['id'] = $poiType->getId();
             $obj['type'] = $poiType->getType();
             $obj['color'] = $poiType->getColor();
-            $obj['raid'] = $poiType->getRaid()->getId();
+            $obj['user'] = $poiType->getUser()->getId();
 
             $poiTypesObj[] = $obj;
         }

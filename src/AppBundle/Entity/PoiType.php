@@ -38,10 +38,10 @@ class PoiType
     protected $color;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
      * @ORM\JoinColumn(nullable=false)
      */
-    protected $raid;
+    protected $user;
 
     /**
      * PoiType constructor.
@@ -103,16 +103,16 @@ class PoiType
     /**
      * @return mixed
      */
-    public function getRaid()
+    public function getUser()
     {
-        return $this->raid;
+        return $this->user;
     }
 
     /**
-     * @param mixed $raid
+     * @param mixed $user
      */
-    public function setRaid($raid)
+    public function setUser($user)
     {
-        $this->raid = $raid;
+        $this->user = $user;
     }
 }

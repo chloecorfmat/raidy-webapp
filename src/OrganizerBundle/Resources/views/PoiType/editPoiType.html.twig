@@ -6,7 +6,7 @@
     {{ form_widget(form) }}
     {{ form_end(form) }}
 
-    <a href="{{ path('deletePoiType', {'poiTypeId': poiType.id, 'raidId': poiType.raid.id}) }}">Supprimer le type de point d'intérêt</a>
+    <a href="{{ path('deletePoiType', {'poiTypeId': poiType.id}) }}">Supprimer le type de point d'intérêt</a>
 
 {% endblock %}
 

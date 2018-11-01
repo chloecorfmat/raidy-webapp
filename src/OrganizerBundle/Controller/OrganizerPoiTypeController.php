@@ -8,39 +8,28 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class OrganizerPoiTypeController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/poitype/add", name="addPoiType")
+     * @Route("/organizer/poitype/add", name="addPoiType")
      *
      * @param Request $request request
-     * @param int     $raidId  raid identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addPoiType(Request $request, $raidId)
+    public function addPoiType(Request $request)
     {
         // Set up managers
         $em = $this->getDoctrine()->getManager();
 
-        $raidManager = $em->getRepository('AppBundle:Raid');
-
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $raidId = (int) $raidId;
-
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
-
-        if (null == $raid) {
-            throw $this->createNotFoundException('Ce raid n\'existe pas');
-        }
-
-        if ($raid->getUser()->getId() != $user->getId()) {
-            throw $this->createAccessDeniedException();
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
         }
 
         $formPoiType = new PoiType();
@@ -56,36 +45,34 @@ class OrganizerPoiTypeController extends AjaxAPIController
         if ($form->isSubmitted() && $form->isValid()) {
             $poiTypeManager = $em->getRepository('AppBundle:PoiType');
             $poiTypeExist = $poiTypeManager->findBy(
-                ['type' => $formPoiType->getType(), 'raid' => $formPoiType->getRaid()]
+                ['type' => $formPoiType->getType(), 'user' => $user]
             );
             if (!$poiTypeExist) {
                 $poiTypeService = $this->container->get('PoiTypeService');
-                $poiType = $poiTypeService->poiTypeFromForm($formPoiType, $raidId);
+                $poiType = $poiTypeService->poiTypeFromForm($formPoiType, $user);
 
                 $em->persist($poiType);
                 $em->flush();
 
-                return $this->redirectToRoute('listPoiType', array('raidId' => $raidId));
+                return $this->redirectToRoute('listPoiType');
             }
             $form->addError(new FormError('Ce type de point d\'intérêt existe déjà.'));
         }
 
         return $this->render('OrganizerBundle:PoiType:addPoiType.html.twig', [
             'form' => $form->createView(),
-            'raidId' => $raidId,
         ]);
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/poitype/{poiTypeId}/edit", name="displayPoiType")
+     * @Route("/organizer/poitype/{poiTypeId}/edit", name="displayPoiType")
      *
      * @param Request $request   request
-     * @param int     $raidId    raid identifier
      * @param int     $poiTypeId poiType identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function displayPoiType(Request $request, $raidId, $poiTypeId)
+    public function displayPoiType(Request $request, $poiTypeId)
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
@@ -93,15 +80,8 @@ class OrganizerPoiTypeController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
-
-        if (null == $raid) {
-            throw $this->createNotFoundException('Ce raid n\'existe pas');
-        }
-
-        if ($raid->getUser()->getId() != $user->getId()) {
-            throw $this->createAccessDeniedException();
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
         }
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
@@ -125,7 +105,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
         if ($form->isSubmitted() && $form->isValid()) {
             $poiTypeManager = $em->getRepository('AppBundle:PoiType');
             $poiTypeExist = $poiTypeManager->findOneBy(
-                ['type' => $formPoiType->getType(), 'raid' => $formPoiType->getRaid()]
+                ['type' => $formPoiType->getType(), 'user' => $formPoiType->getUser()]
             );
 
             if (!$poiTypeExist || $poiTypeExist->getId() === $formPoiType->getId()) {
@@ -134,48 +114,38 @@ class OrganizerPoiTypeController extends AjaxAPIController
                 $poiType = $poiTypeManager->findOneBy(['id' => $formPoiType->getId()]);
 
                 $poiTypeService = $this->container->get('PoiTypeService');
-                $poiType = $poiTypeService->updatePoiTypeFromForm($poiType, $raidId, $formPoiType);
+                $poiType = $poiTypeService->updatePoiTypeFromForm($poiType, $user, $formPoiType);
 
                 $em->persist($poiType);
                 $em->flush();
 
-                return $this->redirectToRoute('listPoiType', array('raidId' => $raidId));
+                return $this->redirectToRoute('listPoiType');
             }
         }
 
         return $this->render('OrganizerBundle:PoiType:poiType.html.twig', [
             'form' => $form->createView(),
-            'raidId' => $raidId,
             'poiType' => $poiType,
         ]);
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/poitype/delete/{poiTypeId}", name="deletePoiType")
+     * @Route("/organizer/poitype/delete/{poiTypeId}", name="deletePoiType")
      *
      * @param Request $request   request
-     * @param mixed   $raidId    raid identifier
      * @param id      $poiTypeId poiType identifier
      *
      * @return Response
      */
-    public function deletePoiType(Request $request, $raidId, $poiTypeId)
+    public function deletePoiType(Request $request, $poiTypeId)
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
-        $raidManager = $em->getRepository('AppBundle:Raid');
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
-
-        if (null == $raid) {
-            throw $this->createNotFoundException('Ce raid n\'existe pas');
-        }
-
-        if ($raid->getUser()->getId() != $user->getId()) {
-            throw $this->createAccessDeniedException();
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
         }
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
@@ -188,45 +158,34 @@ class OrganizerPoiTypeController extends AjaxAPIController
             $em->remove($poiType);
             $em->flush();
 
-        return $this->redirectToRoute('listPoiType', array('raidId' => $raidId));
+        return $this->redirectToRoute('listPoiType');
     }
 
 /**
-     * @Route("/organizer/raid/{raidId}/poitypes", name="listPoiType")
-     *
-     * @param mixed $raidId raid identifier
+     * @Route("/organizer/poitypes", name="listPoiType")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listPoiType($raidId)
+    public function listPoiType()
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
-        $raidManager = $em->getRepository('AppBundle:Raid');
-
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         // Get the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-
-        if (null == $raid) {
-            throw $this->createNotFoundException('Ce raid n\'existe pas');
-        }
-
-        if ($raid->getUser()->getId() != $user->getId()) {
-            throw $this->createAccessDeniedException();
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
         }
 
         $poiTypes = $poiTypeManager->findBy([
-            'raid' => $raid,
+            'user' => $user,
         ]);
 
         return $this->render(
             'OrganizerBundle:PoiType:listPoiType.html.twig',
             [
                 'poiTypes' => $poiTypes,
-                'raidId' => $raidId,
                 'user' => $user,
             ]
         );
@@ -235,24 +194,16 @@ class OrganizerPoiTypeController extends AjaxAPIController
     // API route for Raid Editor
 
     /**
-     * @Route("/organizer/raid/{raidId}/poitype", name="listPoiTypeAPI", methods={"GET"})
-     *
-     * @param mixed $raidId raid identifier
+     * @Route("/organizer/poitype", name="listPoiTypeAPI", methods={"GET"})
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listPoiTypeAPI($raidId)
+    public function listPoiTypeAPI()
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
-        $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
-
-        if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Ce raid n\'existe pas');
-        }
         // Get the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
         if (null == $user->getId()) {

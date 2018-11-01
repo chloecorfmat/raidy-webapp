@@ -1,5 +1,6 @@
 window.addEventListener('load', organizersList)
 window.addEventListener('load', helpers)
+window.addEventListener('load', poiTypesList)
 
 var options = {
   labels: {
@@ -24,5 +25,11 @@ function organizersList (e) {
 function helpers (e) {
   if (document.getElementById('helpersList') != null) {
     new DataTable('#helpersList', options) // eslint-disable-line no-undef, no-new
+  }
+}
+
+function poiTypesList (e) {
+  if (document.getElementById('poiTypesList') != null) {
+    new DataTable('#poiTypesList', options) // eslint-disable-line no-undef, no-new
   }
 }
