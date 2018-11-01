@@ -30,6 +30,10 @@ class HelperRegisterController extends Controller
      */
     public function inviteHelper(Request $request, $id)
     {
+        // Logout user if one user is login.
+        $this->get('security.token_storage')->setToken(null);
+        $this->get('session')->invalidate();
+
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->find($id);
@@ -53,6 +57,10 @@ class HelperRegisterController extends Controller
      */
     public function registerSuccessHelper(Request $request, $id)
     {
+        // Logout user if one user is login.
+        $this->get('security.token_storage')->setToken(null);
+        $this->get('session')->invalidate();
+
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->find($id);
@@ -76,6 +84,10 @@ class HelperRegisterController extends Controller
      */
     public function registerHelper(Request $request, $id)
     {
+        // Logout user if one user is login.
+        $this->get('security.token_storage')->setToken(null);
+        $this->get('session')->invalidate();
+
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -199,6 +211,10 @@ class HelperRegisterController extends Controller
      */
     public function joinHelper(Request $request, $id)
     {
+        // Logout user if one user is login.
+        $this->get('security.token_storage')->setToken(null);
+        $this->get('session')->invalidate();
+
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
