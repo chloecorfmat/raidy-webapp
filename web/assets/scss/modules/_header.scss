@@ -7,6 +7,12 @@ header {
   padding: .5rem 3rem;
 }
 
+body {
+   > header {
+    height: 4rem;
+  }
+}
+
 .logo {
   text-decoration: none;
 

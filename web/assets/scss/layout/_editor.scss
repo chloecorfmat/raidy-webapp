@@ -1,7 +1,15 @@
 .map--container {
   position: relative;
-  transition: width 1s linear;
   width: 80%;
+}
+
+.editor--container {
+  // 4rem is the height of the header.
+  height: calc(100vh - 4rem);
+
+  .map--container {
+    transition: width 1s linear;
+  }
 }
 
 .map {
