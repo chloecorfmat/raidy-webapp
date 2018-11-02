@@ -57,7 +57,14 @@
                             <td>{{ helper.favoritePoiType.type }}</td>
                             <td>
                                 <select id="{{ helper.id }}" class="assign-poi">
-                                        <option value="null">Non défini</option>
+                                        <option
+                                            value="null"
+                                            {% if value is not defined %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            Non défini
+                                        </option>
                                     {% for poi in pois %}
                                         <option
                                             value="{{ poi.id }}"
