@@ -196,7 +196,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     MicroModal.show('add-track-popin');
   });
 
-  document.getElementById('addTrack_submit').addEventListener('click', function () {
+  document.getElementById('addTrack_form').addEventListener('submit', function (e) {
+    e.preventDefault();
     var trName = document.getElementById('addTrack_name').value;
     var trColor = document.getElementById('addTrack_color').value;
     mapManager.requestNewTrack(trName, trColor);
@@ -206,7 +207,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('addTrack_color').value = '#000000'
   });
 
-  document.getElementById('editTrack_submit').addEventListener('click', function () {
+  document.getElementById('editTrack_form').addEventListener('submit', function (e) {
+    e.preventDefault();
     var trName = document.getElementById('editTrack_name').value;
     var trColor = document.getElementById('editTrack_color').value;
     var trId = document.getElementById('editTrack_id').value;
@@ -239,7 +241,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   });
 
 // ADD POI SUBMIT
-  document.getElementById('addPoi_submit').addEventListener('click', function () {
+  document.getElementById('addPoi_form').addEventListener('form', function (e) {
+    e.preventDefault();
     var poiName = document.getElementById('addPoi_name').value;
     var poiType = document.getElementById('addPoi_type').value;
     var poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
@@ -253,7 +256,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   });
 
 // EDIT POI SUBMIT
-  document.getElementById('editPoi_submit').addEventListener('click', function () {
+  document.getElementById('editPoi_form').addEventListener('submit', function (e) {
+    e.preventDefault();
     var poiId = document.getElementById('editPoi_id').value;
     var poi = mapManager.poiMap.get(parseInt(poiId));
 
@@ -262,7 +266,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
     poi.push();
 
-    poi.buildUI();
     MicroModal.close('edit-poi-popin');
 
     document.getElementById('editPoi_name').value = '';

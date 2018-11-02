@@ -63,7 +63,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     li.pseudoStyle('before', 'background-color', poi.color);
     li.querySelector('.btn--poi--settings').addEventListener('click', function () {
       document.getElementById('editPoi_id').value = poi.id;
-      document.getElementById('editPoi_name').value = poi.name;
+      document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);
       document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
       (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
       MicroModal.show('edit-poi-popin');
@@ -171,7 +171,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         let track = mapManager.tracksMap.get(id);
 
         btn.addEventListener('click', function () {
-          document.querySelector('#editTrack_name').value = track.name;
+          document.querySelector('#editTrack_name').value = htmlentities.decode(track.name);
           document.querySelector('#editTrack_color').value = track.color;
           document.querySelector('#editTrack_id').value = track.id;
 

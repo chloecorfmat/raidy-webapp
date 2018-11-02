@@ -64,7 +64,7 @@
   background-color: white;
   max-height: 0;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: hidden;
   transition: max-height .2s ease-out;
 }
 
@@ -650,17 +650,6 @@ input:focus + .slider-alternative {
   }
 }
 
-#pois-pan {
-  position: relative;
-
-  ::before {
-    position: absolute;
-  }
-
-  .track--text {
-    margin-left: 2rem;
-  }
-}
 
 @media screen and (min-width: $breakpoint-mediumlarge) and (max-width: $breakpoint-large) {
   .bar {

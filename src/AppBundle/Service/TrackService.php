@@ -37,11 +37,11 @@ class TrackService
             $track->setId($obj['id']);
         }
 
-        $track->setName($obj['name']);
+        $track->setName(htmlentities($obj['name']));
         $track->setIsVisible(boolval($obj['isVisible']));
         $track->setIsCalibration(boolval($obj['isCalibration']));
 
-        $track->setColor($obj['color']);
+        $track->setColor(htmlentities($obj['color']));
         $track->setTrackPoints($obj['trackpoints']);
 
         $sportRepository = $this->em->getRepository('AppBundle:SportType');
@@ -124,10 +124,10 @@ class TrackService
      */
     public function updateTrackFromArray($track, $raidId, $obj)
     {
-        $track->setName($obj['name']);
+        $track->setName(htmlentities($obj['name']));
         $track->setIsVisible(boolval($obj['isVisible']));
 
-        $track->setColor($obj['color']);
+        $track->setColor(htmlentities($obj['color']));
         $track->setTrackPoints($obj['trackpoints']);
 
         $sportRepository = $this->em->getRepository('AppBundle:SportType');

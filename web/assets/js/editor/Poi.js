@@ -57,7 +57,10 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     xhr_object.open('PATCH', '/organizer/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(this.toJSON());
-    this.buildUI();
+
+      this.name = htmlentities.encode(this.name);
+
+    mapManager.editorUI.updatePoi(this);
   };
 
   Poi.prototype.buildUI = function () {

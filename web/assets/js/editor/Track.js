@@ -127,6 +127,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(this.toJSON());
 
+    //Encode html entities to display purpose only
+    this.name = htmlentities.encode(this.name);
+
     li = document.getElementById('track-li-' + this.id);
     this.calculDistance();
     li.querySelector('label > div > span:nth-child(2)').innerHTML = '(' + Math.round(10 * this.distance / 1000) / 10 + ' Km)';

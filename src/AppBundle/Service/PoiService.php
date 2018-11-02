@@ -33,11 +33,11 @@ class PoiService
     {
         $poi = new Poi();
 
-        $poi->setName($obj['name']);
+        $poi->setName(htmlentities($obj['name']));
 
-        $poi->setLongitude($obj['longitude']);
-        $poi->setLatitude($obj['latitude']);
-        $poi->setRequiredHelpers($obj['requiredHelpers']);
+        $poi->setLongitude(htmlentities($obj['longitude']));
+        $poi->setLatitude(htmlentities($obj['latitude']));
+        $poi->setRequiredHelpers(htmlentities($obj['requiredHelpers']));
 
         $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
         $poiType = $poiTypeRepository->find($obj['poiType']);
@@ -84,11 +84,11 @@ class PoiService
      */
     public function updatePoiFromArray($poi, $raidId, $obj)
     {
-        $poi->setName($obj['name']);
+        $poi->setName(htmlentities($obj['name']));
 
-        $poi->setLongitude($obj['longitude']);
-        $poi->setLatitude($obj['latitude']);
-        $poi->setRequiredHelpers($obj['requiredHelpers']);
+        $poi->setLongitude(htmlentities($obj['longitude']));
+        $poi->setLatitude(htmlentities($obj['latitude']));
+        $poi->setRequiredHelpers(htmlentities($obj['requiredHelpers']));
 
         $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
         $poiType = $poiTypeRepository->find($obj['poiType']);
