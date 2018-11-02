@@ -11,7 +11,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.decorator = null;
     this.visible = true;
-    this.isCalibration = false;
+    this.calibration = false;
     this.waypoints = [];
 
     this.line = L.polyline([]);
