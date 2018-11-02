@@ -1,13 +1,14 @@
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
-    disableScroll();
 
     let dpdwn = this.nextElementSibling;
 
     if(dpdwn.classList.contains("show")){
         dpdwn.classList.remove("show");
     }else{
+        disableScroll();
+
         let drop = document.querySelector(".dropdown-content.show");
         if(drop != null){
           drop.classList.remove("show");
