@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
@@ -31,8 +32,12 @@ class HelperRegisterController extends Controller
     public function inviteHelper(Request $request, $id)
     {
         // Logout user if one user is login.
-        $this->get('security.token_storage')->setToken(null);
-        $this->get('session')->invalidate();
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
 
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -58,8 +63,12 @@ class HelperRegisterController extends Controller
     public function registerSuccessHelper(Request $request, $id)
     {
         // Logout user if one user is login.
-        $this->get('security.token_storage')->setToken(null);
-        $this->get('session')->invalidate();
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
 
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -85,8 +94,12 @@ class HelperRegisterController extends Controller
     public function registerHelper(Request $request, $id)
     {
         // Logout user if one user is login.
-        $this->get('security.token_storage')->setToken(null);
-        $this->get('session')->invalidate();
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
 
         $em = $this->getDoctrine()->getManager();
 
@@ -212,8 +225,12 @@ class HelperRegisterController extends Controller
     public function joinHelper(Request $request, $id)
     {
         // Logout user if one user is login.
-        $this->get('security.token_storage')->setToken(null);
-        $this->get('session')->invalidate();
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
 
         $em = $this->getDoctrine()->getManager();
 
