@@ -39,7 +39,7 @@
   color: #fff;
   cursor: pointer;
   outline: none;
-  padding: 18px;
+  padding: 20px;
   text-align: left;
   transition: .4s;
   width: 100%;
@@ -55,7 +55,8 @@
 .panel {
   background-color: white;
   max-height: 0;
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: scroll;
   transition: max-height .2s ease-out;
 }
 
@@ -98,7 +99,7 @@ button.active:after {
 .editor--list {
   list-style-type: none;
   padding: 0;
-  padding-right: 18px;
+  padding-right: 20px;
 
   li {
     width: 100%;
@@ -234,6 +235,14 @@ button.active:after {
   width: 20%;
   z-index: 1000;
 
+  .fa-caret-right {
+    display: block;
+  }
+
+  .fa-times {
+    display: none;
+  }
+
   &::after {
     background-color: $tertiary-color-1;
     content: '';
@@ -266,11 +275,13 @@ button.active:after {
   top: 50vh;
   transform: translateY(-50%) translateX(100%);
 
-  i {
-    position: absolute;
-    right: 15%;
-    top: 20%;
-    transform: translateX(-75%);
+  div:not(.tab-bar--actions) {
+    i {
+      position: absolute;
+      right: 15%;
+      top: 20%;
+      transform: translateX(-75%);
+    }
   }
 }
 
@@ -280,6 +291,7 @@ button.active:after {
 
 .list--pois {
   font-size: .9rem;
+  padding-right: 25px;
 
   .list--pois-items {
     &::before {
@@ -287,9 +299,15 @@ button.active:after {
       content: '';
       display: inline-block;
       height: 1.25rem;
-      margin-right: 1rem;
       vertical-align: middle;
       width: 1.25rem;
+    }
+
+    .btn--track--more {
+
+      i {
+        vertical-align: top;
+      }
     }
   }
 }
@@ -415,17 +433,13 @@ button.active:after {
   background: none;
   color: $tertiary-color-1;
   display: inline-block;
-  font-size: .65rem;
+  font-size: 1rem;
+  justify-self: flex-end;
   margin-left: .25rem;
 
   &:hover {
     opacity: .5;
   }
-}
-
-.btn--track--more {
-  font-size: 1rem;
-  justify-self: flex-end;
 }
 
 .btn--poi--settings {
@@ -620,6 +634,18 @@ input:focus + .slider-alternative {
   }
 }
 
+#pois-pan {
+  position: relative;
+
+  ::before {
+    position: absolute;
+  }
+
+  .track--text {
+    margin-left: 2rem;
+  }
+}
+
 @media screen and (min-width: $breakpoint-mediumlarge) and (max-width: $breakpoint-large) {
   .bar {
     width: 30%;
@@ -650,6 +676,33 @@ input:focus + .slider-alternative {
         display: none;
       }
     }
+
+    .fa-caret-right {
+      display: none;
+    }
+
+    .fa-times {
+      display: block;
+      margin: auto;
+      vertical-align: middle;
+    }
+
+    &:not(.bar--invisible) {
+      .btn--laterale-bar {
+        display: flex;
+        position: fixed;
+        background: $secondary-color-2;
+        bottom: 2rem;
+        right: 2rem;
+        width: 4rem;
+        height: 4rem;
+        font-size: 2rem;
+        line-height: 2rem;
+        border-radius: 50%;
+        top: initial;
+        transform: initial;
+      }
+    }
   }
 
   .bar--invisible {
@@ -665,14 +718,18 @@ input:focus + .slider-alternative {
         display: initial;
       }
     }
+
+    .fa-caret-right {
+      display: block;
+    }
+    
+    .fa-times {
+      display: none;
+    }
   }
 
   .map--container {
     width: 0;
-  }
-
-  .btn--laterale-bar {
-    display: none;
   }
 
   .dropdown-content {
