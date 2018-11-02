@@ -81,7 +81,7 @@ class HelperService
             }
         }
 
-        if (null == $obj['poi'] || '' == $obj['poi']) {
+        if ('' == $obj['poi']) {
             $status = false;
         }
 
