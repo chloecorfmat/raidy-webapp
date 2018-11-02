@@ -97,6 +97,14 @@ button.active:after {
   flex-direction: column;
   width: 90%;
 }
+
+.track--isCalibration{
+  margin-left: .3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .checkbox-item--label > div > span:nth-child(1){
   display: inline-block;
   white-space: nowrap;

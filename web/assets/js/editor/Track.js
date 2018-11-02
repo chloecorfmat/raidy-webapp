@@ -11,6 +11,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.decorator = null;
     this.visible = true;
+    this.isCalibration = false;
     this.waypoints = [];
 
     this.line = L.polyline([]);
@@ -80,6 +81,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         color: this.color,
         sportType: this.sportType,
         isVisible: this.visible,
+        isCalibration: this.calibration,
         trackpoints: this.line != null ? JSON.stringify(latlong) : null
       };
 
@@ -93,6 +95,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.name = track.name;
     this.sportType = track.sportType;
     this.isVisible = track.isVisible;
+    this.isCalibration = track.isCalibration;
     test = JSON.parse(track.trackpoints);
 
     this.line = L.polyline(test, {color: this.color}).addTo(mapManager.group);

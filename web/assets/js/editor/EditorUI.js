@@ -104,6 +104,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '                <span>' + newTrack.name + '</span>' +
         '                <span style="font-size : 0.75rem;"></br>(150,0 km)</span>' +
         '            </div>' +
+        '            <span class="track--isCalibration" title="Parcours issu d\'une calibration">' + (newTrack.isCalibration ? '<i class="fas fa-mobile-alt"></i></span>' : '' ) +
         '         </label>' +
         '         <button id="moreButton" data-id = "' + newTrack.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
         '             <i class="fas fa-ellipsis-v"></i>' +

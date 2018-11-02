@@ -39,6 +39,7 @@ class TrackService
 
         $track->setName($obj['name']);
         $track->setIsVisible(boolval($obj['isVisible']));
+        $track->setIsCalibration(boolval($obj['isCalibration']));
 
         $track->setColor($obj['color']);
         $track->setTrackPoints($obj['trackpoints']);
@@ -76,6 +77,7 @@ class TrackService
 
         $obj['trackpoints'] = $track->getTrackpoints();
         $obj['isVisible'] = $track->getisVisible();
+        $obj['isCalibration'] = $track->getisCalibration();
 
         return json_encode($obj);
     }
@@ -105,6 +107,7 @@ class TrackService
 
             $obj['trackpoints'] = $track->getTrackpoints();
             $obj['isVisible'] = $track->getisVisible();
+            $obj['isCalibration'] = $track->getisCalibration();
 
             $tracksObj[] = $obj;
         }
@@ -171,6 +174,10 @@ class TrackService
         }
 
         if (!isset($obj['isVisible'])) {
+            $status = false;
+        }
+
+        if (!isset($obj['isCalibration'])) {
             $status = false;
         }
 
