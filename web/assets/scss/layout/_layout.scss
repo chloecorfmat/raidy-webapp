@@ -54,3 +54,38 @@ main {
   max-height: 100vh;
   overflow: hidden;
 }
+
+.content--quarter {
+  overflow: hidden;
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    width: 25%;
+    box-sizing: border-box;
+
+    &:not(:last-child) {
+      margin-right: 3rem;
+    }
+  }
+}
+
+.content--half {
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    width: 50%;
+    box-sizing: border-box;
+
+    &:not(:last-child) {
+      margin-right: 3rem;
+    }
+  }
+}

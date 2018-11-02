@@ -31,6 +31,7 @@ class OrganizerHelpersController extends Controller
         $pois = $poiManager->findBy(['raid' => $id]);
 
         return $this->render('OrganizerBundle:Helpers:helpers.html.twig', [
+            'raid_id' => $id,
             'helpers' => $helpers,
             'pois' => $pois,
         ]);

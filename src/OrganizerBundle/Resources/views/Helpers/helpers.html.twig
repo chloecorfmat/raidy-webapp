@@ -1,5 +1,24 @@
 {% extends 'default/organizer.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <style>
+        .map {
+            height: 50%;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 980px) {
+            .map {
+                height: 50vh;
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
@@ -8,34 +27,52 @@
 {% endblock %}
 
 {% block body %}
-    <div>
-        <h1>Liste des bénévoles</h1>
-        <div class="table--container">
-            <table class="table" id="helpersList">
-                <caption class="sr-only">Liste des organisateurs</caption>
-                <thead class="table--headers">
+    <h1>Liste des bénévoles</h1>
+    <div class="content">
+        <div class="content--half">
+            <div class="table--container">
+                <table class="table" id="helpersList">
+                    <caption class="sr-only">Liste des organisateurs</caption>
+                    <thead class="table--headers">
                     <tr>
                         <th scope="col">Nom</th>
                         <th scope="col">Prénom</th>
                         <th scope="col">Poste souhaité</th>
                         <th scope="col">Poste affecté</th>
                     </tr>
-                </thead>
-                {% for helper in helpers %}
-                    <tr class="table--line">
-                        <td>{{ helper.user.lastname }}</td>
-                        <td>{{ helper.user.firstname }}</td>
-                        <td>{{ helper.favoritePoiType.type }}</td>
-                        <td>
-                            <select id="{{ helper.user.id }}">
-                                {% for poi in pois %}
-                                    <option value="{{ poi.id }}">{{ poi.name }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                    </tr>
-                {% endfor %}
-            </table>
+                    </thead>
+                    {% for helper in helpers %}
+                        <tr class="table--line">
+                            <td>{{ helper.user.lastname }}</td>
+                            <td>{{ helper.user.firstname }}</td>
+                            <td>{{ helper.favoritePoiType.type }}</td>
+                            <td>
+                                <select id="{{ helper.user.id }}">
+                                    {% for poi in pois %}
+                                        <option value="{{ poi.id }}">{{ poi.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="map--container content--half">
+            <div id="map" class="map"></div>
         </div>
     </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script>
+      var mapManager;
+      var raidID;
+      document.addEventListener("DOMContentLoaded", function () {
+        mapManager = new MapManager();
+        raidID = parseInt({{ raid_id }});
+        mapManager.initialize();
+      });
+    </script>
 {% endblock %}
