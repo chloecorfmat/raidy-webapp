@@ -1,23 +1,26 @@
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-      disableScroll()
-    }
+    console.log("more");
+    disableScroll();
 
     let dpdwn = this.nextElementSibling;
-    if ((e.view.screen.height - e.screenY ) < convertRem(12) ){
-      dpdwn.style.top = 'calc(${e.pageY}px - 17.0rem)';
-    } else {
-      dpdwn.style.top = 'calc(${e.pageY}px - 7.0rem)';
-    }
 
-    dpdwn.classList.toggle("show");
+    if(dpdwn.classList.contains("show")){
+        dpdwn.classList.remove("show");
+    }else{
+        let drop = document.querySelector(".dropdown-content.show");
+        if(drop != null){
+          drop.classList.remove("show");
+        }
+
+        if ((e.view.screen.height - e.screenY ) < convertRem(12) ){
+            dpdwn.style.top = 'calc(${e.pageY}px - 17.0rem)';
+        } else {
+            dpdwn.style.top = 'calc(${e.pageY}px - 7.0rem)';
+        }
+        dpdwn.classList.add("show");
+    }
   }
 
   function EditorUI () {
