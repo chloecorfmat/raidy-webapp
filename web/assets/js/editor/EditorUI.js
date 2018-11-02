@@ -1,7 +1,6 @@
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
-    console.log("more");
     disableScroll();
 
     let dpdwn = this.nextElementSibling;
