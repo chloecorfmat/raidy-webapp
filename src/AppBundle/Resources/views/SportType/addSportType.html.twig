@@ -1,0 +1,26 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('listSportType') }}">Liste des types de sports</a></li>
+        <li class="breadcrumb--list-item">Créer un sport</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+
+    <div class="main-form">
+        <h1>Créer un sport</h1>
+        <div>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}

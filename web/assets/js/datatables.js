@@ -1,6 +1,7 @@
 window.addEventListener('load', organizersList)
 window.addEventListener('load', helpers)
 window.addEventListener('load', poiTypesList)
+window.addEventListener('load', sportTypesList)
 
 var options = {
   labels: {
@@ -41,8 +42,19 @@ function poiTypesList (e) {
         colorId.color = this.dataset.poitypecolor
         console.log(this.dataset)
       }) */
-      // Needed to display modal to delete poi type.
-      displayModalToDelete() // eslint-disable-line no-undef
+      // Needed to display modal to delete poi type
+      displayModalToDeletePoiType() // eslint-disable-line no-undef
+    })
+  }
+}
+
+function sportTypesList (e) {
+  if (document.getElementById('sportTypesList') != null) {
+    var dataTableSportType = new DataTable('#sportTypesList', options) // eslint-disable-line no-undef, no-new
+
+    dataTableSportType.on('datatable.page', function (page) {
+      // Needed to display modal to delete sport type.
+      displayModalToDeleteSportType() // eslint-disable-line no-undef
     })
   }
 }

@@ -1,0 +1,83 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item">Liste des types de sports</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des types de sports</h1>
+
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert--success">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('danger') %}
+        <div class="alert alert--danger">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
+    <div class="table--container">
+        <table class="table" id="helpersList">
+            <caption class="sr-only">Liste des types de points d'intérêt</caption>
+            <thead class="table--headers">
+            <tr>
+                <th scope="col">Icone</th>
+                <th scope="col">Sport</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+
+            {% for sportType in sportTypes %}
+                <tr class="table--line">
+                    <td><img src="../uploads/sportTypes/{{ sportType.icon }}" width="100" alt="Icone {{ sportType.sport }}" /></td>
+                    <td>{{ sportType.sport }}</td>
+                    <td><a href="{{ path('editSportType', {'sportTypeId': sportType.id}) }}" class="btn">Editer</a>
+                        <button data-sporttype-id="{{ sportType.id }}" class="btn btn--danger btn--delete-sporttype">
+                            Supprimer
+                        </button> {#data-micromodal-trigger="delete-sporttype" #}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+    <a href="{{ path('addSportType') }}" class="btn--fab">
+        <span class="btn--fab-content">
+            <span>+</span>
+        </span>
+    </a>
+
+    <!-- [1] -->
+    <div id="delete-sporttype" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-sporttype-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-sporttype-title">
+                            Supprimer un sport
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-sporttype-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer ce sport ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <a href="" id="btn--delete-sporttype" class="btn btn--danger" data-base-url="/admin/sporttype/delete/">Supprimer</a>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+    </script>
+{% endblock %}

@@ -10,6 +10,7 @@ imports:
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: fr
+    sporttypes_img_directory: '%kernel.project_dir%/web/uploads/sporttypes'
     raids_img_directory: '%kernel.project_dir%/web/uploads/raids'
     tracks_gpx_directory: '%kernel.project_dir%/web/uploads/tracks/gpx'
 
