@@ -5,6 +5,10 @@
           integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
           crossorigin=""/>
     <style>
+        .map--container {
+            transition: none;
+        }
+        
         .map {
             height: 50%;
             width: 100%;
@@ -42,14 +46,30 @@
                     </tr>
                     </thead>
                     {% for helper in helpers %}
+                        {% if helper.poi and helper.poi.id %}
+                            {% set value = helper.poi.id %}
+                        {% else %}
+                            {% set value = '' %}
+                        {% endif %}
                         <tr class="table--line">
                             <td>{{ helper.user.lastname }}</td>
                             <td>{{ helper.user.firstname }}</td>
                             <td>{{ helper.favoritePoiType.type }}</td>
                             <td>
-                                <select id="{{ helper.user.id }}">
+                                <select id="{{ helper.id }}" class="assign-poi">
+                                        <option value="null">Non défini</option>
                                     {% for poi in pois %}
-                                        <option value="{{ poi.id }}">{{ poi.name }}</option>
+                                        <option
+                                            value="{{ poi.id }}"
+                                            data-longitude="{{ poi.longitude }}"
+                                            data-latitude="{{ poi.latitude }}"
+
+                                            {% if (value is defined) and (value == poi.id)  %}
+                                                selected
+                                            {% endif %}
+                                        >
+                                            {{ poi.name }}
+                                        </option>
                                     {% endfor %}
                                 </select>
                             </td>
