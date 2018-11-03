@@ -33,11 +33,11 @@ class PoiService
     {
         $poi = new Poi();
 
-        $poi->setName(htmlentities($obj['name']));
+        $poi->setName($obj['name']);
 
-        $poi->setLongitude(htmlentities($obj['longitude']));
-        $poi->setLatitude(htmlentities($obj['latitude']));
-        $poi->setRequiredHelpers(htmlentities($obj['requiredHelpers']));
+        $poi->setLongitude($obj['longitude']);
+        $poi->setLatitude($obj['latitude']);
+        $poi->setRequiredHelpers($obj['requiredHelpers']);
 
         $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
         $poiType = $poiTypeRepository->find($obj['poiType']);
