@@ -1,55 +1,122 @@
 .map--container {
-  flex-grow: 1;
   position: relative;
+  width: 80%;
+}
+
+.editor--container {
+  // 4rem is the height of the header.
+  height: calc(100vh - 4rem);
+
+  .map--container {
+    transition: width 1s linear;
+  }
 }
 
 .map {
   min-height: 100%;
   min-width: 100%;
 }
-
-// LEFT TAB BAR.
-
-.tab {
-  background-color: $main-color;
-  display: flex;
-  flex-direction: row;
-  height: 3rem;
-  justify-content: flex-start;
-  overflow: hidden;
+.map-tooltip {
+  background: #666;
+  border: 1px dashed #999;
+  color: white;
+  display: none;
+  font-family: sans-serif;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  opacity: .5;
+  padding: 10px;
   position: absolute;
-  width: 100%;
-
-  // Style the buttons that are used to open the tab content.
-  button {
-    background-color: inherit;
-    border: 0;
-    cursor: pointer;
-    outline: none;
-    padding: 14px 16px;
-    transition: .3s;
-  }
+  z-index: 1000;
 }
 
+.poi-marker{
+  border-radius: 3rem 3rem 0;
+  display: block;
+  height: 2rem;
+  position: relative;
+  transform: translateX(-1rem) translateY(-2rem) rotate(45deg);
+  width: 2rem;
+}
+
+// ACCORDION
+// Style the buttons that are used to open and close the accordion panel.
+.accordion {
+  background-color: $tertiary-color-1;
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  padding: 20px;
+  text-align: left;
+  transition: .4s;
+  width: 100%;
+}
+
+// Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover).
+.active,
+.accordion:hover {
+  background-color: $tertiary-color-1;
+}
+
+// Style the accordion panel. Note: hidden by default.
+.panel {
+  background-color: white;
+  max-height: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+  transition: max-height .2s ease-out;
+}
+
+.accordion:after {
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 900;
+  content: '\f107';
+  font-size: 1rem;
+  color: #fff;
+  float: right;
+  margin-left: 5px;
+
+}
+
+button.active:after {
+  content: '\f106'; // Unicode character for 'minus' sign (-).
+}
+
+// LEFT TAB BAR.
 // Style the tab content.
 .tabcontent {
-  border-top: 0;
-  display: none;
-  padding-top: 3rem;
-
   .btn--action {
     display: block;
     margin: 1rem auto;
   }
 }
 
+.track--text{
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+.checkbox-item--label > div > span:nth-child(1){
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .editor--list {
   list-style-type: none;
   padding: 0;
+  padding-right: 20px;
 
   li {
+    width: 100%;
+    display : flex;
+    flex-direction: row;
     padding: 8px 16px;
-
+    //position: relative;
+    justify-content: space-between;
+    align-items: center;
     &:last-child {
       border-bottom: 0;
     }
@@ -83,7 +150,7 @@
   margin: 2.5rem;
   overflow: hidden;
   padding: 1rem;
-  position: absolute;
+  position: fixed;
   right: 0;
   text-align: center;
   transition-duration: .5s;
@@ -91,7 +158,9 @@
   transition-timing-function: ease;
   vertical-align: middle;
   width: 5rem;
-  z-index: 1000;
+  z-index: 999;
+  border: 2px solid rgba(0, 0, 0, .2);
+  background-clip: padding-box;
 
   svg {
     fill: $tertiary-color-1;
@@ -116,12 +185,33 @@
 
 .editor--container {
   display: flex;
+  justify-content: space-between;
   width: 100%;
+
+  ::-webkit-scrollbar {
+    width: .75rem;
+  }
+
+  // Track.
+  ::-webkit-scrollbar-track {
+    background:#eeeeee;
+  }
+
+  // Handle.
+  ::-webkit-scrollbar-thumb {
+    background: #CCCCCC;
+  }
+
+  // Handle on hover.
+  ::-webkit-scrollbar-thumb:hover {
+    background: #DDDDDD;
+  }
 }
 
 .tab-bar {
   flex-grow: 1;
-  overflow: auto;
+  overflow-y: scroll;
+  overflow-x : visible;
 }
 
 .tablinks {
@@ -147,9 +237,19 @@
 .bar {
   display: flex;
   flex-direction: column;
-  max-width: 30%;
-  min-width: 20%;
+  left : 0;
   position: relative;
+  transition : width 1s ease;
+  width: 20%;
+  z-index: 1000;
+
+  .fa-caret-right {
+    display: block;
+  }
+
+  .fa-times {
+    display: none;
+  }
 
   &::after {
     background-color: $tertiary-color-1;
@@ -171,39 +271,51 @@
   font-size: 2rem;
   height: 3rem;
   margin: auto;
-  position: absolute;
+  /**position: absolute;
   right: 0;
   top: 50%;
-  transform: translateX(100%);
+  transform: translateX(100%);**/
   width: 1.5rem;
   z-index: 1000;
 
-  i {
-    position: absolute;
-    right: 15%;
-    top: 20%;
-    transform: translateX(-75%);
+  position: absolute;
+  right: 0;
+  top: 50vh;
+  transform: translateY(-50%) translateX(100%);
+
+  div:not(.tab-bar--actions) {
+    i {
+      position: absolute;
+      right: 15%;
+      top: 20%;
+      transform: translateX(-75%);
+    }
   }
 }
 
 .tab-bar--actions {
   margin: auto;
-  padding-bottom: 1rem;
 }
 
 .list--pois {
   font-size: .9rem;
+  padding-right: 25px;
 
   .list--pois-items {
     &::before {
-      // background: $main-color; // @TODO : How to set background color ?
       border-radius: 50%;
       content: '';
       display: inline-block;
       height: 1.25rem;
-      margin-right: 1rem;
       vertical-align: middle;
       width: 1.25rem;
+    }
+
+    .btn--track--more {
+
+      i {
+        vertical-align: top;
+      }
     }
   }
 }
@@ -213,14 +325,13 @@
 }
 
 .bar--invisible {
-  position: absolute;
+  position: relative;
+  width: 0;
+  transition : width 1s ease;
 
-  .btn--laterale-bar {
-    left: 0;
-    margin-left: 0;
-    position: fixed;
-    top: 50%;
-    transform: translateX(0%) translateY(100%);
+  & + .map--container{
+    width: 100%;
+    transition: width .5s linear;
   }
 }
 
@@ -229,6 +340,8 @@
 }
 
 .checkbox-item {
+  display: flex;
+  flex-direction: row;
   input {
     display: none;
 
@@ -262,6 +375,8 @@
   }
 
   .checkbox-item--label {
+    display: flex;
+    flex-direction: row;
     &:hover {
       cursor: pointer;
     }
@@ -276,11 +391,58 @@
   background: $grey-light;
 }
 
-.btn--track--edit {
+// Dropdown Button.
+.dropbtn {
+  color: $white;
+  padding: 16px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
+}
+
+// The container <div> - needed to position the dropdown content.
+.dropdown {
+  position: absolute;
+  display: inline-block;
+}
+
+// Dropdown Content (Hidden by Default).
+.dropdown-content {
+  cursor: pointer;
+  left : 100%;
+  display: none;
+  position: absolute;
+  background-color: #FFFFFF;
+  min-width: 12rem ;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
+  z-index: 99999999999;
+}
+
+// Links inside the dropdown.
+.dropdown-content {
+  a {
+    padding: 1.2rem 1.5rem;
+    text-decoration: none;
+    display: block;
+  }
+}
+
+// Change color of dropdown links on hover.
+.dropdown-content a:hover {
+  background-color: $grey-light;
+}
+
+// Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button).
+.show {
+  display: block;
+}
+
+.btn--track--more {
   background: none;
   color: $tertiary-color-1;
   display: inline-block;
-  font-size: .65rem;
+  font-size: 1rem;
+  justify-self: flex-end;
   margin-left: .25rem;
 
   &:hover {
@@ -288,7 +450,6 @@
   }
 }
 
-.btn--track--settings,
 .btn--poi--settings {
   background: none;
   color: $tertiary-color-1;
@@ -314,8 +475,7 @@
   }
 }
 
-
-// LEAF LET POP-UP
+// LEAF LET POP-UP.
 .leaflet-popup-content-wrapper {
   border-radius: 12px;
   padding: 0;
@@ -338,5 +498,250 @@
 
   p {
     margin: 0;
+  }
+}
+
+// TOGGLE.
+
+// The switch - the box around the slider.
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 2.4rem;
+  height: 1.4rem;
+  margin-left: .5rem;
+}
+
+// Hide default HTML checkbox.
+.switch {
+  input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+}
+
+// The slider.
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+
+.slider:before {
+  background-color: $white;
+  bottom: .16rem;
+  content: '';
+  height: 1rem;
+  left: .16rem;
+  position: absolute;
+  transition: .4s;
+  width: 1rem;
+}
+
+#map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-in,
+#map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-out {
+  color : $tertiary-color-1;
+}
+
+input:checked + .slider {
+  background-color: $tertiary-color-1;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 .08rem $tertiary-color-1;
+}
+
+input:checked + .slider:before {
+  transform: translateX(1rem);
+}
+
+.switch-label{
+  color : $tertiary-color-1;
+  display: inline;
+  font-family: 'Proxima Nova', 'SansSerif';
+  font-size: .75rem;
+  font-weight: bold;
+  padding: 0;
+  text-align: center;
+}
+
+.map-controller-container{
+  border-radius: 4px;
+  background-color: $white;
+  padding: .4rem;
+  border: 2px solid rgba(0, 0, 0, .2);
+  background-clip: padding-box;
+}
+
+// Rounded sliders.
+.slider.round {
+  border-radius: 1.4rem;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+// Alternative.
+.slider-alternative {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+
+.slider-alternative:before {
+  font-family: Fontastique;
+  content: 'X';
+  height: .5rem;
+  position: absolute;
+  right: .25rem;
+  top: .25rem;
+  transition: .4s;
+  width: .5rem;
+}
+
+input:checked + .slider-alternative {
+  background-color: $tertiary-color-1;
+}
+
+input:focus + .slider-alternative {
+  box-shadow: 0 0 .08rem $tertiary-color-1;
+}
+
+// Rounded sliders.
+.slider-alternative.round {
+  border-radius: 1.4rem;
+}
+
+.slider-alternative.round:before {
+  border-radius: 50%;
+}
+
+.switch-alternative {
+  display: inline-block;
+  height: 1.4rem;
+  position: relative;
+  width: 1.4rem;
+
+  // Hide default HTML checkbox.
+  input {
+    height: 0;
+    opacity: 0;
+    width: 0;
+  }
+}
+
+#pois-pan {
+  position: relative;
+
+  ::before {
+    position: absolute;
+  }
+
+  .track--text {
+    margin-left: 2rem;
+  }
+}
+
+@media screen and (min-width: $breakpoint-mediumlarge) and (max-width: $breakpoint-large) {
+  .bar {
+    width: 30%;
+  }
+
+  .bar--invisible {
+    position: relative;
+    width: 0;
+    transition : width 1s ease;
+
+    & + .map--container{
+      width: 100%;
+      transition: width .5s linear;
+    }
+  }
+
+  .map--container {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: $breakpoint-mediumlarge) {
+  .bar {
+    width: 100%;
+
+    + .map--container {
+      .fab {
+        display: none;
+      }
+    }
+
+    .fa-caret-right {
+      display: none;
+    }
+
+    .fa-times {
+      display: block;
+      margin: auto;
+      vertical-align: middle;
+    }
+
+    &:not(.bar--invisible) {
+      .btn--laterale-bar {
+        display: flex;
+        position: fixed;
+        background: $secondary-color-2;
+        bottom: 2rem;
+        right: 2rem;
+        width: 4rem;
+        height: 4rem;
+        font-size: 2rem;
+        line-height: 2rem;
+        border-radius: 50%;
+        top: initial;
+        transform: initial;
+      }
+    }
+  }
+
+  .bar--invisible {
+    position: relative;
+    width: 0;
+    transition : width 1s ease;
+
+    + .map--container {
+      width: 100%;
+      transition: width .5s linear;
+
+      .fab {
+        display: initial;
+      }
+    }
+
+    .fa-caret-right {
+      display: block;
+    }
+    
+    .fa-times {
+      display: none;
+    }
+  }
+
+  .map--container {
+    width: 0;
+  }
+
+  .dropdown-content {
+    left: initial;
+    right: 10%;
   }
 }

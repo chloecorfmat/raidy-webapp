@@ -9,44 +9,60 @@
 {% endblock %}
 
 {% block body %}
-    <div class="editor--container">
+    <div id="editorContainer" class="editor--container">
         <div class="bar">
             <div class="tab-bar">
-                <nav class="tab">
+                <!--nav class="tab">
                     <button class="tablinks" onclick="openTab(event, 'tracks-pan')">Tracés</button>
                     <button class="tablinks" onclick="openTab(event, 'pois-pan')">Points d'intéret</button>
-                </nav>
-
-                <div class="tabcontent" id="tracks-pan">
+                </nav-->
+                <button class="active accordion">Parcours</button>
+                <div class="active panel tabcontent" id="tracks-pan">
                     <button class="btn--action" id="addTrackButton">Ajouter un parcours</button>
                     <ul id="editor--list" class="editor--list checkbox-list">
                         <!-- FILLED IN JS-->
                     </ul>
                 </div>
-                <div class="tabcontent" id="pois-pan">
+                <button class="active accordion">Points d'intéret</button>
+                <div class=" panel tabcontent" id="pois-pan">
                     <ul id="list--pois" class="editor--list list--pois">
                         <!-- FILLED IN JS-->
                     </ul>
                 </div>
             </div>
             <div class="tab-bar--actions">
-                <a href="{{ path('displayRaid', {'id': id}) }}" class="btn btn--action btn--return">Retour</a>
+                <!--a href="{{ path('displayRaid', {'id': id}) }}" class="btn btn--action btn--return">Retour</a-->
                 <button aria-label="Fermer la barre latérale" class="btn--laterale-bar" id="btn--laterale-bar">
                     <i class="fas fa-caret-right"></i>
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
         <div class="map--container">
             <div id="map" class="map"></div>
-            <button id="addPoiButton" class="btn--add-poi">
+
+            <div class="fab">
+                <button id="addPoiButton" class="btn--add-poi">
                 <span class="btn--editor">
-
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.85 122.85">
-                          <path d="M122.85,48.06q0,12.15-6.75,19.44T96.93,74.79H74.79v48.06q-12.15,0-19.44-6.75T48.06,96.93V74.79H0Q0,62.64,6.75,55.35t19.17-7.29H48.06V0Q60.21,0,67.5,6.75t7.29,19.17V48.06Z" />
-                        </svg>
-
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.85 122.85">
+                       <path d="M122.85,48.06q0,12.15-6.75,19.44T96.93,74.79H74.79v48.06q-12.15,0-19.44-6.75T48.06,96.93V74.79H0Q0,62.64,6.75,55.35t19.17-7.29H48.06V0Q60.21,0,67.5,6.75t7.29,19.17V48.06Z" />
+                    </svg>
                 </span>
-            </button>
+                </button>
+                <ul class="fab-buttons">
+                    <li class="fab-buttons__item">
+                        <a href="#" class="fab-buttons__link" data-tooltip="Ajouter un tracé">
+                            <i class="icon-material icon-material_timeline"></i>
+                        </a>
+                    </li>
+                    <li class="fab-buttons__item">
+                        <a href="#" class="fab-buttons__link" data-tooltip="Ajouter un point d'intérêt">
+                            <i class="icon-material icon-material_gp"></i>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
         </div>
     </div>
 
@@ -70,18 +86,19 @@
                             <form name="addTrack">
                                 <div id="addTrack">
                                     <div class="form--item">
-                                        <label for="addTrack_name" class="required">Nom du parcours</label>
+                                        <label for="addTrack_name" class="required">
+                                            Nom du parcours <span class="input--required">*</span>
+                                        </label>
                                         <input class="form--input-text" type="text" id="addTrack_name"
                                                required="required" >
                                     </div>
                                     <div class="form--item">
-                                        <label for="addTrack_color" class="required">Couleur</label> <input
-                                                class="form--input-text" type="color" id="addTrack_color"
-                                                required="required">
+                                        <label for="addTrack_color" class="required">Couleur <span class="input--required">*</span></label>
+                                        <input class="form--input-text" type="color" id="addTrack_color">
                                     </div>
                                     <div class="actions">
-                                        <button type="button" id="addTrack_submit" class="btn">Ajouter un parcours</button>
                                         <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
+                                        <button type="button" id="addTrack_submit" class="btn">Ajouter un parcours</button>
                                     </div>
                                 </div>
                             </form>
@@ -112,14 +129,16 @@
                             <form name="editTrack">
                                 <div id="editTrack">
                                     <div class="form--item  form--input-focused">
-                                        <label for="editTrack_name" class="required">Nom du parcours</label>
+                                        <label for="editTrack_name" class="required">
+                                            Nom du parcours <span class="input--required">*</span>
+                                        </label>
                                         <input class="form--input-text" type="text" id="editTrack_name"
                                                required="required" >
                                     </div>
                                     <div class="form--item  form--input-focused">
-                                        <label for="editTrack_color" class="required">Couleur</label> <input
-                                                class="form--input-text" type="color" id="editTrack_color"
-                                                required="required">
+                                        <label for="editTrack_color" class="required">
+                                            Couleur <span class="input--required">*</span></label>
+                                        <input class="form--input-text" type="color" id="editTrack_color">
                                     </div>
                                     <input class="form--input-text" type="hidden" id="editTrack_id" >
                                     <div class="actions">
@@ -155,24 +174,30 @@
                             <form name="addPoi">
                                 <div id="addPoi">
                                     <div class="form--item">
-                                        <label for="addPoi_name" class="required">Nom du point d'intérêt</label>
+                                        <label for="addPoi_name" class="required">
+                                            Nom du point d'intérêt <span class="input--required">*</span>
+                                        </label>
                                         <input class="form--input-text" type="text" id="addPoi_name" required="required" >
                                     </div>
                                     <div class="form--item">
-                                        <label for="addPoi_nbhelper" class="required">Nombre de bénévoles requis</label>
-                                        <input class="form--input-text" type="number" id="addPoi_nbhelper" required="required">
+                                        <label for="addPoi_nbhelper" class="required">
+                                            Nombre de bénévoles requis <span class="input--required">*</span>
+                                        </label>
+                                        <input class="form--input-text" type="number" id="addPoi_nbhelper" required="required" min="0">
                                     </div>
                                     <div class="form--item form--item-select">
-                                        <label for="addPoi_type" class="required">Type du point d'intérêt</label>
-                                        <select id="addPoi_type">
+                                        <label for="addPoi_type" class="required">
+                                            Type du point d'intérêt <span class="input--required">*</span>
+                                        </label>
+                                        <select id="addPoi_type" required>
                                             <option value="1">Parking</option>
                                             <option value="2" >Point dangereux</option>
                                             <option value="3">Restauration</option>
                                         </select>
                                     </div>
                                     <div class="actions">
-                                        <button type="button" id="addPoi_submit">Ajouter</button>
                                         <button type="button" id="addPoi_cancel" class="btn--danger" data-micromodal-close>Annuler</button>
+                                        <button type="button" id="addPoi_submit">Ajouter</button>
                                     </div>
                                 </div>
                             </form>
@@ -203,16 +228,22 @@
                             <form name="editPoi">
                                 <div id="editPoi">
                                     <div class="form--item form--input-focused">
-                                        <label for="editPoi_name" class="required">Nom du point d'intérêt</label>
+                                        <label for="editPoi_name" class="required">
+                                            Nom du point d'intérêt <span class="input--required">*</span>
+                                        </label>
                                         <input class="form--input-text" type="text" id="editPoi_name" required="required" >
                                     </div>
                                     <div class="form--item form--input-focused">
-                                        <label for="editPoi_nbhelper" class="required">Nombre de bénévoles requis</label>
+                                        <label for="editPoi_nbhelper" class="required">
+                                            Nombre de bénévoles requis <span class="input--required">*</span>
+                                        </label>
                                         <input class="form--input-text" type="number" id="editPoi_nbhelper" required="required">
                                     </div>
                                     <div class="form--item form--item-select">
-                                        <label for="editPoi_type" class="required">Type du point d'intérêt</label>
-                                        <select id="editPoi_type">
+                                        <label for="editPoi_type" class="required">
+                                            Type du point d'intérêt <span class="input--required">*</span>
+                                        </label>
+                                        <select id="editPoi_type" required>
                                             <option value="1" selected>Parking</option>
                                             <option value="2" >Point dangereux</option>
                                             <option value="3">Restauration</option>
@@ -225,6 +256,61 @@
                                     </div>
                                 </div>
                             </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- [1] -->
+    <div id="delete-track" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-track-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-track-title">
+                            Supprimer un parcours
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-track-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer ce parcours ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <button type="button" class="btn btn--danger" id="btn--delete-track"  data-id="">Supprimer</button>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- [1] -->
+    <div id="delete-poi" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-poi-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-poi-title">
+                            Supprimer un point d'intérêt
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-poi-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer ce point d'intérêt ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <button type="button" class="btn btn--danger" id="btn--delete-poi"  data-id="">Supprimer</button>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
                         </div>
                     </div>
                 </div>
@@ -247,14 +333,9 @@
         var mapManager;
         var raidID;
         document.addEventListener("DOMContentLoaded", function () {
-            raidID = parseInt({{ id }});
             mapManager = new MapManager();
-            mapManager.markerIconUrl = '{{ asset('assets/images/map-marker-main.svg') }}';
+            raidID = parseInt({{ id }});
             mapManager.initialize();
-            /*mapManager.addPoi(0, "Enssat", [48.729644, -3.462390], '#78e08f');
-            mapManager.addPoi(1, "Enssat2", [48.729644, -3.463000], '#f74a45');
-            mapManager.addPoi(2, "Enssat3", [48.729644, -3.464000], '#a88f73');*/
-
         });
     </script>
 

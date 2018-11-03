@@ -149,28 +149,28 @@ class TrackService
         $status = true;
 
         if ($checkId) {
-            if (null == $obj['id'] || '' == $obj['id']) {
+            if (!isset($obj['id']) || '' == $obj['id']) {
                 $status = false;
             }
         }
 
-        if (null == $obj['name'] || '' == $obj['name']) {
+        if (!isset($obj['name']) || '' == $obj['name']) {
             $status = false;
         }
 
-        if (null == $obj['color'] || '' == $obj['color']) {
+        if (!isset($obj['color']) || '' == $obj['color']) {
             $status = false;
         }
 
-        if (null == $obj['sportType'] || '' == $obj['sportType']) {
+        if (!isset($obj['sportType']) || '' == $obj['sportType']) {
             $status = false;
         }
 
-        if (null == $obj['trackpoints'] || '' == $obj['trackpoints']) {
+        if (!isset($obj['trackpoints'])) {
             $status = false;
         }
 
-        if (null == $obj['isVisible'] || '' == $obj['isVisible']) {
+        if (!isset($obj['isVisible'])) {
             $status = false;
         }
 

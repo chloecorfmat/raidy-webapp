@@ -25,6 +25,7 @@
     "gulp-sass": "^4.0.1",
     "gulp-sass-lint": "^1.4.0",
     "gulp-uglify": "^3.0.1",
+    "leaflet-polylinedecorator": "^1.6.0",
     "uglify-js": "^3.4.9"
   }
 }
