@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Response;
 class TrackController extends AjaxAPIController
 {
     /**
- * @Rest\View(statusCode=Response::HTTP_CREATED)
+ * @Rest\View(statusCode=Response::HTTP_OK)
  * @Rest\Get("/api/organizer/raid/{raidId}/track")
  *
  * @param Request $request request
@@ -42,7 +42,7 @@ class TrackController extends AjaxAPIController
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Get("/api/helper/raid/{raidId}/track")
      *
      * @param Request $request request
@@ -162,7 +162,7 @@ class TrackController extends AjaxAPIController
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
+     * @Rest\View(statusCode=Response::HTTP_OK, serializerGroups={"auth-token"})
      * @Rest\Delete("/api/organizer/raid/{raidId}/track/{trackId}")
      *
      * @param Request $request request

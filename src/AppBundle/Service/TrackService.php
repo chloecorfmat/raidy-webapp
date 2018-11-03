@@ -126,6 +126,7 @@ class TrackService
     {
         $track->setName($obj['name']);
         $track->setIsVisible(boolval($obj['isVisible']));
+        $track->setIsCalibration(boolval($obj['isCalibration']));
 
         $track->setColor($obj['color']);
         $track->setTrackPoints($obj['trackpoints']);
