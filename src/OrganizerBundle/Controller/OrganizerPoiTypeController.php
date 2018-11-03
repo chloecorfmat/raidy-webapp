@@ -97,7 +97,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
         $form = $this->createFormBuilder($formPoiType)
             ->add('type', TextType::class, ['label' => 'Type de point d\'intérêt'])
             ->add('color', ColorType::class, ['label' => 'Couleur'])
-            ->add('submit', SubmitType::class, ['label' => 'Créer un type de point d\'intérêt'])
+            ->add('submit', SubmitType::class, ['label' => 'Editer le type de point d\'intérêt'])
             ->getForm();
 
         $form->handleRequest($request);
