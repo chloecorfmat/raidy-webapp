@@ -241,7 +241,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   });
 
 // ADD POI SUBMIT
-  document.getElementById('addPoi_form').addEventListener('form', function (e) {
+  document.getElementById('addPoi_form').addEventListener('submit', function (e) {
     e.preventDefault();
     var poiName = document.getElementById('addPoi_name').value;
     var poiType = document.getElementById('addPoi_type').value;
