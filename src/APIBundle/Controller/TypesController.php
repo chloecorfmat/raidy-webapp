@@ -17,7 +17,7 @@ class TypesController extends AjaxAPIController
 {
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Get("/api/organizer/poitype")
      *
      * @param Request $request
@@ -44,7 +44,7 @@ class TypesController extends AjaxAPIController
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Get("/api/sporttype")
      *
      * @param Request $request

@@ -60,6 +60,11 @@ class Track
     protected $isVisible;
 
     /**
+     * @ORM\Column(name="isCalibration", type="boolean", nullable=true)
+     */
+    protected $isCalibration = false;
+
+    /**
      * Track constructor.
      */
     public function __construct()
@@ -176,5 +181,21 @@ class Track
     public function setIsVisible($isVisible)
     {
         $this->isVisible = $isVisible;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisCalibration()
+    {
+        return $this->isCalibration;
+    }
+
+    /**
+     * @param mixed $isCalibration
+     */
+    public function setIsCalibration($isCalibration)
+    {
+        $this->isCalibration = $isCalibration;
     }
 }
