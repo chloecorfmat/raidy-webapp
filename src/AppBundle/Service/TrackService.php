@@ -37,11 +37,11 @@ class TrackService
             $track->setId($obj['id']);
         }
 
-        $track->setName(htmlentities($obj['name']));
+        $track->setName($obj['name']);
         $track->setIsVisible(boolval($obj['isVisible']));
         $track->setIsCalibration(boolval($obj['isCalibration']));
 
-        $track->setColor(htmlentities($obj['color']));
+        $track->setColor($obj['color']);
         $track->setTrackPoints($obj['trackpoints']);
 
         $sportRepository = $this->em->getRepository('AppBundle:SportType');
@@ -65,8 +65,8 @@ class TrackService
         $obj = [];
 
         $obj['id'] = $track->getId();
-        $obj['name'] = $track->getName();
-        $obj['color'] = $track->getColor();
+        $obj['name'] = htmlentities($track->getName());
+        $obj['color'] = htmlentities($track->getColor());
         $obj['raid'] = $track->getRaid()->getId();
 
         if (null != $track->getSportType()) {
@@ -95,8 +95,8 @@ class TrackService
             $obj = [];
 
             $obj['id'] = $track->getId();
-            $obj['name'] = $track->getName();
-            $obj['color'] = $track->getColor();
+            $obj['name'] = htmlentities($track->getName());
+            $obj['color'] = htmlentities($track->getColor());
             $obj['raid'] = $track->getRaid()->getId();
 
             if (null != $track->getSportType()) {
@@ -124,10 +124,10 @@ class TrackService
      */
     public function updateTrackFromArray($track, $raidId, $obj)
     {
-        $track->setName(htmlentities($obj['name']));
+        $track->setName($obj['name']);
         $track->setIsVisible(boolval($obj['isVisible']));
 
-        $track->setColor(htmlentities($obj['color']));
+        $track->setColor($obj['color']);
         $track->setTrackPoints($obj['trackpoints']);
 
         $sportRepository = $this->em->getRepository('AppBundle:SportType');
@@ -157,7 +157,7 @@ class TrackService
             }
         }
 
-        if (!isset($obj['name']) || '' == $obj['name']) {
+        if (!isset($obj['name']) || '' == $obj['name'] || strlen($obj['name'] > 100)) {
             $status = false;
         }
 

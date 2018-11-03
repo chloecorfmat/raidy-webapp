@@ -60,10 +60,10 @@ class PoiService
         $obj = [];
 
         $obj['id'] = $poi->getId();
-        $obj['name'] = $poi->getName();
-        $obj['longitude'] = $poi->getLongitude();
-        $obj['latitude'] = $poi->getLatitude();
-        $obj['requiredHelpers'] = $poi->getRequiredHelpers();
+        $obj['name'] = htmlentities($poi->getName());
+        $obj['longitude'] = htmlentities($poi->getLongitude());
+        $obj['latitude'] = htmlentities($poi->getLatitude());
+        $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
         $obj['raid'] = $poi->getRaid()->getId();
 
         if (null != $poi->getPoiType()) {
@@ -84,11 +84,11 @@ class PoiService
      */
     public function updatePoiFromArray($poi, $raidId, $obj)
     {
-        $poi->setName(htmlentities($obj['name']));
+        $poi->setName($obj['name']);
 
-        $poi->setLongitude(htmlentities($obj['longitude']));
-        $poi->setLatitude(htmlentities($obj['latitude']));
-        $poi->setRequiredHelpers(htmlentities($obj['requiredHelpers']));
+        $poi->setLongitude($obj['longitude']);
+        $poi->setLatitude($obj['latitude']);
+        $poi->setRequiredHelpers($obj['requiredHelpers']);
 
         $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
         $poiType = $poiTypeRepository->find($obj['poiType']);
@@ -114,10 +114,10 @@ class PoiService
             $obj = [];
 
             $obj['id'] = $poi->getId();
-            $obj['name'] = $poi->getName();
-            $obj['longitude'] = $poi->getLongitude();
-            $obj['latitude'] = $poi->getLatitude();
-            $obj['requiredHelpers'] = $poi->getRequiredHelpers();
+            $obj['name'] = htmlentities($poi->getName());
+            $obj['longitude'] = htmlentities($poi->getLongitude());
+            $obj['latitude'] = htmlentities($poi->getLatitude());
+            $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
             $obj['raid'] = $poi->getRaid()->getId();
 
             if (null != $poi->getPoiType()) {
@@ -140,34 +140,33 @@ class PoiService
      */
     public function checkDataArray($obj, $checkId)
     {
-        $status = true;
 
         if ($checkId) {
             if (!isset($obj['id']) || '' == $obj['id']) {
-                $status = false;
+                return false;
             }
         }
 
-        if (!isset($obj['name']) || '' == $obj['name']) {
-            $status = false;
+        if (!isset($obj['name']) || '' == $obj['name'] || strlen($obj['name'] > 45)) {
+            return false;
         }
 
         if (!isset($obj['longitude']) || '' == $obj['longitude']) {
-            $status = false;
+            return false;
         }
 
         if (!isset($obj['latitude']) || '' == $obj['latitude']) {
-            $status = false;
+            return false;
         }
 
         if (!isset($obj['requiredHelpers']) || $obj['requiredHelpers'] < 0) {
-            $status = false;
+            return false;
         }
 
         if (!isset($obj['poiType']) || '' == $obj['poiType']) {
-            $status = false;
+            return false;
         }
 
-        return $status;
+        return true;
     }
 }
