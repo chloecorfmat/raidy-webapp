@@ -1,8 +1,8 @@
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
-
-    let dpdwn = this.nextElementSibling;
+    e.stopPropagation();
+    var dpdwn = this.nextElementSibling;
 
     if(dpdwn.classList.contains("show")){
         dpdwn.classList.remove("show");
@@ -14,10 +14,12 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
           drop.classList.remove("show");
         }
 
-        if ((e.view.screen.height - e.screenY ) < convertRem(12) ){
-            dpdwn.style.top = 'calc(${e.pageY}px - 17.0rem)';
+        let clientHeight = document.querySelector('body').clientHeight;
+
+        if ((clientHeight - e.screenY ) < convertRem(12) ){
+            dpdwn.style.top = 'calc('+e.pageY+'px - 13.0rem)';
         } else {
-            dpdwn.style.top = 'calc(${e.pageY}px - 7.0rem)';
+            dpdwn.style.top = 'calc('+e.pageY+'px - 7.0rem)';
         }
         dpdwn.classList.add("show");
     }
