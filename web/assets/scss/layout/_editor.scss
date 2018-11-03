@@ -64,7 +64,7 @@
   background-color: white;
   max-height: 0;
   overflow-x: hidden;
-  overflow-y: scroll;
+  overflow-y: hidden;
   transition: max-height .2s ease-out;
 }
 
@@ -97,6 +97,14 @@ button.active:after {
   flex-direction: column;
   width: 90%;
 }
+
+.track--isCalibration{
+  margin-left: .3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 .checkbox-item--label > div > span:nth-child(1){
   display: inline-block;
   white-space: nowrap;
@@ -455,7 +463,6 @@ button.active:after {
   color: $tertiary-color-1;
   display: inline-block;
   font-size: .95rem;
-  margin-left: .25rem;
 
   &:hover {
     opacity: .5;
@@ -642,17 +649,6 @@ input:focus + .slider-alternative {
   }
 }
 
-#pois-pan {
-  position: relative;
-
-  ::before {
-    position: absolute;
-  }
-
-  .track--text {
-    margin-left: 2rem;
-  }
-}
 
 @media screen and (min-width: $breakpoint-mediumlarge) and (max-width: $breakpoint-large) {
   .bar {
@@ -743,5 +739,9 @@ input:focus + .slider-alternative {
   .dropdown-content {
     left: initial;
     right: 10%;
+
+    i {
+      margin-right: .5rem;
+    }
   }
 }

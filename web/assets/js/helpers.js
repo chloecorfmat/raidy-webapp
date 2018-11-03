@@ -11,7 +11,13 @@ function helpersList() {
       let xhr_object = new XMLHttpRequest();
       xhr_object.open('PATCH', '/organizer/raid/' + raidID + '/helper/' + this.id, true);
       xhr_object.setRequestHeader('Content-Type', 'application/json');
-      xhr_object.send(JSON.stringify({poi : parseInt(this.value)}));
+      let data;
+      if (this.value === 'null') {
+        data = 'null';
+      } else {
+        data = parseInt(this.value);
+      }
+      xhr_object.send(JSON.stringify({poi : data}));
     });
   })
 }

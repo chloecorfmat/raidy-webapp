@@ -11,6 +11,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.decorator = null;
     this.visible = true;
+    this.calibration = false;
     this.waypoints = [];
 
     this.line = L.polyline([]);
@@ -80,6 +81,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         color: this.color,
         sportType: this.sportType,
         isVisible: this.visible,
+        isCalibration: this.calibration,
         trackpoints: this.line != null ? JSON.stringify(latlong) : null
       };
 
@@ -93,6 +95,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.name = track.name;
     this.sportType = track.sportType;
     this.isVisible = track.isVisible;
+    this.isCalibration = track.isCalibration;
     test = JSON.parse(track.trackpoints);
 
     this.line = L.polyline(test, {color: this.color}).addTo(mapManager.group);
@@ -123,6 +126,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     xhr_object.open('PATCH', '/organizer/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(this.toJSON());
+
+    //Encode html entities to display purpose only
+    this.name = htmlentities.encode(this.name);
 
     li = document.getElementById('track-li-' + this.id);
     this.calculDistance();

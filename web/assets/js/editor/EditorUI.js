@@ -1,23 +1,28 @@
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    for (var i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-      disableScroll()
-    }
+    e.stopPropagation();
+    var dpdwn = this.nextElementSibling;
 
-    let dpdwn = this.nextElementSibling;
-    if ((e.view.screen.height - e.screenY ) < convertRem(12) ){
-      dpdwn.style.top = 'calc(${e.pageY}px - 17.0rem)';
-    } else {
-      dpdwn.style.top = 'calc(${e.pageY}px - 7.0rem)';
-    }
+    if(dpdwn.classList.contains("show")){
+        dpdwn.classList.remove("show");
+    }else{
+        disableScroll();
 
-    dpdwn.classList.toggle("show");
+        let drop = document.querySelector(".dropdown-content.show");
+        if(drop != null){
+          drop.classList.remove("show");
+        }
+
+        let clientHeight = document.querySelector('body').clientHeight;
+
+        if ((clientHeight - e.screenY ) < convertRem(12) ){
+            dpdwn.style.top = 'calc('+e.pageY+'px - 13.0rem)';
+        } else {
+            dpdwn.style.top = 'calc('+e.pageY+'px - 7.0rem)';
+        }
+        dpdwn.classList.add("show");
+    }
   }
 
   function EditorUI () {
@@ -63,7 +68,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     li.pseudoStyle('before', 'background-color', poi.color);
     li.querySelector('.btn--poi--settings').addEventListener('click', function () {
       document.getElementById('editPoi_id').value = poi.id;
-      document.getElementById('editPoi_name').value = poi.name;
+      document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);
       document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
       (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
       MicroModal.show('edit-poi-popin');
@@ -104,6 +109,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '                <span>' + newTrack.name + '</span>' +
         '                <span style="font-size : 0.75rem;"></br>(150,0 km)</span>' +
         '            </div>' +
+        '            <span class="track--isCalibration" title="Parcours issu d\'une calibration">' + (newTrack.isCalibration ? '<i class="fas fa-mobile-alt"></i></span>' : '' ) +
         '         </label>' +
         '         <button id="moreButton" data-id = "' + newTrack.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
         '             <i class="fas fa-ellipsis-v"></i>' +
@@ -170,7 +176,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         let track = mapManager.tracksMap.get(id);
 
         btn.addEventListener('click', function () {
-          document.querySelector('#editTrack_name').value = track.name;
+          document.querySelector('#editTrack_name').value = htmlentities.decode(track.name);
           document.querySelector('#editTrack_color').value = track.color;
           document.querySelector('#editTrack_id').value = track.id;
 

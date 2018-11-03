@@ -44,7 +44,7 @@ class PoiController extends AjaxAPIController
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Get("/api/helper/raid/{raidId}/poi/user/{userId}")
      *
      * @param Request $request
@@ -165,7 +165,7 @@ class PoiController extends AjaxAPIController
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Delete("/api/organizer/raid/{raidId}/poi/{poiId}")
      *
      * @param Request $request
