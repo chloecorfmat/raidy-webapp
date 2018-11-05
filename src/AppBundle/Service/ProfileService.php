@@ -16,6 +16,7 @@ class ProfileService
     {
         $obj = [];
 
+        $obj['id'] = $user->getId();
         $obj['username'] = $user->getUsername();
         $obj['firstname'] = $user->getFirstName();
         $obj['lastname'] = $user->getLastName();
