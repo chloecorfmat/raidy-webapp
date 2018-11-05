@@ -44,7 +44,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
     li.innerHTML =
       //'<span class="test">' +
-      '             <div class="track--text">' +
+      '             <div data-id = "' + poi.id + '" class="track--text">' +
       '                <span>' + poi.name + '</span>' +
       '            </div>' +
       //'         </span>' +
@@ -57,6 +57,17 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       '          </div>';
 
     li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
+
+    li.querySelector('.track--text').addEventListener('click', function(e){
+
+      let poi = mapManager.poiMap.get(parseInt(this.dataset.id));
+      if (!poi.marker.isPopupOpen()){
+        mapManager.map.panTo( poi.marker.getLatLng());
+        console.log(mapManager.map.getZoom())
+      }
+      //   mapManager.map.setZoom(zoom);
+      poi.marker.togglePopup();
+    });
 
     let btnDelete = li.querySelector('.btn--poi--delete');
     btnDelete.addEventListener("click", function () {
@@ -126,6 +137,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
       newTrack.calculDistance();
       li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
+
 
       // TRACK SELECTION LISTENER
       li.querySelectorAll('input').forEach(function (input) {

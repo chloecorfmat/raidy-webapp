@@ -96,6 +96,7 @@ button.active:after {
   display: flex;
   flex-direction: column;
   width: 90%;
+  cursor: pointer;
 }
 
 .track--isCalibration{
