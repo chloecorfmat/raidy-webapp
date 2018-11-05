@@ -140,14 +140,15 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
         controlElement.innerHTML =
           '<div class="map-controller-container" >' +
-          '    <span class="switch-label">Édition du parcours</span>' +
-          '    <label class="switch">' +
-          '        <input type="checkbox">' +
-          '         <span class="slider round"></span>' +
-          '     </label>' +
+          '<span class="switch-label">Édition du parcours</span>' +
+          '<button class="btn-leave-track-edit">' +
+          'X'+
+          '</button>' +
           '</div>';
         // Continue implementing the control here.
-        controlElement.querySelector("input[type='checkbox']").addEventListener('change',function(){
+        controlElement.querySelector(".btn-leave-track-edit").addEventListener('click',function(e){
+          e.preventDefault();
+          e.stopImmediatePropagation();
           mapManager.switchMode(EditorMode.READING);
           this.checked = true;
           mapManager.displayTrackButton(false);
@@ -174,9 +175,10 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
           panel.style.maxHeight = panel.scrollHeight + "px";
         }
       });
+      acc[i].nextElementSibling.style.maxHeight = acc[i].nextElementSibling.scrollHeight +"px";
     }
-    document.getElementById("tracks-pan").style.maxHeight = 0;
-    document.getElementById("pois-pan").style.maxHeight = 0;
+   //document.getElementById("tracks-pan").style.maxHeight = "3rem";
+  //  document.getElementById("pois-pan").style.maxHeight = 0;
   });
 
   document.getElementById('addPoiButton').addEventListener('click', function () {

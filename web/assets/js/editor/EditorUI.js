@@ -28,6 +28,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
   function EditorUI () {
     this.trackElements = new Map();
     this.poiElements = new Map();
+
   }
   EditorUI.prototype.addPoi = function(poi){
     let li = document.createElement('li');

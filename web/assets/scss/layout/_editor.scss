@@ -3,6 +3,17 @@
   width: 80%;
 }
 
+.btn-leave-track-edit{
+  border-radius: 3rem;
+  width: 2rem;
+  height: 2rem;
+  padding: 0.5rem !important;
+  margin: 0rem !important;
+  margin-left: 0.5rem !important;
+  font-family: Fontastique;
+  background-color: $live-color;
+}
+
 .editor--container {
   // 4rem is the height of the header.
   height: calc(100vh - 4rem);
@@ -746,3 +757,5 @@ input:focus + .slider-alternative {
     }
   }
 }
+
+

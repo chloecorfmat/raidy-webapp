@@ -157,6 +157,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         var res = this.tracksMap.get(this.currentEditID);
         currentTrack = this.tracksMap.get(this.currentEditID);
         currentTrack.setEditable(true);
+        if(currentTrack.line.isEmpty()){
+          currentTrack.line.editor.continueForward();
+        }
         break;
       case EditorMode.READING :
         document.getElementById('map').style.cursor = 'grab';
@@ -260,7 +263,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           for (poi of pois) {
             mapManager.addPoi(poi);
           }
-          mapManager.map.fitBounds(mapManager.group.getBounds());
+          if(mapManager.group.getLayers().length > 0) {
+            mapManager.map.fitBounds(mapManager.group.getBounds());
+          }
         }
       }
       mapManager.switchMode(EditorMode.READING);
