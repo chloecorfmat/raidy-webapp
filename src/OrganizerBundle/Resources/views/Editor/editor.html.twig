@@ -34,6 +34,7 @@
                 <!--a href="{{ path('displayRaid', {'id': id}) }}" class="btn btn--action btn--return">Retour</a-->
                 <button aria-label="Fermer la barre latérale" class="btn--laterale-bar" id="btn--laterale-bar">
                     <i class="fas fa-caret-right"></i>
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
@@ -51,7 +52,7 @@
                 <ul class="fab-buttons">
                     <li class="fab-buttons__item">
                         <a href="#" class="fab-buttons__link" data-tooltip="Ajouter un tracé">
-                            <i class="icon-material icon-material_timeline">        </i>
+                            <i class="icon-material icon-material_timeline"></i>
                         </a>
                     </li>
                     <li class="fab-buttons__item">
@@ -82,20 +83,21 @@
                     </header>
                     <div id="add-track-content" class="modal--content">
                         <div>
-                            <form name="addTrack">
+                            <form name="addTrack" id="addTrack_form">
                                 <div id="addTrack">
                                     <div class="form--item">
-                                        <label for="addTrack_name" class="required">Nom du parcours</label>
+                                        <label for="addTrack_name" class="required">
+                                            Nom du parcours <span class="input--required">*</span>
+                                        </label>
                                         <input class="form--input-text" type="text" id="addTrack_name"
-                                               required="required" >
+                                               required="required" maxlength="100">
                                     </div>
                                     <div class="form--item">
-                                        <label for="addTrack_color" class="required">Couleur</label> <input
-                                                class="form--input-text" type="color" id="addTrack_color"
-                                                required="required">
+                                        <label for="addTrack_color" class="required">Couleur <span class="input--required">*</span></label>
+                                        <input class="form--input-text" type="color" id="addTrack_color">
                                     </div>
                                     <div class="actions">
-                                        <button type="button" id="addTrack_submit" class="btn">Ajouter un parcours</button>
+                                        <button type="submit" id="addTrack_submit" class="btn">Ajouter un parcours</button>
                                         <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
                                     </div>
                                 </div>
@@ -124,22 +126,25 @@
                     </header>
                     <div id="edit-track-content" class="modal--content">
                         <div>
-                            <form name="editTrack">
+                            <form name="editTrack" id="editTrack_form">
                                 <div id="editTrack">
                                     <div class="form--item  form--input-focused">
-                                        <label for="editTrack_name" class="required">Nom du parcours</label>
+                                        <label for="editTrack_name" class="required">
+                                            Nom du parcours <span class="input--required">*</span>
+                                        </label>
                                         <input class="form--input-text" type="text" id="editTrack_name"
-                                               required="required" >
+                                               required="required" maxlength="100">
                                     </div>
                                     <div class="form--item  form--input-focused">
-                                        <label for="editTrack_color" class="required">Couleur</label> <input
-                                                class="form--input-text" type="color" id="editTrack_color"
-                                                required="required">
+                                        <label for="editTrack_color" class="required">
+                                            Couleur <span class="input--required">*</span></label>
+                                        <input class="form--input-text" type="color" id="editTrack_color">
                                     </div>
                                     <input class="form--input-text" type="hidden" id="editTrack_id" >
                                     <div class="actions">
-                                        <button type="button" class="btn btn--danger" id="editTrack_delete">Supprimer</button>
-                                        <button type="button" id="editTrack_submit" class="btn">Mettre à jour</button>
+                                        <button type="submit" id="editTrack_submit" class="btn">Mettre à jour</button>
+                                        <button type="button" class="btn btn--danger" id="editTrack_delete">Annuler</button>
+
                                     </div>
                                 </div>
                             </form>
@@ -167,26 +172,33 @@
                     </header>
                     <div id="add-poi-content" class="modal--content">
                         <div>
-                            <form name="addPoi">
+                            <form name="addPoi" id="addPoi_form">
                                 <div id="addPoi">
                                     <div class="form--item">
-                                        <label for="addPoi_name" class="required">Nom du point d'intérêt</label>
-                                        <input class="form--input-text" type="text" id="addPoi_name" required="required" >
+                                        <label for="addPoi_name" class="required">
+                                            Nom du point d'intérêt <span class="input--required">*</span>
+                                        </label>
+                                        <input class="form--input-text" type="text" id="addPoi_name"
+                                               required="required" maxlength="45">
                                     </div>
                                     <div class="form--item">
-                                        <label for="addPoi_nbhelper" class="required">Nombre de bénévoles requis</label>
-                                        <input class="form--input-text" type="number" id="addPoi_nbhelper" required="required">
+                                        <label for="addPoi_nbhelper" class="required">
+                                            Nombre de bénévoles requis <span class="input--required">*</span>
+                                        </label>
+                                        <input class="form--input-text" type="number" id="addPoi_nbhelper" required="required" min="0">
                                     </div>
                                     <div class="form--item form--item-select">
-                                        <label for="addPoi_type" class="required">Type du point d'intérêt</label>
-                                        <select id="addPoi_type">
+                                        <label for="addPoi_type" class="required">
+                                            Type du point d'intérêt <span class="input--required">*</span>
+                                        </label>
+                                        <select id="addPoi_type" required>
                                             <option value="1">Parking</option>
                                             <option value="2" >Point dangereux</option>
                                             <option value="3">Restauration</option>
                                         </select>
                                     </div>
                                     <div class="actions">
-                                        <button type="button" id="addPoi_submit">Ajouter</button>
+                                        <button type="submit" id="addPoi_submit">Ajouter</button>
                                         <button type="button" id="addPoi_cancel" class="btn--danger" data-micromodal-close>Annuler</button>
                                     </div>
                                 </div>
@@ -215,19 +227,26 @@
                     </header>
                     <div id="edit-poi-content" class="modal--content">
                         <div>
-                            <form name="editPoi">
+                            <form name="editPoi" id="editPoi_form">
                                 <div id="editPoi">
                                     <div class="form--item form--input-focused">
-                                        <label for="editPoi_name" class="required">Nom du point d'intérêt</label>
-                                        <input class="form--input-text" type="text" id="editPoi_name" required="required" >
+                                        <label for="editPoi_name" class="required">
+                                            Nom du point d'intérêt <span class="input--required">*</span>
+                                        </label>
+                                        <input class="form--input-text" type="text" id="editPoi_name"
+                                               required="required" maxlength="45">
                                     </div>
                                     <div class="form--item form--input-focused">
-                                        <label for="editPoi_nbhelper" class="required">Nombre de bénévoles requis</label>
+                                        <label for="editPoi_nbhelper" class="required">
+                                            Nombre de bénévoles requis <span class="input--required">*</span>
+                                        </label>
                                         <input class="form--input-text" type="number" id="editPoi_nbhelper" required="required">
                                     </div>
                                     <div class="form--item form--item-select">
-                                        <label for="editPoi_type" class="required">Type du point d'intérêt</label>
-                                        <select id="editPoi_type">
+                                        <label for="editPoi_type" class="required">
+                                            Type du point d'intérêt <span class="input--required">*</span>
+                                        </label>
+                                        <select id="editPoi_type" required>
                                             <option value="1" selected>Parking</option>
                                             <option value="2" >Point dangereux</option>
                                             <option value="3">Restauration</option>
@@ -235,8 +254,8 @@
                                     </div>
                                     <input class="form--input-text" type="hidden" id="editPoi_id" >
                                     <div class="actions">
-                                        <button type="button" class="btn btn--danger" id="editPoi_delete">Supprimer</button>
-                                        <button type="button" id="editPoi_submit" class="btn">Mettre à jour</button>
+                                        <button type="submit" id="editPoi_submit" class="btn">Mettre à jour</button>
+                                        <button type="button" class="btn btn--danger" id="editPoi_delete">Annuler</button>
                                     </div>
                                 </div>
                             </form>

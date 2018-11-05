@@ -1,9 +1,9 @@
-if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
+if (typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
   var UID = {
     _current: 0,
     getNew: function () {
       this._current++;
-      return this._current
+      return this._current;
     }
   };
 
@@ -39,8 +39,6 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
   var editor = {activeTab: 'tracks-pan'};
 
 /* SCROLL MANAGEMENT */
-
-
   function preventDefault(e) {
     e = e || window.event;
     if (e.preventDefault)
@@ -50,7 +48,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
   function preventDefaultForScrollKeys(e) {
     // left: 37, up: 38, right: 39, down: 40,
-// spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+    // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
     if ({37: 1, 38: 1, 39: 1, 40: 1}[e.keyCode]) {
       preventDefault(e);
       return false;
@@ -75,13 +73,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     document.onkeydown = null;
   }
   function disableDropdown(event) {
-    // console.log(event);
     if (!event.target.matches('.dropbtn')) {
-
       enableScroll();
       var dropdowns = document.getElementsByClassName("dropdown-content");
-      var i;
-      for (i = 0; i < dropdowns.length; i++) {
+      for (var i = 0; i < dropdowns.length; i++) {
         var openDropdown = dropdowns[i];
         if (openDropdown.classList.contains('show')) {
           openDropdown.classList.remove('show');
@@ -89,9 +84,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       }
     }
   }
-// Close the dropdown menu if the user clicks outside of it
+  // Close the dropdown menu if the user clicks outside of it
   window.onclick = disableDropdown;
-
 
   document.getElementById('btn--laterale-bar').addEventListener('click', function () {
     var tab = this.parentElement.parentElement;
@@ -100,8 +94,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
   });
 
   window.addEventListener('load', function () {
-
-    //LOAD EDITOR SPECIFIC CONTROLLER ON MAP
+    // LOAD EDITOR SPECIFIC CONTROLLER ON MAP
     L.POIEditControl = L.Control.extend({
       options: {
         position: 'topright'
@@ -141,7 +134,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         L.Util.setOptions(this, options);
         // Continue initializing the control plugin here.
       },
-      onAdd: function (map) {
+      onAdd: function () {
         var controlElementTag = 'div';
         var controlElementClass = 'my-leaflet-control';
         var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
@@ -161,7 +154,6 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         });
         return controlElement;
       }
-
     });
 
     mapManager.trackControl = new L.TrackEditControl();
@@ -170,11 +162,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     }
     mapManager.map.addControl(new L.POIEditControl());
 
-
     var acc = document.getElementsByClassName("accordion");
-    var i;
 
-    for (i = 0; i < acc.length; i++) {
+    for (var i = 0; i < acc.length; i++) {
       acc[i].addEventListener("click", function() {
         this.classList.toggle("active");
         var panel = this.nextElementSibling;
@@ -187,29 +177,27 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     }
     document.getElementById("tracks-pan").style.maxHeight = 0;
     document.getElementById("pois-pan").style.maxHeight = 0;
-
-
   });
 
   document.getElementById('addPoiButton').addEventListener('click', function () {
     this.classList.toggle('add--poi');
     if (this.classList.contains('add--poi')) {
-      mapManager.switchMode(EditorMode.ADD_POI)
+      mapManager.switchMode(EditorMode.ADD_POI);
     } else {
-      if(mapManager.waitingPoi !=null ){
+      if (mapManager.waitingPoi !=null ){
         mapManager.map.removeEventListener("mousemove");
         mapManager.map.removeLayer(mapManager.waitingPoi.marker);
-
       }
-      mapManager.switchMode(mapManager.lastMode)
+      mapManager.switchMode(mapManager.lastMode);
     }
   });
 
   document.getElementById('addTrackButton').addEventListener('click', function () {
-    MicroModal.show('add-track-popin')
+    MicroModal.show('add-track-popin');
   });
 
-  document.getElementById('addTrack_submit').addEventListener('click', function () {
+  document.getElementById('addTrack_form').addEventListener('submit', function (e) {
+    e.preventDefault();
     var trName = document.getElementById('addTrack_name').value;
     var trColor = document.getElementById('addTrack_color').value;
     mapManager.requestNewTrack(trName, trColor);
@@ -219,7 +207,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     document.getElementById('addTrack_color').value = '#000000'
   });
 
-  document.getElementById('editTrack_submit').addEventListener('click', function () {
+  document.getElementById('editTrack_form').addEventListener('submit', function (e) {
+    e.preventDefault();
     var trName = document.getElementById('editTrack_name').value;
     var trColor = document.getElementById('editTrack_color').value;
     var trId = document.getElementById('editTrack_id').value;
@@ -230,38 +219,30 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     track.setColor(trColor);
 
     track.push();
-    MicroModal.close('edit-track-popin')
+    MicroModal.close('edit-track-popin');
   });
 
   document.getElementById('editTrack_delete').addEventListener('click', function () {
-    MicroModal.close('edit-track-popin')
-
+    MicroModal.close('edit-track-popin');
   });
 
   document.getElementById('btn--delete-track').addEventListener('click', function () {
-
     var trId = parseInt(this.dataset.id);
     var track = mapManager.tracksMap.get(parseInt(trId));
     track.remove();
-    MicroModal.close('delete-track')
-
+    MicroModal.close('delete-track');
   });
 
-
   document.getElementById('btn--delete-poi').addEventListener('click', function () {
-
     var poiId = this.dataset.id;
     var poi = mapManager.poiMap.get(parseInt(poiId));
     poi.remove();
-    MicroModal.close('delete-poi')
-
+    MicroModal.close('delete-poi');
   });
 
-
-
-
 // ADD POI SUBMIT
-  document.getElementById('addPoi_submit').addEventListener('click', function () {
+  document.getElementById('addPoi_form').addEventListener('submit', function (e) {
+    e.preventDefault();
     var poiName = document.getElementById('addPoi_name').value;
     var poiType = document.getElementById('addPoi_type').value;
     var poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
@@ -271,11 +252,12 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
     document.getElementById('addPoi_name').value = '';
     document.getElementById('addPoi_type').value = '';
-    document.getElementById('addPoi_nbhelper').value = ''
+    document.getElementById('addPoi_nbhelper').value = '';
   });
 
 // EDIT POI SUBMIT
-  document.getElementById('editPoi_submit').addEventListener('click', function () {
+  document.getElementById('editPoi_form').addEventListener('submit', function (e) {
+    e.preventDefault();
     var poiId = document.getElementById('editPoi_id').value;
     var poi = mapManager.poiMap.get(parseInt(poiId));
 
@@ -284,32 +266,24 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
     poi.push();
 
-    poi.buildUI();
     MicroModal.close('edit-poi-popin');
 
     document.getElementById('editPoi_name').value = '';
     document.getElementById('editPoi_type').value = '';
-    document.getElementById('editPoi_nbhelper').value = ''
+    document.getElementById('editPoi_nbhelper').value = '';
   });
 
 // EDIT POI DELETE
   document.getElementById('editPoi_delete').addEventListener('click', function () {
     var poiId = document.getElementById('editPoi_id').value;
-
     var poi = mapManager.poiMap.get(parseInt(poiId));
-
     poi.remove();
 
-    MicroModal.close('edit-poi-popin')
+    MicroModal.close('edit-poi-popin');
   });
 
-
-  console.log("Editor JS loaded")
+  console.log("Editor JS loaded");
 
   MapManager.prototype.displayTrackButton = function () {
-
   }
-
-
-
 }

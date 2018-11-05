@@ -1,28 +1,28 @@
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-      disableScroll()
-    }
+    e.stopPropagation();
+    var dpdwn = this.nextElementSibling;
 
-    let dpdwn = this.nextElementSibling;
-    console.log(dpdwn);
-    //  console.log(convertRem(12))
-    // console.log(e.view.screen.height +" - "+ e.screenY+" = "+(e.view.screen.height - e.screenY ))
-    if((e.view.screen.height - e.screenY ) < convertRem(12) ){
-      console.log("nope")
-      dpdwn.style.top =  'calc(${e.pageY}px - 17.0rem)' ;
+    if(dpdwn.classList.contains("show")){
+        dpdwn.classList.remove("show");
     }else{
-      dpdwn.style.top =  'calc(${e.pageY}px - 7.0rem)' ;
-    }
+        disableScroll();
 
-    dpdwn.classList.toggle("show");
+        let drop = document.querySelector(".dropdown-content.show");
+        if(drop != null){
+          drop.classList.remove("show");
+        }
+
+        let clientHeight = document.querySelector('body').clientHeight;
+
+        if ((clientHeight - e.screenY ) < convertRem(12) ){
+            dpdwn.style.top = 'calc('+e.pageY+'px - 13.0rem)';
+        } else {
+            dpdwn.style.top = 'calc('+e.pageY+'px - 7.0rem)';
+        }
+        dpdwn.classList.add("show");
+    }
   }
 
   function EditorUI () {
@@ -30,24 +30,24 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     this.poiElements = new Map();
   }
   EditorUI.prototype.addPoi = function(poi){
-    let li = document.createElement('li')
-    li.classList.add('list--pois-items')
+    let li = document.createElement('li');
+    li.classList.add('list--pois-items');
     this.poiElements.set(poi.id, li);
     this.updatePoi(poi);
   }
   EditorUI.prototype.updatePoi = function(poi){
-
     let keepThis = this;
     if(!this.poiElements.has(poi.id)) {
       this.addPoi(poi);
     }
-    let li = this.poiElements.get(poi.id)
+    let li = this.poiElements.get(poi.id);
 
     li.innerHTML =
+      //'<span class="test">' +
       '             <div class="track--text">' +
       '                <span>' + poi.name + '</span>' +
       '            </div>' +
-      '         </label>' +
+      //'         </span>' +
       '         <button id="moreButton" data-id = "' + poi.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
       '             <i class="fas fa-ellipsis-v"></i>' +
       '         </button>' +
@@ -61,18 +61,17 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     let btnDelete = li.querySelector('.btn--poi--delete');
     btnDelete.addEventListener("click", function () {
       document.getElementById("btn--delete-poi").dataset.id = poi.id;
-      MicroModal.show('delete-poi')
+      MicroModal.show('delete-poi');
     })
 
-    document.getElementById('list--pois').appendChild(li)
-    li.pseudoStyle('before', 'background-color', poi.color)
+    document.getElementById('list--pois').appendChild(li);
+    li.pseudoStyle('before', 'background-color', poi.color);
     li.querySelector('.btn--poi--settings').addEventListener('click', function () {
-      console.log(poi);
-      document.getElementById('editPoi_id').value = poi.id
-      document.getElementById('editPoi_name').value = poi.name
+      document.getElementById('editPoi_id').value = poi.id;
+      document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);
       document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
-      (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected')
-      MicroModal.show('edit-poi-popin')
+      (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
+      MicroModal.show('edit-poi-popin');
     })
     let panel = document.getElementById("pois-pan");
     if (panel.style.maxHeight){
@@ -80,25 +79,26 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     }
   }
   EditorUI.prototype.removePoi = function(poi){
-    let li = this.poiElements.get(poi.id)
+    let li = this.poiElements.get(poi.id);
     document.getElementById('list--pois').removeChild(li)
   }
+
   EditorUI.prototype.addTrack = function(track){
-    let li = document.createElement('li')
-    li.classList.add('checkbox-item')
+    let li = document.createElement('li');
+    li.classList.add('checkbox-item');
     this.trackElements.set(track.id, li);
-    document.getElementById('editor--list').appendChild(li)
+    document.getElementById('editor--list').appendChild(li);
     this.updateTrack(track);
-
   }
-  EditorUI.prototype.updateTrack = function(track){
-    if(!this.trackElements.has(track.id)){
-      this.addTrack(track)
-    }else{
-      let newTrack = track
-      let li = this.trackElements.get(track.id)
 
-      li.id = 'track-li-' + newTrack.id
+  EditorUI.prototype.updateTrack = function(track){
+    if (!this.trackElements.has(track.id)){
+      this.addTrack(track);
+    } else {
+      let newTrack = track;
+      let li = this.trackElements.get(track.id);
+
+      li.id = 'track-li-' + newTrack.id;
       li.innerHTML = '<label class="checkbox-item--label">' +
         '             <input data-id = "' + newTrack.id + '" type="checkbox" checked="checked">' +
         '             ' +
@@ -109,6 +109,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '                <span>' + newTrack.name + '</span>' +
         '                <span style="font-size : 0.75rem;"></br>(150,0 km)</span>' +
         '            </div>' +
+        '            <span class="track--isCalibration" title="Parcours issu d\'une calibration">' + (newTrack.isCalibration ? '<i class="fas fa-mobile-alt"></i></span>' : '' ) +
         '         </label>' +
         '         <button id="moreButton" data-id = "' + newTrack.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
         '             <i class="fas fa-ellipsis-v"></i>' +
@@ -122,96 +123,90 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
        
       /* When the user clicks on the button, toggle between hiding and showing the dropdown content */
-
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
-      newTrack.calculDistance()
-      li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)'
+      newTrack.calculDistance();
+      li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
 
       // TRACK SELECTION LISTENER
       li.querySelectorAll('input').forEach(function (input) {
         input.addEventListener('change', function () {
           if (input.checked) {
-            mapManager.showTrack(parseInt(input.dataset.id))
-           // li.querySelector('.btn--track--edit').style.display = 'inline-block'
-            li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor
+            mapManager.showTrack(parseInt(input.dataset.id));
+            li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor;
           } else {
-            li.querySelector('label > span.checkmark').style.backgroundColor = '#ffffff'
+            li.querySelector('label > span.checkmark').style.backgroundColor = '#ffffff';
             if (mapManager.currentEditID == input.dataset.id) {
               document.querySelectorAll('.track--edit').forEach(function (el) {
-                el.classList.remove('track--edit')
+                el.classList.remove('track--edit');
               })
-              mapManager.switchMode(EditorMode.READING)
+              mapManager.switchMode(EditorMode.READING);
             }
-            mapManager.hideTrack(parseInt(input.dataset.id))
-          //  li.querySelector('.btn--track--edit').style.display = 'none'
+            mapManager.hideTrack(parseInt(input.dataset.id));
           }
         })
-      })
+      });
 
       let btnDelete = li.querySelector('.btn--track--delete');
       btnDelete.addEventListener("click", function () {
         document.getElementById("btn--delete-track").dataset.id = newTrack.id;
-        MicroModal.show('delete-track')
-      })
+        MicroModal.show('delete-track');
+      });
 
       // TRACK EDIT PENCIL
      let btn = li.querySelector('.btn--track--edit');
      btn.addEventListener('click', function () {
      if (!this.parentElement.classList.contains('track--edit')) {
        document.querySelectorAll('.track--edit').forEach(function (el) {
-         el.classList.remove('track--edit')
-       })
+         el.classList.remove('track--edit');
+       });
       }
       this.parentElement.classList.toggle('track--edit')
        if (this.parentElement.classList.contains('track--edit')) {
-         // console.log(btn);
-         mapManager.currentEditID = parseInt(btn.dataset.id)
-         console.log(btn.dataset.id)
-         mapManager.switchMode(EditorMode.TRACK_EDIT)
+         mapManager.currentEditID = parseInt(btn.dataset.id);
+         console.log(btn.dataset.id);
+         mapManager.switchMode(EditorMode.TRACK_EDIT);
        } else {
-         mapManager.switchMode(EditorMode.READING)
+         mapManager.switchMode(EditorMode.READING);
        }
-     })
-
+     });
 
       // TRACK SETTINGS COG
       li.querySelectorAll('.btn--track--settings').forEach(function (btn) {
-        let id = parseInt(btn.dataset.id)
-        let track = mapManager.tracksMap.get(id)
+        let id = parseInt(btn.dataset.id);
+        let track = mapManager.tracksMap.get(id);
 
         btn.addEventListener('click', function () {
-          document.querySelector('#editTrack_name').value = track.name
-          document.querySelector('#editTrack_color').value = track.color
-          document.querySelector('#editTrack_id').value = track.id
+          document.querySelector('#editTrack_name').value = htmlentities.decode(track.name);
+          document.querySelector('#editTrack_color').value = track.color;
+          document.querySelector('#editTrack_id').value = track.id;
 
-          MicroModal.show('edit-track-popin')
-        })
-      })
+          MicroModal.show('edit-track-popin');
+        });
+      });
 
       let panel = document.getElementById("tracks-pan");
       if (panel.style.maxHeight){
         panel.style.maxHeight = panel.scrollHeight + "px";
       }
-
-      return li
+      return li;
     }
-
   }
+
   EditorUI.prototype.removeTrack = function(track) {
-    let li = this.trackElements.get(track.id)//document.getElementById('track-li-' + this.id)
-    document.getElementById('editor--list').removeChild(li)
+    let li = this.trackElements.get(track.id);
+    document.getElementById('editor--list').removeChild(li);
   }
-  console.log("Editor UI for editor loaded")
+  console.log("Editor UI for editor loaded");
+} else {
+  if (document.querySelector('#map') != undefined) {
+    var EditorUI = function () {}
+    EditorUI.prototype.addPoi = function(poi){}
+    EditorUI.prototype.updatePoi = function(id, poi){}
+    EditorUI.prototype.removePoi = function(id){}
+    EditorUI.prototype.addTrack = function(poi){}
+    EditorUI.prototype.updateTrack = function(id, poi){}
+    EditorUI.prototype.removeTrack = function(id){}
 
-}else{
-  var EditorUI = function () {}
-  EditorUI.prototype.addPoi = function(poi){}
-  EditorUI.prototype.updatePoi = function(id, poi){}
-  EditorUI.prototype.removePoi = function(id){}
-  EditorUI.prototype.addTrack = function(poi){}
-  EditorUI.prototype.updateTrack = function(id, poi){}
-  EditorUI.prototype.removeTrack = function(id){}
-
-  console.log("Editor UI for display only loaded")
-
+    console.log("Editor UI for display only loaded");
+  }
 }

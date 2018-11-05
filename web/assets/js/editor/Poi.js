@@ -7,9 +7,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.poiType = null;
     this.requiredHelpers = 0;
     this.color = '#0f5e54';
-    this.buildUI()
+    this.buildUI();
 
-    this.marker.unbindPopup()
+    this.marker.unbindPopup();
   }
 
   Poi.prototype.toJSON = function () {
@@ -23,34 +23,33 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         poiType: this.poiType.id
       };
     let json = JSON.stringify(poi);
-    return json
+    return json;
   };
+
   Poi.prototype.fromObj = function (poi) {
     let keepThis = this;
 
-    // console.log(poi);
     this.id = poi.id;
     this.name = poi.name;
     this.poiType = mapManager.poiTypesMap.get(poi.poiType);
     (poiType != null) && (this.color = this.poiType.color);
     this.requiredHelpers = poi.requiredHelpers;
-   // console.log(this.requiredHelpers)
     this.marker = L.marker([poi.latitude, poi.longitude]);
 
     this.marker.addTo(mapManager.group);
 
     this.marker.disableEdit();
-    this.marker.on('dragend', function (e) {
-      keepThis.push()
+    this.marker.on('dragend', function () {
+      keepThis.push();
     });
-    keepThis.buildUI()
+    keepThis.buildUI();
   };
   Poi.prototype.fromJSON = function (json) {
     let poi = JSON.parse(json);
-    this.fromObj(poi)
+    this.fromObj(poi);
   };
   Poi.prototype.setEditable = function (b) {
-    b ? this.marker.enableEdit() : this.marker.disableEdit()
+    b ? this.marker.enableEdit() : this.marker.disableEdit();
   };
 
   Poi.prototype.push = function () {
@@ -58,11 +57,13 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     xhr_object.open('PATCH', '/organizer/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(this.toJSON());
-    this.buildUI()
+
+      this.name = htmlentities.encode(this.name);
+
+    mapManager.editorUI.updatePoi(this);
   };
 
   Poi.prototype.buildUI = function () {
-
     let keepThis = this;
     this.poiType != null && (this.color = this.poiType.color );
 
@@ -86,7 +87,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       html: '<span class="poi-marker" style="background-color:' + this.color + ';" />'
     });
 
-    this.marker.setIcon(icon)
+    this.marker.setIcon(icon);
   };
 
   Poi.prototype.remove = function () {
@@ -97,9 +98,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.map.removeLayer(this.marker);
 
-    mapManager.editorUI.removePoi(this)
+    mapManager.editorUI.removePoi(this);
   };
 
-  console.log("Track POI loaded")
-
+  console.log("Track POI loaded");
 }
