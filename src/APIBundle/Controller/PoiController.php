@@ -45,35 +45,24 @@ class PoiController extends AjaxAPIController
 
     /**
      * @Rest\View(statusCode=Response::HTTP_OK)
-     * @Rest\Get("/api/helper/raid/{raidId}/poi/user/{userId}")
+     * @Rest\Get("/api/helper/raid/{raidId}/poi")
      *
      * @param Request $request
      * @param int     $raidId  raid id
-     * @param int     $userId  user id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function getHelperPOIAction(Request $request, $raidId, $userId)
+    public function getHelperPOIAction(Request $request, $raidId)
     {
 
         $em = $this->getDoctrine()->getManager();
-        $userManager = $em->getRepository('AppBundle:User');
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $user = $userManager->find($userId);
-        if ($user == null) {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "Cet utilisateur n'existe pas");
-        }
+        $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $raid = $raidManager->find($raidId);
         if ($raid == null) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "Ce raid n'existe pas");
-        }
-
-        $currentUser = $this->get('security.token_storage')->getToken()->getUser();
-
-        if ($user->getId() != $currentUser->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé pour cet utilisateur.');
         }
 
         $helperManager = $em->getRepository('AppBundle:Helper');
