@@ -21,7 +21,7 @@
     {% set type = type|default('file') %}
     {{ block('form_widget_simple') }}
     <div class="form--item-file-previews">
-        <img class="form--item-file-preview" src="{{ asset('uploads/raids/' ~ form.vars.data) }}" alt=""/>
+        <img class="form--item-file-preview" src="{{ asset(attr.data_url ~ form.vars.data) }}" alt=""/>
     </div>
 {% endblock %}
 

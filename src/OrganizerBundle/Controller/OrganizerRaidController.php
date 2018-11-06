@@ -153,6 +153,9 @@ class OrganizerRaidController extends Controller
                 'label' => 'Photo',
                 'required' => false,
                 'data_class' => null,
+                'attr' => [
+                    'data_url' => 'uploads/raids/',
+                ],
             ])
             ->add('submit', SubmitType::class, ['label' => 'Editer un raid'])
             ->getForm();
