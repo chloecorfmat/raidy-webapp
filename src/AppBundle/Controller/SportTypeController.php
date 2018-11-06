@@ -181,13 +181,51 @@ class SportTypeController extends Controller
     /**
      * @Route("/admin/sporttype", name="listSportType")
      *
+     * @param Request $request request
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listSportTypes()
+    public function listSportTypes(Request $request)
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
         $sportTypeManager = $em->getRepository('AppBundle:SportType');
+        $formSportType = new SportType();
+
+        $form = $this->createFormBuilder($formSportType)
+            ->add('sport', TextType::class, ['label' => 'Sport'])
+            ->add('icon', FileType::class, [
+                'label' => 'Icone',
+                'label_attr' => ['class' => 'form--fixed-label'],
+                'required' => false,
+                'data_class' => null,
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Ajouter un sport'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $sportTypeManager = $em->getRepository('AppBundle:SportType');
+            $sportTypeExist = $sportTypeManager->findBy(
+                ['sport' => $formSportType->getSport()]
+            );
+            if (!$sportTypeExist) {
+                $sportTypeService = $this->container->get('SportTypeService');
+                $sportType = $sportTypeService->sportTypeFromForm(
+                    $formSportType,
+                    $this->getParameter('sporttypes_img_directory')
+                );
+
+                $em->persist($sportType);
+                $em->flush();
+                $this->addFlash('success', 'Le sport a bien été ajouté.');
+
+                return $this->redirectToRoute('listSportType');
+            } else {
+                $form->addError(new FormError('Ce type de sport existe déjà.'));
+            }
+        }
 
         // Get the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -201,6 +239,7 @@ class SportTypeController extends Controller
             'AppBundle:SportType:listSportType.html.twig',
             [
                 'sportTypes' => $sportTypes,
+                'form' => $form->createView(),
             ]
         );
     }

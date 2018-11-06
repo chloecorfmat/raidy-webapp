@@ -8,47 +8,55 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des types de sports</h1>
-
-    {% for flash_message in app.session.flashBag.get('success') %}
-        <div class="alert alert--success">
-            <p>{{ flash_message }}</p>
-        </div>
-    {% endfor %}
-    {% for flash_message in app.session.flashBag.get('danger') %}
-        <div class="alert alert--danger">
-            <p>{{ flash_message }}</p>
-        </div>
-    {% endfor %}
-    <div class="table--container">
-        <table class="table" id="helpersList">
-            <caption class="sr-only">Liste des types de points d'intérêt</caption>
-            <thead class="table--headers">
-            <tr>
-                <th scope="col">Icone</th>
-                <th scope="col">Sport</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-
-            {% for sportType in sportTypes %}
-                <tr class="table--line">
-                    <td><img src="../uploads/sportTypes/{{ sportType.icon }}" width="100" alt="Icone {{ sportType.sport }}" /></td>
-                    <td>{{ sportType.sport }}</td>
-                    <td><a href="{{ path('editSportType', {'sportTypeId': sportType.id}) }}" class="btn">Editer</a>
-                        <button data-sporttype-id="{{ sportType.id }}" class="btn btn--danger btn--delete-sporttype">
-                            Supprimer
-                        </button> {#data-micromodal-trigger="delete-sporttype" #}
-                    </td>
-                </tr>
+    <div class="content">
+        <div class="content--half">
+            <h1>Liste des types de sports</h1>
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
             {% endfor %}
-        </table>
+            {% for flash_message in app.session.flashBag.get('danger') %}
+                <div class="alert alert--danger">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
+            <div class="table--container">
+                <table class="table" id="helpersList">
+                    <caption class="sr-only">Liste des types de points d'intérêt</caption>
+                    <thead class="table--headers">
+                    <tr>
+                        <th scope="col">Icone</th>
+                        <th scope="col">Sport</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+
+                    {% for sportType in sportTypes %}
+                        <tr class="table--line">
+                            <td><img src="../uploads/sporttypes/{{ sportType.icon }}" width="100" alt="Icone {{ sportType.sport }}" /></td>
+                            <td>{{ sportType.sport }}</td>
+                            <td><a href="{{ path('editSportType', {'sportTypeId': sportType.id}) }}" class="btn">Editer</a>
+                                <button data-sporttype-id="{{ sportType.id }}" class="btn btn--danger btn--delete-sporttype">
+                                    Supprimer
+                                </button> {#data-micromodal-trigger="delete-sporttype" #}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+
+
+        <div class="content--half">
+                <h1>Créer un sport</h1>
+                <div>
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    {{ form_end(form) }}
+                </div>
+        </div>
     </div>
-    <a href="{{ path('addSportType') }}" class="btn--fab">
-        <span class="btn--fab-content">
-            <span>+</span>
-        </span>
-    </a>
 
     <!-- [1] -->
     <div id="delete-sporttype" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
