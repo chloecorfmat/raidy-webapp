@@ -3,15 +3,13 @@
   width: 80%;
 }
 
-.btn-leave-track-edit{
-  border-radius: 3rem;
- // width: 2rem;
-  //height: 2rem;
-  padding: 0.5rem !important;
-  margin: 0rem !important;
-  margin-left: 0.5rem !important;
-  font-family: Fontastique;
+.btn-leave-track-edit {
   background-color: $live-color;
+  border-radius: 3rem;
+  font-family: Fontastique;
+  margin: 0 !important;
+  margin-left: .5rem !important;
+  padding: .5rem !important;
 }
 
 .editor--container {
@@ -27,10 +25,11 @@
   min-height: 100%;
   min-width: 100%;
 }
+
 .map-tooltip {
   background: #666;
   border: 1px dashed #999;
-  color: white;
+  color: $white;
   display: none;
   font-family: sans-serif;
   font-size: 12px;
@@ -42,32 +41,30 @@
   z-index: 1000;
 }
 
-.poi-marker{
+.poi-marker {
+  border: 1px solid black;
   border-radius: 3rem 3rem 0;
-
-  border:1px solid black;
-
   display: block;
   height: 2rem;
-  width: 2rem;
   position: relative;
   transform: translateX(-1rem) translateY(-2rem) rotate(45deg);
+  width: 2rem;
 }
 
-.track-marker{
+.track-marker {
   border-radius: 3rem 3rem;
   display: block;
   height: 1rem;
-  width: 1rem;
   position: relative;
-  transform: translateX(-0.5rem) translateY(-0.5rem);
+  transform: translateX(-.5rem) translateY(-.5rem);
+  width: 1rem;
 }
 
 // ACCORDION
 // Style the buttons that are used to open and close the accordion panel.
 .accordion {
   background-color: $tertiary-color-1;
-  color: #fff;
+  color: $white;
   cursor: pointer;
   outline: none;
   padding: 20px;
@@ -84,7 +81,7 @@
 
 // Style the accordion panel. Note: hidden by default.
 .panel {
-  background-color: white;
+  background-color: $white;
   max-height: 0;
   overflow-x: hidden;
   overflow-y: hidden;
@@ -92,12 +89,12 @@
 }
 
 .accordion:after {
-  font-family: 'Font Awesome 5 Free';
-  font-weight: 900;
-  content: '\f107';
-  font-size: 1rem;
   color: #fff;
+  content: '\f107';
   float: right;
+  font-family: 'Font Awesome 5 Free';
+  font-size: 1rem;
+  font-weight: 900;
   margin-left: 5px;
 
 }
@@ -115,25 +112,25 @@ button.active:after {
   }
 }
 
-.track--text{
+.track--text {
+  cursor: pointer;
   display: flex;
   flex-direction: column;
   width: 90%;
-  cursor: pointer;
 }
 
-.track--isCalibration{
-  margin-left: .3rem;
+.track--isCalibration {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  margin-left: .3rem;
 }
 
-.checkbox-item--label > div > span:nth-child(1){
+.checkbox-item--label > div > span:nth-child(1) {
   display: inline-block;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .editor--list {
@@ -142,13 +139,13 @@ button.active:after {
   padding-right: 20px;
 
   li {
-    width: 100%;
-    display : flex;
-    flex-direction: row;
-    padding: 8px 16px;
-    //position: relative;
-    justify-content: space-between;
     align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 8px 16px;
+    width: 100%;
+
     &:last-child {
       border-bottom: 0;
     }
@@ -174,7 +171,9 @@ button.active:after {
 }
 
 .btn--add-poi {
+  background-clip: padding-box;
   background-color: $tertiary-color-1;
+  border: 2px solid rgba(0, 0, 0, .2);
   border-radius: 3rem ;
   bottom: 0;
   font-size: 3rem;
@@ -191,8 +190,6 @@ button.active:after {
   vertical-align: middle;
   width: 5rem;
   z-index: 999;
-  border: 2px solid rgba(0, 0, 0, .2);
-  background-clip: padding-box;
 
   svg {
     fill: $tertiary-color-1;
@@ -226,7 +223,7 @@ button.active:after {
 
   // Track.
   ::-webkit-scrollbar-track {
-    background:#eeeeee;
+    background: #eeeeee;
   }
 
   // Handle.
@@ -242,8 +239,8 @@ button.active:after {
 
 .tab-bar {
   flex-grow: 1;
+  overflow-x: visible;
   overflow-y: scroll;
-  overflow-x : visible;
 }
 
 .tablinks {
@@ -269,9 +266,9 @@ button.active:after {
 .bar {
   display: flex;
   flex-direction: column;
-  left : 0;
+  left: 0;
   position: relative;
-  transition : width 1s ease;
+  transition: width 1s ease;
   width: 20%;
   z-index: 1000;
 
@@ -303,17 +300,12 @@ button.active:after {
   font-size: 2rem;
   height: 3rem;
   margin: auto;
-  /**position: absolute;
-  right: 0;
-  top: 50%;
-  transform: translateX(100%);**/
-  width: 1.5rem;
-  z-index: 1000;
-
   position: absolute;
   right: 0;
   top: 50vh;
   transform: translateY(-50%) translateX(100%);
+  width: 1.5rem;
+  z-index: 1000;
 
   div:not(.tab-bar--actions) {
     i {
@@ -335,14 +327,14 @@ button.active:after {
 
   .list--pois-items {
     &::before {
-      content: ' ';
       border-radius: 50%;
+      content: ' ';
       display: inline-block;
-      width: calc(0.5rem + 4px);
-      height: calc(0.5rem + 4px);
-      vertical-align: middle;
+      height: calc(.5rem + 4px);
       margin-right: .5rem;
       padding: .2rem;
+      vertical-align: middle;
+      width: calc(.5rem + 4px);
     }
 
     .btn--track--more {
@@ -360,12 +352,12 @@ button.active:after {
 
 .bar--invisible {
   position: relative;
+  transition: width 1s ease;
   width: 0;
-  transition : width 1s ease;
 
-  & + .map--container{
-    width: 100%;
+  & + .map--container {
     transition: width .5s linear;
+    width: 100%;
   }
 }
 
@@ -427,43 +419,39 @@ button.active:after {
 
 // Dropdown Button.
 .dropbtn {
-  color: $white;
-  padding: 16px;
-  font-size: 16px;
   border: none;
+  color: $white;
   cursor: pointer;
+  font-size: 16px;
+  padding: 16px;
 }
 
 // The container <div> - needed to position the dropdown content.
 .dropdown {
-  position: absolute;
   display: inline-block;
+  position: absolute;
 }
 
 // Dropdown Content (Hidden by Default).
 .dropdown-content {
-  cursor: pointer;
-  left : 100%;
-  display: none;
-  position: absolute;
   background-color: #FFFFFF;
-  min-width: 12rem ;
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
+  cursor: pointer;
+  display: none;
+  left : 100%;
+  min-width: 12rem ;
+  position: absolute;
   z-index: 99999999999;
-}
 
-// Links inside the dropdown.
-.dropdown-content {
   a {
+    display: block;
     padding: 1.2rem 1.5rem;
     text-decoration: none;
-    display: block;
-  }
-}
 
-// Change color of dropdown links on hover.
-.dropdown-content a:hover {
-  background-color: $grey-light;
+    &:hover {
+      background-color: $grey-light;
+    }
+  }
 }
 
 // Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button).
@@ -538,19 +526,19 @@ button.active:after {
 
 // The switch - the box around the slider.
 .switch {
-  position: relative;
   display: inline-block;
-  width: 2.4rem;
   height: 1.4rem;
   margin-left: .5rem;
+  position: relative;
+  width: 2.4rem;
 }
 
 // Hide default HTML checkbox.
 .switch {
   input {
+    height: 0;
     opacity: 0;
     width: 0;
-    height: 0;
   }
 }
 
@@ -579,7 +567,7 @@ button.active:after {
 
 #map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-in,
 #map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-out {
-  color : $tertiary-color-1;
+  color: $tertiary-color-1;
 }
 
 input:checked + .slider {
@@ -590,12 +578,12 @@ input:focus + .slider {
   box-shadow: 0 0 .08rem $tertiary-color-1;
 }
 
-input:checked + .slider:before {
+input:checked + .slider::before {
   transform: translateX(1rem);
 }
 
-.switch-label{
-  color : $tertiary-color-1;
+.switch-label {
+  color: $tertiary-color-1;
   display: inline;
   font-family: 'Proxima Nova', 'SansSerif';
   font-size: .75rem;
@@ -604,12 +592,12 @@ input:checked + .slider:before {
   text-align: center;
 }
 
-.map-controller-container{
-  border-radius: 4px;
-  background-color: $white;
-  padding: .4rem;
-  border: 2px solid rgba(0, 0, 0, .2);
+.map-controller-container {
   background-clip: padding-box;
+  background-color: $white;
+  border: 2px solid rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  padding: .4rem;
 }
 
 // Rounded sliders.
@@ -631,11 +619,19 @@ input:checked + .slider:before {
   right: 0;
   top: 0;
   transition: .4s;
+
+  &.round {
+    border-radius: 1.4rem;
+
+    &::before {
+      border-radius: 50%;
+    }
+  }
 }
 
-.slider-alternative:before {
-  font-family: Fontastique;
+.slider-alternative::before {
   content: 'X';
+  font-family: Fontastique;
   height: .5rem;
   position: absolute;
   right: .25rem;
@@ -648,17 +644,10 @@ input:checked + .slider-alternative {
   background-color: $tertiary-color-1;
 }
 
-input:focus + .slider-alternative {
-  box-shadow: 0 0 .08rem $tertiary-color-1;
-}
-
-// Rounded sliders.
-.slider-alternative.round {
-  border-radius: 1.4rem;
-}
-
-.slider-alternative.round:before {
-  border-radius: 50%;
+input:focus {
+  + .slider-alternative {
+    box-shadow: 0 0 .08rem $tertiary-color-1;
+  }
 }
 
 .switch-alternative {
@@ -683,12 +672,12 @@ input:focus + .slider-alternative {
 
   .bar--invisible {
     position: relative;
+    transition: width 1s ease;
     width: 0;
-    transition : width 1s ease;
 
-    & + .map--container{
-      width: 100%;
+    & + .map--container {
       transition: width .5s linear;
+      width: 100%;
     }
   }
 
@@ -719,30 +708,30 @@ input:focus + .slider-alternative {
 
     &:not(.bar--invisible) {
       .btn--laterale-bar {
-        display: flex;
-        position: fixed;
         background: $secondary-color-2;
-        bottom: 2rem;
-        right: 2rem;
-        width: 4rem;
-        height: 4rem;
-        font-size: 2rem;
-        line-height: 2rem;
         border-radius: 50%;
+        bottom: 2rem;
+        display: flex;
+        font-size: 2rem;
+        height: 4rem;
+        line-height: 2rem;
+        position: fixed;
+        right: 2rem;
         top: initial;
         transform: initial;
+        width: 4rem;
       }
     }
   }
 
   .bar--invisible {
     position: relative;
+    transition: width 1s ease;
     width: 0;
-    transition : width 1s ease;
 
     + .map--container {
-      width: 100%;
       transition: width .5s linear;
+      width: 100%;
 
       .fab {
         display: initial;
@@ -752,7 +741,7 @@ input:focus + .slider-alternative {
     .fa-caret-right {
       display: block;
     }
-    
+
     .fa-times {
       display: none;
     }
@@ -771,5 +760,3 @@ input:focus + .slider-alternative {
     }
   }
 }
-
-

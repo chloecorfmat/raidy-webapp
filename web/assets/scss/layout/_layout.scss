@@ -64,8 +64,8 @@ main {
   }
 
   @media screen and (min-width: $breakpoint-large) {
-    width: 25%;
     box-sizing: border-box;
+    width: 25%;
 
     &:not(:last-child) {
       margin-right: 3rem;
@@ -81,8 +81,8 @@ main {
   }
 
   @media screen and (min-width: $breakpoint-large) {
-    width: 50%;
     box-sizing: border-box;
+    width: 50%;
 
     &:not(:last-child) {
       margin-right: 3rem;
