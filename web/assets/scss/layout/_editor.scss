@@ -323,12 +323,14 @@ button.active:after {
 
   .list--pois-items {
     &::before {
+      content: ' ';
       border-radius: 50%;
-      content: '';
       display: inline-block;
-      height: 1.25rem;
+      width: calc(0.5rem + 4px);
+      height: calc(0.5rem + 4px);
       vertical-align: middle;
-      width: 1.25rem;
+      margin-right: .5rem;
+      padding: .2rem;
     }
 
     .btn--track--more {

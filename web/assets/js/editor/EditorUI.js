@@ -13,15 +13,25 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         if(drop != null){
           drop.classList.remove("show");
         }
+      dpdwn.classList.add("show");
+       // let clientHeight = document.querySelector('main').clientHeight;
+        //let click = e.screenY / screen.height;
+        //click = click * (e.screenY - document.querySelector("header").clientHeight)
+      let remaining = screen.height - e.screenY;
+      console.log("--------------------");
+      console.log("remaining: "+remaining);
+      console.log("menu: "+dpdwn.clientHeight);
 
-        let clientHeight = document.querySelector('body').clientHeight;
+      let topshift ;
+      if (remaining < dpdwn.clientHeight ){
+        topshift = e.pageY- dpdwn.clientHeight*1.5
+        dpdwn.style.top = topshift+'px';
+      } else {
+        topshift = e.pageY- dpdwn.clientHeight
+        dpdwn.style.top = topshift+'px';
+      }
 
-        if ((clientHeight - e.screenY ) < convertRem(12) ){
-            dpdwn.style.top = 'calc('+e.pageY+'px - 13.0rem)';
-        } else {
-            dpdwn.style.top = 'calc('+e.pageY+'px - 7.0rem)';
-        }
-        dpdwn.classList.add("show");
+      console.log( "top: "+dpdwn.style.top );
     }
   }
 
@@ -78,6 +88,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
     document.getElementById('list--pois').appendChild(li);
     li.pseudoStyle('before', 'background-color', poi.color);
+    li.pseudoStyle('before', 'border-color', poi.color);
+
     li.querySelector('.btn--poi--settings').addEventListener('click', function () {
       document.getElementById('editPoi_id').value = poi.id;
       document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);

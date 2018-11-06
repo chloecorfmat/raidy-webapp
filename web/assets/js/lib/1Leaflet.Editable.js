@@ -486,6 +486,9 @@
             this.on('dragend', this.onDragEnd);
             this.on('mouseup', this.onMouseup);
             this.on('click', this.onClick);
+            this.on('dblclick',function (e) {
+                this.delete();
+             });
             this.on('contextmenu', this.onContextMenu);
             this.on('mousedown touchstart', this.onMouseDown);
             this.on('mouseover', this.onMouseOver);

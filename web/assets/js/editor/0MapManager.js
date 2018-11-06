@@ -92,6 +92,14 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:vertex:mousedown ', function (e) {
       e.vertex.continue();
     });
+
+    this.map.on('editable:vertex:rawclick', function (e) {
+      e.cancel();
+      e.vertex.continue();
+      console.log(e.originalEvent)
+      console.log("clicked")
+    });
+
     this.map.on('editable:drawing:end', function () {
       document.getElementById('map').style.cursor = 'grab';
     });
@@ -151,7 +159,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         break;
       case EditorMode.TRACK_EDIT :
         this.displayTrackButton(true);
-        document.getElementById('map').style.cursor = 'crosshair';
+        document.getElementById('map').style.cursor = 'grab';
         document.getElementById('addPoiButton').classList.remove('add--poi');
         this.setTracksEditable(false);
         var res = this.tracksMap.get(this.currentEditID);
@@ -159,6 +167,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         currentTrack.setEditable(true);
         if(currentTrack.line.isEmpty()){
           currentTrack.line.editor.continueForward();
+          document.getElementById('map').style.cursor = 'crosshair';
         }
         break;
       case EditorMode.READING :

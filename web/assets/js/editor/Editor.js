@@ -7,7 +7,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     }
   };
 
-
   function convertRem(value) {
     return value * getRootElementFontSize();
   }
@@ -109,11 +108,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
         controlElement.innerHTML =
           '<div class="map-controller-container" >' +
-          '    <span class="switch-label">Édition des points</span>' +
-          '    <label class="switch">' +
-          '        <input type="checkbox">' +
-          '         <span class="slider round"></span>' +
-          '     </label>' +
+          '<span class="switch-label">Édition des points</span>' +
+          '<label class="switch">' +
+          '<input type="checkbox">' +
+          '<span class="slider round"></span>' +
+          '</label>' +
           '</div>';
         // Continue implementing the control here.
         controlElement.querySelector("input[type='checkbox']").addEventListener('change',function(){
