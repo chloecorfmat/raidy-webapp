@@ -39,14 +39,9 @@ class SportType
 
     /**
      * SportType constructor.
-     *
-     * @param mixed $sport sport
-     * @param mixed $icon  icon
      */
-    public function __construct($sport, $icon)
+    public function __construct()
     {
-        $this->sport = $sport;
-        $this->icon = $icon;
     }
 
     /**

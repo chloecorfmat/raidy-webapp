@@ -1,0 +1,15 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('deletePoiType', {'poiTypeId': poiType.id}) }}">Supprimer le type de point d'intérêt</a>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}

@@ -1,5 +1,7 @@
 window.addEventListener('load', organizersList)
 window.addEventListener('load', helpers)
+window.addEventListener('load', poiTypesList)
+window.addEventListener('load', sportTypesList)
 
 var options = {
   labels: {
@@ -24,5 +26,35 @@ function organizersList (e) {
 function helpers (e) {
   if (document.getElementById('helpersList') != null) {
     new DataTable('#helpersList', options);
+  }
+}
+
+function poiTypesList (e) {
+  if (document.getElementById('poiTypesList') != null) {
+    var dataTablePoiType = new DataTable('#poiTypesList', options) // eslint-disable-line no-undef, no-new
+
+    dataTablePoiType.on('datatable.page', function (page) {
+      /* document.getElementsByClassName('char--poitype').forEach(function () {
+        console.log('salut')
+        var id = this.dataset.poitypeId
+        console.log(id)
+        var colorId = document.getElementById('char--poitype-') + id
+        colorId.color = this.dataset.poitypecolor
+        console.log(this.dataset)
+      }) */
+      // Needed to display modal to delete poi type
+      displayModalToDeletePoiType() // eslint-disable-line no-undef
+    })
+  }
+}
+
+function sportTypesList (e) {
+  if (document.getElementById('sportTypesList') != null) {
+    var dataTableSportType = new DataTable('#sportTypesList', options) // eslint-disable-line no-undef, no-new
+
+    dataTableSportType.on('datatable.page', function (page) {
+      // Needed to display modal to delete sport type.
+      displayModalToDeleteSportType() // eslint-disable-line no-undef
+    })
   }
 }
