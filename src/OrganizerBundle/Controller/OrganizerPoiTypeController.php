@@ -54,6 +54,8 @@ class OrganizerPoiTypeController extends AjaxAPIController
                 $em->persist($poiType);
                 $em->flush();
 
+                $this->addFlash('success', 'Le type de point d\'intérêt a bien été ajouté.');
+
                 return $this->redirectToRoute('listPoiType');
             }
             $form->addError(new FormError('Ce type de point d\'intérêt existe déjà.'));
@@ -119,6 +121,8 @@ class OrganizerPoiTypeController extends AjaxAPIController
                 $em->persist($poiType);
                 $em->flush();
 
+                $this->addFlash('success', 'Le type de point d\'intérêt a bien été mis à jour.');
+
                 return $this->redirectToRoute('listPoiType');
             }
         }
@@ -157,6 +161,8 @@ class OrganizerPoiTypeController extends AjaxAPIController
 
             $em->remove($poiType);
             $em->flush();
+
+        $this->addFlash('success', 'Le type de point d\'intérêt a bien été supprimé.');
 
         return $this->redirectToRoute('listPoiType');
     }
@@ -201,6 +207,8 @@ class OrganizerPoiTypeController extends AjaxAPIController
 
                 $em->persist($poiType);
                 $em->flush();
+
+                $this->addFlash('success', 'Le type de point d\'intérêt a bien été ajouté.');
 
                 return $this->redirectToRoute('listPoiType');
             } else {
