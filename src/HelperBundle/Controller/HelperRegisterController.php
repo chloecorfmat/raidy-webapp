@@ -130,7 +130,7 @@ class HelperRegisterController extends Controller
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
             ->add('poitype', ChoiceType::class, [
-                'label' => 'Type de poste',
+                'label' => 'Type de poste souhaité pour le bénévolat',
                 'choices' => $choices,
             ])
             ->add('submit', SubmitType::class, [
@@ -261,7 +261,7 @@ class HelperRegisterController extends Controller
             ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
             //->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
             ->add('poitype', ChoiceType::class, [
-                'label' => 'Type de poste',
+                'label' => 'Type de poste souhaité pour le bénévolat',
                 'choices' => $choices,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
