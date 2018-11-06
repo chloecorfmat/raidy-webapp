@@ -45,7 +45,7 @@ class SportTypeService
      *
      * @return mixed
      */
-    public function updatePoiTypeFromForm($sportType, $obj, $oldIcon, $directory)
+    public function updateSportTypeFromForm($sportType, $obj, $oldIcon, $directory)
     {
         $sportType->setSport($obj->getSport());
 

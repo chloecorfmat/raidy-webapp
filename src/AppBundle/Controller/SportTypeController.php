@@ -39,7 +39,6 @@ class SportTypeController extends Controller
             ->add('icon', FileType::class, [
                 'label' => 'Icone',
                 'label_attr' => ['class' => 'form--fixed-label'],
-                'required' => false,
                 'data_class' => null,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un sport'])
@@ -197,7 +196,6 @@ class SportTypeController extends Controller
             ->add('icon', FileType::class, [
                 'label' => 'Icone',
                 'label_attr' => ['class' => 'form--fixed-label'],
-                'required' => false,
                 'data_class' => null,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un sport'])
