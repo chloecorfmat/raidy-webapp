@@ -92,6 +92,16 @@
                                         <input class="form--input-text" type="text" id="addTrack_name"
                                                required="required" maxlength="100">
                                     </div>
+                                    <div class="form--item form--item-select">
+                                        <label for="addTrack_sportType" class="required">
+                                            Type de sport <span class="input--required">*</span>
+                                        </label>
+                                        <select id="addTrack_sportType" required>
+                                            {% for sportType in sportTypes %}
+                                                <option value="{{ sportType.id }}">{{ sportType.sport }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                     <div class="form--item">
                                         <label for="addTrack_color" class="required">Couleur <span class="input--required">*</span></label>
                                         <input class="form--input-text" type="color" id="addTrack_color">
@@ -135,6 +145,16 @@
                                         <input class="form--input-text" type="text" id="editTrack_name"
                                                required="required" maxlength="100">
                                     </div>
+                                    <div class="form--item form--item-select">
+                                        <label for="editTrack_sportType" class="required">
+                                            Type de sport <span class="input--required">*</span>
+                                        </label>
+                                        <select id="editTrack_sportType" required>
+                                            {% for sportType in sportTypes %}
+                                                <option value="{{ sportType.id }}">{{ sportType.sport }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                     <div class="form--item  form--input-focused">
                                         <label for="editTrack_color" class="required">
                                             Couleur <span class="input--required">*</span></label>
@@ -144,7 +164,6 @@
                                     <div class="actions">
                                         <button type="submit" id="editTrack_submit" class="btn">Mettre à jour</button>
                                         <button type="button" class="btn btn--danger" id="editTrack_delete">Annuler</button>
-
                                     </div>
                                 </div>
                             </form>

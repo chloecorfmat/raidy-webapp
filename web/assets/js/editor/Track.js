@@ -38,6 +38,10 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     })
   };
 
+    Track.prototype.setSportType = function (sportType) {
+        this.sportType = sportType;
+    };
+
   Track.prototype.setEditable = function (b) {
     if(b){
       this.line.enableEdit();

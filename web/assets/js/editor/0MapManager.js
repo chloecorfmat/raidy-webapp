@@ -214,13 +214,16 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
   };
 
-  MapManager.prototype.requestNewTrack = function (name, color) {
+  MapManager.prototype.requestNewTrack = function (name, color, sportType) {
     var track = new Track();
     track.name = name;
     track.color = color;
+    track.sportType = sportType;
+
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/organizer/raid/' + raidID + '/track', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
+    console.log(track.toJSON());
     xhr_object.send(track.toJSON());
 
     xhr_object.onreadystatechange = function (event) {

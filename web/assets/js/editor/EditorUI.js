@@ -204,6 +204,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
           document.querySelector('#editTrack_name').value = htmlentities.decode(track.name);
           document.querySelector('#editTrack_color').value = track.color;
           document.querySelector('#editTrack_id').value = track.id;
+          console.log('ok');
+          document.querySelector('#editTrack_sportType').value = track.sportType;
+          console.log(track.sportType);
 
           MicroModal.show('edit-track-popin');
         });

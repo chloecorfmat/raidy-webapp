@@ -205,7 +205,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     e.preventDefault();
     var trName = document.getElementById('addTrack_name').value;
     var trColor = document.getElementById('addTrack_color').value;
-    mapManager.requestNewTrack(trName, trColor);
+    var trSport = document.getElementById('addTrack_sportType').value;
+    mapManager.requestNewTrack(trName, trColor, trSport);
     MicroModal.close('add-track-popin');
 
     document.getElementById('addTrack_name').value = '';
@@ -217,11 +218,13 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     var trName = document.getElementById('editTrack_name').value;
     var trColor = document.getElementById('editTrack_color').value;
     var trId = document.getElementById('editTrack_id').value;
+    var trSport = document.getElementById('editTrack_sportType').value;
 
     var track = mapManager.tracksMap.get(parseInt(trId));
 
     track.setName(trName);
     track.setColor(trColor);
+    track.setSportType(trSport);
 
     track.push();
     MicroModal.close('edit-track-popin');

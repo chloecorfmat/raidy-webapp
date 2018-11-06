@@ -167,9 +167,9 @@ class TrackService
         }
 
         /* TODO Temporary fix for demo, UNDO ASAP */
-        /*if (!isset($obj['sportType']) || '' == $obj['sportType']) {
+        if (!isset($obj['sportType']) || '' == $obj['sportType']) {
             $status = false;
-        }*/
+        }
 
         if (!isset($obj['trackpoints'])) {
             $status = false;

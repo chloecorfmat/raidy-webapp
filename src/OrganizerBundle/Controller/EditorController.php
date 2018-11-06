@@ -36,6 +36,9 @@ class EditorController extends Controller
             'user' => $raid->getUser(),
         ]);
 
+        $sportManager = $em->getRepository('AppBundle:SportType');
+        $sportTypes = $sportManager->findAll();
+
         if (null === $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
@@ -48,6 +51,7 @@ class EditorController extends Controller
         return $this->render('OrganizerBundle:Editor:editor.html.twig', [
             'id' => $id,
             'poiTypes' => $poiTypes,
+            'sportTypes' => $sportTypes,
         ]);
     }
 }
