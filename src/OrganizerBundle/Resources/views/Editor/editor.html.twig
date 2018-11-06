@@ -172,7 +172,14 @@
                     </header>
                     <div id="add-poi-content" class="modal--content">
                         <div>
-                            <form name="addPoi" id="addPoi_form">
+                            {% if poiTypes is empty %}
+                                <div class="alert alert--danger">
+                                    <p>Il n'existe aucun type de point d'intérêt.</p>
+                                    <p>Pour en ajouter, <a href="{{ path('addPoiType') }}">cliquez ici</a>.</p>
+                                </div>
+                            {% endif %}
+
+                                <form name="addPoi" id="addPoi_form">
                                 <div id="addPoi">
                                     <div class="form--item">
                                         <label for="addPoi_name" class="required">

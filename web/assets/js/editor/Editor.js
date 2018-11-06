@@ -108,7 +108,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
         controlElement.innerHTML =
           '<div class="map-controller-container" >' +
-          '<span class="switch-label">Édition des points</span>' +
+          '<span class="switch-label">Édition des points d\'intérêt</span>' +
           '<label class="switch">' +
           '<input type="checkbox">' +
           '<span class="slider round"></span>' +
