@@ -16,6 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrganizerAdminController extends Controller
 {
     /**
+     * @Route("/admin", name="admin")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function admin()
+    {
+        return $this->render('AppBundle:Admin:admin.html.twig');
+    }
+
+    /**
      * @Route("/admin/organizer/add", name="addOrganizer")
      *
      * @param Request $request request
@@ -59,6 +69,8 @@ class OrganizerAdminController extends Controller
                 $user->setRoles(['ROLE_ORGANIZER']);
 
                 $userManager->updateUser($user);
+
+                $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
 
                 return $this->redirectToRoute('listOrganizer');
             }
@@ -113,7 +125,8 @@ class OrganizerAdminController extends Controller
                 $user->setEmail($formUser->getEmail());
 
                 $userManager->updateUser($user);
-                // To display the phone number correctly.
+                $this->addFlash('success', 'Le profil a bien été modifié.');
+
                 return $this->redirectToRoute('editOrganizer', ['id' => $id]);
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
@@ -149,6 +162,8 @@ class OrganizerAdminController extends Controller
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(['id' => $id]);
         $userManager->deleteUser($user);
+
+        $this->addFlash('danger', 'L\'utilisateur a bien été supprimé.');
 
         return $this->redirectToRoute('listOrganizer');
     }

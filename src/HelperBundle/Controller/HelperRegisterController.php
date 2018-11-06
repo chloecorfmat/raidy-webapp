@@ -11,9 +11,11 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
@@ -29,6 +31,14 @@ class HelperRegisterController extends Controller
      */
     public function inviteHelper(Request $request, $id)
     {
+        // Logout user if one user is login.
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
+
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->find($id);
@@ -52,6 +62,14 @@ class HelperRegisterController extends Controller
      */
     public function registerSuccessHelper(Request $request, $id)
     {
+        // Logout user if one user is login.
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
+
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->find($id);
@@ -75,10 +93,29 @@ class HelperRegisterController extends Controller
      */
     public function registerHelper(Request $request, $id)
     {
+        // Logout user if one user is login.
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->find($id);
+
+        $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+
+        $poiTypes = $poiTypeManager->findBy([
+            'user' => $raid->getUser(),
+        ]);
+
+        $choices = [];
+        foreach ($poiTypes as $poiType) {
+            $choices[$poiType->getType()] = $poiType->getId();
+        }
 
         if (null === $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -92,8 +129,14 @@ class HelperRegisterController extends Controller
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
-            ->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
-            ->add('submit', SubmitType::class, ['label' => 'S\'inscrire', 'attr' => array('class' => 'btn')])
+            ->add('poitype', ChoiceType::class, [
+                'label' => 'Type de poste souhaité pour le bénévolat',
+                'choices' => $choices,
+            ])
+            ->add('submit', SubmitType::class, [
+                'label' => 'S\'inscrire',
+                'attr' => array('class' => 'btn'),
+            ])
             ->getForm();
 
         $form->handleRequest($request);
@@ -137,13 +180,11 @@ class HelperRegisterController extends Controller
                         if ($alreadyRegistered) {
                             return $this->redirectToRoute('helper');
                         } else {
-                            $poitype = new PoiType($formData['poitype']);
-                            $em->persist($poitype);
-                            $em->flush();
+                            $poitype = $em->getRepository('AppBundle:PoiType')->find($formData['poitype']);
 
                             $helper = new Helper();
                             $helper->setRaid($raid);
-                            $helper->setFavoritePoiType($poitype); // @todo : Use list instead of raw data
+                            $helper->setFavoritePoiType($poitype);
                             $helper->setUser($user);
                             $helper->setIsCheckedIn(false);
 
@@ -186,6 +227,14 @@ class HelperRegisterController extends Controller
      */
     public function joinHelper(Request $request, $id)
     {
+        // Logout user if one user is login.
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
+
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -195,11 +244,26 @@ class HelperRegisterController extends Controller
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
+        $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+
+        $poiTypes = $poiTypeManager->findBy([
+            'user' => $raid->getUser(),
+        ]);
+
+        $choices = [];
+        foreach ($poiTypes as $poiType) {
+            $choices[$poiType->getType()] = $poiType->getId();
+        }
+
         $defaultData = [];
         $form = $this->createFormBuilder($defaultData)
             ->add('email', TextType::class, ['label' => 'Email'])
             ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
-            ->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
+            //->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
+            ->add('poitype', ChoiceType::class, [
+                'label' => 'Type de poste souhaité pour le bénévolat',
+                'choices' => $choices,
+            ])
             ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
             ->getForm();
 
@@ -244,13 +308,11 @@ class HelperRegisterController extends Controller
                         if ($alreadyRegistered) {
                             return $this->redirectToRoute('helper');
                         } else {
-                            $poitype = new PoiType($formData['poitype']);
-                            $em->persist($poitype);
-                            $em->flush();
+                            $poitype = $em->getRepository('AppBundle:PoiType')->find($formData['poitype']);
 
                             $helper = new Helper();
                             $helper->setRaid($raid);
-                            $helper->setFavoritePoiType($poitype); // @todo : Use list instead of raw data
+                            $helper->setFavoritePoiType($poitype);
                             $helper->setUser($user);
                             $helper->setIsCheckedIn(false);
 

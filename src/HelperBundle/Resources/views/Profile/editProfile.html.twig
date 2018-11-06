@@ -4,15 +4,28 @@
     {% form_theme editPasswordForm 'form/fields.html.twig' %}
 {% endif %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('helper') }}">Administration</a></li>
+        <li class="breadcrumb--list-item">Édition du profil</li>
+    </ol>
+{% endblock %}
+
 {% block body %}
     <div class="main-form">
         <h1>Modifier son profil</h1>
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert--success">
+                <p>{{ flash_message }}</p>
+            </div>
+        {% endfor %}
         <div>
             {{ form_start(form) }}
             {{ form_widget(form) }}
             {{ form_end(form) }}
         </div>
 
+        <h2>Modifier son mot de passe</h2>
         <div>
             {{ form_start(editPasswordForm) }}
             {{ form_widget(editPasswordForm) }}

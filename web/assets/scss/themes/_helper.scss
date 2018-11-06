@@ -38,6 +38,20 @@ $theme-color: $helper-color;
     }
   }
 
+  .breadcrumb--list-item {
+    color: $tertiary-color-2;
+
+    &:not(:first-child) {
+      &::before {
+        content: url('../../images/angle-right-helper.svg');
+      }
+    }
+
+    a {
+      color: $theme-color;
+    }
+  }
+
   form {
     label {
       color: $text-color;

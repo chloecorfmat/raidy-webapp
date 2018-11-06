@@ -39,6 +39,7 @@ class TrackService
 
         $track->setName($obj['name']);
         $track->setIsVisible(boolval($obj['isVisible']));
+        $track->setIsCalibration(boolval($obj['isCalibration']));
 
         $track->setColor($obj['color']);
         $track->setTrackPoints($obj['trackpoints']);
@@ -64,8 +65,8 @@ class TrackService
         $obj = [];
 
         $obj['id'] = $track->getId();
-        $obj['name'] = $track->getName();
-        $obj['color'] = $track->getColor();
+        $obj['name'] = htmlentities($track->getName());
+        $obj['color'] = htmlentities($track->getColor());
         $obj['raid'] = $track->getRaid()->getId();
 
         if (null != $track->getSportType()) {
@@ -76,6 +77,7 @@ class TrackService
 
         $obj['trackpoints'] = $track->getTrackpoints();
         $obj['isVisible'] = $track->getisVisible();
+        $obj['isCalibration'] = $track->getisCalibration();
 
         return json_encode($obj);
     }
@@ -93,8 +95,8 @@ class TrackService
             $obj = [];
 
             $obj['id'] = $track->getId();
-            $obj['name'] = $track->getName();
-            $obj['color'] = $track->getColor();
+            $obj['name'] = htmlentities($track->getName());
+            $obj['color'] = htmlentities($track->getColor());
             $obj['raid'] = $track->getRaid()->getId();
 
             if (null != $track->getSportType()) {
@@ -105,6 +107,7 @@ class TrackService
 
             $obj['trackpoints'] = $track->getTrackpoints();
             $obj['isVisible'] = $track->getisVisible();
+            $obj['isCalibration'] = $track->getisCalibration();
 
             $tracksObj[] = $obj;
         }
@@ -123,6 +126,7 @@ class TrackService
     {
         $track->setName($obj['name']);
         $track->setIsVisible(boolval($obj['isVisible']));
+        $track->setIsCalibration(boolval($obj['isCalibration']));
 
         $track->setColor($obj['color']);
         $track->setTrackPoints($obj['trackpoints']);
@@ -149,28 +153,33 @@ class TrackService
         $status = true;
 
         if ($checkId) {
-            if (null == $obj['id'] || '' == $obj['id']) {
+            if (!isset($obj['id']) || '' == $obj['id']) {
                 $status = false;
             }
         }
 
-        if (null == $obj['name'] || '' == $obj['name']) {
+        if (!isset($obj['name']) || '' == $obj['name'] || strlen($obj['name'] > 100)) {
             $status = false;
         }
 
-        if (null == $obj['color'] || '' == $obj['color']) {
+        if (!isset($obj['color']) || '' == $obj['color']) {
             $status = false;
         }
 
-        if (null == $obj['sportType'] || '' == $obj['sportType']) {
+        /* TODO Temporary fix for demo, UNDO ASAP */
+        if (!isset($obj['sportType']) || '' == $obj['sportType']) {
             $status = false;
         }
 
-        if (null == $obj['trackpoints'] || '' == $obj['trackpoints']) {
+        if (!isset($obj['trackpoints'])) {
             $status = false;
         }
 
-        if (null == $obj['isVisible'] || '' == $obj['isVisible']) {
+        if (!isset($obj['isVisible'])) {
+            $status = false;
+        }
+
+        if (!isset($obj['isCalibration'])) {
             $status = false;
         }
 

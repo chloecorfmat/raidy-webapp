@@ -1,0 +1,88 @@
+<?php
+
+namespace OrganizerBundle\Controller;
+
+use AppBundle\Controller\AjaxAPIController;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+class OrganizerHelpersController extends AjaxAPIController
+{
+    /**
+     * @Route("/organizer/raid/{raidId}/helper/{helperId}", name="patchHelperToPoi", methods={"PATCH"})
+     *
+     * @param Request $request
+     * @param int     $raidId   raid id
+     * @param int     $helperId helper id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function patchHelperToPoi(Request $request, $raidId, $helperId)
+    {
+        // Set up managers
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        // Find the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
+        }
+
+        if ($raid->getUser()->getId() != $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        }
+
+        $data = $request->request->all();
+        $helperService = $this->container->get('HelperService');
+
+        if (!$helperService->checkDataAffectationArray($data, false)) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled');
+        }
+
+        $helperManager = $em->getRepository('AppBundle:Helper');
+        $helper = $helperManager->find($helperId);
+
+        if (null != $helper) {
+            $helper = $helperService->updateHelperToPoiFromArray($helper, $raidId, $data);
+            $em->flush();
+        } else {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This helper does not exist');
+        }
+
+        return new Response($helperService->helperToJson($helper));
+    }
+
+    /**
+     * @Route("/organizer/raid/helpers/{id}", name="listHelpers")
+     *
+     * @param Request $request request
+     * @param mixed   $id      id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function helpersList(Request $request, $id)
+    {
+        $manager = $this->getDoctrine()
+            ->getManager();
+
+        $helperManager = $manager->getRepository('AppBundle:Helper');
+
+        $helpers = $helperManager->findBy([
+            'raid' => $id,
+        ]);
+
+        $poiManager = $manager->getRepository('AppBundle:Poi');
+        $pois = $poiManager->findBy(['raid' => $id]);
+
+        return $this->render('OrganizerBundle:Helpers:helpers.html.twig', [
+            'raid_id' => $id,
+            'helpers' => $helpers,
+            'pois' => $pois,
+        ]);
+    }
+}

@@ -60,10 +60,10 @@ class PoiService
         $obj = [];
 
         $obj['id'] = $poi->getId();
-        $obj['name'] = $poi->getName();
-        $obj['longitude'] = $poi->getLongitude();
-        $obj['latitude'] = $poi->getLatitude();
-        $obj['requiredHelpers'] = $poi->getRequiredHelpers();
+        $obj['name'] = htmlentities($poi->getName());
+        $obj['longitude'] = htmlentities($poi->getLongitude());
+        $obj['latitude'] = htmlentities($poi->getLatitude());
+        $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
         $obj['raid'] = $poi->getRaid()->getId();
 
         if (null != $poi->getPoiType()) {
@@ -114,10 +114,10 @@ class PoiService
             $obj = [];
 
             $obj['id'] = $poi->getId();
-            $obj['name'] = $poi->getName();
-            $obj['longitude'] = $poi->getLongitude();
-            $obj['latitude'] = $poi->getLatitude();
-            $obj['requiredHelpers'] = $poi->getRequiredHelpers();
+            $obj['name'] = htmlentities($poi->getName());
+            $obj['longitude'] = htmlentities($poi->getLongitude());
+            $obj['latitude'] = htmlentities($poi->getLatitude());
+            $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
             $obj['raid'] = $poi->getRaid()->getId();
 
             if (null != $poi->getPoiType()) {
@@ -140,34 +140,33 @@ class PoiService
      */
     public function checkDataArray($obj, $checkId)
     {
-        $status = true;
 
         if ($checkId) {
-            if (null == $obj['id'] || '' == $obj['id']) {
-                $status = false;
+            if (!isset($obj['id']) || '' == $obj['id']) {
+                return false;
             }
         }
 
-        if (null == $obj['name'] || '' == $obj['name']) {
-            $status = false;
+        if (!isset($obj['name']) || '' == $obj['name'] || strlen($obj['name'] > 45)) {
+            return false;
         }
 
-        if (null == $obj['longitude'] || '' == $obj['longitude']) {
-            $status = false;
+        if (!isset($obj['longitude']) || '' == $obj['longitude']) {
+            return false;
         }
 
-        if (null == $obj['latitude'] || '' == $obj['latitude']) {
-            $status = false;
+        if (!isset($obj['latitude']) || '' == $obj['latitude']) {
+            return false;
         }
 
-        if (null == $obj['requiredHelpers'] || '' == $obj['requiredHelpers']) {
-            $status = false;
+        if (!isset($obj['requiredHelpers']) || $obj['requiredHelpers'] < 0) {
+            return false;
         }
 
-        if (null == $obj['poiType'] || '' == $obj['poiType']) {
-            $status = false;
+        if (!isset($obj['poiType']) || '' == $obj['poiType']) {
+            return false;
         }
 
-        return $status;
+        return true;
     }
 }

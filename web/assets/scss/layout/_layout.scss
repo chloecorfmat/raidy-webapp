@@ -54,3 +54,47 @@ main {
   max-height: 100vh;
   overflow: hidden;
 }
+
+.content--quarter {
+  overflow: hidden;
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    box-sizing: border-box;
+    width: 25%;
+
+    &:not(:last-child) {
+      margin-right: 3rem;
+    }
+  }
+}
+
+.content--half {
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    box-sizing: border-box;
+    width: 50%;
+
+    &:not(:last-child) {
+      margin-right: 3rem;
+    }
+  }
+}
+
+.main-flex-column {
+  display: flex;
+  flex-direction: column;
+
+  .content {
+    flex-grow: 1;
+  }
+}

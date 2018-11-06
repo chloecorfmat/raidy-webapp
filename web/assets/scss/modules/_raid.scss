@@ -29,6 +29,7 @@
   .profile--contact-information {
     background: $grey-light;
     padding: .5rem 1rem;
+    word-break: break-word;
   }
 }
 
@@ -125,5 +126,16 @@
   .raid--date {
     font-family: 'Fontastique', 'SansSerif';
     font-size: .9rem;
+  }
+}
+
+.useful-links {
+  p {
+    font-weight: 700;
+
+    a {
+      font-weight: normal;
+      word-break: break-word;
+    }
   }
 }

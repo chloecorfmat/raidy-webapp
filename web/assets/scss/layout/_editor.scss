@@ -1,6 +1,24 @@
 .map--container {
-  flex-grow: 1;
   position: relative;
+  width: 80%;
+}
+
+.btn-leave-track-edit {
+  background-color: $live-color;
+  border-radius: 3rem;
+  font-family: Fontastique;
+  margin: 0 !important;
+  margin-left: .5rem !important;
+  padding: .5rem !important;
+}
+
+.editor--container {
+  // 4rem is the height of the header.
+  height: calc(100vh - 4rem);
+
+  .map--container {
+    transition: width 1s linear;
+  }
 }
 
 .map {
@@ -8,43 +26,125 @@
   min-width: 100%;
 }
 
-// LEFT TAB BAR.
-
-.tab {
-  background-color: $main-color;
-  display: flex;
-  flex-direction: row;
-  justify-content: flex-start;
-  overflow: hidden;
-
-  // Style the buttons that are used to open the tab content.
-  button {
-    background-color: inherit;
-    border: 0;
-    cursor: pointer;
-    outline: none;
-    padding: 14px 16px;
-    transition: .3s;
-  }
+.map-tooltip {
+  background: #666;
+  border: 1px dashed #999;
+  color: $white;
+  display: none;
+  font-family: sans-serif;
+  font-size: 12px;
+  height: 20px;
+  line-height: 20px;
+  opacity: .5;
+  padding: 10px;
+  position: absolute;
+  z-index: 1000;
 }
 
+.poi-marker {
+  border: 1px solid black;
+  border-radius: 3rem 3rem 0;
+  display: block;
+  height: 2rem;
+  position: relative;
+  transform: translateX(-1rem) translateY(-2rem) rotate(45deg);
+  width: 2rem;
+}
+
+.track-marker {
+  border-radius: 3rem 3rem;
+  display: block;
+  height: 1rem;
+  position: relative;
+  transform: translateX(-.5rem) translateY(-.5rem);
+  width: 1rem;
+}
+
+// ACCORDION
+// Style the buttons that are used to open and close the accordion panel.
+.accordion {
+  background-color: $tertiary-color-1;
+  color: $white;
+  cursor: pointer;
+  outline: none;
+  padding: 20px;
+  text-align: left;
+  transition: .4s;
+  width: 100%;
+}
+
+// Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover).
+.active,
+.accordion:hover {
+  background-color: $tertiary-color-1;
+}
+
+// Style the accordion panel. Note: hidden by default.
+.panel {
+  background-color: $white;
+  max-height: 0;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  transition: max-height .2s ease-out;
+}
+
+.accordion:after {
+  color: #fff;
+  content: '\f107';
+  float: right;
+  font-family: 'Font Awesome 5 Free';
+  font-size: 1rem;
+  font-weight: 900;
+  margin-left: 5px;
+
+}
+
+button.active:after {
+  content: '\f106'; // Unicode character for 'minus' sign (-).
+}
+
+// LEFT TAB BAR.
 // Style the tab content.
 .tabcontent {
-  border-top: 0;
-  display: none;
-
   .btn--action {
     display: block;
     margin: 1rem auto;
   }
 }
 
+.track--text {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.track--isCalibration {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-left: .3rem;
+}
+
+.checkbox-item--label > div > span:nth-child(1) {
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .editor--list {
   list-style-type: none;
   padding: 0;
+  padding-right: 20px;
 
   li {
+    align-items: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     padding: 8px 16px;
+    width: 100%;
 
     &:last-child {
       border-bottom: 0;
@@ -71,7 +171,9 @@
 }
 
 .btn--add-poi {
+  background-clip: padding-box;
   background-color: $tertiary-color-1;
+  border: 2px solid rgba(0, 0, 0, .2);
   border-radius: 3rem ;
   bottom: 0;
   font-size: 3rem;
@@ -79,7 +181,7 @@
   margin: 2.5rem;
   overflow: hidden;
   padding: 1rem;
-  position: absolute;
+  position: fixed;
   right: 0;
   text-align: center;
   transition-duration: .5s;
@@ -87,44 +189,58 @@
   transition-timing-function: ease;
   vertical-align: middle;
   width: 5rem;
-  z-index: 1000;
+  z-index: 999;
 
-  svg{
+  svg {
+    fill: $tertiary-color-1;
+    transform: translateY(-.5rem);
     transition-duration: .5s;
-    transition-property:fill, transform;
+    transition-property: fill, transform;
     transition-timing-function: ease;
     width: 50%;
-    transform: translateY(-0.5rem);
-    fill : $tertiary-color-1;
   }
+
   &.add--poi {
     background-color: $secondary-color-2;
 
     .btn--editor {
-     // span { // sass-lint:disable-line nesting-depth
-       // color: $secondary-color-2;
-        svg{
-          transform: translateY(-0.5rem) rotate(50deg) ;//translateX(.25rem);
-          fill : $secondary-color-2;
-
-        }
-      //}
+      svg {
+        fill: $secondary-color-2;
+        transform: translateY(-.5rem) rotate(50deg);
+      }
     }
   }
 }
 
-
 .editor--container {
-  //border-top: 1px solid $white;
   display: flex;
+  justify-content: space-between;
   width: 100%;
-}
 
+  ::-webkit-scrollbar {
+    width: .75rem;
+  }
+
+  // Track.
+  ::-webkit-scrollbar-track {
+    background: #eeeeee;
+  }
+
+  // Handle.
+  ::-webkit-scrollbar-thumb {
+    background: #CCCCCC;
+  }
+
+  // Handle on hover.
+  ::-webkit-scrollbar-thumb:hover {
+    background: #DDDDDD;
+  }
+}
 
 .tab-bar {
   flex-grow: 1;
-  overflow: scroll;
-  overflow-x: hidden;
+  overflow-x: visible;
+  overflow-y: scroll;
 }
 
 .tablinks {
@@ -150,8 +266,19 @@
 .bar {
   display: flex;
   flex-direction: column;
-  max-width: 30%;
+  left: 0;
   position: relative;
+  transition: width 1s ease;
+  width: 20%;
+  z-index: 1000;
+
+  .fa-caret-right {
+    display: block;
+  }
+
+  .fa-times {
+    display: none;
+  }
 
   &::after {
     background-color: $tertiary-color-1;
@@ -175,36 +302,46 @@
   margin: auto;
   position: absolute;
   right: 0;
-  top: 50%;
-  transform: translateX(100%);
+  top: 50vh;
+  transform: translateY(-50%) translateX(100%);
   width: 1.5rem;
   z-index: 1000;
-   i{
-     right: 15%;
-     top: 20%;
-     position: absolute;
-     transform: translateX(-75%);
-   }
+
+  div:not(.tab-bar--actions) {
+    i {
+      position: absolute;
+      right: 15%;
+      top: 20%;
+      transform: translateX(-75%);
+    }
+  }
 }
 
 .tab-bar--actions {
   margin: auto;
-  padding-bottom: 1rem;
 }
 
 .list--pois {
   font-size: .9rem;
+  padding-right: 25px;
 
   .list--pois-items {
     &::before {
-      // background: $main-color; // @TODO : How to set background color ?
       border-radius: 50%;
-      content: '';
+      content: ' ';
       display: inline-block;
-      height: 1.25rem;
-      margin-right: 1rem;
+      height: calc(.5rem + 4px);
+      margin-right: .5rem;
+      padding: .2rem;
       vertical-align: middle;
-      width: 1.25rem;
+      width: calc(.5rem + 4px);
+    }
+
+    .btn--track--more {
+
+      i {
+        vertical-align: top;
+      }
     }
   }
 }
@@ -214,14 +351,13 @@
 }
 
 .bar--invisible {
-  position: absolute;
+  position: relative;
+  transition: width 1s ease;
+  width: 0;
 
-  .btn--laterale-bar {
-    left: 0;
-    margin-left: 0;
-    position: fixed;
-    top: 50%;
-    transform: translateX(0%) translateY(100%);
+  & + .map--container {
+    transition: width .5s linear;
+    width: 100%;
   }
 }
 
@@ -230,6 +366,8 @@
 }
 
 .checkbox-item {
+  display: flex;
+  flex-direction: row;
   input {
     display: none;
 
@@ -263,6 +401,8 @@
   }
 
   .checkbox-item--label {
+    display: flex;
+    flex-direction: row;
     &:hover {
       cursor: pointer;
     }
@@ -277,11 +417,54 @@
   background: $grey-light;
 }
 
-.btn--track--edit {
+// Dropdown Button.
+.dropbtn {
+  border: none;
+  color: $white;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 16px;
+}
+
+// The container <div> - needed to position the dropdown content.
+.dropdown {
+  display: inline-block;
+  position: absolute;
+}
+
+// Dropdown Content (Hidden by Default).
+.dropdown-content {
+  background-color: #FFFFFF;
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
+  cursor: pointer;
+  display: none;
+  left : 100%;
+  min-width: 12rem ;
+  position: absolute;
+  z-index: 99999999999;
+
+  a {
+    display: block;
+    padding: 1.2rem 1.5rem;
+    text-decoration: none;
+
+    &:hover {
+      background-color: $grey-light;
+    }
+  }
+}
+
+// Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button).
+.show {
+  display: block;
+}
+
+.btn--track--more {
   background: none;
   color: $tertiary-color-1;
   display: inline-block;
-  font-size: .65rem;
+  font-size: 1rem;
+  justify-self: flex-end;
   margin-left: .25rem;
 
   &:hover {
@@ -289,13 +472,11 @@
   }
 }
 
-.btn--track--settings,
 .btn--poi--settings {
   background: none;
   color: $tertiary-color-1;
   display: inline-block;
   font-size: .95rem;
-  margin-left: .25rem;
 
   &:hover {
     opacity: .5;
@@ -315,8 +496,7 @@
   }
 }
 
-
-// LEAF LET POP-UP
+// LEAF LET POP-UP.
 .leaflet-popup-content-wrapper {
   border-radius: 12px;
   padding: 0;
@@ -342,3 +522,241 @@
   }
 }
 
+// TOGGLE.
+
+// The switch - the box around the slider.
+.switch {
+  display: inline-block;
+  height: 1.4rem;
+  margin-left: .5rem;
+  position: relative;
+  width: 2.4rem;
+}
+
+// Hide default HTML checkbox.
+.switch {
+  input {
+    height: 0;
+    opacity: 0;
+    width: 0;
+  }
+}
+
+// The slider.
+.slider {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+}
+
+.slider:before {
+  background-color: $white;
+  bottom: .16rem;
+  content: '';
+  height: 1rem;
+  left: .16rem;
+  position: absolute;
+  transition: .4s;
+  width: 1rem;
+}
+
+#map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-in,
+#map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-out {
+  color: $tertiary-color-1;
+}
+
+input:checked + .slider {
+  background-color: $tertiary-color-1;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 .08rem $tertiary-color-1;
+}
+
+input:checked + .slider::before {
+  transform: translateX(1rem);
+}
+
+.switch-label {
+  color: $tertiary-color-1;
+  display: inline;
+  font-family: 'Proxima Nova', 'SansSerif';
+  font-size: .75rem;
+  font-weight: bold;
+  padding: 0;
+  text-align: center;
+}
+
+.map-controller-container {
+  background-clip: padding-box;
+  background-color: $white;
+  border: 2px solid rgba(0, 0, 0, .2);
+  border-radius: 4px;
+  padding: .4rem;
+}
+
+// Rounded sliders.
+.slider.round {
+  border-radius: 1.4rem;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
+
+// Alternative.
+.slider-alternative {
+  background-color: #ccc;
+  bottom: 0;
+  cursor: pointer;
+  left: 0;
+  position: absolute;
+  right: 0;
+  top: 0;
+  transition: .4s;
+
+  &.round {
+    border-radius: 1.4rem;
+
+    &::before {
+      border-radius: 50%;
+    }
+  }
+}
+
+.slider-alternative::before {
+  content: 'X';
+  font-family: Fontastique;
+  height: .5rem;
+  position: absolute;
+  right: .25rem;
+  top: .25rem;
+  transition: .4s;
+  width: .5rem;
+}
+
+input:checked + .slider-alternative {
+  background-color: $tertiary-color-1;
+}
+
+input:focus {
+  + .slider-alternative {
+    box-shadow: 0 0 .08rem $tertiary-color-1;
+  }
+}
+
+.switch-alternative {
+  display: inline-block;
+  height: 1.4rem;
+  position: relative;
+  width: 1.4rem;
+
+  // Hide default HTML checkbox.
+  input {
+    height: 0;
+    opacity: 0;
+    width: 0;
+  }
+}
+
+
+@media screen and (min-width: $breakpoint-mediumlarge) and (max-width: $breakpoint-large) {
+  .bar {
+    width: 30%;
+  }
+
+  .bar--invisible {
+    position: relative;
+    transition: width 1s ease;
+    width: 0;
+
+    & + .map--container {
+      transition: width .5s linear;
+      width: 100%;
+    }
+  }
+
+  .map--container {
+    width: 70%;
+  }
+}
+
+@media screen and (max-width: $breakpoint-mediumlarge) {
+  .bar {
+    width: 100%;
+
+    + .map--container {
+      .fab {
+        display: none;
+      }
+    }
+
+    .fa-caret-right {
+      display: none;
+    }
+
+    .fa-times {
+      display: block;
+      margin: auto;
+      vertical-align: middle;
+    }
+
+    &:not(.bar--invisible) {
+      .btn--laterale-bar {
+        background: $secondary-color-2;
+        border-radius: 50%;
+        bottom: 2rem;
+        display: flex;
+        font-size: 2rem;
+        height: 4rem;
+        line-height: 2rem;
+        position: fixed;
+        right: 2rem;
+        top: initial;
+        transform: initial;
+        width: 4rem;
+      }
+    }
+  }
+
+  .bar--invisible {
+    position: relative;
+    transition: width 1s ease;
+    width: 0;
+
+    + .map--container {
+      transition: width .5s linear;
+      width: 100%;
+
+      .fab {
+        display: initial;
+      }
+    }
+
+    .fa-caret-right {
+      display: block;
+    }
+
+    .fa-times {
+      display: none;
+    }
+  }
+
+  .map--container {
+    width: 0;
+  }
+
+  .dropdown-content {
+    left: initial;
+    right: 10%;
+
+    i {
+      margin-right: .5rem;
+    }
+  }
+}

@@ -1,10 +1,4 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: lucas
- * Date: 15/10/18
- * Time: 14:57.
- */
 
 namespace APIBundle\Controller;
 
@@ -16,15 +10,14 @@ use Symfony\Component\HttpFoundation\Response;
 class TrackController extends AjaxAPIController
 {
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
-     * @Rest\Get("/api/organizer/raid/{raidId}/track")
-     * @Rest\Get("/api/helper/raid/{raidId}/track")
-     *
-     * @param Request $request request
-     * @param int     $raidId  raid id
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
+ * @Rest\View(statusCode=Response::HTTP_OK)
+ * @Rest\Get("/api/organizer/raid/{raidId}/track")
+ *
+ * @param Request $request request
+ * @param int     $raidId  raid id
+ *
+ * @return \Symfony\Component\HttpFoundation\Response
+ */
     public function getTrackAction(Request $request, $raidId)
     {
         $em = $this->getDoctrine()->getManager();
@@ -38,8 +31,36 @@ class TrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
+        if (null == $user->getId()) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        }
+
+        $tracks = $trackManager->findBy(array('raid' => $raidId));
+        $trackService = $this->container->get('TrackService');
+
+        return new Response($trackService->tracksArrayToJson($tracks));
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_OK)
+     * @Rest\Get("/api/helper/raid/{raidId}/track")
+     *
+     * @param Request $request request
+     * @param int     $raidId  raid id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getTrackHelperAction(Request $request, $raidId)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $trackManager = $em->getRepository('AppBundle:Track');
+
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        $user = $this->getUser();
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
         $tracks = $trackManager->findBy(array('raid' => $raidId));
@@ -141,7 +162,7 @@ class TrackController extends AjaxAPIController
     }
 
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED, serializerGroups={"auth-token"})
+     * @Rest\View(statusCode=Response::HTTP_OK, serializerGroups={"auth-token"})
      * @Rest\Delete("/api/organizer/raid/{raidId}/track/{trackId}")
      *
      * @param Request $request request

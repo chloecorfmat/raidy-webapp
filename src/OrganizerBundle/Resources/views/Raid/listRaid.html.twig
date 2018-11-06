@@ -2,7 +2,7 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item">Organizer</li>
+        <li class="breadcrumb--list-item">Administration</li>
     </ol>
 {% endblock %}
 
@@ -36,10 +36,15 @@
             <h2>{{ user.firstname }} {{ user.lastname }}</h2>
             <div class="profile--contact-information">
                 <h3>Coordonnées <a href="{{ path('editOrganizerProfile') }}"><i aria-hidden="true" class="fas fa-pen"></i></a></h3>
-                <p>Login : {{ user.username }}</p>
                 <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
                 <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             </div>
+            <h2>Liens utiles</h2>
+            <ul>
+                <li>
+                    <a href="{{ path('listPoiType') }}">Gérer les types de points d'intérêt</a>
+                </li>
+            </ul>
         </div>
     </div>
 {% endblock %}

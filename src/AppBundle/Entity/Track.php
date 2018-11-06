@@ -44,13 +44,13 @@ class Track
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="cascade")
      */
     protected $raid;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\SportType")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=true, onDelete="cascade")
      */
     protected $sportType;
 
@@ -58,6 +58,11 @@ class Track
      * @ORM\Column(name="isVisible", type="boolean", nullable=false)
      */
     protected $isVisible;
+
+    /**
+     * @ORM\Column(name="isCalibration", type="boolean", nullable=true)
+     */
+    protected $isCalibration = false;
 
     /**
      * Track constructor.
@@ -176,5 +181,21 @@ class Track
     public function setIsVisible($isVisible)
     {
         $this->isVisible = $isVisible;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisCalibration()
+    {
+        return $this->isCalibration;
+    }
+
+    /**
+     * @param mixed $isCalibration
+     */
+    public function setIsCalibration($isCalibration)
+    {
+        $this->isCalibration = $isCalibration;
     }
 }

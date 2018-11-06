@@ -82,6 +82,8 @@ class DefaultController extends Controller
             $user->setPhone($phone);
             $userManager->updateUser($user);
 
+            $this->addFlash('success', 'Le profil a bien été mis à jour.');
+
             return $this->redirectToRoute('editOrganizerProfile');
         }
 
@@ -98,6 +100,8 @@ class DefaultController extends Controller
                 $user->setPlainPassword($formData['plainPassword']);
                 $userManager = $this->get('fos_user.user_manager');
                 $userManager->updateUser($user);
+
+                $this->addFlash('success', 'Le mot de passe a bien été mis à jour.');
             }
         }
 

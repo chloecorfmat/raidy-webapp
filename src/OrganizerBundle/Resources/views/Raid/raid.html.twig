@@ -1,5 +1,25 @@
 {% extends 'default/organizer.html.twig' %}
 
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <style>
+        .map {
+            height: 50%;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 980px) {
+            .map {
+                height: 50vh;
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Organizer</a></li>
@@ -9,24 +29,65 @@
 
 {% block body %}
     <h1>{{ raid.name }}</h1>
-
     <div class="content">
-        <div class="content--part">
+        <div class="content--quarter">
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
+
             {{ form_start(form) }}
             {{ form_widget(form) }}
             {{ form_end(form) }}
         </div>
-        <div class="content--part">
-            <div>
-                <h2>Editeur</h2>
-                <a href="{{ path('editor', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('editor', {'id': raid.id}) }}</a>
+
+        <div class="map--container content--half">
+            <div id="map" class="map"></div>
+        </div>
+
+        <div class="content--quarter">
+            <div class="card">
+                <a href="{{ path('editor', {'id': raid.id}) }}">
+                    <i class="fas fa-map-marked-alt fa-2x"></i>
+                    <p>Tracé</p>
+                </a>
             </div>
-            <div>
-                <h2>Inviter des bénévoles</h2>
-                <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
+            <div class="card">
+                <a href="{{ path('listHelpers', {'id': raid.id}) }}">
+                    <i class="fas fa-users fa-2x"></i>
+                    <p>Bénévoles</p>
+                </a>
+            </div>
+            <div class="card">
+                {# @TODO : change the url #}
+                <a href="{{ path('listHelpers', {'id': raid.id}) }}">
+                    <i class="fas fa-phone fa-2x"></i>
+                    <p>Contacts</p>
+                </a>
             </div>
 
+            <div class="useful-links">
+                <h2>Liens utiles</h2>
+                <p>
+                    Inviter des bénévoles :
+                    <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
+                </p>
+            </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script>
+      var mapManager;
+      var raidID;
+      document.addEventListener("DOMContentLoaded", function () {
+        mapManager = new MapManager();
+        raidID = parseInt({{ raid.id }});
+        mapManager.initialize();
+      });
+    </script>
 {% endblock %}
