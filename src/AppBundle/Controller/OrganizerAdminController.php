@@ -16,6 +16,16 @@ use Symfony\Component\Routing\Annotation\Route;
 class OrganizerAdminController extends Controller
 {
     /**
+     * @Route("/admin", name="admin")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function admin()
+    {
+        return $this->render('AppBundle:Admin:admin.html.twig');
+    }
+
+    /**
      * @Route("/admin/organizer/add", name="addOrganizer")
      *
      * @param Request $request request
