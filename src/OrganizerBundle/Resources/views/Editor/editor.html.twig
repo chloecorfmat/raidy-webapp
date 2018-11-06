@@ -192,9 +192,9 @@
                                             Type du point d'intérêt <span class="input--required">*</span>
                                         </label>
                                         <select id="addPoi_type" required>
-                                            <option value="1">Parking</option>
-                                            <option value="2" >Point dangereux</option>
-                                            <option value="3">Restauration</option>
+                                            {% for poiType in poiTypes %}
+                                            <option value="{{ poiType.id }}">{{ poiType.type }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <div class="actions">
