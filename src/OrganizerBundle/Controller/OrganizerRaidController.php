@@ -183,7 +183,7 @@ class OrganizerRaidController extends Controller
                     $uploadedFileService = $this->container->get('UploadedFileService');
                     $fileName = $uploadedFileService->saveFile(
                         $formRaid->getPicture(),
-                        $this->getParameter('raids_img_directory'),
+                        $this->getParameter('raids_img_directory')
                     );
                     $raid->setPicture($fileName);
                 } else {
