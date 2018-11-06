@@ -4,6 +4,16 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.map = map;
     this.line = [];
 
+
+    this.startMarker = L.marker([0, 0]);
+    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
+      html: '<span class="track-marker" style=" border:1px solid black; background-color: #78e08f'  + ';" />'
+    }));
+    this.endMarker = L.marker([0, 0]);
+    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
+      html: '<span class="track-marker" style=" border:1px solid black; background-color: #f74a45' +  ';" />'
+    }));
+
     this.id = '';
     this.name = '';
     this.color = '';
@@ -32,9 +42,23 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     if(b){
       this.line.enableEdit();
       this.decorator.removeFrom(this.map);
+      this.startMarker.removeFrom(this.map);
+      this.endMarker.removeFrom(this.map);
     }else{
       this.line.disableEdit();
-      this.decorator.addTo(this.map);
+      if(this.visible) {
+        this.decorator.addTo(this.map);
+        if (!this.line.isEmpty()) {
+          let latLngs = this.line.getLatLngs();
+          this.startMarker.setLatLng(latLngs[0]);
+          this.startMarker.addTo(this.map);
+          if (latLngs.length > 1) {
+            console.log(latLngs);
+            this.endMarker.setLatLng(latLngs[latLngs.length - 1]);
+            this.endMarker.addTo(this.map);
+          }
+        }
+      }
     }
   };
 
@@ -50,6 +74,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Track.prototype.hide = function () {
     this.decorator.removeFrom(this.map);
+    this.startMarker.removeFrom(this.map);
+    this.endMarker.removeFrom(this.map);
 
     var points = this.waypoints;
     for (var point in points) {
@@ -61,6 +87,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Track.prototype.show = function () {
     this.decorator.addTo(this.map);
+    this.startMarker.addTo(this.map);
+    this.endMarker.addTo(this.map);
+
     var points = this.waypoints;
     for (var point in points) {
       mapManager.group.addLayer(points[point]);
@@ -99,6 +128,14 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     test = JSON.parse(track.trackpoints);
 
     this.line = L.polyline(test, {color: this.color}).addTo(mapManager.group);
+
+    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
+      html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #78e08f'  + ';" />'
+    }));
+    this.endMarker = L.marker([0, 0]);
+    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
+      html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #f74a45' +  ';" />'
+    }));
 
     this.line.bindPopup('' +
       '<header style="' +
@@ -145,6 +182,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.map.removeLayer(this.line);
     this.map.removeLayer(this.decorator);
+    this.map.removeLayer(this.startMarker);
+    this.map.removeLayer(this.endMarker);
 
     mapManager.editorUI.removeTrack(this);
   };

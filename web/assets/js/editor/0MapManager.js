@@ -89,9 +89,11 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
 
 
-    this.map.on('editable:vertex:mousedown ', function (e) {
+    this.map.on('editable:vertex:rawclick', function (e) {
+      e.cancel();
       e.vertex.continue();
     });
+
     this.map.on('editable:drawing:end', function () {
       document.getElementById('map').style.cursor = 'grab';
     });
@@ -151,12 +153,16 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         break;
       case EditorMode.TRACK_EDIT :
         this.displayTrackButton(true);
-        document.getElementById('map').style.cursor = 'crosshair';
+        document.getElementById('map').style.cursor = 'grab';
         document.getElementById('addPoiButton').classList.remove('add--poi');
         this.setTracksEditable(false);
         var res = this.tracksMap.get(this.currentEditID);
         currentTrack = this.tracksMap.get(this.currentEditID);
         currentTrack.setEditable(true);
+        if(currentTrack.line.isEmpty()){
+          currentTrack.line.editor.continueForward();
+          document.getElementById('map').style.cursor = 'crosshair';
+        }
         break;
       case EditorMode.READING :
         document.getElementById('map').style.cursor = 'grab';
@@ -260,7 +266,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           for (poi of pois) {
             mapManager.addPoi(poi);
           }
-          mapManager.map.fitBounds(mapManager.group.getBounds());
+          if(mapManager.group.getLayers().length > 0) {
+            mapManager.map.fitBounds(mapManager.group.getBounds());
+          }
         }
       }
       mapManager.switchMode(EditorMode.READING);

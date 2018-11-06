@@ -3,6 +3,17 @@
   width: 80%;
 }
 
+.btn-leave-track-edit{
+  border-radius: 3rem;
+ // width: 2rem;
+  //height: 2rem;
+  padding: 0.5rem !important;
+  margin: 0rem !important;
+  margin-left: 0.5rem !important;
+  font-family: Fontastique;
+  background-color: $live-color;
+}
+
 .editor--container {
   // 4rem is the height of the header.
   height: calc(100vh - 4rem);
@@ -33,11 +44,23 @@
 
 .poi-marker{
   border-radius: 3rem 3rem 0;
+
+  border:1px solid black;
+
   display: block;
   height: 2rem;
+  width: 2rem;
   position: relative;
   transform: translateX(-1rem) translateY(-2rem) rotate(45deg);
-  width: 2rem;
+}
+
+.track-marker{
+  border-radius: 3rem 3rem;
+  display: block;
+  height: 1rem;
+  width: 1rem;
+  position: relative;
+  transform: translateX(-0.5rem) translateY(-0.5rem);
 }
 
 // ACCORDION
@@ -96,6 +119,7 @@ button.active:after {
   display: flex;
   flex-direction: column;
   width: 90%;
+  cursor: pointer;
 }
 
 .track--isCalibration{
@@ -311,12 +335,14 @@ button.active:after {
 
   .list--pois-items {
     &::before {
+      content: ' ';
       border-radius: 50%;
-      content: '';
       display: inline-block;
-      height: 1.25rem;
+      width: calc(0.5rem + 4px);
+      height: calc(0.5rem + 4px);
       vertical-align: middle;
-      width: 1.25rem;
+      margin-right: .5rem;
+      padding: .2rem;
     }
 
     .btn--track--more {
@@ -745,3 +771,5 @@ input:focus + .slider-alternative {
     }
   }
 }
+
+

@@ -1,5 +1,8 @@
 if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
   function Poi(map) {
+
+
+
     this.map = map;
     this.marker = L.marker([0, 0]);
     this.id = '';
