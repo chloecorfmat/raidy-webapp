@@ -1,0 +1,15 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+    {{ form_widget(form) }}
+    {{ form_end(form) }}
+
+    <a href="{{ path('deleteSportType', {'sportTypeId': sportType.id}) }}">Supprimer le sport</a>
+
+{% endblock %}
+
+{% block stylesheets %}
+
+{% endblock %}

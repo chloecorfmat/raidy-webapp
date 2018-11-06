@@ -45,7 +45,7 @@ class PoiController extends AjaxAPIController
 
     /**
      * @Rest\View(statusCode=Response::HTTP_OK)
-     * @Rest\Get("/api/helper/raid/{raidId}/poi/user/{userId}")
+     * @Rest\Get("/api/helper/raid/{raidId}/poi")
      *
      * @param Request $request
      * @param int     $raidId  raid id
@@ -54,7 +54,29 @@ class PoiController extends AjaxAPIController
      */
     public function getHelperPOIAction(Request $request, $raidId)
     {
-        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
+
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $raid = $raidManager->find($raidId);
+        if ($raid == null) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "Ce raid n'existe pas");
+        }
+
+        $helperManager = $em->getRepository('AppBundle:Helper');
+        $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
+
+        $poiService = $this->container->get('PoiService');
+        if ($helper != null && $helper->getPoi() != null) {
+            return new Response($poiService->poiToJson($helper->getPoi()));
+        }
+
+        return parent::buildJSONStatus(
+            Response::HTTP_NOT_FOUND,
+            "Pas de point d'intérêt attribué pour cet utilisateur et ce raid"
+        );
     }
 
     /**

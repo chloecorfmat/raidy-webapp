@@ -13,21 +13,32 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         if(drop != null){
           drop.classList.remove("show");
         }
+      dpdwn.classList.add("show");
+       // let clientHeight = document.querySelector('main').clientHeight;
+        //let click = e.screenY / screen.height;
+        //click = click * (e.screenY - document.querySelector("header").clientHeight)
+      let remaining = screen.height - e.screenY;
+      console.log("--------------------");
+      console.log("remaining: "+remaining);
+      console.log("menu: "+dpdwn.clientHeight);
 
-        let clientHeight = document.querySelector('body').clientHeight;
+      let topshift ;
+      if (remaining < dpdwn.clientHeight ){
+        topshift = e.pageY- dpdwn.clientHeight*1.5
+        dpdwn.style.top = topshift+'px';
+      } else {
+        topshift = e.pageY- dpdwn.clientHeight
+        dpdwn.style.top = topshift+'px';
+      }
 
-        if ((clientHeight - e.screenY ) < convertRem(12) ){
-            dpdwn.style.top = 'calc('+e.pageY+'px - 13.0rem)';
-        } else {
-            dpdwn.style.top = 'calc('+e.pageY+'px - 7.0rem)';
-        }
-        dpdwn.classList.add("show");
+      console.log( "top: "+dpdwn.style.top );
     }
   }
 
   function EditorUI () {
     this.trackElements = new Map();
     this.poiElements = new Map();
+
   }
   EditorUI.prototype.addPoi = function(poi){
     let li = document.createElement('li');
@@ -44,7 +55,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
     li.innerHTML =
       //'<span class="test">' +
-      '             <div class="track--text">' +
+      '             <div data-id = "' + poi.id + '" class="track--text">' +
       '                <span>' + poi.name + '</span>' +
       '            </div>' +
       //'         </span>' +
@@ -58,6 +69,17 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
     li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
 
+    li.querySelector('.track--text').addEventListener('click', function(e){
+
+      let poi = mapManager.poiMap.get(parseInt(this.dataset.id));
+      if (!poi.marker.isPopupOpen()){
+        mapManager.map.panTo( poi.marker.getLatLng());
+        console.log(mapManager.map.getZoom())
+      }
+      //   mapManager.map.setZoom(zoom);
+      poi.marker.togglePopup();
+    });
+
     let btnDelete = li.querySelector('.btn--poi--delete');
     btnDelete.addEventListener("click", function () {
       document.getElementById("btn--delete-poi").dataset.id = poi.id;
@@ -66,6 +88,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
     document.getElementById('list--pois').appendChild(li);
     li.pseudoStyle('before', 'background-color', poi.color);
+    li.pseudoStyle('before', 'border-color', poi.color);
+
     li.querySelector('.btn--poi--settings').addEventListener('click', function () {
       document.getElementById('editPoi_id').value = poi.id;
       document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);
@@ -126,6 +150,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
       newTrack.calculDistance();
       li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
+
 
       // TRACK SELECTION LISTENER
       li.querySelectorAll('input').forEach(function (input) {
