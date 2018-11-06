@@ -148,6 +148,10 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         controlElement.querySelector(".btn-leave-track-edit").addEventListener('click',function(e){
           e.preventDefault();
           e.stopImmediatePropagation();
+          track = mapManager.tracksMap.get(mapManager.currentEditID);
+          if (track.line.editor.drawing() ) {
+            track.line.editor.pop();
+          }
           mapManager.switchMode(EditorMode.READING);
           this.checked = true;
           mapManager.displayTrackButton(false);

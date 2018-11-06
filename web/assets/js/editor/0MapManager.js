@@ -89,15 +89,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
 
 
-    this.map.on('editable:vertex:mousedown ', function (e) {
-      e.vertex.continue();
-    });
-
     this.map.on('editable:vertex:rawclick', function (e) {
       e.cancel();
       e.vertex.continue();
-      console.log(e.originalEvent)
-      console.log("clicked")
     });
 
     this.map.on('editable:drawing:end', function () {
