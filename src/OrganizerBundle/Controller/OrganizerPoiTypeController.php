@@ -35,7 +35,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
         $formPoiType = new PoiType();
 
         $form = $this->createFormBuilder($formPoiType)
-            ->add('type', TextType::class, ['label' => 'Type de point d\'intérêt'])
+            ->add('type', TextType::class, ['label' => 'Type de point d\'intérêt', 'data' => ''])
             ->add('color', ColorType::class, ['label' => 'Couleur'])
             ->add('submit', SubmitType::class, ['label' => 'Créer un type de point d\'intérêt'])
             ->getForm();
@@ -161,12 +161,14 @@ class OrganizerPoiTypeController extends AjaxAPIController
         return $this->redirectToRoute('listPoiType');
     }
 
-/**
+    /**
      * @Route("/organizer/poitypes", name="listPoiType")
+     *
+     * @param Request $request request
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listPoiType()
+    public function listPoiType(Request $request)
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
@@ -178,6 +180,34 @@ class OrganizerPoiTypeController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
         }
 
+        $formPoiType = new PoiType();
+
+        $form = $this->createFormBuilder($formPoiType)
+            ->add('type', TextType::class, ['label' => 'Type de point d\'intérêt', 'data' => ''])
+            ->add('color', ColorType::class, ['label' => 'Couleur'])
+            ->add('submit', SubmitType::class, ['label' => 'Créer un type de point d\'intérêt'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+            $poiTypeExist = $poiTypeManager->findBy(
+                ['type' => $formPoiType->getType(), 'user' => $user]
+            );
+            if (!$poiTypeExist) {
+                $poiTypeService = $this->container->get('PoiTypeService');
+                $poiType = $poiTypeService->poiTypeFromForm($formPoiType, $user);
+
+                $em->persist($poiType);
+                $em->flush();
+
+                return $this->redirectToRoute('listPoiType');
+            } else {
+                $form->addError(new FormError('Ce type de point d\'intérêt existe déjà.'));
+            }
+        }
+
         $poiTypes = $poiTypeManager->findBy([
             'user' => $user,
         ]);
@@ -187,6 +217,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
             [
                 'poiTypes' => $poiTypes,
                 'user' => $user,
+                'form' => $form->createView(),
             ]
         );
     }

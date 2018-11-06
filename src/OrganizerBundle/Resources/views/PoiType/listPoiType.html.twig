@@ -8,47 +8,55 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des types de points d'intérêt</h1>
+    <div class="content">
+        <div class="content--half">
+            <h1>Liste des types de points d'intérêt</h1>
 
-    {% for flash_message in app.session.flashBag.get('success') %}
-        <div class="alert alert--success">
-            <p>{{ flash_message }}</p>
-        </div>
-    {% endfor %}
-    {% for flash_message in app.session.flashBag.get('danger') %}
-        <div class="alert alert--danger">
-            <p>{{ flash_message }}</p>
-        </div>
-    {% endfor %}
-    <div class="table--container">
-        <table class="table" id="helpersList">
-            <caption class="sr-only">Liste des types de points d'intérêt</caption>
-            <thead class="table--headers">
-            <tr>
-                <th scope="col">Type</th>
-                <th scope="col">Couleur</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-
-            {% for poiType in poiTypes %}
-                <tr class="table--line">
-                    <td>{{ poiType.type }}</td>
-                    <td><span class="char--poitype" id="char--poitype-{{ poiType.id }}" style="color:{{ poiType.color }}" data-poitype-color="{{ poiType.color }}">■</span></td>
-                    <td><a href="{{ path('displayPoiType', {'poiTypeId': poiType.id}) }}" class="btn">Editer</a>
-                        <button data-poitype-id="{{ poiType.id }}" class="btn btn--danger btn--delete-poitype">
-                            Supprimer
-                        </button> {#data-micromodal-trigger="delete-poitype" #}
-                    </td>
-                </tr>
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
             {% endfor %}
-        </table>
+            {% for flash_message in app.session.flashBag.get('danger') %}
+                <div class="alert alert--danger">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
+            <div class="table--container">
+                <table class="table" id="helpersList">
+                    <caption class="sr-only">Liste des types de points d'intérêt</caption>
+                    <thead class="table--headers">
+                    <tr>
+                        <th scope="col">Type</th>
+                        <th scope="col">Couleur</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+
+                    {% for poiType in poiTypes %}
+                        <tr class="table--line">
+                            <td>{{ poiType.type }}</td>
+                            <td>
+                                <span class="char--poitype" id="char--poitype-{{ poiType.id }}" style="background-color:{{ poiType.color }}" data-poitype-color="{{ poiType.color }}"></span>
+                            </td>
+                            <td><a href="{{ path('displayPoiType', {'poiTypeId': poiType.id}) }}" class="btn">Editer</a>
+                                <button data-poitype-id="{{ poiType.id }}" class="btn btn--danger btn--delete-poitype">
+                                    Supprimer
+                                </button> {#data-micromodal-trigger="delete-poitype" #}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="content--half">
+            <h1>Ajouter un type de POI</h1>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
     </div>
-    <a href="{{ path('addPoiType') }}" class="btn--fab">
-        <span class="btn--fab-content">
-            <span>+</span>
-        </span>
-    </a>
+
 
     <!-- [1] -->
     <div id="delete-poitype" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
@@ -76,8 +84,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-
-    </script>
 {% endblock %}

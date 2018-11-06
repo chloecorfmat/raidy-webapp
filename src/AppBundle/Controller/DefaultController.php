@@ -29,7 +29,7 @@ class DefaultController extends Controller
         if (null == $user) {
             return $this->redirectToRoute('fos_user_security_login');
         } elseif ($user->hasRole('ROLE_SUPER_ADMIN')) {
-            return $this->redirectToRoute('listOrganizer');
+            return $this->redirectToRoute('admin');
         } elseif ($user->hasRole('ROLE_ORGANIZER')) {
             return $this->redirectToRoute('listRaid');
         } elseif ($user->hasRole('ROLE_HELPER')) {

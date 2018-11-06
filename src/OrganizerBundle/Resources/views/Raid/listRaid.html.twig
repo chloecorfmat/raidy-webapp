@@ -39,6 +39,12 @@
                 <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
                 <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             </div>
+            <h2>Liens utiles</h2>
+            <ul>
+                <li>
+                    <a href="{{ path('listPoiType') }}">Gérer les types de points d'intérêt</a>
+                </li>
+            </ul>
         </div>
     </div>
 {% endblock %}

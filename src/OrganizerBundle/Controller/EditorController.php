@@ -24,6 +24,18 @@ class EditorController extends Controller
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->findOneBy(['id' => $id]);
 
+        $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+
+        // Get the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
+        }
+
+        $poiTypes = $poiTypeManager->findBy([
+            'user' => $raid->getUser(),
+        ]);
+
         if (null === $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
@@ -35,6 +47,7 @@ class EditorController extends Controller
 
         return $this->render('OrganizerBundle:Editor:editor.html.twig', [
             'id' => $id,
+            'poiTypes' => $poiTypes,
         ]);
     }
 }

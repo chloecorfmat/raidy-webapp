@@ -107,7 +107,10 @@ class HelperRegisterController extends Controller
         $raid = $raidManager->find($id);
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
-        $poiTypes = $poiTypeManager->findAll();
+
+        $poiTypes = $poiTypeManager->findBy([
+            'user' => $raid->getUser(),
+        ]);
 
         $choices = [];
         foreach ($poiTypes as $poiType) {
@@ -242,7 +245,10 @@ class HelperRegisterController extends Controller
         }
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
-        $poiTypes = $poiTypeManager->findAll();
+
+        $poiTypes = $poiTypeManager->findBy([
+            'user' => $raid->getUser(),
+        ]);
 
         $choices = [];
         foreach ($poiTypes as $poiType) {
