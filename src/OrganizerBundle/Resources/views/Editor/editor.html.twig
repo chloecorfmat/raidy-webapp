@@ -18,7 +18,7 @@
                 </nav-->
                 <button class="active accordion">Parcours</button>
                 <div class="active panel tabcontent" id="tracks-pan">
-                    <button class="btn--action" id="addTrackButton">Ajouter un parcours</button>
+                    <!--button class="btn--action" id="addTrackButton">Ajouter un parcours</button--->
                     <ul id="editor--list" class="editor--list checkbox-list">
                         <!-- FILLED IN JS-->
                     </ul>
@@ -41,28 +41,37 @@
         <div class="map--container">
             <div id="map" class="map"></div>
 
-            <div class="fab">
-                <button id="addPoiButton" class="btn--add-poi">
+
+                <!-- id="addPoiButton" class="btn--add-poi">
                 <span class="btn--editor">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.85 122.85">
                        <path d="M122.85,48.06q0,12.15-6.75,19.44T96.93,74.79H74.79v48.06q-12.15,0-19.44-6.75T48.06,96.93V74.79H0Q0,62.64,6.75,55.35t19.17-7.29H48.06V0Q60.21,0,67.5,6.75t7.29,19.17V48.06Z" />
                     </svg>
                 </span>
-                </button>
+                </button-->
+
+
+            <div class="fab">
+              <span id="fabActionButton"  class="fab-action-button btn--add-poi">
+                <span class="btn--editor">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.85 122.85">
+                       <path d="M122.85,48.06q0,12.15-6.75,19.44T96.93,74.79H74.79v48.06q-12.15,0-19.44-6.75T48.06,96.93V74.79H0Q0,62.64,6.75,55.35t19.17-7.29H48.06V0Q60.21,0,67.5,6.75t7.29,19.17V48.06Z" />
+                    </svg>
+                </span>
+              </span>
                 <ul class="fab-buttons">
                     <li class="fab-buttons__item">
-                        <a href="#" class="fab-buttons__link" data-tooltip="Ajouter un tracé">
-                            <i class="icon-material icon-material_timeline"></i>
+                        <a href="#" id="addTrackButton" class="fab-buttons__link" data-tooltip="Ajouter un parcours">
+                            <i class="icon-material icon-material_track"></i>
                         </a>
                     </li>
                     <li class="fab-buttons__item">
-                        <a href="#" class="fab-buttons__link" data-tooltip="Ajouter un point d'intérêt">
-                            <i class="icon-material icon-material_gp"></i>
+                        <a href="#" id="addPoiButton"  class="fab-buttons__link" data-tooltip="Ajouter un point d'intéret">
+                            <i class="icon-material icon-material_poi"></i>
                         </a>
                     </li>
                 </ul>
             </div>
-
         </div>
     </div>
 

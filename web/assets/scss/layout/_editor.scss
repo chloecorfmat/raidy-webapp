@@ -152,65 +152,8 @@ button.active:after {
   }
 }
 
-.btn--editor {
-  background-image: url('../../images/map-marker-main-white.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: contain;
-  display: block;
-  position: relative;
 
-  span {
-    color: $tertiary-color-1;
-    display: block;
-    font-family: 'Fontastique', 'SansSerif';
-    position: relative;
-    top: -.75rem;
-    transition: all .5s ease; // sass-lint:disable-line no-transition-all
-  }
-}
 
-.btn--add-poi {
-  background-clip: padding-box;
-  background-color: $tertiary-color-1;
-  border: 2px solid rgba(0, 0, 0, .2);
-  border-radius: 3rem ;
-  bottom: 0;
-  font-size: 3rem;
-  height: 5rem;
-  margin: 2.5rem;
-  overflow: hidden;
-  padding: 1rem;
-  position: fixed;
-  right: 0;
-  text-align: center;
-  transition-duration: .5s;
-  transition-property: background-color;
-  transition-timing-function: ease;
-  vertical-align: middle;
-  width: 5rem;
-  z-index: 999;
-
-  svg {
-    fill: $tertiary-color-1;
-    transform: translateY(-.5rem);
-    transition-duration: .5s;
-    transition-property: fill, transform;
-    transition-timing-function: ease;
-    width: 50%;
-  }
-
-  &.add--poi {
-    background-color: $secondary-color-2;
-
-    .btn--editor {
-      svg {
-        fill: $secondary-color-2;
-        transform: translateY(-.5rem) rotate(50deg);
-      }
-    }
-  }
-}
 
 .editor--container {
   display: flex;
@@ -410,7 +353,7 @@ button.active:after {
 }
 
 .checkbox-list {
-  margin-top: 1rem;
+  //margin-top: 1rem;
 }
 
 .track--edit {
@@ -759,4 +702,254 @@ input:focus {
       margin-right: .5rem;
     }
   }
+}
+
+//fab
+
+
+.btn--add-poi {
+  background-clip: padding-box;
+  background-color: $tertiary-color-1;
+
+  border: 2px solid rgba(0, 0, 0, .2);
+  border-radius: 50%;
+
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  height: 5rem;
+  width: 5rem;
+
+  margin: 2.5rem;
+  padding: 0rem;
+
+  overflow: hidden;
+
+  font-size: 3rem;
+  text-align: center;
+  vertical-align: middle;
+
+  transition-duration: .5s;
+  transition-property: background-color;
+  transition-timing-function: ease;
+
+  z-index: 999;
+
+  svg {
+    fill: $tertiary-color-1;
+    transform: translateY(.5rem);
+    transition-duration: .5s;
+    transition-property: fill, transform;
+    transition-timing-function: ease;
+    width: 40%;
+
+  }
+
+  &.add--poi {
+
+    background-color: $secondary-color-2;
+
+    &:hover {
+      + .fab-buttons {
+        opacity: 0;
+        visibility: hidden;
+      }
+    }
+    .btn--editor {
+      svg {
+        fill: $secondary-color-2;
+        transform: translateY(.5rem) rotate(50deg);
+      }
+    }
+  }
+}
+
+.btn--editor {
+  background-image: url('../../images/map-marker-main-white.svg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 3rem;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  height: 5rem;
+  width: 5rem;
+
+  margin: 2.5rem;
+  padding: 0rem;
+
+
+}
+
+.fab {
+
+  z-index: 50000;
+
+  position: fixed;
+  bottom: 0;
+  right: 0;
+
+  height: 5rem;
+  width: 5rem;
+
+  margin: 2.5rem;
+  padding: 0rem;
+}
+
+.fab:hover .fab-buttons {
+  opacity: 1;
+  visibility: visible;
+}
+
+.fab:hover .fab-buttons__link {
+  transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0px);
+}
+
+.fab-action-button:hover + .fab-buttons .fab-buttons__link:before {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: right center 0;
+  transition-delay: 0.3s;
+
+}
+
+.fab-action-button {
+/*  bottom: 0;
+  display: block;
+  border-radius: 50%;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+
+//here
+  background-clip: padding-box;
+  background-color: $tertiary-color-1;
+  border: 2px solid rgba(0, 0, 0, .2);
+  font-size: 3rem;
+  height: 5rem;
+  width: 5rem;
+  margin: 2.5rem;
+  overflow: hidden;
+  position: fixed;
+  right: 0;
+  text-align: center;
+  transition-duration: .5s;
+  transition-property: background-color;
+  transition-timing-function: ease;
+  vertical-align: middle;
+  z-index: 999;*/
+
+}
+
+.fab-buttons {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 4.0rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.2s;
+}
+
+.fab-action-button__icon {
+  display: block;
+  width: 3rem;
+  height: 3rem;
+  background: url('data:image/svg+xml;utf8,<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 895.05 895"><defs><style>.cls-1{fill:#fff;}</style></defs><title>plus</title><text x="-52.48" y="-52.5"/><path class="cls-1" d="M947.52,402.52q0,88.65-49.17,141.81t-139.6,53.15H597.48v350q-88.65,0-141.81-49.15T402.52,758.72V597.48h-350q0-88.62,49.14-141.78t139.66-53.18H402.52V52.5q88.62,0,141.78,49.17t53.18,139.61V402.52Z" transform="translate(-52.48 -52.5)"/></svg>') center no-repeat;
+}
+
+.fab-buttons__item {
+  display: block;
+  text-align: center;
+  margin: 1.2rem;
+}
+
+.fab-buttons__link {
+  display: inline-block;
+  width: 3rem;
+  height: 3rem;
+  text-decoration: none;
+  background-color: #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
+  transform: scaleY(0.5) scaleX(0.5) translateY(0px) translateX(0px);
+  -moz-transition: .3s;
+  -webkit-transition: .3s;
+  -o-transition: .3s;
+  transition: .3s;
+}
+
+[data-tooltip]:before {
+  top: 50%;
+  margin-top: -1.1rem;
+  font-weight: 600;
+  border-radius: 2px;
+  background: $tertiary-color-1;
+  color: #fff;
+  content: attr(data-tooltip);
+  font-size: 1rem;
+  text-decoration: none;
+  visibility: hidden;
+  opacity: 0;
+  padding: 0.4rem 0.7rem;
+  margin-right: 1.2rem;
+  position: absolute;
+  transform: scale(0);
+  right: 100%;
+  white-space: nowrap;
+  transform-origin: top right;
+  transition: all .3s cubic-bezier(.25, .8, .25, 1);
+}
+
+[data-tooltip]:hover:before {
+  visibility: visible;
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: right center 0;
+}
+
+.icon-material {
+  display: inline-block;
+  width: 3.0rem;
+  height: 3.0rem;
+}
+
+.icon-material_track {
+  background: url('data:image/svg+xml; utf8, <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
+<style type="text/css">
+	.st0{clip-path:url(#SVGID_2_);fill:#0F5E54;}
+</style>
+<g>
+	<defs>
+		<rect id="SVGID_1_" width="24" height="24"/>
+	</defs>
+	<clipPath id="SVGID_2_">
+		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
+	</clipPath>
+	<path class="st0" d="M22.3,8.3c0,1-0.8,1.9-1.9,1.9c-0.2,0-0.3,0-0.5-0.1l-3.3,3.3c0,0.1,0.1,0.3,0.1,0.5c0,1-0.8,1.9-1.9,1.9
+		s-1.9-0.8-1.9-1.9c0-0.2,0-0.3,0.1-0.5L10.6,11c-0.1,0-0.3,0.1-0.5,0.1c-0.2,0-0.3,0-0.5-0.1l-4.2,4.3c0,0.1,0.1,0.3,0.1,0.5
+		c0,1-0.8,1.9-1.9,1.9s-1.9-0.8-1.9-1.9s0.8-1.9,1.9-1.9c0.2,0,0.3,0,0.5,0.1l4.3-4.2c0-0.1-0.1-0.3-0.1-0.5c0-1,0.8-1.9,1.9-1.9
+		S12,8.2,12,9.2c0,0.2,0,0.3-0.1,0.5l2.4,2.4c0.1,0,0.3-0.1,0.5-0.1s0.3,0,0.5,0.1l3.3-3.3c0-0.1-0.1-0.3-0.1-0.5
+		c0-1,0.8-1.9,1.9-1.9S22.3,7.2,22.3,8.3z"/>
+</g>
+</svg>
+') center no-repeat;
+}
+
+.icon-material_poi {
+  background: url('data:image/svg+xml; utf8, <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
+<style type="text/css">
+	.st0{fill:#0F5E54;}
+	.st1{fill:none;}
+</style>
+<path class="st0" d="M12,4.2c-3,0-5.5,2.4-5.5,5.5c0,4.1,5.5,10.1,5.5,10.1s5.5-6,5.5-10.1C17.5,6.7,15,4.2,12,4.2z"/>
+<path class="st1" d="M0,0h24v24H0V0z"/>
+</svg>
+') center no-repeat;
 }
