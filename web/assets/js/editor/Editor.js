@@ -184,9 +184,31 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   //  document.getElementById("pois-pan").style.maxHeight = 0;
   });
 
-  document.getElementById('addPoiButton').addEventListener('click', function () {
-    this.classList.toggle('add--poi');
+  document.getElementById('fabActionButton').addEventListener('click', function (e) {
     if (this.classList.contains('add--poi')) {
+      if(mapManager.mode == EditorMode.ADD_POI) {
+        if (mapManager.waitingPoi != null) {
+          mapManager.map.removeEventListener("mousemove");
+          mapManager.map.removeLayer(mapManager.waitingPoi.marker);
+        }
+      }else if(mapManager.mode == EditorMode.TRACK_EDIT){
+        e.preventDefault();
+        e.stopImmediatePropagation();
+      /*  let track = mapManager.tracksMap.get(mapManager.currentEditID);
+        if (track.line.editor.drawing() ) {
+          track.line.editor.pop();
+        }*/
+      }
+      mapManager.switchMode(mapManager.lastMode);
+      this.classList.toggle('add--poi')
+    }
+  });
+
+
+    document.getElementById('addPoiButton').addEventListener('click', function () {
+    let fabActionButton = document.getElementById("fabActionButton");
+    fabActionButton.classList.toggle('add--poi');
+    if (fabActionButton.classList.contains('add--poi')) {
       mapManager.switchMode(EditorMode.ADD_POI);
     } else {
       if (mapManager.waitingPoi !=null ){

@@ -41,6 +41,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.currentEditID = 0;
 
     this.mode = EditorMode.READING;
+    this.lastMode = EditorMode.READING;
     this.editorUI = new EditorUI();
   }
 
@@ -62,7 +63,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           } else {
             keepThis.switchMode(EditorMode.READING);
           }
-          document.getElementById('addPoiButton').classList.remove('add--poi');
+          document.getElementById('fabActionButton').classList.remove('add--poi');
 
           keepThis.map.removeEventListener("mousemove");
           break;
@@ -145,16 +146,16 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         if (this.waitingPoi != null) this.map.removeLayer(this.waitingPoi.marker);
         this.map.removeEventListener("mousemove");
         document.getElementById('map').style.cursor = 'grab';
-        document.getElementById('addPoiButton').classList.remove('add--poi');
+        document.getElementById('fabActionButton').classList.remove('add--poi');
         document.querySelectorAll('.track--edit').forEach(function (el) {
           el.classList.remove('track--edit');
         });
         this.setTracksEditable(false);
         break;
       case EditorMode.TRACK_EDIT :
-        this.displayTrackButton(true);
+       // this.displayTrackButton(true);
         document.getElementById('map').style.cursor = 'grab';
-        document.getElementById('addPoiButton').classList.remove('add--poi');
+        document.getElementById('fabActionButton').classList.add('add--poi');
         this.setTracksEditable(false);
         var res = this.tracksMap.get(this.currentEditID);
         currentTrack = this.tracksMap.get(this.currentEditID);

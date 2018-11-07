@@ -123,8 +123,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       let li = this.trackElements.get(track.id);
 
       li.id = 'track-li-' + newTrack.id;
+      let checked = newTrack.isVisible? 'checked = "checked"' : '';
+      checked = 'checked = "checked"'
       li.innerHTML = '<label class="checkbox-item--label">' +
-        '             <input data-id = "' + newTrack.id + '" type="checkbox" checked="checked">' +
+        '             <input data-id = "' + newTrack.id + '" type="checkbox"'+checked+'>' +
         '             ' +
         '             <span style ="background-color : ' + newTrack.color + '; border-color :' + newTrack.color + '" class="checkmark">' +
         '                  <i class="fas fa-check"></i>' +
@@ -168,6 +170,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
             }
             mapManager.hideTrack(parseInt(input.dataset.id));
           }
+          //mapManager.tracksMap.get(parseInt(input.dataset.id)).push();
+
         })
       });
 
