@@ -270,10 +270,19 @@ class OrganizerRaidController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        //$raids = $raidManager->findAll();
         $raids = $raidManager->findBy([
             'user' => $user,
         ]);
+
+        $collaborationManager = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Collaboration');
+
+        $collaborations = $collaborationManager->findBy(["user" => $user]);
+
+        foreach ($collaborations as $collaboration) {
+            $raids[] = $collaboration->getRaid();
+        }
 
         return $this->render(
             'OrganizerBundle:Raid:listRaid.html.twig',

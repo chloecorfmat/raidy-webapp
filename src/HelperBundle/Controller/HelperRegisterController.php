@@ -335,7 +335,7 @@ class HelperRegisterController extends Controller
     }
 
     /**
-     * @Route("/organizer", name="listRaidHelper")
+     * @Route("/helper", name="listRaidHelper")
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */

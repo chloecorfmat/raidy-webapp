@@ -66,6 +66,14 @@
                     <p>Contacts</p>
                 </a>
             </div>
+            {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
+                <div class="card">
+                    <a href="{{ path('listCollaborators', {'raidId': raid.id}) }}">
+                        <i class="fas fa-hands-helping fa-2x"></i>
+                        <p>Collaborateurs</p>
+                    </a>
+                </div>
+            {% endif %}
 
             <div class="useful-links">
                 <h2>Liens utiles</h2>

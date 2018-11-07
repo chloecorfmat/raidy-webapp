@@ -59,7 +59,7 @@ class CollaborationController extends Controller
         $raid = $raidManager->find($raidId);
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+        if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -79,8 +79,9 @@ class CollaborationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $emailVerif = $formCollab->getEmail();
             $raidVerif = $formCollab->getRaid();
-
+            dump($emailVerif);
             $collab = $collaborationManager->findOneBy(['email' => $emailVerif, 'raid' => $raidVerif]);
+            dump($collab);
             if ($collab != null) {
                 $form->addError(new FormError('Une invitation pour cet utilisateur existe déjà'));
             } else {
@@ -116,7 +117,7 @@ class CollaborationController extends Controller
         $raid = $raidManager->find($raidId);
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+        if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -166,6 +167,42 @@ class CollaborationController extends Controller
         return $this->render('OrganizerBundle:Collaborator:inviteCollaborator.html.twig', [
             'raid' => $collaboration->getRaid(),
             'collaboration' => $collaboration,
+        ]);
+    }
+
+    /**
+     * @Route("/collaborator/invite/success/{invitationId}", name="registerSuccessCollaborator")
+     *
+     * @param int $invitationId
+     *
+     * @return \Symfony\Component\HttpFoundation\Response|template
+     */
+    public function registerSuccessCollaborator($invitationId)
+    {
+        // Logout user if one user is login.
+        if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
+            // authenticated (NON anonymous)
+            $this->get('session')->invalidate();
+            $anonToken = new AnonymousToken('theTokensKey', 'anon.', array());
+            $this->get('security.token_storage')->setToken($anonToken);
+        }
+
+        $em = $this->getDoctrine()->getManager();
+        $collaborationManager = $em->getRepository('AppBundle:Collaboration');
+        $collaboration = $collaborationManager->findOneBy(["invitationId" => $invitationId]);
+
+        if (null === $collaboration) {
+            throw $this->createNotFoundException('Cette invitation n\'existe pas');
+        }
+
+        $raid = $collaboration->getRaid();
+
+        if (null === $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        return $this->render('OrganizerBundle:Collaborator:registerSuccessCollaborator.html.twig', [
+            'raid' => $raid,
         ]);
     }
 
@@ -255,7 +292,7 @@ class CollaborationController extends Controller
                             $form->addError(new FormError("Vous n'êtes pas invités à rejoindre ce raid"));
                         } else {
                             $collaboration->setUser($user);
-                            $em->persist($collaboration);
+                            $em->flush();
 
                             return $this->redirectToRoute('registerSuccessCollaborator', [
                                 'invitationId' => $invitationId,
@@ -353,14 +390,14 @@ class CollaborationController extends Controller
                         $collaboration = null;
                         $collaboration = $collaborationManager->findOneBy([
                             'email' => $user->getEmail(),
-                            'invitationId' => $collaboration->getInvitationId(),
+                            'invitationId' => $invitationId,
                         ]);
 
                         if ($collaboration == null) {
                             $form->addError(new FormError("Vous n'êtes pas invités à rejoindre ce raid"));
                         } else {
                             $collaboration->setUser($user);
-                            $em->persist($collaboration);
+                            $em->flush();
 
                             return $this->redirectToRoute('registerSuccessCollaborator', [
                                 'invitationId' => $invitationId,
