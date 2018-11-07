@@ -21,14 +21,12 @@ class Collaboration
     /**
      * @ORM\Id
      * @ORM\Column(name="invitationId", type="string", length=13)
-     * @Assert\NotBlank()
      */
     private $invitationId;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
      * @ORM\JoinColumn()
-     * @Assert\NotBlank()
      */
     protected $raid;
 
@@ -49,22 +47,6 @@ class Collaboration
      */
     public function __construct()
     {
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
-     * @param mixed $id
-     */
-    public function setId($id)
-    {
-        $this->id = $id;
     }
 
     /**

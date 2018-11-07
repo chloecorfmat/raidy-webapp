@@ -32,6 +32,8 @@ class DefaultController extends Controller
             return $this->redirectToRoute('admin');
         } elseif ($user->hasRole('ROLE_ORGANIZER')) {
             return $this->redirectToRoute('listRaid');
+        } elseif ($user->hasRole('ROLE_COLLABORATOR')) {
+            return $this->redirectToRoute('listRaid');
         } elseif ($user->hasRole('ROLE_HELPER')) {
             return $this->redirectToRoute('helper');
         }

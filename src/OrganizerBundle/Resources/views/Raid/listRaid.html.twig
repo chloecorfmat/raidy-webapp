@@ -11,11 +11,13 @@
         <div class="raids--list">
             <h1>Mes raids</h1>
             <div class="raids--list-items">
-                <div class="raid raid--add">
-                    <a href="{{ path('addRaid') }}">
-                        <span>+</span>
-                    </a>
-                </div>
+                {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
+                    <div class="raid raid--add">
+                        <a href="{{ path('addRaid') }}">
+                            <span>+</span>
+                        </a>
+                    </div>
+                {% endif %}
                 {% for raid in raids %}
                     <div class="raid" style="background-image: url('{{ asset('uploads/raids/' ~ raid.picture) }}');">
                         <a href="{{ path('displayRaid', {'id': raid.id}) }}">
@@ -41,9 +43,11 @@
             </div>
             <h2>Liens utiles</h2>
             <ul>
-                <li>
-                    <a href="{{ path('listPoiType') }}">Gérer les types de points d'intérêt</a>
-                </li>
+                {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
+                    <li>
+                        <a href="{{ path('listPoiType') }}">Gérer les types de points d'intérêt</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>
