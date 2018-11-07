@@ -20,7 +20,9 @@ function initForm (e) {
     })
 
     var fileInput = form.querySelector(".form-input--image");
-    fileInput.addEventListener("change", imagePreview);
+    if(fileInput != null){
+        fileInput.addEventListener("change", imagePreview);
+    }
 
   })
 }
