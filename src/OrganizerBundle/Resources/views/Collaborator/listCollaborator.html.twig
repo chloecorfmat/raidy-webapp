@@ -3,7 +3,8 @@
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
-        <li class="breadcrumb--list-item">Liste des type de points d'intérêt</li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id':raid.id}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item">Liste des collaborateurs</li>
     </ol>
 {% endblock %}
 
@@ -45,8 +46,7 @@
                             {% endif %}
 
                             <td>{{ app.request.getSchemeAndHttpHost() ~ path('inviteCollaborator', {'invitationId': collaboration.invitationId}) }}</td>
-                            <td><a href="{{ path('deleteCollaborator', {'raidId': collaboration.raid.id, 'invitationId':collaboration.invitationId}) }}" class="btn btn--danger">Supprimer</a>
-                            </td>
+                            <td><button class="btn btn--danger btn--delete-collaborator" data-raid="{{ raid.id }}" data-invitation="{{ collaboration.invitationId }}">Supprimer</button></td>
                         </tr>
                     {% endfor %}
                 </table>
@@ -62,7 +62,7 @@
 
 
     <!-- [1] -->
-    <div id="delete-poitype" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+    <div id="delete-collaborator" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
         <!-- [2] -->
         <div tabindex="-1" data-micromodal-close>
             <!-- [3] -->
@@ -70,16 +70,16 @@
                 <div class="modal-container">
                     <header class="modal--header modal--header--danger">
                         <h2 id="delete-poitype-title">
-                            Supprimer un type de point d'intérêt
+                            Supprimer un collaborateur
                         </h2>
                         <!-- [4] -->
                         <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
                     </header>
-                    <div id="delete-poitype-content" class="modal--content">
-                        <p>Êtes-vous certains de vouloir supprimer ce type de point d'intérêt ?</p>
+                    <div id="delete-collaborator-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer ce collaborateur ?</p>
                         <p class="text--important">Cette action est irréversible.</p>
                         <div class="modal--actions">
-                            <a href="" id="btn--delete-poitype" class="btn btn--danger" data-base-url="/organizer/poitype/delete/">Supprimer</a>
+                            <a href="" id="btn--delete-collaborator" class="btn btn--danger">Supprimer</a>
                             <button data-micromodal-close class="btn btn--cancel">Annuler</button>
                         </div>
                     </div>

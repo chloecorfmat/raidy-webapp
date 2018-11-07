@@ -230,7 +230,7 @@ class OrganizerRaidController extends Controller
         }
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+        if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
             throw $this->createAccessDeniedException();
         }
 

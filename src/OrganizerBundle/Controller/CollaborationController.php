@@ -79,17 +79,27 @@ class CollaborationController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $emailVerif = $formCollab->getEmail();
             $raidVerif = $formCollab->getRaid();
-            dump($emailVerif);
-            $collab = $collaborationManager->findOneBy(['email' => $emailVerif, 'raid' => $raidVerif]);
-            dump($collab);
-            if ($collab != null) {
-                $form->addError(new FormError('Une invitation pour cet utilisateur existe déjà'));
+
+            $user = $this->getUser();
+            if ($user->getEmail() == $emailVerif) {
+                $form->addError(new FormError('Vous ne pouvez pas vous ajouter en tant que collaborateur.'));
             } else {
-                $em = $this->getDoctrine()->getManager();
-                $formCollab->setInvitationId(uniqid());
-                $formCollab->setRaid($raid);
-                $em->persist($formCollab);
-                $em->flush();
+                $collab = $collaborationManager->findOneBy(['email' => $emailVerif, 'raid' => $raidVerif]);
+                if ($collab != null) {
+                    $form->addError(new FormError('Une invitation pour cet utilisateur existe déjà'));
+                } else {
+                    $em = $this->getDoctrine()->getManager();
+
+                    do {
+                        $uid = uniqid();
+                        $collabExist = $collaborationManager->find($uid);
+                    } while ($collabExist != null);
+
+                    $formCollab->setInvitationId($uid);
+                    $formCollab->setRaid($raid);
+                    $em->persist($formCollab);
+                    $em->flush();
+                }
             }
         }
 
@@ -98,6 +108,7 @@ class CollaborationController extends Controller
         return $this->render('OrganizerBundle:Collaborator:listCollaborator.html.twig', [
                 "collaborations" => $collaborations,
                 "form" => $form->createView(),
+                "raid" => $raid,
         ]);
     }
 
@@ -270,15 +281,6 @@ class CollaborationController extends Controller
 
                         $userManager->updateUser($user);
 
-                        // Connect the user manually
-                        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                        $this->get('security.token_storage')->setToken($token);
-
-                        $this->get('session')->set('_security_main', serialize($token));
-
-                        $event = new InteractiveLoginEvent($request, $token);
-                        $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
-
                         $helperManager = $em->getRepository('AppBundle:Helper');
                         $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
 
@@ -289,8 +291,21 @@ class CollaborationController extends Controller
                         ]);
 
                         if ($collaboration == null) {
-                            $form->addError(new FormError("Vous n'êtes pas invités à rejoindre ce raid"));
+                            $form->addError(
+                                new FormError(
+                                    "Vous n'êtes pas invité à rejoindre ce raid avec ce lien d'invitation"
+                                )
+                            );
                         } else {
+                            // Connect the user manually
+                            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+                            $this->get('security.token_storage')->setToken($token);
+
+                            $this->get('session')->set('_security_main', serialize($token));
+
+                            $event = new InteractiveLoginEvent($request, $token);
+                            $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+
                             $collaboration->setUser($user);
                             $em->flush();
 
@@ -378,15 +393,6 @@ class CollaborationController extends Controller
                             $em->flush();
                         }
 
-                        // Connect the user manually
-                        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                        $this->get('security.token_storage')->setToken($token);
-
-                        $this->get('session')->set('_security_main', serialize($token));
-
-                        $event = new InteractiveLoginEvent($request, $token);
-                        $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
-
                         $collaboration = null;
                         $collaboration = $collaborationManager->findOneBy([
                             'email' => $user->getEmail(),
@@ -394,8 +400,21 @@ class CollaborationController extends Controller
                         ]);
 
                         if ($collaboration == null) {
-                            $form->addError(new FormError("Vous n'êtes pas invités à rejoindre ce raid"));
+                            $form->addError(
+                                new FormError(
+                                    "Vous n'êtes pas invité à rejoindre ce raid avec ce lien d'invitation"
+                                )
+                            );
                         } else {
+                            // Connect the user manually
+                            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+                            $this->get('security.token_storage')->setToken($token);
+
+                            $this->get('session')->set('_security_main', serialize($token));
+
+                            $event = new InteractiveLoginEvent($request, $token);
+                            $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+
                             $collaboration->setUser($user);
                             $em->flush();
 
@@ -411,7 +430,7 @@ class CollaborationController extends Controller
         }
 
         return $this->render('OrganizerBundle:Collaborator:joinCollaborator.html.twig', [
-            'raid' => $collaboration->getRaid(),
+            'raid' => $raid,
             'form' => $form->createView(),
         ]);
     }
