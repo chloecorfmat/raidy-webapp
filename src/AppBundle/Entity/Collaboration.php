@@ -9,6 +9,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -19,10 +20,10 @@ class Collaboration
 
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(name="invitationId", type="string", length=13)
+     * @Assert\NotBlank()
      */
-    protected $id;
+    private $invitationId;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
@@ -36,12 +37,6 @@ class Collaboration
      * @Assert\NotBlank()
      */
     private $email;
-
-    /**
-     * @ORM\Column(name="email", type="string", length=13)
-     * @Assert\NotBlank()
-     */
-    private $invitationId;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
