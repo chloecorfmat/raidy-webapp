@@ -53,6 +53,7 @@ class OrganizerRaidController extends Controller
             ->add('picture', FileType::class, [
                 'label' => 'Photo',
                 'label_attr' => ['class' => 'form--fixed-label'],
+                'attr' => ['class' => 'form-input--image'],
                 'data_class' => null,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Créer un raid'])
@@ -155,6 +156,7 @@ class OrganizerRaidController extends Controller
                 'data_class' => null,
                 'attr' => [
                     'data_url' => 'uploads/raids/',
+                    'class' => 'form-input--image',
                 ],
             ])
             ->add('submit', SubmitType::class, ['label' => 'Editer un raid'])

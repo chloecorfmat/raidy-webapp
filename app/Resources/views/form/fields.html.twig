@@ -72,5 +72,6 @@
 
 {%- block form_widget_simple -%}
     {%- set type = type|default('text') -%}
-    <input class="form--input-{{ type }}" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {%- set class = attr.class|default('') -%}
+    <input class="form--input-{{ type }} {{ class }}" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
 {%- endblock form_widget_simple -%}
