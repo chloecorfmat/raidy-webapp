@@ -40,7 +40,7 @@ class TypesController extends AjaxAPIController
         $poiTypes = $poiTypeManager->findAll();
         $poiTypesService = $this->container->get('PoiTypeService');
 
-        return new Response($poiTypesService->poisArrayToJson($poiTypes));
+        return new Response($poiTypesService->poiTypesArrayToJson($poiTypes));
     }
 
     /**
