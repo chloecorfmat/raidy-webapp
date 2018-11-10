@@ -166,7 +166,6 @@ class TrackService
             $status = false;
         }
 
-        /* TODO Temporary fix for demo, UNDO ASAP */
         if (!isset($obj['sportType']) || '' == $obj['sportType']) {
             $status = false;
         }

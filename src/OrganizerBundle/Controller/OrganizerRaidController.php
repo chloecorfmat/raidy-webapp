@@ -270,8 +270,45 @@ class OrganizerRaidController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        //$raids = $raidManager->findAll();
         $raids = $raidManager->findBy([
+            'user' => $user,
+        ]);
+
+        return $this->render(
+            'OrganizerBundle:Raid:listRaid.html.twig',
+            [
+                'raids' => $raids,
+                'user' => $user,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/organizer/raid/{raidId}/clone", name="cloneRaid")
+     *
+     * @param mixed $raidId the raid to clone
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function cloneRaid($raidId)
+    {
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $raid = $raidManager->findOneBy(['id' => $raidId]);
+
+        if (null === $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $raids = $raidManager->findOneBy([
             'user' => $user,
         ]);
 
