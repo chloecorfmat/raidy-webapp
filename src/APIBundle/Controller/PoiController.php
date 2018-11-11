@@ -81,17 +81,39 @@ class PoiController extends AjaxAPIController
 
     /**
      * @Rest\View(statusCode=Response::HTTP_CREATED)
-     * @Rest\Put("/api/helper/raid/{raidId}/check-in/user/{userId}")
+     * @Rest\Put("/api/helper/raid/{raidId}/check-in")
      *
      * @param Request $request
      * @param int     $raidId  raid id
-     * @param int     $userId  user id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function putHelperCheckinAction(Request $request, $raidId, $userId)
+    public function putHelperCheckinAction(Request $request, $raidId)
     {
-        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
+		// Set up managers
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        // Find the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
+        }
+		
+		$helperManager = $em->getRepository('AppBundle:Helper');
+        $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
+		
+		$helper->setCheckInTime(new \DateTime("now"));
+        $em->flush();
+		
+		$ret = [];
+        $ret['checkInTime'] = $helper->getCheckInTime();
+        $ret['code'] = Response::HTTP_OK;
+
+        return new Response(json_encode($ret));
     }
 
     /**
