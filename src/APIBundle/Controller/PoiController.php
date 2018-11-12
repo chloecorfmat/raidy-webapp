@@ -3,6 +3,7 @@ namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use OrganizerBundle\Security\RaidVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -33,8 +34,9 @@ class PoiController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé pour ce raid.');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $pois = $poiManager->findBy(array('raid' => $raidId));
@@ -54,7 +56,6 @@ class PoiController extends AjaxAPIController
      */
     public function getHelperPOIAction(Request $request, $raidId)
     {
-
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
@@ -140,8 +141,9 @@ class PoiController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $data = $request->request->all();
@@ -184,8 +186,9 @@ class PoiController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $data = $request->request->all();
@@ -233,8 +236,9 @@ class PoiController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $poiManager = $em->getRepository('AppBundle:Poi');
@@ -275,8 +279,9 @@ class PoiController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $poiService = $this->container->get('PoiService');

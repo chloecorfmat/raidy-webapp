@@ -61,14 +61,7 @@ class RaidVoter implements VoterInterface
                 }
             }
 
-            $isSuperAdmin = false;
-            if (!$isOwner && !$isCollaborator) {
-                $isSuperAdmin = \in_array('ROLE_SUPER_ADMIN', $user->getRoles(), true);
-            }
-
-            if ($isOwner
-                || $isSuperAdmin
-                || $isCollaborator) {
+            if ($isOwner || $isCollaborator) {
                 return VoterInterface::ACCESS_GRANTED;
             }
 
