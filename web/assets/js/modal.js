@@ -1,6 +1,7 @@
 window.addEventListener('load', displayModalToDelete)
 window.addEventListener('load', displayModalToDeletePoiType)
 window.addEventListener('load', displayModalToDeleteSportType)
+window.addEventListener('load', displayModalToDeleteCollaborator)
 
 function displayModalToDelete () {
   MicroModal.init();
@@ -39,4 +40,17 @@ function displayModalToDeleteSportType () {
       MicroModal.show('delete-sporttype') // eslint-disable-line no-undef
     })
   })
+}
+
+function displayModalToDeleteCollaborator () {
+    MicroModal.init() // eslint-disable-line no-undef
+
+    document.querySelectorAll('.btn--delete-collaborator').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            console.log(this.dataset);
+            var url = '/organizer/raid/'+this.dataset.raid+'/collaborator/'+this.dataset.invitation+'/delete';
+            document.getElementById('btn--delete-collaborator').href = url;
+            MicroModal.show('delete-collaborator') // eslint-disable-line no-undef
+        })
+    })
 }

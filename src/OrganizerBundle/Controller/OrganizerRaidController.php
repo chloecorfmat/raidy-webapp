@@ -230,7 +230,7 @@ class OrganizerRaidController extends Controller
         }
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+        if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
             throw $this->createAccessDeniedException();
         }
 
@@ -273,6 +273,16 @@ class OrganizerRaidController extends Controller
         $raids = $raidManager->findBy([
             'user' => $user,
         ]);
+
+        $collaborationManager = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Collaboration');
+
+        $collaborations = $collaborationManager->findBy(["user" => $user]);
+
+        foreach ($collaborations as $collaboration) {
+            $raids[] = $collaboration->getRaid();
+        }
 
         return $this->render(
             'OrganizerBundle:Raid:listRaid.html.twig',

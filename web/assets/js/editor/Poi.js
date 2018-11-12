@@ -43,6 +43,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.marker.disableEdit();
     this.marker.on('dragend', function () {
+      keepThis.name = htmlentities.decode(keepThis.name);
       keepThis.push();
     });
     keepThis.buildUI();

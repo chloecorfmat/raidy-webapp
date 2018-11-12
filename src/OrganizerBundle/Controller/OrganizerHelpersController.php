@@ -3,6 +3,7 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
+use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,14 +27,14 @@ class OrganizerHelpersController extends AjaxAPIController
         $raidManager = $em->getRepository('AppBundle:Raid');
 
         // Find the user
-        $user = $this->get('security.token_storage')->getToken()->getUser();
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 

@@ -77,15 +77,18 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.map.on('editable:middlemarker:mousedown', function () {
       track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.name = htmlentities.decode(track.name);
       track.push();
     });
     this.map.on('editable:drawing:click', function () {
       track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.name = htmlentities.decode(track.name);
       track.push();
     });
 
     this.map.on('editable:vertex:dragend', function () {
       track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.name = htmlentities.decode(track.name);
       track.push();
     });
 
@@ -111,7 +114,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     MapManager.prototype.loadRessources = function () {
     var keepThis = this;
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/organizer/poitype', true);
+    xhr_object.open('GET', '/organizer/raid/'+raidID+'/poitype', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE) {

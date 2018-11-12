@@ -4,6 +4,7 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\PoiType;
+use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -249,6 +250,37 @@ class OrganizerPoiTypeController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
         }
         $poiTypes = $poiTypeManager->findAll();
+        $poiTypesService = $this->container->get('PoiTypeService');
+
+        return new Response($poiTypesService->poiTypesArrayToJson($poiTypes));
+    }
+
+    /**
+     * @Route("/organizer/raid/{raidId}/poitype", name="listPoiTypeByRaidAPI", methods={"GET"})
+     *
+     * @param int $raidId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listPoiTypeByRaidAPI($raidId)
+    {
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raid = $raidManager->find($raidId);
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        }
+
+        $user = $raid->getUser();
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
+        }
+
+        $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+        $poiTypes = $poiTypeManager->findBy(["user" => $user]);
         $poiTypesService = $this->container->get('PoiTypeService');
 
         return new Response($poiTypesService->poiTypesArrayToJson($poiTypes));
