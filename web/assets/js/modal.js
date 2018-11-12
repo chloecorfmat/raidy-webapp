@@ -12,8 +12,8 @@ function displayModalToDelete () {
       var url = document.getElementById('btn--delete-organizer').dataset.baseUrl + id;
       document.getElementById('btn--delete-organizer').href = url;
       MicroModal.show('delete-organizer');
-    })
-  })
+    });
+  });
 }
 
 function displayModalToDeletePoiType () {
@@ -21,12 +21,12 @@ function displayModalToDeletePoiType () {
 
   document.querySelectorAll('.btn--delete-poitype').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var id = this.dataset.poitypeId
-      var url = document.getElementById('btn--delete-poitype').dataset.baseUrl + id
-      document.getElementById('btn--delete-poitype').href = url
-      MicroModal.show('delete-poitype') // eslint-disable-line no-undef
-    })
-  })
+      var id = this.dataset.poitypeId;
+      var url = document.getElementById('btn--delete-poitype').dataset.baseUrl + id;
+      document.getElementById('btn--delete-poitype').href = url;
+      MicroModal.show('delete-poitype'); // eslint-disable-line no-undef
+    });
+  });
 }
 
 function displayModalToDeleteSportType () {
@@ -34,10 +34,10 @@ function displayModalToDeleteSportType () {
 
   document.querySelectorAll('.btn--delete-sporttype').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var id = this.dataset.sporttypeId
-      var url = document.getElementById('btn--delete-sporttype').dataset.baseUrl + id
-      document.getElementById('btn--delete-sporttype').href = url
-      MicroModal.show('delete-sporttype') // eslint-disable-line no-undef
+      var id = this.dataset.sporttypeId;
+      var url = document.getElementById('btn--delete-sporttype').dataset.baseUrl + id;
+      document.getElementById('btn--delete-sporttype').href = url;
+      MicroModal.show('delete-sporttype'); // eslint-disable-line no-undef
     })
   })
 }

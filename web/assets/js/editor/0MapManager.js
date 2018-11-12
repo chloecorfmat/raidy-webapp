@@ -227,7 +227,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/organizer/raid/' + raidID + '/track', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
-    console.log(track.toJSON());
     xhr_object.send(track.toJSON());
 
     xhr_object.onreadystatechange = function (event) {

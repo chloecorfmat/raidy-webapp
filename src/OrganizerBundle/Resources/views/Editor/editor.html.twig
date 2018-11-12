@@ -1,5 +1,5 @@
 {% extends 'default/organizer.html.twig' %}
-{% block main_attributes %}class="full-content"{% endblock %}
+{% block main_attributes %}class="main-editor"{% endblock %}
 {% block body_class %}editor{% endblock %}
 
 {% block stylesheets %}
@@ -8,14 +8,21 @@
           crossorigin=""/>
 {% endblock %}
 
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': id}) }}">Détails du raid</a></li>
+        <li class="breadcrumb--list-item">Éditeur</li>
+    </ol>
+
+    <button class="btn-ico" id="editorTutorial" title="Tutoriel"><span>Voir l'aide</span> <i class="fas fa-lightbulb fa-lg"></i></button>
+{% endblock %}
+
 {% block body %}
+<div class="full-content">
     <div id="editorContainer" class="editor--container">
         <div class="bar">
             <div class="tab-bar">
-                <!--nav class="tab">
-                    <button class="tablinks" onclick="openTab(event, 'tracks-pan')">Tracés</button>
-                    <button class="tablinks" onclick="openTab(event, 'pois-pan')">Points d'intéret</button>
-                </nav-->
                 <button class="active accordion">Parcours</button>
                 <div class="active panel tabcontent" id="tracks-pan">
                     <!--button class="btn--action" id="addTrackButton">Ajouter un parcours</button--->
@@ -41,16 +48,6 @@
         <div class="map--container">
             <div id="map" class="map"></div>
 
-
-                <!-- id="addPoiButton" class="btn--add-poi">
-                <span class="btn--editor">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 122.85 122.85">
-                       <path d="M122.85,48.06q0,12.15-6.75,19.44T96.93,74.79H74.79v48.06q-12.15,0-19.44-6.75T48.06,96.93V74.79H0Q0,62.64,6.75,55.35t19.17-7.29H48.06V0Q60.21,0,67.5,6.75t7.29,19.17V48.06Z" />
-                    </svg>
-                </span>
-                </button-->
-
-
             <div class="fab">
               <span id="fabActionButton"  class="fab-action-button btn--add-poi">
                 <span class="btn--editor">
@@ -62,12 +59,12 @@
                 <ul class="fab-buttons">
                     <li class="fab-buttons__item">
                         <a href="#" id="addTrackButton" class="fab-buttons__link" data-tooltip="Ajouter un parcours">
-                            <i class="icon-material icon-material_track"></i>
+                            <i class="icon-material icon-material_track fab-icon"></i>
                         </a>
                     </li>
                     <li class="fab-buttons__item">
                         <a href="#" id="addPoiButton"  class="fab-buttons__link" data-tooltip="Ajouter un point d'intéret">
-                            <i class="icon-material icon-material_poi"></i>
+                            <i class="icon-material icon-material_poi fab-icon"></i>
                         </a>
                     </li>
                 </ul>
@@ -356,6 +353,128 @@
         </div>
     </div>
 
+    <!-- Tutorial  -->
+    <div id="tutorial_1" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" data-micromodal-close>
+                <div class="modal-container modal-tutorial">
+                    <header class="modal--header ">
+                        <h2>
+                            Bienvenue sur l'éditeur Raidy
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div class="modal--content">
+                        <div>
+                            <p>Avant de commencer, nous vous proposons de suivre un rapide tutoriel. Vous pouvez retrouver à tout moment ce tutoriel à partir du menu d'actions.</p>
+                            <p>L'éditeur de carte Raidy vous permettra de préparer votre raid.</p>
+                            <p class="text--introducing">Vous pourrez :</p>
+                            <ul>
+                                <li>Créer et gérer des parcours</li>
+                                <li>Créer et gérer des points d'intérêt</li>
+                                <li>Importer et exporter des fichiers .gpx</li>
+                            </ul>
+                        </div>
+                        <div class="btn--actions-tutorial">
+                            <button class="btn btn--danger" data-micromodal-close>Fermer</button>
+                            <button class="btn btn--editor-tutorial" data-id="2" data-current="1">Suivant</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tutorial_2" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="add-poi-title" data-micromodal-close>
+                <div class="modal-container modal-tutorial">
+                    <header class="modal--header ">
+                        <h2>
+                            L'interface (2)
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div class="modal--content">
+                        <div>
+                            <ol>
+                                <li>
+                                    <h2>La barre latérale</h2>
+                                    <p>Cette barre latérale liste les différents parcours et points d'intérêt créés. Au clic sur un accordéon, la liste concernée est cachée ou affichée.</p>
+                                    <p>Pour chaque item, il y a un menu contextuel qui permet de modifier l'entité concernée ou de la supprimer.</p>
+                                </li>
+                                <li>
+                                    <h2>La carte</h2>
+                                    <p>La carte est l'élément le plus important de l'éditeur Raidy, car elle permet de : </p>
+                                    <ul>
+                                        <li>ajouter des parcours et des points d'intérêt</li>
+                                        <li>visualiser les parcours et les points d'inérêt créés</li>
+                                        <li>concevoir et modifier des tracés</li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <h2>Le menu d'action</h2>
+                                    <p>Le menu d'action permet de travailler sur l'éditeur. Au survol, les différentes actions possibles deviennent accessibles.</p>
+                                    <ol>
+                                        <li>Création d'un parcours</li>
+                                        <li>Création d'un point d'intérêt</li>
+                                        <li>Tutoriel</li>
+                                    </ol>
+                                </li>
+                            </ol>
+                        </div>
+                        <div class="btn--actions-tutorial">
+                            <button class="btn btn--editor-tutorial" data-id="1" data-current="2">Précédent</button>
+                            <button class="btn btn--editor-tutorial" data-id="3" data-current="2">Suivant</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tutorial_3" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="add-poi-title" data-micromodal-close>
+                <div class="modal-container modal-tutorial">
+                    <header class="modal--header ">
+                        <h2>
+                            Les parcours (3)
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div class="modal--content">
+                        <div>
+                            <p>L'éditeur de carte Raidy vous permettra de préparer votre raid.</p>
+                            <p>Vous pourrez :</p>
+                            <ul>
+                                <li>Créer et gérer des parcours</li>
+                                <li>Créer et gérer des points d'intérêt</li>
+                                <li>Importer les fichiers .gpx d'autres services</li>
+                                <li>Exporter le raid en .gpx</li>
+                            </ul>
+                        </div>
+
+                        <div class="btn--actions-tutorial">
+                            <button class="btn btn--editor-tutorial" data-id="2" data-current="3">Précédent</button>
+                            <button class="btn btn--danger" data-micromodal-close>Terminer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
 
 {% block javascripts %}
@@ -376,6 +495,16 @@
             mapManager.initialize();
         });
     </script>
+
+    {% if app.user.tutorialTime is null %}
+        <script>
+            var tutorial = true;
+        </script>
+    {% else %}
+        <script>
+            var tutorial = false;
+        </script>
+    {% endif %}
 
     <!--script type="text/javascript" src="{#{ asset('assets/js/lib/Editor.js') }#}"></script-->
     <!--script type="text/javascript" src="{#{ asset('assets/js/lib/Track.js') }#}"></script-->

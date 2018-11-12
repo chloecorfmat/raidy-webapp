@@ -6,6 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use OrganizerBundle\Security\RaidVoter;
+use Symfony\Component\HttpFoundation\Response;
 
 class EditorController extends Controller
 {
@@ -47,5 +48,26 @@ class EditorController extends Controller
             'poiTypes' => $poiTypes,
             'sportTypes' => $sportTypes,
         ]);
+    }
+
+    /**
+     * @Route("/organizer/checkTutorial", name="checkTutorial", methods={"PATCH"})
+     *
+     * @param Request $request request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function checkTutorial(Request $request)
+    {
+        // Find the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $datetime = new \DateTime("now");
+
+        $user->setTutorialTime($datetime);
+        $userManager = $this->get('fos_user.user_manager');
+        $userManager->updateUser($user);
+
+        return new Response();
     }
 }
