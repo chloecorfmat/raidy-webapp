@@ -8,6 +8,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\Raid;
 use AppBundle\Entity\Track;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -183,5 +184,33 @@ class TrackService
         }
 
         return $status;
+    }
+
+    /**
+     * @param Raid $raidToClone
+     * @param Raid $raid
+     */
+    public function cloneTracks($raidToClone, $raid)
+    {
+        // Clone tracks
+        $trackRepository = $this->em->getRepository('AppBundle:Track');
+        $tracks = $trackRepository->findBy(array('raid' => $raidToClone->getId()));
+
+        if (null != $tracks) {
+            foreach ($tracks as $track) {
+                $t = new Track();
+
+                $t->setName($track->getName());
+                $t->setRaid($raid);
+                $t->setTrackPoints($track->getTrackPoints());
+                $t->setColor($track->getColor());
+                $t->setSportType($track->getSportType());
+                $t->setIsVisible($track->getIsVisible());
+                $t->setIsCalibration($track->getIsCalibration());
+
+                $this->em->persist($t);
+                $this->em->flush();
+            }
+        }
     }
 }

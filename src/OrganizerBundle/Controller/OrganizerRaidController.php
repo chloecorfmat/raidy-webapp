@@ -286,38 +286,112 @@ class OrganizerRaidController extends Controller
     /**
      * @Route("/organizer/raid/{raidId}/clone", name="cloneRaid")
      *
-     * @param mixed $raidId the raid to clone
+     * @param Request $request
+     * @param mixed   $raidId  the raid to clone
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function cloneRaid($raidId)
+    public function cloneRaid(Request $request, $raidId)
     {
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(['id' => $raidId]);
+        $cloneRaid = $raidManager->find($raidId);
 
-        if (null === $raid) {
+        if (null === $cloneRaid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $cloneRaid)) {
             throw $this->createAccessDeniedException();
         }
 
-        $raids = $raidManager->findOneBy([
+        $oldPicture = $cloneRaid->getPicture();
+
+        $formRaid = new Raid();
+
+        $form = $this->createFormBuilder($formRaid)
+            ->add('name', TextType::class, [
+                'label' => 'Nom du raid',
+                'data' => $cloneRaid->getName(),
+            ])
+            ->add('date', DateType::class, [
+                'label' => 'Date',
+                'widget' => 'single_text',
+                'data' => $cloneRaid->getDate(),
+
+                // prevents rendering it as type="date", to avoid HTML5 date pickers
+                'html5' => true,
+            ])
+            ->add('address', TextType::class, [
+                'label' => 'Adresse',
+                'data' => $cloneRaid->getAddress(),
+            ])
+            ->add('addressAddition', TextType::class, [
+                'required' => false,
+                'label' => 'Complément d\'adresse',
+                'data' => (null != $cloneRaid->getAddressAddition()) ? $cloneRaid->getAddressAddition() : '',
+            ])
+            ->add('postCode', IntegerType::class, [
+                'label' => 'Code postal',
+                'data' => $cloneRaid->getPostCode(),
+            ])
+            ->add('city', TextType::class, [
+                'label' => 'Ville',
+                'data' => $cloneRaid->getCity(),
+            ])
+            ->add('editionNumber', IntegerType::class, [
+                'label' => 'Numéro d\'édition',
+                'data' => $cloneRaid->getEditionNumber(),
+            ])
+            ->add('picture', FileType::class, [
+                'label_attr' => ['class' => 'form--fixed-label'],
+                'label' => 'Photo',
+                'data' => $cloneRaid->getPicture(),
+                'required' => false,
+                'data_class' => null,
+                'attr' => [
+                    'data_url' => '/uploads/raids/',
+                    'class' => 'form-input--image',
+                ],
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Cloner ce raid'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $raidManager = $em->getRepository('AppBundle:Raid');
+            $raidExist = $raidManager->findBy(
+                ['name' => $formRaid->getName(), 'editionNumber' => $formRaid->getEditionNumber()]
+            );
+
+            if (!$raidExist) {
+                $formRaid = $form->getData();
+                $formRaid->setUser($this->getUser());
+
+                $raidService = $this->container->get('RaidService');
+                $raid = $raidService->cloneRaid($formRaid, $this->getParameter('raids_img_directory'), $oldPicture);
+
+                $trackService = $this->container->get('TrackService');
+                $trackService->cloneTracks($cloneRaid, $raid);
+
+                $poiService = $this->container->get('PoiService');
+                $poiService->clonePois($cloneRaid, $raid);
+
+                return $this->redirectToRoute('listRaid');
+            }
+            $form->addError(new FormError(
+                'Ce raid existe déjà. Avez-vous pensé à changer le nom ou le numéro d\'édition ?'
+            ));
+        }
+
+        return $this->render('OrganizerBundle:Raid:cloneRaid.html.twig', [
+            'form' => $form->createView(),
             'user' => $user,
         ]);
-
-        return $this->render(
-            'OrganizerBundle:Raid:listRaid.html.twig',
-            [
-                'raids' => $raids,
-                'user' => $user,
-            ]
-        );
     }
 }

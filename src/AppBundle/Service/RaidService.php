@@ -15,6 +15,17 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class RaidService
 {
+    /**
+     * RaidService constructor.
+     *
+     * @param EntityManagerInterface $em
+     * @param UploadedFileService    $uploadedFileService
+     */
+    public function __construct(EntityManagerInterface $em, UploadedFileService $uploadedFileService)
+    {
+        $this->em = $em;
+        $this->uploadedFileService = $uploadedFileService;
+    }
 
     /**
      * @param array $raids
@@ -79,14 +90,16 @@ class RaidService
     }
 
     /**
-     * @param Raid $obj
+     * @param Raid   $obj
+     * @param String $directory
+     * @param String $oldPicture
+     *
+     * @return Raid
      */
-    public function cloneRaid($obj)
+    public function cloneRaid($obj, $directory, $oldPicture)
     {
-
         $raid = new Raid();
 
-        // Clone raid
         $raid->setName($obj->getName());
         $raid->setDate($obj->getDate());
         $raid->setAddress($obj->getAddress());
@@ -100,60 +113,21 @@ class RaidService
         $raid->setPostCode($obj->getPostCode());
         $raid->setCity($obj->getCity());
         $raid->setEditionNumber($obj->getEditionNumber());
-        $raid->setPicture($obj->getPicture());
+
+        if (null != $obj->getPicture()) {
+            $picture = $this->uploadedFileService->saveFile($obj->getPicture(), $directory);
+            $raid->setPicture($picture);
+        } else {
+            $raid->setPicture($oldPicture);
+        }
 
         $userRepository = $this->em->getRepository('AppBundle:User');
         $user = $userRepository->find($obj->getUser());
         $raid->setUser($user);
 
-        $this->persist($raid);
+        $this->em->persist($raid);
         $this->em->flush();
 
-        // Clone tracks
-        $trackRepository = $this->em->getRepository('AppBundle:Track');
-        $tracks = $trackRepository->findAll(array('raid' => $obj->getId()));
-
-        if (null != $tracks) {
-            foreach ($tracks as $track) {
-                $t = new Track();
-
-                $t->setName($track->getName());
-                $t->setRaid($raid->getId());
-                $t->setTrackPoints($track->getTrackPoints());
-                $t->setColor($track->getColor());
-                $t->setSportType($track->getSportType());
-                $t->setIsVisible($track->getIsVisible());
-                $t->setIsCalibration($track->getIsCalibration());
-
-                $this->persist($t);
-                $this->em->flush();
-            }
-        }
-
-        // Clone POIs
-        $poiRepository = $this->em->getRepository('AppBundle:Poi');
-        $pois = $poiRepository->findAll(array('raid' => $obj->getId()));
-
-        if (null != $pois) {
-            foreach ($pois as $poi) {
-                $p = new Poi();
-
-                $p->setName($poi->getName());
-                $p->setLongitude($poi->getLongitude());
-                $p->setLatitude($poi->getLatitude());
-                $p->setRequiredHelpers($poi->getRequiredHelpers());
-
-                $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
-                $poiType = $poiTypeRepository->find($obj->getPoiType());
-                $p->setPoiType($poiType);
-
-                $p->setRaid($raid->getId());
-
-                $this->persist($p);
-                $this->em->flush();
-            }
-        }
-
-        // Clone contacts
+        return $raid;
     }
 }
