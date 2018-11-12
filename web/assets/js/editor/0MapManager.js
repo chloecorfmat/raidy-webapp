@@ -77,15 +77,18 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.map.on('editable:middlemarker:mousedown', function () {
       track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.name = htmlentities.decode(track.name);
       track.push();
     });
     this.map.on('editable:drawing:click', function () {
       track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.name = htmlentities.decode(track.name);
       track.push();
     });
 
     this.map.on('editable:vertex:dragend', function () {
       track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.name = htmlentities.decode(track.name);
       track.push();
     });
 
