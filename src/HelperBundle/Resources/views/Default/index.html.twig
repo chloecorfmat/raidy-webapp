@@ -34,6 +34,18 @@
                 <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
                 <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             </div>
+            <h2>Liens utiles</h2>
+            <div class="downloads">
+                <p>Téléchargez l'application Raidy</p>
+				<div class="downloads--links">
+					<a href="#">
+						<img src="{{ asset('assets/images/app-store-badge.png') }}" alt="">
+					</a>
+					<a href="#">
+						<img src="{{ asset('assets/images/google-play-badge.png') }}" alt="">
+					</a>
+				</div>
+			</div>
         </div>
     </div>
 
