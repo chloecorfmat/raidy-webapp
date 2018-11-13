@@ -474,6 +474,47 @@
             </div>
         </div>
     </div>
+    <!-- Import GPX -->
+    <div id="import-gpx" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-poi-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-poi-title">
+                            Importer un fichier GPX
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="import-gpx-content" class="modal--content">
+                        <form id="import-gpx--form" class="gpx-import--form">
+                            <input type="file" id="import-gpx--input">
+
+                            <div id="import-gpx--tracks" class="import-gpx--category">
+                                <h3>Tracés</h3>
+                                <div class="import-gpx--checkboxes"></div>
+                            </div>
+                            <div id="import-gpx--routes" class="import-gpx--category">
+                                <h3>Routes</h3>
+                                <div class="import-gpx--checkboxes"></div>
+                            </div>
+                            <div id="import-gpx--waypoints" class="import-gpx--category">
+                                <h3>Points de passages</h3>
+                                <div class="import-gpx--checkboxes"></div>
+                            </div>
+
+                            <div class="actions">
+                                <button type="submit" class="btn btn--action">Importer</button>
+                                <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
 
