@@ -117,6 +117,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           container.style.width = '30px';
           container.style.height = '30px';
           container.innerHTML = "<i class=\"fas fa-file-import fa-2x\"></i>";
+          container.setAttribute("title", "Importer un fichier GPX");
           container.onclick = function() {
               keepThis.editorUI.cleanImportGPXPopin();
               MicroModal.show('import-gpx');

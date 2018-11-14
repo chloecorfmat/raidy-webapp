@@ -341,6 +341,7 @@ button.active:after {
 .checkbox-item {
   display: flex;
   flex-direction: row;
+  width: 100%;
   input {
     display: none;
 
@@ -376,6 +377,7 @@ button.active:after {
   .checkbox-item--label {
     display: flex;
     flex-direction: row;
+    width: 87%;
     &:hover {
       cursor: pointer;
     }
@@ -1004,8 +1006,16 @@ input:focus {
     margin-bottom: 0.3rem;
   }
 
-  &>.import-gpx--category {
+  & > .import-gpx--category {
     display: none;
+
+    & > .import-gpx--checkboxes > div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+
   }
 
   label {

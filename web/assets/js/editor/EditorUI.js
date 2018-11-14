@@ -230,6 +230,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     var form = document.getElementById('import-gpx--form');
 
     let sportSelect = this.buildSportTypeSelect();
+    let poiTypeSelect = this.buildPoiTypeSelect();
 
     for(let idx in tracks){
       let track = tracks[idx];
@@ -260,19 +261,19 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     };
 
 
-    /* Disable waypoints import as POI */
-    /*for(let idx in waypoints){
+    for(let idx in waypoints){
         let waypoint = waypoints[idx];
-        let name = (waypoint.name != null && waypoint.name !== '') ? route.name : ('POI #' + (parseInt(idx)+1));
+        let name = (waypoint.name != null && waypoint.name !== '') ? waypoint.name : ('POI #' + (parseInt(idx)+1));
         let markup = '<div>' +
-          '<input type="checkbox" data-id="' + idx + '" id="waypoint-' + idx + '" name="' + name + '" checked="checked">' +
-          '<label for="waypoint-' + idx + '">' + name + '</label>' +
-          '</div>';
+            '<input type="checkbox" data-id="' + idx + '" id="poi-' + idx + '" name="' + name + '" checked="checked">' +
+            '<label for="poi-' + idx + '">' + name + '</label>' +
+            poiTypeSelect +
+            '</div>';
 
-      let div = form.querySelector('#import-gpx--waypoints .import-gpx--checkboxes');
+        let div = form.querySelector('#import-gpx--waypoints .import-gpx--checkboxes');
         div.parentNode.style.display = "block";
         div.innerHTML += markup;
-    };*/
+    };
   };
 
   EditorUI.prototype.cleanImportGPXPopin = function(){
@@ -299,6 +300,17 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
       return select+"</select>";
   };
+
+  EditorUI.prototype.buildPoiTypeSelect = function(){
+
+        let select = "<select>";
+
+        mapManager.poiTypesMap.forEach(function (poiType) {
+            select+= '<option value="' + poiType.id + '">' + poiType.type + '</option>';
+        });
+
+        return select+"</select>";
+    };
 
         console.log("Editor UI for editor loaded");
 } else {

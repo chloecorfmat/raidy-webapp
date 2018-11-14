@@ -338,8 +338,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
     this.querySelectorAll('#import-gpx--waypoints input[type=checkbox]').forEach(function (box) {
         if(box.checked){
-            let sportType = box.parentNode.querySelector('select').value;
-            mapManager.GPXImporter.importWaypoint(parseInt(box.dataset.id), sportType);
+            let poiType = box.parentNode.querySelector('select').value;
+            mapManager.GPXImporter.importWaypoint(parseInt(box.dataset.id), poiType);
         }
     });
 

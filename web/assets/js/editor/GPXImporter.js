@@ -35,7 +35,7 @@ GPXImporter.prototype.importGPXTrack = function(id, sportType, gpxTrack){
 
     let track = new Track();
     track.setName(name);
-    track.setSportType(sportType);
+    track.setSportType(parseInt(sportType));
     track.setColor("#000000");
     track.line.setLatLngs(latLngs);
 
@@ -67,7 +67,31 @@ GPXImporter.prototype.importRoute = function (id, sportType) {
     this.importGPXTrack(id, sportType, gpxTrack);
 };
 
-GPXImporter.prototype.importWaypoint = function (id, sportType) {
-    console.log(this.gpxParser.waypoints[id]);
+GPXImporter.prototype.importWaypoint = function (id, poiType) {
+    let gpxWaypoint = this.gpxParser.waypoints[id];
+    let keepThis = this;
+    let name = (gpxWaypoint.name != null && gpxWaypoint.name !== '') ? gpxWaypoint.name : ('POI #' + (parseInt(id)+1));
+
+    let poi = new Poi();
+    poi.name = name;
+    poi.editable = false;
+    poi.poiType = this.mapManager.poiTypesMap.get(parseInt(poiType));
+    poi.marker = L.marker([gpxWaypoint.lat, gpxWaypoint.lon]);
+    console.log(poi);
+
+    var xhr_object = new XMLHttpRequest();
+    xhr_object.open('PUT', '/organizer/raid/' + raidID + '/poi', true);
+    xhr_object.setRequestHeader('Content-Type', 'application/json');
+    xhr_object.send(poi.toJSON());
+
+    xhr_object.onreadystatechange = function () {
+        // XMLHttpRequest.DONE === 4
+        if (this.readyState === XMLHttpRequest.DONE) {
+            if (xhr_object.status === 200) {
+                poi = JSON.parse(xhr_object.responseText);
+                mapManager.addPoi(poi);
+            }
+        }
+    }
 };
 
