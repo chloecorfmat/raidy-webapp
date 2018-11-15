@@ -2,6 +2,7 @@ window.addEventListener('load', organizersList)
 window.addEventListener('load', helpers)
 window.addEventListener('load', poiTypesList)
 window.addEventListener('load', sportTypesList)
+window.addEventListener('load', contactsList)
 
 var options = {
   labels: {
@@ -14,18 +15,18 @@ var options = {
 
 function organizersList (e) {
   if (document.getElementById('organizersList') != null) {
-    var dataTableOrganizer = new DataTable('#organizersList', options);
+    var dataTableOrganizer = new DataTable('#organizersList', options)
 
     dataTableOrganizer.on('datatable.page', function (page) {
       // Needed to display modal to delete organizer.
-      displayModalToDelete();
+      displayModalToDelete()
     })
   }
 }
 
 function helpers (e) {
   if (document.getElementById('helpersList') != null) {
-    new DataTable('#helpersList', options);
+    new DataTable('#helpersList', options)
   }
 }
 
@@ -34,14 +35,6 @@ function poiTypesList (e) {
     var dataTablePoiType = new DataTable('#poiTypesList', options) // eslint-disable-line no-undef, no-new
 
     dataTablePoiType.on('datatable.page', function (page) {
-      /* document.getElementsByClassName('char--poitype').forEach(function () {
-        console.log('salut')
-        var id = this.dataset.poitypeId
-        console.log(id)
-        var colorId = document.getElementById('char--poitype-') + id
-        colorId.color = this.dataset.poitypecolor
-        console.log(this.dataset)
-      }) */
       // Needed to display modal to delete poi type
       displayModalToDeletePoiType() // eslint-disable-line no-undef
     })
@@ -55,6 +48,17 @@ function sportTypesList (e) {
     dataTableSportType.on('datatable.page', function (page) {
       // Needed to display modal to delete sport type.
       displayModalToDeleteSportType() // eslint-disable-line no-undef
+    })
+  }
+}
+
+function contactsList (e) {
+  if (document.getElementById('contactsList') != null) {
+    var dataTableContact = new DataTable('#contactsList', options) // eslint-disable-line no-undef, no-new
+
+    dataTableContact.on('datatable.page', function (page) {
+      // Needed to display modal to delete poi type
+      displayModalToDeleteContact() // eslint-disable-line no-undef
     })
   }
 }
