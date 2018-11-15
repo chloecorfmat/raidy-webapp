@@ -10,13 +10,14 @@ namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use OrganizerBundle\Security\RaidVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ContactController extends AjaxAPIController
 {
     /**
-     * @Rest\View(statusCode=Response::HTTP_CREATED)
+     * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Get("/api/helper/raid/{raidId}/contact")
      *
      * @param Request $request request
@@ -26,6 +27,24 @@ class ContactController extends AjaxAPIController
      */
     public function getContactAction(Request $request, $raidId)
     {
-        return AjaxAPIController::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Not implemented');
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $contactManager = $em->getRepository('AppBundle:Contact');
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
+        }
+
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        $contacts = $contactManager->findBy(array('raid' => $raidId));
+        $contactService = $this->container->get('ContactService');
+
+        var_dump($contacts);
+
+        return new Response($contactService->contactsArrayToJson($contacts));
     }
 }
