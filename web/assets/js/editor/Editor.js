@@ -346,6 +346,18 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     MicroModal.close('import-gpx');
   });
 
+  //Export GPX
+  document.getElementById('export-gpx--track').addEventListener('click', function () {
+    mapManager.GPXExporter.exportAsTracks();
+    MicroModal.close('export-gpx');
+  });
+
+  //Export GPX
+  document.getElementById('export-gpx--route').addEventListener('click', function () {
+    mapManager.GPXExporter.exportAsRoutes();
+    MicroModal.close('export-gpx');
+  });
+
   console.log("Editor JS loaded");
 
   MapManager.prototype.displayTrackButton = function () {

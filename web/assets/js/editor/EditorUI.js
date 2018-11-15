@@ -312,6 +312,16 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         return select+"</select>";
     };
 
+    EditorUI.prototype.buildExportGPXPopin = function(){
+        mapManager.tracksMap.forEach(function (track) {
+            let markup = '<div>' +
+                '<input type="checkbox" data-id="' + idx + '" id="track-' + idx + '" name="' + name + '" checked="checked">' +
+                '<label for="route-' + idx + '">' + name + '</label>' +
+                sportSelect +
+                '</div>';
+        });
+    };
+
         console.log("Editor UI for editor loaded");
 } else {
   if (document.querySelector('#map') != undefined) {

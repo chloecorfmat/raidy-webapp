@@ -189,6 +189,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.map.removeLayer(this.endMarker);
 
     mapManager.editorUI.removeTrack(this);
+    mapManager.tracksMap.delete(this.id);
   };
   Track.prototype.buildUI = function () {
     mapManager.editorUI.updatePoi()
