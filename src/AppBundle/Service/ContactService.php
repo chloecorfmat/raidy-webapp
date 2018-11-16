@@ -8,6 +8,8 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\Contact;
+use AppBundle\Entity\Raid;
 use Doctrine\ORM\EntityManagerInterface;
 
 class ContactService
@@ -49,5 +51,30 @@ class ContactService
         }
 
         return json_encode($contactsObj);
+    }
+
+    /**
+     * @param Raid $raidToClone
+     * @param Raid $raid
+     */
+    public function cloneContacts($raidToClone, $raid)
+    {
+        // Clone contacts
+        $contactRepository = $this->em->getRepository('AppBundle:Contact');
+        $contacts = $contactRepository->findBy(array('raid' => $raidToClone->getId()));
+
+        if (null != $contacts) {
+            foreach ($contacts as $contact) {
+                $c = new Contact();
+
+                $c->setRole($contact->getRole());
+                $c->setPhoneNumber($contact->getPhoneNumber());
+                $c->setRaid($raid);
+                $c->setHelper($contact->getHelper());
+
+                $this->em->persist($c);
+                $this->em->flush();
+            }
+        }
     }
 }
