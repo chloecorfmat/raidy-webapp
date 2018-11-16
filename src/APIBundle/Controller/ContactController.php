@@ -43,8 +43,6 @@ class ContactController extends AjaxAPIController
         $contacts = $contactManager->findBy(array('raid' => $raidId));
         $contactService = $this->container->get('ContactService');
 
-        var_dump($contacts);
-
         return new Response($contactService->contactsArrayToJson($contacts));
     }
 }
