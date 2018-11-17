@@ -56,25 +56,30 @@ class OrganizerAdminController extends Controller
 
             if (!$emailExist) {
                 if (!$usernameExist) {
-                    $formUser = $form->getData();
-
-                    $user = $userManager->createUser();
-                    $user->setUsername($formUser->getUsername());
-                    $user->setLastName($formUser->getLastName());
-                    $user->setFirstName($formUser->getFirstName());
                     $phone = $formatService->telephoneNumber($formUser->getPhone());
-                    $user->setPhone($phone);
-                    $user->setEmail($formUser->getEmail());
-                    $user->setEmailCanonical($formUser->getEmail());
-                    $user->setEnabled(1);
-                    $user->setPlainPassword($formUser->getPlainPassword());
-                    $user->setRoles(['ROLE_ORGANIZER']);
 
-                    $userManager->updateUser($user);
+                    if (strlen($phone) === 10) {
+                        $formUser = $form->getData();
 
-                    $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
+                        $user = $userManager->createUser();
+                        $user->setUsername($formUser->getUsername());
+                        $user->setLastName($formUser->getLastName());
+                        $user->setFirstName($formUser->getFirstName());
+                        $user->setPhone($phone);
+                        $user->setEmail($formUser->getEmail());
+                        $user->setEmailCanonical($formUser->getEmail());
+                        $user->setEnabled(1);
+                        $user->setPlainPassword($formUser->getPlainPassword());
+                        $user->setRoles(['ROLE_ORGANIZER']);
 
-                    return $this->redirectToRoute('listOrganizer');
+                        $userManager->updateUser($user);
+
+                        $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
+
+                        return $this->redirectToRoute('listOrganizer');
+                    } else {
+                        $form->addError(new FormError('Un numéro de téléphone doit comporter 10 chiffres'));
+                    }
                 } else {
                     $form->addError(new FormError('Un utilisateur avec ce nom d\'utilisateur est déjà enregistré'));
                 }
@@ -122,18 +127,23 @@ class OrganizerAdminController extends Controller
 
             if (!$emailExist || $emailExist->getId() === $formUser->getId()) {
                 $formUser = $form->getData();
-                $user = $userManager->findUserBy(['id' => $formUser->getId()]);
-                $user->setUsername($formUser->getUsername());
-                $user->setLastName($formUser->getLastName());
-                $user->setFirstName($formUser->getFirstName());
                 $phone = $formatService->telephoneNumber($formUser->getPhone());
-                $user->setPhone($phone);
-                $user->setEmail($formUser->getEmail());
 
-                $userManager->updateUser($user);
-                $this->addFlash('success', 'Le profil a bien été modifié.');
+                if (strlen($phone) === 10) {
+                    $user = $userManager->findUserBy(['id' => $formUser->getId()]);
+                    $user->setUsername($formUser->getUsername());
+                    $user->setLastName($formUser->getLastName());
+                    $user->setFirstName($formUser->getFirstName());
+                    $user->setPhone($phone);
+                    $user->setEmail($formUser->getEmail());
 
-                return $this->redirectToRoute('editOrganizer', ['id' => $id]);
+                    $userManager->updateUser($user);
+                    $this->addFlash('success', 'Le profil a bien été modifié.');
+
+                    return $this->redirectToRoute('editOrganizer', ['id' => $id]);
+                } else {
+                    $form->addError(new FormError('Un numéro de téléphone doit comporter 10 chiffres'));
+                }
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
