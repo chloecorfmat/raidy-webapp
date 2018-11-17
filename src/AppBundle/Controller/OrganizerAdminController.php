@@ -52,29 +52,35 @@ class OrganizerAdminController extends Controller
             $formatService = $this->container->get('FormatService');
             $userManager = $this->get('fos_user.user_manager');
             $emailExist = $userManager->findUserByEmail($formUser->getEmail());
+            $usernameExist = $userManager->findUserByUsername($formUser->getUsername());
 
             if (!$emailExist) {
-                $formUser = $form->getData();
+                if (!$usernameExist) {
+                    $formUser = $form->getData();
 
-                $user = $userManager->createUser();
-                $user->setUsername($formUser->getUsername());
-                $user->setLastName($formUser->getLastName());
-                $user->setFirstName($formUser->getFirstName());
-                $phone = $formatService->telephoneNumber($formUser->getPhone());
-                $user->setPhone($phone);
-                $user->setEmail($formUser->getEmail());
-                $user->setEmailCanonical($formUser->getEmail());
-                $user->setEnabled(1);
-                $user->setPlainPassword($formUser->getPlainPassword());
-                $user->setRoles(['ROLE_ORGANIZER']);
+                    $user = $userManager->createUser();
+                    $user->setUsername($formUser->getUsername());
+                    $user->setLastName($formUser->getLastName());
+                    $user->setFirstName($formUser->getFirstName());
+                    $phone = $formatService->telephoneNumber($formUser->getPhone());
+                    $user->setPhone($phone);
+                    $user->setEmail($formUser->getEmail());
+                    $user->setEmailCanonical($formUser->getEmail());
+                    $user->setEnabled(1);
+                    $user->setPlainPassword($formUser->getPlainPassword());
+                    $user->setRoles(['ROLE_ORGANIZER']);
 
-                $userManager->updateUser($user);
+                    $userManager->updateUser($user);
 
-                $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
+                    $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
 
-                return $this->redirectToRoute('listOrganizer');
+                    return $this->redirectToRoute('listOrganizer');
+                } else {
+                    $form->addError(new FormError('Un utilisateur avec ce nom d\'utilisateur est déjà enregistré'));
+                }
+            } else {
+                $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
-            $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
         }
 
         return $this->render('AppBundle:Admin:addOrganizer.html.twig', [
