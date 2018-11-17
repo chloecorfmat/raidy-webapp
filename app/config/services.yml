@@ -35,6 +35,11 @@ services:
     #     arguments:
     #         $someArgument: 'some_value'
 
+    ContactService:
+        class: AppBundle\Service\ContactService
+        autowire: true
+        public: true
+
     HelperService:
         class: AppBundle\Service\HelperService
         autowire: true

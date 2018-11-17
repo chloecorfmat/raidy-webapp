@@ -392,6 +392,9 @@ class OrganizerRaidController extends Controller
                 $poiService = $this->container->get('PoiService');
                 $poiService->clonePois($cloneRaid, $raid);
 
+                $contactService = $this->container->get('ContactService');
+                $contactService->cloneContacts($cloneRaid, $raid);
+
                 return $this->redirectToRoute('listRaid');
             }
             $form->addError(new FormError(

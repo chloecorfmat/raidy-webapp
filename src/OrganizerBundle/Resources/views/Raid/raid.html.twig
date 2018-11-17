@@ -60,8 +60,7 @@
                 </a>
             </div>
             <div class="card">
-                {# @TODO : change the url #}
-                <a href="{{ path('listHelpers', {'id': raid.id}) }}">
+                <a href="{{ path('listContacts', {'raidId': raid.id}) }}">
                     <i class="fas fa-phone fa-2x"></i>
                     <p>Contacts</p>
                 </a>
@@ -80,6 +79,8 @@
                 <p>
                     Inviter des bénévoles :
                     <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
+                </p>
+                <p>
                     Cloner ce raid :
                     <a href="{{ path('cloneRaid', {'raidId': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('cloneRaid', {'raidId': raid.id}) }}</a>
                 </p>
