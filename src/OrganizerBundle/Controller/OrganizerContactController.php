@@ -81,9 +81,10 @@ class OrganizerContactController extends Controller
                 $contact = $contactManager->findOneBy(['id' => $formContact->getId()]);
 
                 $contact->setRole($formContact->getRole());
-                $contact->setPhoneNumber($formContact->getPhoneNumber());
+                $formatService = $this->container->get('FormatService');
+                $phone = $formatService->telephoneNumber($formContact->getPhoneNumber());
+                $contact->setPhoneNumber($phone);
                 $contact->setRaid($raid);
-                //$contact->setUser($this->getUser());
 
                 $em->persist($contact);
                 $em->flush();
@@ -173,7 +174,10 @@ class OrganizerContactController extends Controller
 
         $form = $this->createFormBuilder($formContact)
             ->add('role', TextType::class, ['label' => 'Rôle'])
-            ->add('phoneNumber', TextType::class, ['label' => 'Téléphone'])
+            ->add('phoneNumber', TextType::class, [
+                'label' => 'Téléphone',
+                'required' => false,
+            ])
             ->add('helper', ChoiceType::class, array(
                 'label' => 'Bénévole responsable',
                 'required' => false,
@@ -198,24 +202,35 @@ class OrganizerContactController extends Controller
                 'role' => $formContact->getRole(),
                 'raid' => $formContact->getRaid(),
             ]);
+
             if (!$contactExit) {
-                $formContact = $form->getData();
+                if (null != $formContact->getHelper() || null != $formContact->getPhoneNumber()) {
+                    $formContact = $form->getData();
 
-                $contact = new Contact();
+                    $contact = new Contact();
 
-                $contact->setRole($formContact->getRole());
-                $contact->setPhoneNumber($formContact->getPhoneNumber());
-                $contact->setRaid($raid);
-                if (null != $formContact->getHelper()) {
-                    $contact->setHelper($formContact->getHelper());
+                    $contact->setRole($formContact->getRole());
+                    $contact->setRaid($raid);
+                    if (null != $formContact->getHelper()) {
+                        $contact->setHelper($formContact->getHelper());
+                    } else {
+                        $formatService = $this->container->get('FormatService');
+                        $phone = $formatService->telephoneNumber($formContact->getPhoneNumber());
+                        $contact->setPhoneNumber($phone);
+                    }
+
+                    $em->persist($contact);
+                    $em->flush();
+
+                    return $this->redirectToRoute('listContacts', array('raidId' => $raidId));
+                } else {
+                    $form->addError(
+                        new FormError('Un contact doit être lié à un bénévole ou avoir un numéro de téléphone.')
+                    );
                 }
-
-                $em->persist($contact);
-                $em->flush();
-
-                return $this->redirectToRoute('listContacts', array('raidId' => $raidId));
+            } else {
+                $form->addError(new FormError('Ce contact existe déjà.'));
             }
-            $form->addError(new FormError('Ce contact existe déjà.'));
         }
 
         $contactManager = $em->getRepository('AppBundle:Contact');

@@ -79,6 +79,8 @@
                 <p>
                     Inviter des bénévoles :
                     <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
+                </p>
+                <p>
                     Cloner ce raid :
                     <a href="{{ path('cloneRaid', {'raidId': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('cloneRaid', {'raidId': raid.id}) }}</a>
                 </p>

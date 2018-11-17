@@ -38,7 +38,13 @@
                     {% for contact in contacts %}
                         <tr class="table--line">
                             <td>{{ contact.role }}</td>
-                            <td>{{ contact.phoneNumber }}</td>
+                            <td>
+                                {% if contact.helper %}
+                                    {{ contact.helper.user.phone|telephone }}
+                                {% else %}
+                                    {{ contact.phoneNumber|telephone }}
+                                {% endif %}
+                            </td>
                             <td>
                                 {% if contact.helper %}
                                     {{ contact.helper.user.firstName }} {{ contact.helper.user.lastName }}

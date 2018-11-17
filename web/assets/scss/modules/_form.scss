@@ -121,3 +121,9 @@ form {
   color: $secondary-color-2;
   font-weight: 700;
 }
+
+.form--item-select {
+  select {
+    width: 100%;
+  }
+}

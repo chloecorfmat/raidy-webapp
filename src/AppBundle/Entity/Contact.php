@@ -33,7 +33,7 @@ class Contact
     protected $role;
 
     /**
-     * @ORM\Column(name="phone_number", type="string", length=45)
+     * @ORM\Column(name="phone_number", type="string", length=45, nullable=true)
      */
     protected $phoneNumber;
 

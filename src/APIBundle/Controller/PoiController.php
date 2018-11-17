@@ -91,7 +91,7 @@ class PoiController extends AjaxAPIController
      */
     public function putHelperCheckinAction(Request $request, $raidId)
     {
-		// Set up managers
+        // Set up managers
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -103,14 +103,14 @@ class PoiController extends AjaxAPIController
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
-		
-		$helperManager = $em->getRepository('AppBundle:Helper');
+
+        $helperManager = $em->getRepository('AppBundle:Helper');
         $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
-		
-		$helper->setCheckInTime(new \DateTime("now"));
+
+        $helper->setCheckInTime(new \DateTime("now"));
         $em->flush();
-		
-		$ret = [];
+
+        $ret = [];
         $ret['checkInTime'] = $helper->getCheckInTime();
         $ret['code'] = Response::HTTP_OK;
 

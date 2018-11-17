@@ -65,15 +65,16 @@ class ContactService
 
         if (null != $contacts) {
             foreach ($contacts as $contact) {
-                $c = new Contact();
+                if (is_null($contact->getHelper())) {
+                    $c = new Contact();
 
-                $c->setRole($contact->getRole());
-                $c->setPhoneNumber($contact->getPhoneNumber());
-                $c->setRaid($raid);
-                $c->setHelper($contact->getHelper());
+                    $c->setRole($contact->getRole());
+                    $c->setPhoneNumber($contact->getPhoneNumber());
+                    $c->setRaid($raid);
 
-                $this->em->persist($c);
-                $this->em->flush();
+                    $this->em->persist($c);
+                    $this->em->flush();
+                }
             }
         }
     }
