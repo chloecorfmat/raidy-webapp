@@ -108,48 +108,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       document.getElementById('map').style.cursor = 'crosshair';
     })
 
-    var ImportGPXCtrl = L.Control.extend({
-        options: {
-          position: 'topleft'
-      },
-      onAdd: function(map) {
-          var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-          container.style.backgroundColor = 'white';
-          container.style.width = '30px';
-          container.style.height = '30px';
-          container.innerHTML = "<i class=\"fas fa-file-import fa-2x\"></i>";
-          container.setAttribute("title", "Importer un fichier GPX");
-          container.onclick = function(e) {
-              e.preventDefault();
-              keepThis.editorUI.cleanImportGPXPopin();
-              MicroModal.show('import-gpx');
-          }
-          return container;
-      },
-    });
-
-      var ExportGPXCtrl = L.Control.extend({
-          options: {
-              position: 'topleft'
-          },
-          onAdd: function(map) {
-              var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-              container.style.backgroundColor = 'white';
-              container.style.width = '30px';
-              container.style.height = '30px';
-              container.innerHTML = "<i class=\"fas fa-file-export fa-2x\"></i>";
-              container.setAttribute("title", "Exporter un fichier GPX");
-              container.onclick = function(e) {
-                e.preventDefault();
-                MicroModal.show('export-gpx');
-              }
-              return container;
-          },
-      });
-
-    this.map.addControl(new ImportGPXCtrl());
-    this.map.addControl(new ExportGPXCtrl());
-
     this.loadRessources();
 
   };
