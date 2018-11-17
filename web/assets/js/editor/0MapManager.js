@@ -261,9 +261,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
   MapManager.prototype.requestNewPoi = function (name, type, requiredHelpers) {
     var poi = this.waitingPoi;
-    poi.name = name;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(type));
-    poi.requiredHelpers = parseInt(requiredHelpers);
+    poi.name = name != "" ? name : poi.poiType.type;
+    poi.requiredHelpers = requiredHelpers != "" ? parseInt(requiredHelpers) : 0;
 
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/organizer/raid/' + raidID + '/poi', true);

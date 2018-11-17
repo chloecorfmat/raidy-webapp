@@ -28,24 +28,24 @@ class Poi
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(type="string", length=45, nullable=true)
      */
     protected $name;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, nullable=false)
      */
     protected $longitude;
 
     /**
-     * @ORM\Column(type="string", length=20)
+     * @ORM\Column(type="string", length=20, nullable=false)
      */
     protected $latitude;
 
     /**
      * @ORM\Column(name="required_helpers", type="integer")
      */
-    protected $requiredHelpers;
+    protected $requiredHelpers = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\PoiType")
