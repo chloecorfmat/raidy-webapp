@@ -85,12 +85,15 @@
 
 .raid--add {
   background: $tertiary-color-1;
+  height: 10vh;
+  display: flex;
+  align-items: center;
 
   a {
     display: flex;
     font-family: 'Fontastique', 'SansSerif';
     font-size: 5rem;
-    height: 100%;
+    height: 50%;
     text-decoration: none;
     transition: opacity .5s ease;
     width: 100%;
@@ -101,9 +104,17 @@
 
     span {
       margin: auto;
+      line-height: .5;
     }
   }
 
+  @media screen and (min-width: $breakpoint-medium) {
+    height: 20vh;
+
+    span {
+      line-height: initial;
+    }
+  }
 }
 
 .raid--content {

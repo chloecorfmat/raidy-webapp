@@ -74,15 +74,18 @@
                 </div>
             {% endif %}
 
+            <div class="card">
+                <a href="{{ path('cloneRaid', {'raidId': raid.id}) }}">
+                    <i class="far fa-clone fa-2x"></i>
+                    <p>Cloner le raid</p>
+                </a>
+            </div>
+
             <div class="useful-links">
                 <h2>Liens utiles</h2>
                 <p>
-                    Inviter des bénévoles :
+                    <i class="far fa-envelope-open"></i> Lien d'invitation des bénévoles :
                     <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
-                </p>
-                <p>
-                    Cloner ce raid :
-                    <a href="{{ path('cloneRaid', {'raidId': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('cloneRaid', {'raidId': raid.id}) }}</a>
                 </p>
             </div>
         </div>
