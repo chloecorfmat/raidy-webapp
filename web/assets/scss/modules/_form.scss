@@ -101,6 +101,7 @@ form {
   select {
     display: block;
     margin-top: .5rem;
+    width: 100%;
   }
 }
 
@@ -120,10 +121,4 @@ form {
 .input--required {
   color: $secondary-color-2;
   font-weight: 700;
-}
-
-.form--item-select {
-  select {
-    width: 100%;
-  }
 }

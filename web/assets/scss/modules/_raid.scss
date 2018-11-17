@@ -84,10 +84,10 @@
 }
 
 .raid--add {
-  background: $tertiary-color-1;
-  height: 10vh;
-  display: flex;
   align-items: center;
+  background: $tertiary-color-1;
+  display: flex;
+  height: 10vh;
 
   a {
     display: flex;
@@ -103,8 +103,8 @@
     }
 
     span {
-      margin: auto;
       line-height: .5;
+      margin: auto;
     }
   }
 

@@ -14,9 +14,9 @@ td {
   overflow-y: hidden;
   padding: 0;
 
-  @media screen and (min-width: $breakpoint-large) {
-    //overflow-x: hidden; // @TODO : Why this line was here ?
-  }
+  //@media screen and (min-width: $breakpoint-large) {
+  //  overflow-x: hidden; // @TODO : Why this line was here ?
+  //}
 }
 
 .table {
