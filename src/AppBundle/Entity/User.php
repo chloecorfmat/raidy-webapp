@@ -53,6 +53,11 @@ class User extends BaseUser
     protected $plainPassword;
 
     /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $tutorialTime;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -138,5 +143,21 @@ class User extends BaseUser
     public function setPhone($phone)
     {
         $this->phone = $phone;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTutorialTime()
+    {
+        return $this->tutorialTime;
+    }
+
+    /**
+     * @param mixed $tutorialTime
+     */
+    public function setTutorialTime($tutorialTime)
+    {
+        $this->tutorialTime = $tutorialTime;
     }
 }

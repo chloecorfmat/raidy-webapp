@@ -74,7 +74,6 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       let poi = mapManager.poiMap.get(parseInt(this.dataset.id));
       if (!poi.marker.isPopupOpen()){
         mapManager.map.panTo( poi.marker.getLatLng());
-        console.log(mapManager.map.getZoom())
       }
       //   mapManager.map.setZoom(zoom);
       poi.marker.togglePopup();
@@ -192,7 +191,6 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       this.parentElement.classList.toggle('track--edit')
        if (this.parentElement.classList.contains('track--edit')) {
          mapManager.currentEditID = parseInt(btn.dataset.id);
-         console.log(btn.dataset.id);
          mapManager.switchMode(EditorMode.TRACK_EDIT);
        } else {
          mapManager.switchMode(EditorMode.READING);
@@ -208,9 +206,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
           document.querySelector('#editTrack_name').value = htmlentities.decode(track.name);
           document.querySelector('#editTrack_color').value = track.color;
           document.querySelector('#editTrack_id').value = track.id;
-          console.log('ok');
           document.querySelector('#editTrack_sportType').value = track.sportType;
-          console.log(track.sportType);
 
           MicroModal.show('edit-track-popin');
         });
@@ -228,7 +224,105 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     let li = this.trackElements.get(track.id);
     document.getElementById('editor--list').removeChild(li);
   }
-  console.log("Editor UI for editor loaded");
+
+  EditorUI.prototype.displayGPXMetadata = function(tracks, routes, waypoints){
+
+    var form = document.getElementById('import-gpx--form');
+
+    let sportSelect = this.buildSportTypeSelect();
+    let poiTypeSelect = this.buildPoiTypeSelect();
+
+    for(let idx in tracks){
+      let track = tracks[idx];
+      let name = (track.name != null && track.name !== '') ? track.name : ('track #' + (parseInt(idx)+1));
+      let markup = '<div>'+
+       '<input type="checkbox" data-id="'+idx+'" id="track-'+idx+'" name="'+name+'" checked="checked">'+
+       '<label for="track-'+idx+'">'+name+'</label>'+
+        sportSelect +
+      '</div>';
+
+      let div = form.querySelector('#import-gpx--tracks .import-gpx--checkboxes');
+        div.parentNode.style.display = "block";
+        div.innerHTML += markup;
+    };
+
+    for(let idx in routes){
+        let route = routes[idx];
+        let name = (route.name != null && route.name !== '') ? route.name : ('route #' + (parseInt(idx)+1));
+        let markup = '<div>' +
+            '<input type="checkbox" data-id="' + idx + '" id="route-' + idx + '" name="' + name + '" checked="checked">' +
+            '<label for="route-' + idx + '">' + name + '</label>' +
+            sportSelect +
+            '</div>';
+
+        let div = form.querySelector('#import-gpx--routes .import-gpx--checkboxes');
+        div.parentNode.style.display = "block";
+        div.innerHTML += markup;
+    };
+
+
+    for(let idx in waypoints){
+        let waypoint = waypoints[idx];
+        let name = (waypoint.name != null && waypoint.name !== '') ? waypoint.name : ('POI #' + (parseInt(idx)+1));
+        let markup = '<div>' +
+            '<input type="checkbox" data-id="' + idx + '" id="poi-' + idx + '" name="' + name + '" checked="checked">' +
+            '<label for="poi-' + idx + '">' + name + '</label>' +
+            poiTypeSelect +
+            '</div>';
+
+        let div = form.querySelector('#import-gpx--waypoints .import-gpx--checkboxes');
+        div.parentNode.style.display = "block";
+        div.innerHTML += markup;
+    };
+  };
+
+  EditorUI.prototype.cleanImportGPXPopin = function(){
+      var form = document.getElementById('import-gpx--form');
+
+      form.querySelector('input[type=file]').value = '';
+
+      form.querySelector('#import-gpx--tracks').style.display = 'none';
+      form.querySelector('#import-gpx--routes').style.display = 'none';
+      form.querySelector('#import-gpx--waypoints').style.display = 'none';
+
+      form.querySelector('#import-gpx--tracks .import-gpx--checkboxes').innerHTML = '';
+      form.querySelector('#import-gpx--routes .import-gpx--checkboxes').innerHTML = '';
+      form.querySelector('#import-gpx--waypoints .import-gpx--checkboxes').innerHTML = '';
+  }
+
+  EditorUI.prototype.buildSportTypeSelect = function(){
+
+      let select = "<select>";
+
+      mapManager.sportTypesMap.forEach(function (sportType) {
+          select+= '<option value="' + sportType.id + '">' + sportType.sport + '</option>';
+      });
+
+      return select+"</select>";
+  };
+
+  EditorUI.prototype.buildPoiTypeSelect = function(){
+
+        let select = "<select>";
+
+        mapManager.poiTypesMap.forEach(function (poiType) {
+            select+= '<option value="' + poiType.id + '">' + poiType.type + '</option>';
+        });
+
+        return select+"</select>";
+    };
+
+    EditorUI.prototype.buildExportGPXPopin = function(){
+        mapManager.tracksMap.forEach(function (track) {
+            let markup = '<div>' +
+                '<input type="checkbox" data-id="' + idx + '" id="track-' + idx + '" name="' + name + '" checked="checked">' +
+                '<label for="route-' + idx + '">' + name + '</label>' +
+                sportSelect +
+                '</div>';
+        });
+    };
+
+        console.log("Editor UI for editor loaded");
 } else {
   if (document.querySelector('#map') != undefined) {
     var EditorUI = function () {}

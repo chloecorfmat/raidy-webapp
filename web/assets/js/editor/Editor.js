@@ -312,6 +312,52 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     MicroModal.close('edit-poi-popin');
   });
 
+
+  //Import GPX
+  document.getElementById("import-gpx--input").addEventListener("change", function () {
+    var file = this.files[0];
+    mapManager.GPXImporter.openGPX(file);
+  });
+
+  document.getElementById("import-gpx--form").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    this.querySelectorAll('#import-gpx--tracks input[type=checkbox]').forEach(function (box) {
+        if(box.checked){
+            let sportType = box.parentNode.querySelector('select').value;
+            mapManager.GPXImporter.importTrack(parseInt(box.dataset.id), sportType);
+        }
+    });
+
+    this.querySelectorAll('#import-gpx--routes input[type=checkbox]').forEach(function (box) {
+        if(box.checked){
+            let sportType = box.parentNode.querySelector('select').value;
+            mapManager.GPXImporter.importRoute(parseInt(box.dataset.id), sportType);
+        }
+    });
+
+    this.querySelectorAll('#import-gpx--waypoints input[type=checkbox]').forEach(function (box) {
+        if(box.checked){
+            let poiType = box.parentNode.querySelector('select').value;
+            mapManager.GPXImporter.importWaypoint(parseInt(box.dataset.id), poiType);
+        }
+    });
+
+    MicroModal.close('import-gpx');
+  });
+
+  //Export GPX
+  document.getElementById('export-gpx--track').addEventListener('click', function () {
+    mapManager.GPXExporter.exportAsTracks();
+    MicroModal.close('export-gpx');
+  });
+
+  //Export GPX
+  document.getElementById('export-gpx--route').addEventListener('click', function () {
+    mapManager.GPXExporter.exportAsRoutes();
+    MicroModal.close('export-gpx');
+  });
+
   console.log("Editor JS loaded");
 
   MapManager.prototype.displayTrackButton = function () {

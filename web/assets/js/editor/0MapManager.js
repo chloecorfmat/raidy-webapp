@@ -33,9 +33,10 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.waitingPoi = null;
 
-    this.poiTypesMap = new Map();
-    this.tracksMap = new Map();
-    this.poiMap = new Map();
+    this.poiTypesMap   = new Map();
+    this.sportTypesMap = new Map();
+    this.tracksMap     = new Map();
+    this.poiMap        = new Map();
 
     this.distance = 0;
     this.currentEditID = 0;
@@ -43,6 +44,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.mode = EditorMode.READING;
     this.lastMode = EditorMode.READING;
     this.editorUI = new EditorUI();
+    this.GPXImporter = new GPXImporter(this);
+    this.GPXExporter = new GPXExporter(this);
   }
 
   MapManager.prototype.initialize = function () {
@@ -105,13 +108,55 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       document.getElementById('map').style.cursor = 'crosshair';
     })
 
+    var ImportGPXCtrl = L.Control.extend({
+        options: {
+          position: 'topleft'
+      },
+      onAdd: function(map) {
+          var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+          container.style.backgroundColor = 'white';
+          container.style.width = '30px';
+          container.style.height = '30px';
+          container.innerHTML = "<i class=\"fas fa-file-import fa-2x\"></i>";
+          container.setAttribute("title", "Importer un fichier GPX");
+          container.onclick = function(e) {
+              e.preventDefault();
+              keepThis.editorUI.cleanImportGPXPopin();
+              MicroModal.show('import-gpx');
+          }
+          return container;
+      },
+    });
+
+      var ExportGPXCtrl = L.Control.extend({
+          options: {
+              position: 'topleft'
+          },
+          onAdd: function(map) {
+              var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+              container.style.backgroundColor = 'white';
+              container.style.width = '30px';
+              container.style.height = '30px';
+              container.innerHTML = "<i class=\"fas fa-file-export fa-2x\"></i>";
+              container.setAttribute("title", "Exporter un fichier GPX");
+              container.onclick = function(e) {
+                e.preventDefault();
+                MicroModal.show('export-gpx');
+              }
+              return container;
+          },
+      });
+
+    this.map.addControl(new ImportGPXCtrl());
+    this.map.addControl(new ExportGPXCtrl());
+
     this.loadRessources()
 
   };
   MapManager.prototype.displayTrackButton = function (b) {
   }
 
-    MapManager.prototype.loadRessources = function () {
+  MapManager.prototype.loadRessources = function () {
     var keepThis = this;
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('GET', '/organizer/raid/'+raidID+'/poitype', true);
@@ -125,9 +170,27 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           };
           keepThis.loadTracks(); // Load tracks
           keepThis.loadPois(); // Load PoiS
+          keepThis.loadSportTypes();
         }
       }
     }
+  };
+
+  MapManager.prototype.loadSportTypes = function(){
+      var keepThis = this;
+      var xhr_object = new XMLHttpRequest();
+      xhr_object.open('GET', '/organizer/sporttype', true);
+      xhr_object.send(null);
+      xhr_object.onreadystatechange = function () {
+          if (this.readyState === XMLHttpRequest.DONE) {
+              if (xhr_object.status === 200) {
+                  var sportTypes = JSON.parse(xhr_object.responseText);
+                  for (sportType of sportTypes) {
+                      keepThis.sportTypesMap.set(sportType.id, sportType);
+                  };
+              }
+          }
+      }
   };
 
   MapManager.prototype.switchMode = function (mode) {
@@ -227,7 +290,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/organizer/raid/' + raidID + '/track', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
-    console.log(track.toJSON());
     xhr_object.send(track.toJSON());
 
     xhr_object.onreadystatechange = function (event) {

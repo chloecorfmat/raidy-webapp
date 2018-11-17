@@ -57,7 +57,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
           this.startMarker.setLatLng(latLngs[0]);
           this.startMarker.addTo(this.map);
           if (latLngs.length > 1) {
-            console.log(latLngs);
             this.endMarker.setLatLng(latLngs[latLngs.length - 1]);
             this.endMarker.addTo(this.map);
           }
@@ -190,6 +189,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.map.removeLayer(this.endMarker);
 
     mapManager.editorUI.removeTrack(this);
+    mapManager.tracksMap.delete(this.id);
   };
   Track.prototype.buildUI = function () {
     mapManager.editorUI.updatePoi()
