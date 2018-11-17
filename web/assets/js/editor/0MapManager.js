@@ -23,7 +23,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   function MapManager() {
 
-    this.map = L.map('map', {editable: true}).setView([48.742917, -3.459180], 15);
+    this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
@@ -150,7 +150,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.addControl(new ImportGPXCtrl());
     this.map.addControl(new ExportGPXCtrl());
 
-    this.loadRessources()
+    this.loadRessources();
 
   };
   MapManager.prototype.displayTrackButton = function (b) {
