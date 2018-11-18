@@ -11,6 +11,12 @@ button {
   &:hover {
     opacity: .8;
   }
+
+  &[disabled] {
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
 
 .btn {
@@ -36,6 +42,10 @@ button {
 
 .btn--danger {
   background: $secondary-color-2 !important; // sass-lint:disable-line no-important
+
+  &[disabled] {
+    background: $secondary-color-12 !important; // sass-lint:disable-line no-important
+  }
 }
 
 .btn--action {
@@ -99,3 +109,4 @@ button {
   color: $tertiary-color-1;
   cursor: pointer;
 }
+

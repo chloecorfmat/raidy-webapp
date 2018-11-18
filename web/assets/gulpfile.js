@@ -7,6 +7,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const sassLint = require('gulp-sass-lint');
 const esLint = require('gulp-eslint');
 const cleanCSS = require('gulp-clean-css');
+const babel = require('gulp-babel');
 
 // Linter.
 gulp.task('lint', function() {
@@ -47,6 +48,7 @@ gulp.task('styles', function() {
 gulp.task('scripts', function() {
     return gulp.src('./js/**/*.js')
         .pipe(concat('../dist/js/scripts.js'))
+        .pipe(babel({presets: ['es2015']}))
         .pipe(gulp.dest('./js'))
         // Comment the line below to have unminify files.
         //.pipe(uglify())

@@ -86,10 +86,13 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   // Close the dropdown menu if the user clicks outside of it
   window.onclick = disableDropdown;
 
+  document.querySelector('.bar').addEventListener('transitionend', function () {
+      mapManager.map.invalidateSize();
+  });
+
   document.getElementById('btn--laterale-bar').addEventListener('click', function () {
     var tab = this.parentElement.parentElement;
     tab.classList.toggle('bar--invisible');
-    mapManager.map.invalidateSize()
   });
 
   function checkoutForConflict(){
@@ -157,7 +160,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
         controlElement.innerHTML =
           '<div class="map-controller-container" >' +
-          '<span class="switch-label">Édition des points d\'intérêt</span>' +
+          '<span class="switch-label">Déplacer les points d\'intérêt</span>' +
           '<label class="switch">' +
           '<input type="checkbox">' +
           '<span class="slider round"></span>' +
@@ -353,6 +356,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     var track = mapManager.tracksMap.get(parseInt(trId));
     track.remove();
     MicroModal.close('delete-track');
+
+    document.getElementById('track-name-delete').value = '';
+    document.getElementById('track-name-delete').dataset.name = '';
   });
 
   document.getElementById('btn--delete-poi').addEventListener('click', function () {

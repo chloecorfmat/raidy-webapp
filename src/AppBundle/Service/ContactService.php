@@ -38,7 +38,13 @@ class ContactService
 
             $obj['id'] = $contact->getId();
             $obj['role'] = htmlentities($contact->getRole());
-            $obj['phoneNumber'] = htmlentities($contact->getPhoneNumber());
+
+            if ($contact->getHelper() != null) {
+                $obj['phoneNumber'] = htmlentities($contact->getHelper()->getUser()->getPhone());
+            } else {
+                $obj['phoneNumber'] = htmlentities($contact->getPhoneNumber());
+            }
+
             $obj['raid'] = $contact->getRaid()->getId();
 
             if (null != $contact->getHelper()) {

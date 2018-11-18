@@ -4,7 +4,7 @@
   .breadcrumb {
     align-items: center;
     display: flex;
-    padding: 0.5rem 3rem;
+    padding: .5rem 3rem;
     justify-content: space-between;
     height: 2rem;
 
@@ -31,7 +31,7 @@
 
     @media screen and (min-width: $breakpoint-medium) {
       height: initial;
-      padding: 0rem 3rem;
+      padding: 0 3rem;
 
       li:first-child {
         display: inline-block;
@@ -410,7 +410,7 @@ button.active:after {
 
 // Dropdown Button.
 .dropbtn {
-  border: none;
+  border: 0;
   color: $white;
   cursor: pointer;
   font-size: 16px;
@@ -429,7 +429,7 @@ button.active:after {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
   cursor: pointer;
   display: none;
-  left : 100%;
+  left: 100%;
   min-width: 12rem ;
   position: absolute;
   z-index: 99999999999;
@@ -599,8 +599,8 @@ input:checked + .slider::before {
 
 .leaflet-control-custom {
   text-align: center;
-  padding-top: 0.2rem;
-  font-size: 0.6rem;
+  padding-top: .2rem;
+  font-size: .6rem;
   box-sizing: border-box;
 }
 
@@ -831,24 +831,20 @@ input:focus {
   background-position: center;
   background-repeat: no-repeat;
   background-size: 3rem;
-  position: fixed;
   bottom: 0;
   height: 5rem;
   margin: 2.5rem;
-  padding: 0rem;
+  padding: 0;
+  position: fixed;
   right: 0;
   width: 5rem;
 }
 
 .fab {
-
-  z-index: 1000;
-
-  position: fixed;
   bottom: 0;
   height: 5rem;
   margin: 2.5rem;
-  padding: 0rem;
+  padding: 0;
   position: fixed;
   right: 0;
   width: 5rem;
@@ -861,7 +857,7 @@ input:focus {
 }
 
 .fab:hover .fab-buttons__link {
-  transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0px);
+  transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0);
 }
 
 .fab-action-button:hover + .fab-buttons .fab-buttons__link:before {
@@ -873,34 +869,8 @@ input:focus {
 
 }
 
-.fab-action-button {
-/*  bottom: 0;
-  display: block;
-  border-radius: 50%;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-
-//here
-  background-clip: padding-box;
-  background-color: $tertiary-color-1;
-  border: 2px solid rgba(0, 0, 0, .2);
-  font-size: 3rem;
-  height: 5rem;
-  width: 5rem;
-  margin: 2.5rem;
-  overflow: hidden;
-  position: fixed;
-  right: 0;
-  text-align: center;
-  transition-duration: .5s;
-  transition-property: background-color;
-  transition-timing-function: ease;
-  vertical-align: middle;
-  z-index: 999;*/
-
-}
-
 .fab-buttons {
-  bottom: 4.0rem;
+  bottom: 4rem;
   left: 0;
   list-style: none;
   margin: 0;
@@ -968,44 +938,8 @@ input:focus {
 
 .fab-icon {
   display: inline-block;
-  height: 3.0rem;
-  width: 3.0rem;
-}
-
-.icon-material_track {
-  background: url('data:image/svg+xml; utf8, <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
-<style type="text/css">
-	.st0{clip-path:url(#SVGID_2_);fill:#0F5E54;}
-</style>
-<g>
-	<defs>
-		<rect id="SVGID_1_" width="24" height="24"/>
-	</defs>
-	<clipPath id="SVGID_2_">
-		<use xlink:href="#SVGID_1_"  style="overflow:visible;"/>
-	</clipPath>
-	<path class="st0" d="M22.3,8.3c0,1-0.8,1.9-1.9,1.9c-0.2,0-0.3,0-0.5-0.1l-3.3,3.3c0,0.1,0.1,0.3,0.1,0.5c0,1-0.8,1.9-1.9,1.9
-		s-1.9-0.8-1.9-1.9c0-0.2,0-0.3,0.1-0.5L10.6,11c-0.1,0-0.3,0.1-0.5,0.1c-0.2,0-0.3,0-0.5-0.1l-4.2,4.3c0,0.1,0.1,0.3,0.1,0.5
-		c0,1-0.8,1.9-1.9,1.9s-1.9-0.8-1.9-1.9s0.8-1.9,1.9-1.9c0.2,0,0.3,0,0.5,0.1l4.3-4.2c0-0.1-0.1-0.3-0.1-0.5c0-1,0.8-1.9,1.9-1.9
-		S12,8.2,12,9.2c0,0.2,0,0.3-0.1,0.5l2.4,2.4c0.1,0,0.3-0.1,0.5-0.1s0.3,0,0.5,0.1l3.3-3.3c0-0.1-0.1-0.3-0.1-0.5
-		c0-1,0.8-1.9,1.9-1.9S22.3,7.2,22.3,8.3z"/>
-</g>
-</svg>
-') center no-repeat;
-}
-
-.icon-material_poi {
-  background: url('data:image/svg+xml; utf8, <svg version="1.1" id="Calque_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 24 24" style="enable-background:new 0 0 24 24;" xml:space="preserve">
-<style type="text/css">
-	.st0{fill:#0F5E54;}
-	.st1{fill:none;}
-</style>
-<path class="st0" d="M12,4.2c-3,0-5.5,2.4-5.5,5.5c0,4.1,5.5,10.1,5.5,10.1s5.5-6,5.5-10.1C17.5,6.7,15,4.2,12,4.2z"/>
-<path class="st1" d="M0,0h24v24H0V0z"/>
-</svg>
-') center no-repeat;
+  height: 3rem;
+  width: 3rem;
 }
 
 .icon-tutorial {
@@ -1014,11 +948,9 @@ input:focus {
 }
 
 /* GPX import */
-
 .gpx-import--form {
-
   h3 {
-    margin-bottom: 0.3rem;
+    margin-bottom: .3rem;
   }
 
   & > .import-gpx--category {
@@ -1028,7 +960,7 @@ input:focus {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      margin-bottom: 0.6rem;
+      margin-bottom: .6rem;
     }
 
   }
@@ -1042,19 +974,31 @@ input:focus {
   }
 }
 
+.modal--delete-track {
+  .form--input-text {
+    border-radius: 5px;
+    border: 1px solid $secondary-color-2;
+    font-size: 1rem;
+    line-height: 1.5;
+    margin-bottom: 1rem;
 
-#errorMessage{
-  background-color: $live-color;
-  font-family: 'Proxima Nova', 'SansSerif';
-  color : white;
-  padding-left: 1rem;
-  display: flex;
-  justify-content: space-between;
-  align-items : center;
-
-  button{
-    cursor: pointer;
-    background-color: inherit;
+    &:focus {
+      outline-color: $secondary-color-2;
+    }
   }
 }
 
+#errorMessage {
+  align-items: center;
+  background-color: $secondary-color-2;
+  color: white;
+  display: flex;
+  font-family: 'Proxima Nova', 'SansSerif';
+  justify-content: space-between;
+  padding-left: 1rem;
+
+  button {
+    background-color: inherit;
+    cursor: pointer;
+  }
+}
