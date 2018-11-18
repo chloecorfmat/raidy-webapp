@@ -79,22 +79,34 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
 
     this.map.on('editable:middlemarker:mousedown', function () {
-      track = keepThis.tracksMap.get(keepThis.currentEditID);
-      track.name = htmlentities.decode(track.name);
+      track = keepThis.tracksMap.get(keepThis.currentEditID)
       track.push();
     });
     this.map.on('editable:drawing:click', function () {
       track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       track.push();
+      track.update();
     });
 
-    this.map.on('editable:vertex:dragend', function () {
+    this.map.on('editable:drawing:clicked', function () {
       track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       track.push();
+      track.update();
+    });
+    this.map.on('editable:drawing:mouseup', function () {
+      track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.update();
+    });
+    this.map.on('editable:vertex:dragstart', function () {
+      this.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
     });
 
+
+    this.map.on('editable:vertex:drag', function () {
+      this.currentTrack.update();
+    });
 
     this.map.on('editable:vertex:rawclick', function (e) {
       e.cancel();

@@ -46,8 +46,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     if(b){
       this.line.enableEdit();
       this.decorator.removeFrom(this.map);
-      this.startMarker.removeFrom(this.map);
-      this.endMarker.removeFrom(this.map);
+      //this.startMarker.removeFrom(this.map);
+      //this.endMarker.removeFrom(this.map);
     }else{
       this.line.disableEdit();
       if(this.visible) {
@@ -64,7 +64,16 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       }
     }
   };
-
+  Track.prototype.update = function () {
+    if (!this.line.isEmpty()) {
+      let latLngs = this.line.getLatLngs();
+      this.startMarker.setLatLng(latLngs[0]);
+      if (latLngs.length > 1) {
+        console.log(latLngs);
+        this.endMarker.setLatLng(latLngs[latLngs.length - 1]);
+      }
+    }
+  }
   Track.prototype.calculDistance = function () {
     var points = this.line.getLatLngs();
     this.distance = 0;

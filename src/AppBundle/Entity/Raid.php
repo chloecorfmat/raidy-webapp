@@ -78,6 +78,18 @@ class Raid
      */
     protected $picture;
 
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $lastEdition;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $lastEditor;
+
     /**
      * Raid constructor.
      */
@@ -243,5 +255,37 @@ class Raid
     public function setPicture($picture = null)
     {
         $this->picture = $picture;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastEdition()
+    {
+        return $this->lastEdition;
+    }
+
+    /**
+     * @param mixed $lastEdition
+     */
+    public function setLastEdition($lastEdition)
+    {
+        $this->lastEdition = $lastEdition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastEditor()
+    {
+        return $this->lastEditor;
+    }
+
+    /**
+     * @param mixed $lastEditor
+     */
+    public function setLastEditor($lastEditor)
+    {
+        $this->lastEditor = $lastEditor;
     }
 }

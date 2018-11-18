@@ -245,7 +245,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         }*/
       }
       mapManager.switchMode(mapManager.lastMode);
-      this.classList.toggle('add--poi')
+      this.classList.remove('add--poi')
     }
   });
 
