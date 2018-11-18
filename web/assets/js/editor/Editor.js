@@ -356,6 +356,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     var track = mapManager.tracksMap.get(parseInt(trId));
     track.remove();
     MicroModal.close('delete-track');
+
+    document.getElementById('track-name-delete').value = '';
+    document.getElementById('track-name-delete').dataset.name = '';
   });
 
   document.getElementById('btn--delete-poi').addEventListener('click', function () {
