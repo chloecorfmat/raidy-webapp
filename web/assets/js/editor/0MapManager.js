@@ -129,11 +129,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           keepThis.loadPois(); // Load PoiS
           keepThis.loadSportTypes();
         }
-      } else {
-        console.log('ok');
-        keepThis.loadTracks(); // Load tracks
-        keepThis.loadPois(); // Load PoiS
-        keepThis.loadSportTypes();
       }
     }
   };
