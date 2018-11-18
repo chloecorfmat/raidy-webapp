@@ -18,7 +18,7 @@ use OrganizerBundle\Security\RaidVoter;
 class RaidLastEditionController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/lastEdit", name="lastEdit", methods={"GET"})
+     * @Route("/editor/raid/{raidId}/lastEdit", name="lastEdit", methods={"GET"})
      *
      * @param Request $request request
      * @param int     $raidId  raid identifier

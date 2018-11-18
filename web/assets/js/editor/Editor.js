@@ -95,7 +95,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   function checkoutForConflict(){
     var keepThis = this;
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/organizer/raid/'+raidID+'/lastEdit', true);
+    xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE) {
