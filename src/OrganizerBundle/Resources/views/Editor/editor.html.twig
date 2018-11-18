@@ -300,7 +300,7 @@
     </div>
 
     <!-- [1] -->
-    <div id="delete-track" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+    <div id="delete-track" aria-hidden="true" class="modal modal--danger modal--delete-track" data-micromodal-close>
         <!-- [2] -->
         <div tabindex="-1" data-micromodal-close>
             <!-- [3] -->
@@ -316,8 +316,14 @@
                     <div id="delete-track-content" class="modal--content">
                         <p>Êtes-vous certains de vouloir supprimer ce parcours ?</p>
                         <p class="text--important">Cette action est irréversible.</p>
+
+                        <p>Pour supprimer le parcours, veuillez entrer son nom "<span class="text--medium" id="span--track-name"></span>" dans le champ ci-dessous : </p>
+
+                        <input class="form--input-text" type="text" id="track-name-delete"
+                               required="required" maxlength="45">
+
                         <div class="modal--actions">
-                            <button type="button" class="btn btn--danger" id="btn--delete-track"  data-id="">Supprimer</button>
+                            <button type="button" class="btn btn--danger" id="btn--delete-track"  data-id="" disabled>Supprimer</button>
                             <button data-micromodal-close class="btn btn--cancel">Annuler</button>
                         </div>
                     </div>
@@ -505,7 +511,6 @@
                                 <h3>Points de passages</h3>
                                 <div class="import-gpx--checkboxes"></div>
                             </div>
-
                             <div class="actions">
                                 <button type="submit" class="btn btn--action">Importer</button>
                                 <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
@@ -531,7 +536,6 @@
                         <button aria-label="Fermer la fenêtre" data-micromodal-close><i data-micromodal-close class="fas fa-times"></i></button>
                     </header>
                     <div id="export-gpx-content" class="modal--content">
-
                         <div class="actions">
                             <button class="btn btn--action" id="export-gpx--track">Exporter en tant que tracés GPX</button>
                             <button class="btn btn--action" id="export-gpx--route">Exporter en tant que routes GPX</button>
@@ -547,13 +551,6 @@
 
 {% block javascripts %}
     <!-- Make sure you put this AFTER Leaflet's CSS -->
-
-    <!--script type="text/javascript" src="{#{ asset('assets/js/lib/leaflet.js') }#}"></script-->
-    <!--script-- type="text/javascript" src="{#{ asset('assets/js/lib/Leaflet.Editable.js') }#}"></script-->
-    <!--script-- type="text/javascript" src="{#{ asset('assets/js/lib/GpxFactory.js') }#}"></script-->
-    <!--script type="text/javascript" src="{#{ asset('assets/js/lib/MapManager.js') }#}"></script-->
-
-
     <script>
         var mapManager;
         var raidID;
@@ -561,6 +558,16 @@
             mapManager = new MapManager();
             raidID = parseInt({{ id }});
             mapManager.initialize();
+        });
+    </script>
+
+    <script>
+        document.getElementById('track-name-delete').addEventListener('keyup', function() {
+            if (document.getElementById('track-name-delete').dataset.name === this.value) {
+                document.getElementById('btn--delete-track').disabled = false;
+            } else {
+                document.getElementById('btn--delete-track').disabled = true;
+            }
         });
     </script>
 
@@ -573,9 +580,5 @@
             var tutorial = false;
         </script>
     {% endif %}
-
-    <!--script type="text/javascript" src="{#{ asset('assets/js/lib/Editor.js') }#}"></script-->
-    <!--script type="text/javascript" src="{#{ asset('assets/js/lib/Track.js') }#}"></script-->
-
 {% endblock %}
 
