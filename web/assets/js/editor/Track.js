@@ -42,6 +42,14 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         {offset: 25, repeat: 100, symbol: L.Symbol.arrowHead({pixelSize: 15, pathOptions: {fillOpacity: 1, color: this.color, weight: 0}})}
       ]
     }).addTo(this.map);
+
+    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
+      html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #78e08f'  + ';" />'
+    }));
+    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
+      html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #f74a45' +  ';" />'
+    }));
+
   };
 
     Track.prototype.setSportType = function (sportType) {
