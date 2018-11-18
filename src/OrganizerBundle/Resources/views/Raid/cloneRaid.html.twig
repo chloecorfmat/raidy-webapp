@@ -2,7 +2,8 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Administration</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raidId}) }}">{{ raidName }}</a></li>
         <li class="breadcrumb--list-item">Cloner un raid</li>
     </ol>
 {% endblock %}
