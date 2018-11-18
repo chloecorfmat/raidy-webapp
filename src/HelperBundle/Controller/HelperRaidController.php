@@ -35,16 +35,19 @@ class HelperRaidController extends Controller
         $raidManager = $em->getRepository('AppBundle:Raid');
 
         $raid = $raidManager->find($id);
-        $user = $this->getUser();
-
-        $helperManager = $em->getRepository('AppBundle:Helper');
-        $helper = $helperManager->findBy(['raid' => $raid, 'user' => $user])[0];
 
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
-        // @TODO : manage permissions.
+        $user = $this->getUser();
+
+        $helperManager = $em->getRepository('AppBundle:Helper');
+        $helper = $helperManager->findOneBy(['raid' => $raid, 'user' => $user]);
+
+        if (is_null($helper)) {
+            throw $this->createAccessDeniedException();
+        }
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
 
