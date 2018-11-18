@@ -15,9 +15,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         }
       dpdwn.classList.add("show");
       let remaining = screen.height - e.screenY;
-      console.log("--------------------");
-      console.log("remaining: "+remaining);
-      console.log("menu: "+dpdwn.clientHeight);
+     // console.log("--------------------");
+     // console.log("remaining: "+remaining);
+     // console.log("menu: "+dpdwn.clientHeight);
 
       let topshift;
       if (remaining < dpdwn.clientHeight ) {
@@ -28,7 +28,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         dpdwn.style.top = topshift+'px';
       }
 
-      console.log( "top: "+dpdwn.style.top );
+  //    console.log( "top: "+dpdwn.style.top );
     }
   }
 
@@ -123,12 +123,16 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       let li = this.trackElements.get(track.id);
 
       li.id = 'track-li-' + newTrack.id;
-      let checked = newTrack.isVisible? 'checked = "checked"' : '';
-      checked = 'checked = "checked"';
+      let checked = newTrack.isVisible? ' checked = "checked"' : '';
+     // checked = 'checked = "checked"';
+
+      let checkboxAttribute = 'style =" background-color : ' + newTrack.color  + '; border-color :' + newTrack.color + '" class="checkmark"';
+
+
       li.innerHTML = '<label class="checkbox-item--label">' +
         '             <input data-id = "' + newTrack.id + '" type="checkbox"'+checked+'>' +
         '             ' +
-        '             <span style ="background-color : ' + newTrack.color + '; border-color :' + newTrack.color + '" class="checkmark">' +
+        '             <span '+checkboxAttribute+'>'+
         '                  <i class="fas fa-check"></i>' +
         '             </span>' +
         '             <div class="track--text">' +
@@ -147,31 +151,25 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '            <!-- a><i class="fas fa-clone"></i> Dupliquer</a-->' +
         '          </div>';
 
-       
+
+      let input = li.querySelector("input")
+      input.checked = newTrack.visible;
+      if (newTrack.visible){
+        li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor;
+      }else{
+        li.querySelector('label > span.checkmark').style.backgroundColor = '#ffffff';
+      }
       /* When the user clicks on the button, toggle between hiding and showing the dropdown content */
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
       newTrack.calculDistance();
       li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
 
-
+      //console.log(input);
       // TRACK SELECTION LISTENER
-      li.querySelectorAll('input').forEach(function (input) {
-        input.addEventListener('change', function () {
-          if (input.checked) {
-            mapManager.showTrack(parseInt(input.dataset.id));
-            li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor;
-          } else {
-            li.querySelector('label > span.checkmark').style.backgroundColor = '#ffffff';
-            if (mapManager.currentEditID == input.dataset.id) {
-              document.querySelectorAll('.track--edit').forEach(function (el) {
-                el.classList.remove('track--edit');
-              })
-              mapManager.switchMode(EditorMode.READING);
-            }
-            mapManager.hideTrack(parseInt(input.dataset.id));
-          }
-        });
+      input.addEventListener('change', function () {
+        mapManager.toggleTrackVisibility(newTrack);
       });
+
 
       let btnDelete = li.querySelector('.btn--track--delete');
       btnDelete.addEventListener("click", function () {
