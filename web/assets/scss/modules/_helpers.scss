@@ -1,0 +1,19 @@
+.helper-check {
+  border: 1px solid $text-color;
+  border-radius: 50%;
+  display: inline-block;
+  height: 1rem;
+  width: 1rem;
+
+  &--in {
+    background: $main-color;
+  }
+
+  &--not {
+    background: $secondary-color-2;
+  }
+
+  &--no-assign {
+    background: $grey-light;
+  }
+}
