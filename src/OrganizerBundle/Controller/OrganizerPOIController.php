@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrganizerPOIController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/poi", name="addPoi", methods={"PUT"})
+     * @Route("/editor/raid/{raidId}/poi", name="addPoi", methods={"PUT"})
      *
      * @param Request $request request
      * @param int     $raidId  raid identifier
@@ -58,7 +58,7 @@ class OrganizerPOIController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/poi/{poiId}", name="displayPoi", methods={"PATCH"})
+     * @Route("/editor/raid/{raidId}/poi/{poiId}", name="displayPoi", methods={"PATCH"})
      *
      * @param Request $request request
      * @param int     $raidId  raid identifier
@@ -107,7 +107,7 @@ class OrganizerPOIController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/poi/{poiId}", name="deletePoi", methods={"DELETE"})
+     * @Route("/editor/raid/{raidId}/poi/{poiId}", name="deletePoi", methods={"DELETE"})
      *
      * @param Request $request request
      * @param mixed   $raidId  raid identifier
@@ -149,7 +149,7 @@ class OrganizerPOIController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/poi", name="listPoi", methods={"GET"})
+     * @Route("/editor/raid/{raidId}/poi", name="listPoi", methods={"GET"})
      *
      * @param mixed $raidId raid identifier
      *
@@ -172,11 +172,22 @@ class OrganizerPOIController extends AjaxAPIController
         }
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid) && !$authChecker->isGranted(RaidVoter::HELPER, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        } elseif ($authChecker->isGranted(RaidVoter::HELPER, $raid)) {
+            $helperManager = $em->getRepository('AppBundle:Helper');
+            $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);
+
+            if (!is_null($helper) && !is_null($helper->getPoi())) {
+                $pois[] = $poiManager->find($helper->getPoi());
+            } else {
+                $pois = [];
+            }
+        } else {
+            $pois = $poiManager->findBy(array('raid' => $raidId));
         }
 
-        $pois = $poiManager->findBy(array('raid' => $raidId));
         $poiService = $this->container->get('PoiService');
 
         return new Response($poiService->poisArrayToJson($pois));

@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrganizerTrackController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/track", name="addTrack", methods={"PUT"})
+     * @Route("/editor/raid/{raidId}/track", name="addTrack", methods={"PUT"})
      *
      * @param Request $request request
      * @param int     $raidId  raidId
@@ -55,7 +55,7 @@ class OrganizerTrackController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}", name="editTrack", methods={"PATCH"})
+     * @Route("/editor/raid/{raidId}/track/{trackId}", name="editTrack", methods={"PATCH"})
      *
      * @param Request $request request
      * @param int     $raidId  raidId
@@ -104,7 +104,7 @@ class OrganizerTrackController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track", name="listTrack", methods={"GET"})
+     * @Route("/editor/raid/{raidId}/track", name="listTrack", methods={"GET"})
      *
      * @param mixed $raidId raidId
      *
@@ -124,7 +124,7 @@ class OrganizerTrackController extends AjaxAPIController
         }
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid) && !$authChecker->isGranted(RaidVoter::HELPER, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
@@ -135,7 +135,7 @@ class OrganizerTrackController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}", name="deleteTrack", methods={"DELETE"})
+     * @Route("/editor/raid/{raidId}/track/{trackId}", name="deleteTrack", methods={"DELETE"})
      *
      * @param Request $request request
      * @param mixed   $raidId  raidId

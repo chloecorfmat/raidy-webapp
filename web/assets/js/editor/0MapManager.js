@@ -22,7 +22,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   });
 
   function MapManager() {
-
     this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -117,7 +116,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   MapManager.prototype.loadRessources = function () {
     var keepThis = this;
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/organizer/raid/'+raidID+'/poitype', true);
+    xhr_object.open('GET', '/editor/raid/'+raidID+'/poitype', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE) {
@@ -130,6 +129,11 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           keepThis.loadPois(); // Load PoiS
           keepThis.loadSportTypes();
         }
+      } else {
+        console.log('ok');
+        keepThis.loadTracks(); // Load tracks
+        keepThis.loadPois(); // Load PoiS
+        keepThis.loadSportTypes();
       }
     }
   };
@@ -137,7 +141,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   MapManager.prototype.loadSportTypes = function(){
       var keepThis = this;
       var xhr_object = new XMLHttpRequest();
-      xhr_object.open('GET', '/organizer/sporttype', true);
+      xhr_object.open('GET', '/editor/sporttype', true);
       xhr_object.send(null);
       xhr_object.onreadystatechange = function () {
           if (this.readyState === XMLHttpRequest.DONE) {
@@ -224,7 +228,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     poi.requiredHelpers = requiredHelpers != "" ? parseInt(requiredHelpers) : 0;
 
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('PUT', '/organizer/raid/' + raidID + '/poi', true);
+    xhr_object.open('PUT', '/editor/raid/' + raidID + '/poi', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(poi.toJSON());
 
@@ -246,7 +250,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     track.sportType = sportType;
 
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('PUT', '/organizer/raid/' + raidID + '/track', true);
+    xhr_object.open('PUT', '/editor/raid/' + raidID + '/track', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(track.toJSON());
 
@@ -266,7 +270,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   MapManager.prototype.loadTracks = function () {
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/organizer/raid/' + raidID + '/track', true);
+    xhr_object.open('GET', '/editor/raid/' + raidID + '/track', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function (event) {
       // XMLHttpRequest.DONE === 4
@@ -283,7 +287,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
   MapManager.prototype.loadPois = function () {
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/organizer/raid/' + raidID + '/poi', true);
+    xhr_object.open('GET', '/editor/raid/' + raidID + '/poi', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function (event) {
       // XMLHttpRequest.DONE === 4

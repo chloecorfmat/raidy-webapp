@@ -23,6 +23,7 @@ class RaidVoter implements VoterInterface
 {
     const EDIT = 'edit';
     const COLLAB = 'collab';
+    const HELPER = 'helper';
 
     private $em;
 
@@ -49,8 +50,9 @@ class RaidVoter implements VoterInterface
             $isOwner = $user->getId() === $raid->getUser()->getId();
 
             $isCollaborator = false;
+            $isHelper = false;
+
             if (in_array(self::EDIT, $attributes)) {
-                $isCollaborator = false;
                 if (!$isOwner) {
                     $collaborationManager = $this->em->getRepository('AppBundle:Collaboration');
                     $collaboration = $collaborationManager->findOneBy(["user" => $user, "raid" => $raid]);
@@ -61,7 +63,18 @@ class RaidVoter implements VoterInterface
                 }
             }
 
-            if ($isOwner || $isCollaborator) {
+            if (in_array(self::HELPER, $attributes)) {
+                if (!$isHelper) {
+                    $helperManager = $this->em->getRepository('AppBundle:Helper');
+                    $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
+
+                    if ($helper != null) {
+                        $isHelper = true;
+                    }
+                }
+            }
+
+            if ($isOwner || $isCollaborator || $isHelper) {
                 return VoterInterface::ACCESS_GRANTED;
             }
 

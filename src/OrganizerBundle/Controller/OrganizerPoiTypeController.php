@@ -234,7 +234,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
     // API route for Raid Editor
 
     /**
-     * @Route("/organizer/poitype", name="listPoiTypeAPI", methods={"GET"})
+     * @Route("/editor/poitype", name="listPoiTypeAPI", methods={"GET"})
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -256,21 +256,21 @@ class OrganizerPoiTypeController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/poitype", name="listPoiTypeByRaidAPI", methods={"GET"})
+     * @Route("/editor/raid/{raidId}/poitype", name="listPoiTypeByRaidAPI", methods={"GET"})
      *
      * @param int $raidId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listPoiTypeByRaidAPI($raidId)
     {
-        // Get managers
+        // Get managers.
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->find($raidId);
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid) && !$authChecker->isGranted(RaidVoter::HELPER, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 

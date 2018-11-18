@@ -48,7 +48,7 @@ function displayModalToDeleteCollaborator () {
 
   document.querySelectorAll('.btn--delete-collaborator').forEach(function (btn) {
     btn.addEventListener('click', function () {
-      var url = '/organizer/raid/' + this.dataset.raid + '/collaborator/' + this.dataset.invitation + '/delete';
+      var url = '/editor/raid/' + this.dataset.raid + '/collaborator/' + this.dataset.invitation + '/delete';
       document.getElementById('btn--delete-collaborator').href = url;
       MicroModal.show('delete-collaborator'); // eslint-disable-line no-undef
     });

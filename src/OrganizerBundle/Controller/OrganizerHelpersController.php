@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrganizerHelpersController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/helper/{helperId}", name="patchHelperToPoi", methods={"PATCH"})
+     * @Route("/editor/raid/{raidId}/helper/{helperId}", name="patchHelperToPoi", methods={"PATCH"})
      *
      * @param Request $request
      * @param int     $raidId   raid id
