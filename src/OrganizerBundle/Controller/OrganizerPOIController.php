@@ -4,6 +4,7 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Poi;
+use AppBundle\Entity\Raid;
 use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -102,6 +103,9 @@ class OrganizerPOIController extends AjaxAPIController
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Ce point d\'intérêt n\'existe pas.');
         }
+
+        //Log change on db
+        $raid->notifyChange($user, $em);
 
         return new Response($poiService->poiToJson($poi));
     }

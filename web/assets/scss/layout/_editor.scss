@@ -513,6 +513,10 @@ button.active:after {
   }
 }
 
+.leaflet-marker-icon.leaflet-interactive, .leaflet-image-layer.leaflet-interactive, .leaflet-pane > svg path.leaflet-interactive {
+  border-radius: 50%;
+}
+
 // TOGGLE.
 
 // The switch - the box around the slider.
@@ -723,6 +727,9 @@ input:focus {
       }
     }
   }
+
+
+
 
   .bar--invisible {
     position: relative;
@@ -1036,10 +1043,18 @@ input:focus {
 }
 
 
+#errorMessage{
+  background-color: $live-color;
+  font-family: 'Proxima Nova', 'SansSerif';
+  color : white;
+  padding-left: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items : center;
 
-
-
-
-
-
+  button{
+    cursor: pointer;
+    background-color: inherit;
+  }
+}
 

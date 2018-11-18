@@ -92,7 +92,56 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     mapManager.map.invalidateSize()
   });
 
+  function checkoutForConflict(){
+    var keepThis = this;
+    var xhr_object = new XMLHttpRequest();
+    xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
+    xhr_object.send(null);
+    xhr_object.onreadystatechange = function () {
+      if (this.readyState === XMLHttpRequest.DONE) {
+        if (xhr_object.status === 200) {
+          var lastEdition = JSON.parse(xhr_object.responseText);
+          console.log(lastEdition);
+          if(lastEdition.lastEditor != false){
+            var getDuration = function(d1, d2) {
+              d3 = new Date(d2 - d1);
+              d0 = new Date(0);
+
+              return {
+                getHours: function(){
+                  return d3.getHours() - d0.getHours();
+                },
+                getMinutes: function(){
+                  return d3.getMinutes() - d0.getMinutes();
+                },
+                getSeconds: function() {
+                  return d3.getSeconds() - d0.getSeconds();
+                },
+                toString: function(){
+                  return (this.getHours() != 0 ?  this.getHours()+ "h "  :"") +
+                    (this.getMinutes() != 0 ?  this.getMinutes()+ "min "  :"") +
+                    this.getSeconds()+"s ";
+                },
+              };
+            }
+
+            var date = new Date(Date.parse(lastEdition.lastEdition.date));
+            console.log(new Date(date));
+            console.log(new Date())
+            document.getElementById("errorMessage").innerHTML = "Attention "+lastEdition.lastEditor+" a modifié ce raid il y a "+getDuration(date, new Date()).toString()+"  !  <button>X</button>";
+
+            document.getElementById('errorMessage').querySelector('button').addEventListener('click', function(e){
+              document.getElementById('errorMessage').style.display = "none";
+            });
+          }
+        }
+      }
+    }
+
+  }
   window.addEventListener('load', function () {
+
+    checkoutForConflict();
     // LOAD EDITOR SPECIFIC CONTROLLER ON MAP
     L.POIEditControl = L.Control.extend({
       options: {
@@ -226,6 +275,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   //  document.getElementById("pois-pan").style.maxHeight = 0;
   });
 
+
   document.getElementById('fabActionButton').addEventListener('click', function (e) {
     if (this.classList.contains('add--poi')) {
       if(mapManager.mode == EditorMode.ADD_POI) {
@@ -242,7 +292,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         }*/
       }
       mapManager.switchMode(mapManager.lastMode);
-      this.classList.toggle('add--poi')
+      this.classList.remove('add--poi')
     }
   });
 
