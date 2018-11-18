@@ -692,12 +692,13 @@ input:focus {
 
 @media screen and (max-width: $breakpoint-mediumlarge) {
   .bar {
-    width: 100%;
+    width: 100vw;
 
     + .map--container {
       .fab {
         display: none;
       }
+      width: 100vw;
     }
 
     .fa-caret-right {

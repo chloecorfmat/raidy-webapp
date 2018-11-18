@@ -86,10 +86,13 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   // Close the dropdown menu if the user clicks outside of it
   window.onclick = disableDropdown;
 
+  document.querySelector('.bar').addEventListener('transitionend', function () {
+      mapManager.map.invalidateSize();
+  });
+
   document.getElementById('btn--laterale-bar').addEventListener('click', function () {
     var tab = this.parentElement.parentElement;
     tab.classList.toggle('bar--invisible');
-    mapManager.map.invalidateSize()
   });
 
   function checkoutForConflict(){
