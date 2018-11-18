@@ -176,6 +176,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       let btnDelete = li.querySelector('.btn--track--delete');
       btnDelete.addEventListener("click", function () {
         document.getElementById("btn--delete-track").dataset.id = newTrack.id;
+        document.getElementById("track-name-delete").dataset.name = htmlentities.decode(newTrack.name);
+        document.getElementById("span--track-name").innerText = htmlentities.decode(newTrack.name);
         MicroModal.show('delete-track');
       });
 
