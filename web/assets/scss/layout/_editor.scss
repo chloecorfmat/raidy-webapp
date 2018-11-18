@@ -1047,3 +1047,20 @@ input:focus {
 
 
 
+
+
+
+.editor-error--message{
+  background-color: $live-color;
+  font-family: 'Proxima Nova', 'SansSerif';
+  color : white;
+  padding-left: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items : center;
+
+  button{
+    cursor: pointer;
+    background-color: inherit;
+  }
+}

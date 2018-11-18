@@ -226,6 +226,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   //  document.getElementById("pois-pan").style.maxHeight = 0;
   });
 
+  document.getElementById('errorMessage').querySelector('button').addEventListener('click', function(e){
+    document.getElementById('errorMessage').style.display = "none";
+  });
   document.getElementById('fabActionButton').addEventListener('click', function (e) {
     if (this.classList.contains('add--poi')) {
       if(mapManager.mode == EditorMode.ADD_POI) {
