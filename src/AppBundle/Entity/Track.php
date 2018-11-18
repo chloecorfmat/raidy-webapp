@@ -13,6 +13,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -29,6 +30,11 @@ class Track
 
     /**
      * @ORM\Column(name="name", type="string", length=100, nullable=true)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 100,
+     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $name;
 
@@ -39,6 +45,12 @@ class Track
 
     /**
      * @ORM\Column(name="color", type="string", length=9)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 9,
+     *      maxMessage = "La couleur ne doit pas dépasser {{ limit }} caractères",
+     *      groups={"editProfile", "Profile"}
+     * )
      */
     protected $color;
 

@@ -13,6 +13,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -29,11 +30,21 @@ class PoiType
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le type ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $type;
 
     /**
      * @ORM\Column(type="string", length=9)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 9,
+     *      maxMessage = "La couleur ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $color;
 

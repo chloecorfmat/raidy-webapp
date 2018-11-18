@@ -21,6 +21,7 @@ class Collaboration
     /**
      * @ORM\Id
      * @ORM\Column(name="invitationId", type="string", length=13)
+     *
      */
     private $invitationId;
 
@@ -33,6 +34,11 @@ class Collaboration
     /**
      * @ORM\Column(name="email", type="string", length=45)
      * @Assert\NotBlank()
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "L'adresse email ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     private $email;
 

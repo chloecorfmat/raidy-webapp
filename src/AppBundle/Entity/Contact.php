@@ -13,6 +13,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -29,11 +30,21 @@ class Contact
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le role ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $role;
 
     /**
      * @ORM\Column(name="phone_number", type="string", length=45, nullable=true)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le numéro de téléphone ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $phoneNumber;
 
