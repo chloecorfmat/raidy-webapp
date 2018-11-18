@@ -4,6 +4,8 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Track;
+use AppBundle\Entity\Raid;
+
 use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -100,6 +102,9 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
 
+        //Log change on db
+        $raid->notifyChange($user, $em);
+
         return new Response($trackService->trackToJson($track));
     }
 
@@ -172,6 +177,9 @@ class OrganizerTrackController extends AjaxAPIController
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
+
+        //Log change on db
+        $raid->notifyChange($user, $em);
 
         return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
     }

@@ -722,6 +722,9 @@ input:focus {
     }
   }
 
+
+
+
   .bar--invisible {
     position: relative;
     transition: width 1s ease;
@@ -1044,17 +1047,7 @@ input:focus {
 }
 
 
-
-
-
-
-
-
-
-
-
-
-.editor-error--message{
+#errorMessage{
   background-color: $live-color;
   font-family: 'Proxima Nova', 'SansSerif';
   color : white;
@@ -1068,3 +1061,4 @@ input:focus {
     background-color: inherit;
   }
 }
+

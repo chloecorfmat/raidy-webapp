@@ -288,4 +288,15 @@ class Raid
     {
         $this->lastEditor = $lastEditor;
     }
+
+    /**
+     * @param mixed $lastEditor
+     * @param mixed $em
+     */
+    public function notifyChange($lastEditor, $em)
+    {
+        $this->setLastEdition(new \DateTime(date('Y-m-d H:i:s')));
+        $this->setLastEditor($lastEditor);
+        $em->flush();
+    }
 }

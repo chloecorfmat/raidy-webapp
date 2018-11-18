@@ -12,20 +12,24 @@ use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class OrganizerPoiTypeController extends AjaxAPIController
+use FOS\RestBundle\Controller\Annotations as Rest;
+use OrganizerBundle\Security\RaidVoter;
+
+class RaidLastEditionController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/lastedit", name="listTrack", methods={"GET"})
+     * @Route("/organizer/raid/{raidId}/lastEdit", name="lastEdit", methods={"GET"})
      *
-     * @param mixed $raidId raidId
+     * @param Request $request request
+     * @param int     $raidId  raid identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function lastEdition($raidId)
+    public function lastEdition(Request $request, $raidId)
     {
+
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
-        $trackManager = $em->getRepository('AppBundle:Track');
 
         $raid = $raidManager->findOneBy(array('id' => $raidId));
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -34,21 +38,22 @@ class OrganizerPoiTypeController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $lastEdition = $raid->getLastEdition();
         $lastEditor = $raid->getLastEditor();
 
         $obj = [];
-        if ($user->getId() != $lastEditor->getId()) {
-            $obj['$lastEditor'] = $lastEditor;
+        if ($lastEditor != null && $user->getId() != $lastEditor->getId()) {
+            $obj['lastEditor'] = $lastEditor->getFirstName() . ' ' . $lastEditor->getLastName();
         } else {
-            $obj['$lastEditor'] = false;
+            $obj['lastEditor'] = false;
         }
         $obj['lastEdition'] = $lastEdition;
 
-        return json_encode($obj);
+        return new Response(json_encode($obj));
     }
 }
