@@ -72,34 +72,27 @@ class OrganizerContactController extends Controller
             $formatService = $this->container->get('FormatService');
             $phone = $formatService->telephoneNumber($formContact->getPhoneNumber());
 
-            if (strlen($phone) === 10) {
-                $contactExist = $contactManager->findOneBy([
-                    'phoneNumber' => $phone,
-                    'role' => $formContact->getRole(),
-                    'raid' => $formContact->getRaid(),
-                ]);
+            $contactExist = $contactManager->findOneBy([
+                'phoneNumber' => $phone,
+                'role' => $formContact->getRole(),
+                'raid' => $formContact->getRaid(),
+            ]);
 
-                if (!$contactExist || $contactExist->getId() === $formContact->getId()) {
-                    $formContact = $form->getData();
+            if (!$contactExist || $contactExist->getId() === $formContact->getId()) {
+                $formContact = $form->getData();
 
-                    $contact = $contactManager->findOneBy(['id' => $formContact->getId()]);
+                $contact = $contactManager->findOneBy(['id' => $formContact->getId()]);
+                $contact->setRole($formContact->getRole());
+                $phone = $formatService->telephoneNumber($phone);
+                $contact->setPhoneNumber($phone);
+                $contact->setRaid($raid);
 
-                    $contact->setRole($formContact->getRole());
-                    $phone = $formatService->telephoneNumber($phone);
-                    $contact->setPhoneNumber($phone);
-                    $contact->setRaid($raid);
+                $em->persist($contact);
+                $em->flush();
 
-                    $em->persist($contact);
-                    $em->flush();
+                $this->addFlash('success', 'Le contact a bien été mis à jour.');
 
-                    $this->addFlash('success', 'Le contact a bien été mis à jour.');
-
-                    return $this->redirectToRoute('listContacts', array('raid' => $raid, 'raidId' => $raidId));
-                }
-            } else {
-                $form->addError(
-                    new FormError('Un numéro de téléphone doit comporter 10 chiffres.')
-                );
+                return $this->redirectToRoute('listContacts', array('raid' => $raid, 'raidId' => $raidId));
             }
         }
 
@@ -229,18 +222,12 @@ class OrganizerContactController extends Controller
                         $formatService = $this->container->get('FormatService');
                         $phone = $formatService->telephoneNumber($formContact->getPhoneNumber());
 
-                        if (strlen($phone) === 10) {
-                            $contact->setPhoneNumber($phone);
+                        $contact->setPhoneNumber($phone);
 
-                            $em->persist($contact);
-                            $em->flush();
+                        $em->persist($contact);
+                        $em->flush();
 
-                            return $this->redirectToRoute('listContacts', array('raidId' => $raidId));
-                        } else {
-                            $form->addError(
-                                new FormError('Un numéro de téléphone doit comporter 10 chiffres.')
-                            );
-                        }
+                        return $this->redirectToRoute('listContacts', array('raidId' => $raidId));
                     }
                 } else {
                     $form->addError(
