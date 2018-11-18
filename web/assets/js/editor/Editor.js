@@ -118,8 +118,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
                   return d3.getSeconds() - d0.getSeconds();
                 },
                 toString: function(){
-                  return (this.getHours() != 0 ?  this.getHours()+ "h "  :"" )+
-                    (this.getMinutes() != 0 ?  this.getMinutes()+ "h "  :"" ) + "min " +
+                  return (this.getHours() != 0 ?  this.getHours()+ "h "  :"") +
+                    (this.getMinutes() != 0 ?  this.getMinutes()+ "min "  :"") +
                     this.getSeconds()+"s ";
                 },
               };
