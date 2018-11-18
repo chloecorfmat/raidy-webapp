@@ -9,7 +9,7 @@ function helpersList() {
       }
 
       let xhr_object = new XMLHttpRequest();
-      xhr_object.open('PATCH', '/organizer/raid/' + raidID + '/helper/' + this.id, true);
+      xhr_object.open('PATCH', '/editor/raid/' + raidID + '/helper/' + this.id, true);
       xhr_object.setRequestHeader('Content-Type', 'application/json');
       let data;
       if (this.value === 'null') {

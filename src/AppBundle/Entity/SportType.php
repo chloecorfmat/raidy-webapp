@@ -13,6 +13,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -29,6 +30,11 @@ class SportType
 
     /**
      * @ORM\Column(type="string", length=45, unique=true)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le sport ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $sport;
 

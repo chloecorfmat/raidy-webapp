@@ -16,7 +16,7 @@ class OrganizerSportTypeController extends AjaxAPIController
 {
 
     /**
-     * @Route("/organizer/sporttype", name="listsporttypeeditor", methods={"GET"})
+     * @Route("/editor/sporttype", name="listsporttypeeditor", methods={"GET"})
      *
      * @return Response
      */

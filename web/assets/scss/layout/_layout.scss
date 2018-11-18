@@ -30,6 +30,17 @@ main {
     width: 100%;
   }
 
+  .content-important {
+    background: $grey-light;
+    padding: .5rem 1rem;
+
+    &--part {
+      &:not(:first-child) {
+        margin-top: 2rem;
+      }
+    }
+  }
+
   @media screen and (min-width: $breakpoint-large) {
     display: flex;
 

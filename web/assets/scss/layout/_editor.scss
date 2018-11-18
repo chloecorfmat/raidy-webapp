@@ -130,15 +130,16 @@
   transition: max-height .2s ease-out;
 }
 
-.accordion:after {
-  color: #fff;
-  content: '\f107';
-  float: right;
-  font-family: 'Font Awesome 5 Free';
-  font-size: 1rem;
-  font-weight: 900;
-  margin-left: 5px;
-
+.accordion {
+  &:after {
+    color: #fff;
+    content: '\f107';
+    float: right;
+    font-family: 'Font Awesome 5 Free';
+    font-size: 1rem;
+    font-weight: 900;
+    margin-left: 5px;
+  }
 }
 
 button.active:after {
@@ -194,11 +195,10 @@ button.active:after {
   }
 }
 
-
-
-
 .editor--container {
   display: flex;
+  height: calc(100vh - 4rem);
+  // 4rem is the height of the header.
   justify-content: space-between;
   width: 100%;
 
@@ -219,6 +219,10 @@ button.active:after {
   // Handle on hover.
   ::-webkit-scrollbar-thumb:hover {
     background: #DDDDDD;
+  }
+
+  .map--container {
+    transition: width 1s linear;
   }
 }
 
@@ -545,15 +549,17 @@ button.active:after {
   transition: .4s;
 }
 
-.slider:before {
-  background-color: $white;
-  bottom: .16rem;
-  content: '';
-  height: 1rem;
-  left: .16rem;
-  position: absolute;
-  transition: .4s;
-  width: 1rem;
+.slider {
+  &:before {
+    background-color: $white;
+    bottom: .16rem;
+    content: '';
+    height: 1rem;
+    left: .16rem;
+    position: absolute;
+    transition: .4s;
+    width: 1rem;
+  }
 }
 
 #map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-in,
@@ -772,26 +778,23 @@ input:focus {
   border: 2px solid rgba(0, 0, 0, .2);
   border-radius: 50%;
 
-  position: fixed;
   bottom: 0;
+  font-size: 3rem;
+  height: 5rem;
+  margin: 2.5rem;
+  overflow: hidden;
+  padding: 0;
+  position: fixed;
+
   right: 0;
 
-  height: 5rem;
-  width: 5rem;
-
-  margin: 2.5rem;
-  padding: 0rem;
-
-  overflow: hidden;
-
-  font-size: 3rem;
   text-align: center;
-  vertical-align: middle;
-
   transition-duration: .5s;
   transition-property: background-color;
   transition-timing-function: ease;
 
+  vertical-align: middle;
+  width: 5rem;
   z-index: 999;
 
   svg {
@@ -830,15 +833,11 @@ input:focus {
   background-size: 3rem;
   position: fixed;
   bottom: 0;
-  right: 0;
-
   height: 5rem;
-  width: 5rem;
-
   margin: 2.5rem;
   padding: 0rem;
-
-
+  right: 0;
+  width: 5rem;
 }
 
 .fab {
@@ -847,13 +846,13 @@ input:focus {
 
   position: fixed;
   bottom: 0;
-  right: 0;
-
   height: 5rem;
-  width: 5rem;
-
   margin: 2.5rem;
   padding: 0rem;
+  position: fixed;
+  right: 0;
+  width: 5rem;
+  z-index: 50000;
 }
 
 .fab:hover .fab-buttons {
@@ -866,11 +865,11 @@ input:focus {
 }
 
 .fab-action-button:hover + .fab-buttons .fab-buttons__link:before {
-  visibility: visible;
   opacity: 1;
   transform: scale(1);
   transform-origin: right center 0;
-  transition-delay: 0.3s;
+  transition-delay: .3s;
+  visibility: visible;
 
 }
 
@@ -901,79 +900,76 @@ input:focus {
 }
 
 .fab-buttons {
-  position: absolute;
-  left: 0;
-  right: 0;
   bottom: 4.0rem;
+  left: 0;
   list-style: none;
   margin: 0;
-  padding: 0;
   opacity: 0;
+  padding: 0;
+  position: absolute;
+  right: 0;
+  transition: .2s;
   visibility: hidden;
-  transition: 0.2s;
 }
 
 .fab-action-button__icon {
-  display: block;
-  width: 3rem;
-  height: 3rem;
   background: url('data:image/svg+xml;utf8,<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 895.05 895"><defs><style>.cls-1{fill:#fff;}</style></defs><title>plus</title><text x="-52.48" y="-52.5"/><path class="cls-1" d="M947.52,402.52q0,88.65-49.17,141.81t-139.6,53.15H597.48v350q-88.65,0-141.81-49.15T402.52,758.72V597.48h-350q0-88.62,49.14-141.78t139.66-53.18H402.52V52.5q88.62,0,141.78,49.17t53.18,139.61V402.52Z" transform="translate(-52.48 -52.5)"/></svg>') center no-repeat;
+  display: block;
+  height: 3rem;
+  width: 3rem;
 }
 
 .fab-buttons__item {
   display: block;
-  text-align: center;
   margin: 1.2rem;
+  text-align: center;
 }
 
 .fab-buttons__link {
-  display: inline-block;
-  width: 3rem;
-  height: 3rem;
-  text-decoration: none;
   background-color: #ffffff;
   border-radius: 50%;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);
-  transform: scaleY(0.5) scaleX(0.5) translateY(0px) translateX(0px);
-  -moz-transition: .3s;
-  -webkit-transition: .3s;
-  -o-transition: .3s;
+  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2);
+  display: inline-block;
+  height: 3rem;
+  text-decoration: none;
+  transform: scaleY(.5) scaleX(.5) translateY(0) translateX(0);
   transition: .3s;
+  width: 3rem;
 }
 
 [data-tooltip]:before {
-  top: 50%;
-  margin-top: -1.1rem;
-  font-weight: 600;
-  border-radius: 2px;
   background: $tertiary-color-1;
+  border-radius: 2px;
   color: #fff;
   content: attr(data-tooltip);
   font-size: 1rem;
-  text-decoration: none;
-  visibility: hidden;
-  opacity: 0;
-  padding: 0.4rem 0.7rem;
+  font-weight: 600;
   margin-right: 1.2rem;
+  margin-top: -1.1rem;
+  opacity: 0;
+  padding: .4rem .7rem;
   position: absolute;
-  transform: scale(0);
   right: 100%;
-  white-space: nowrap;
+  text-decoration: none;
+  top: 50%;
+  transform: scale(0);
   transform-origin: top right;
   transition: all .3s cubic-bezier(.25, .8, .25, 1);
+  visibility: hidden;
+  white-space: nowrap;
 }
 
 [data-tooltip]:hover:before {
-  visibility: visible;
   opacity: 1;
   transform: scale(1);
   transform-origin: right center 0;
+  visibility: visible;
 }
 
 .fab-icon {
   display: inline-block;
-  width: 3.0rem;
   height: 3.0rem;
+  width: 3.0rem;
 }
 
 .icon-material_track {

@@ -2,7 +2,7 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item">Administration</li>
+        <li class="breadcrumb--list-item">Organizer</li>
     </ol>
 {% endblock %}
 
@@ -49,6 +49,17 @@
                     </li>
                 {% endif %}
             </ul>
+            <div class="downloads">
+                <p>Téléchargez l'application Raidy</p>
+				<div class="downloads--links">
+					<a href="#" download>
+						<img src="{{ asset('assets/images/app-store-badge.png') }}" alt="">
+					</a>
+					<a href="assets/mobile_apps/raidy-organizer.apk" download>
+						<img src="{{ asset('assets/images/google-play-badge.png') }}" alt="">
+					</a>
+				</div>
+			</div>
         </div>
     </div>
 {% endblock %}

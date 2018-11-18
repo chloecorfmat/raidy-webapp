@@ -10,8 +10,8 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
-        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': id}) }}">Détails du raid</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': id}) }}">{{ raidName }}</a></li>
         <li class="breadcrumb--list-item">Éditeur</li>
     </ol>
 

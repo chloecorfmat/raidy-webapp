@@ -45,6 +45,7 @@ class EditorController extends Controller
 
         return $this->render('OrganizerBundle:Editor:editor.html.twig', [
             'id' => $id,
+            'raidName' => $raid->getName(),
             'poiTypes' => $poiTypes,
             'sportTypes' => $sportTypes,
         ]);

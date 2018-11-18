@@ -405,6 +405,8 @@ class OrganizerRaidController extends Controller
         return $this->render('OrganizerBundle:Raid:cloneRaid.html.twig', [
             'form' => $form->createView(),
             'user' => $user,
+            'raidId' => $cloneRaid->getId(),
+            'raidName' => $cloneRaid->getName(),
         ]);
     }
 }

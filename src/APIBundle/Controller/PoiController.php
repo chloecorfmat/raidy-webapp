@@ -107,8 +107,15 @@ class PoiController extends AjaxAPIController
         $helperManager = $em->getRepository('AppBundle:Helper');
         $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
 
-        $helper->setCheckInTime(new \DateTime("now"));
+        $now = new \DateTime("now");
+
+        $helper->setCheckInTime($now);
         $em->flush();
+
+        $diff = $raid->getDate()->diff($now);
+        if ($diff->days > 0 || ($diff->invert == 0 && $diff->days > 0)) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You can not check in for this raid today');
+        }
 
         $ret = [];
         $ret['checkInTime'] = $helper->getCheckInTime();

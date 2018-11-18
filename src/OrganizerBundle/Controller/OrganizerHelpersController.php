@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrganizerHelpersController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/helper/{helperId}", name="patchHelperToPoi", methods={"PATCH"})
+     * @Route("/editor/raid/{raidId}/helper/{helperId}", name="patchHelperToPoi", methods={"PATCH"})
      *
      * @param Request $request
      * @param int     $raidId   raid id
@@ -73,6 +73,9 @@ class OrganizerHelpersController extends AjaxAPIController
 
         $helperManager = $manager->getRepository('AppBundle:Helper');
 
+        $raidManager = $manager->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(array('id' => $id));
+
         $helpers = $helperManager->findBy([
             'raid' => $id,
         ]);
@@ -82,6 +85,7 @@ class OrganizerHelpersController extends AjaxAPIController
 
         return $this->render('OrganizerBundle:Helpers:helpers.html.twig', [
             'raid_id' => $id,
+            'raidName' => $raid->getName(),
             'helpers' => $helpers,
             'pois' => $pois,
         ]);

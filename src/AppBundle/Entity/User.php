@@ -32,12 +32,24 @@ class User extends BaseUser
     /**
      * @ORM\Column(name="last_name", type="string", length=45)
      * @Assert\NotBlank(groups={"editProfile"})
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères",
+     *      groups={"editProfile", "Profile"}
+     * )
      */
     protected $lastName;
 
     /**
      * @ORM\Column(name="first_name", type="string", length=45)
-     * @Assert\NotBlank(groups={"editProfile"})
+     * @Assert\NotBlank(groups={"editProfile", "Profile"})
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} caractères",
+     *      groups={"editProfile", "Profile"}
+     * )
      */
     protected $firstName;
 
@@ -49,6 +61,12 @@ class User extends BaseUser
 
     /**
      * @Assert\NotBlank(groups={"changePassword"})
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 255,
+     *      maxMessage = "Le mot de passe ne doit pas dépasser {{ limit }} caractères",
+     *      groups={"editProfile", "Profile"}
+     * )
      */
     protected $plainPassword;
 
