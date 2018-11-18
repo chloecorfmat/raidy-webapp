@@ -179,7 +179,9 @@ class OrganizerPOIController extends AjaxAPIController
 
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid) && !$authChecker->isGranted(RaidVoter::HELPER, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
-        } elseif ($authChecker->isGranted(RaidVoter::HELPER, $raid)) {
+        } elseif ($authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            $pois = $poiManager->findBy(array('raid' => $raidId));
+        } else {
             $helperManager = $em->getRepository('AppBundle:Helper');
             $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);
 
@@ -188,8 +190,6 @@ class OrganizerPOIController extends AjaxAPIController
             } else {
                 $pois = [];
             }
-        } else {
-            $pois = $poiManager->findBy(array('raid' => $raidId));
         }
 
         $poiService = $this->container->get('PoiService');
