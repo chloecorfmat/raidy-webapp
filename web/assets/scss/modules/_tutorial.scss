@@ -1,23 +1,23 @@
 .modal-tutorial {
   @media screen and (min-width: $breakpoint-large) {
-    max-width: 75% !important;
-    min-height: 80vh;
+    margin: 10vh auto !important; // sass-lint:disable-line no-important
     max-height: 80vh;
-    margin: 10vh auto !important;
+    max-width: 75% !important; // sass-lint:disable-line no-important
+    min-height: 80vh;
   }
 }
 
 .modal--content {
-  overflow-y: scroll;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow-y: scroll;
 }
 
 .btn--actions-tutorial {
   display: flex;
-  justify-content: space-between;
   flex-shrink: 0;
+  justify-content: space-between;
 
   .btn {
     flex-grow: 1;

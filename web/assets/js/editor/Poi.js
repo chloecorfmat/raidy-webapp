@@ -103,6 +103,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.map.removeLayer(this.marker);
 
     mapManager.editorUI.removePoi(this);
+    mapManager.poiMap.delete(this.id);
   };
 
   console.log("Track POI loaded");

@@ -4,7 +4,7 @@
   .breadcrumb {
     align-items: center;
     display: flex;
-    padding: 0 3rem;
+    padding: 0.5rem 3rem;
     justify-content: space-between;
     height: 2rem;
 
@@ -24,8 +24,20 @@
         display: inline;
       }
     }
-  }
 
+    li:first-child {
+      display: none;
+    }
+
+    @media screen and (min-width: $breakpoint-medium) {
+      height: initial;
+      padding: 0rem 3rem;
+
+      li:first-child {
+        display: inline-block;
+      }
+    }
+  }
 }
 
 .map--container {
@@ -345,6 +357,7 @@ button.active:after {
 .checkbox-item {
   display: flex;
   flex-direction: row;
+  width: 100%;
   input {
     display: none;
 
@@ -380,6 +393,7 @@ button.active:after {
   .checkbox-item--label {
     display: flex;
     flex-direction: row;
+    width: 87%;
     &:hover {
       cursor: pointer;
     }
@@ -577,6 +591,13 @@ input:checked + .slider::before {
   border: 2px solid rgba(0, 0, 0, .2);
   border-radius: 4px;
   padding: .4rem;
+}
+
+.leaflet-control-custom {
+  text-align: center;
+  padding-top: 0.2rem;
+  font-size: 0.6rem;
+  box-sizing: border-box;
 }
 
 // Rounded sliders.
@@ -985,6 +1006,34 @@ input:focus {
   ') center no-repeat;
 }
 
+/* GPX import */
+
+.gpx-import--form {
+
+  h3 {
+    margin-bottom: 0.3rem;
+  }
+
+  & > .import-gpx--category {
+    display: none;
+
+    & > .import-gpx--checkboxes > div {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+
+  }
+
+  label {
+    position: static;
+  }
+
+  input {
+    width: auto;
+  }
+}
 
 
 

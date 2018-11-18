@@ -147,7 +147,7 @@ class HelperRegisterController extends Controller
 
             $userManager = $this->get('fos_user.user_manager');
             $phone = $formatService->mobilePhoneNumber($formData['phone']);
-            if (!is_null($phone)) {
+            if (!is_null($phone) && strlen($phone) === 10) {
                 $emailExist = $userManager->findUserByEmail($formData['email']);
 
                 if ($formData['plainPassword'] == $formData['repeatPassword']) {
@@ -206,7 +206,8 @@ class HelperRegisterController extends Controller
             } else {
                 $form->addError(
                     new FormError(
-                        'Le numéro de téléphone d\'un bénévole doit être un mobile et commencer par 06 ou 07.'
+                        'Le numéro de téléphone d\'un bénévole doit être un mobile et commencer par 06 ou 07. ' .
+                        'Il comporte 10 numéros.'
                     )
                 );
             }

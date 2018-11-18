@@ -23,8 +23,7 @@ function initForm (e) {
     if(fileInput != null){
         fileInput.addEventListener("change", imagePreview);
     }
-
-  })
+  });
 }
 
 function inputFocusIn (e) {

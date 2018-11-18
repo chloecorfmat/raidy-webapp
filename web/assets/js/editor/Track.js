@@ -21,7 +21,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.decorator = null;
     this.visible = true;
-    this.calibration = false;
+    this.isCalibration = false;
     this.waypoints = [];
 
     this.line = L.polyline([]);
@@ -113,7 +113,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         color: this.color,
         sportType: this.sportType,
         isVisible: this.visible,
-        isCalibration: this.calibration,
+        isCalibration: this.isCalibration,
         trackpoints: this.line != null ? JSON.stringify(latlong) : null
       };
 
@@ -189,6 +189,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.map.removeLayer(this.endMarker);
 
     mapManager.editorUI.removeTrack(this);
+    mapManager.tracksMap.delete(this.id);
   };
   Track.prototype.buildUI = function () {
     mapManager.editorUI.updatePoi()

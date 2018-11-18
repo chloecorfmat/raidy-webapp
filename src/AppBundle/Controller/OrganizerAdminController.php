@@ -52,29 +52,40 @@ class OrganizerAdminController extends Controller
             $formatService = $this->container->get('FormatService');
             $userManager = $this->get('fos_user.user_manager');
             $emailExist = $userManager->findUserByEmail($formUser->getEmail());
+            $usernameExist = $userManager->findUserByUsername($formUser->getUsername());
 
             if (!$emailExist) {
-                $formUser = $form->getData();
+                if (!$usernameExist) {
+                    $phone = $formatService->telephoneNumber($formUser->getPhone());
 
-                $user = $userManager->createUser();
-                $user->setUsername($formUser->getUsername());
-                $user->setLastName($formUser->getLastName());
-                $user->setFirstName($formUser->getFirstName());
-                $phone = $formatService->telephoneNumber($formUser->getPhone());
-                $user->setPhone($phone);
-                $user->setEmail($formUser->getEmail());
-                $user->setEmailCanonical($formUser->getEmail());
-                $user->setEnabled(1);
-                $user->setPlainPassword($formUser->getPlainPassword());
-                $user->setRoles(['ROLE_ORGANIZER']);
+                    if (strlen($phone) === 10) {
+                        $formUser = $form->getData();
 
-                $userManager->updateUser($user);
+                        $user = $userManager->createUser();
+                        $user->setUsername($formUser->getUsername());
+                        $user->setLastName($formUser->getLastName());
+                        $user->setFirstName($formUser->getFirstName());
+                        $user->setPhone($phone);
+                        $user->setEmail($formUser->getEmail());
+                        $user->setEmailCanonical($formUser->getEmail());
+                        $user->setEnabled(1);
+                        $user->setPlainPassword($formUser->getPlainPassword());
+                        $user->setRoles(['ROLE_ORGANIZER']);
 
-                $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
+                        $userManager->updateUser($user);
 
-                return $this->redirectToRoute('listOrganizer');
+                        $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
+
+                        return $this->redirectToRoute('listOrganizer');
+                    } else {
+                        $form->addError(new FormError('Un numéro de téléphone doit comporter 10 chiffres'));
+                    }
+                } else {
+                    $form->addError(new FormError('Un utilisateur avec ce nom d\'utilisateur est déjà enregistré'));
+                }
+            } else {
+                $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }
-            $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
         }
 
         return $this->render('AppBundle:Admin:addOrganizer.html.twig', [
@@ -116,18 +127,23 @@ class OrganizerAdminController extends Controller
 
             if (!$emailExist || $emailExist->getId() === $formUser->getId()) {
                 $formUser = $form->getData();
-                $user = $userManager->findUserBy(['id' => $formUser->getId()]);
-                $user->setUsername($formUser->getUsername());
-                $user->setLastName($formUser->getLastName());
-                $user->setFirstName($formUser->getFirstName());
                 $phone = $formatService->telephoneNumber($formUser->getPhone());
-                $user->setPhone($phone);
-                $user->setEmail($formUser->getEmail());
 
-                $userManager->updateUser($user);
-                $this->addFlash('success', 'Le profil a bien été modifié.');
+                if (strlen($phone) === 10) {
+                    $user = $userManager->findUserBy(['id' => $formUser->getId()]);
+                    $user->setUsername($formUser->getUsername());
+                    $user->setLastName($formUser->getLastName());
+                    $user->setFirstName($formUser->getFirstName());
+                    $user->setPhone($phone);
+                    $user->setEmail($formUser->getEmail());
 
-                return $this->redirectToRoute('editOrganizer', ['id' => $id]);
+                    $userManager->updateUser($user);
+                    $this->addFlash('success', 'Le profil a bien été modifié.');
+
+                    return $this->redirectToRoute('editOrganizer', ['id' => $id]);
+                } else {
+                    $form->addError(new FormError('Un numéro de téléphone doit comporter 10 chiffres'));
+                }
             } else {
                 $form->addError(new FormError('Un utilisateur avec cette adresse email est déjà enregistré'));
             }

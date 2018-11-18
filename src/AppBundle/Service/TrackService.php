@@ -163,7 +163,7 @@ class TrackService
             $status = false;
         }
 
-        if (!isset($obj['color']) || '' == $obj['color']) {
+        if (!isset($obj['color']) || '' == $obj['color'] || strlen($obj['color'] > 9)) {
             $status = false;
         }
 

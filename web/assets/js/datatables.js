@@ -1,7 +1,8 @@
-window.addEventListener('load', organizersList)
-window.addEventListener('load', helpers)
-window.addEventListener('load', poiTypesList)
-window.addEventListener('load', sportTypesList)
+window.addEventListener('load', organizersList);
+window.addEventListener('load', helpers);
+window.addEventListener('load', poiTypesList);
+window.addEventListener('load', sportTypesList);
+window.addEventListener('load', contactsList);
 
 var options = {
   labels: {
@@ -31,30 +32,33 @@ function helpers (e) {
 
 function poiTypesList (e) {
   if (document.getElementById('poiTypesList') != null) {
-    var dataTablePoiType = new DataTable('#poiTypesList', options) // eslint-disable-line no-undef, no-new
+    var dataTablePoiType = new DataTable('#poiTypesList', options); // eslint-disable-line no-undef, no-new
 
     dataTablePoiType.on('datatable.page', function (page) {
-      /* document.getElementsByClassName('char--poitype').forEach(function () {
-        console.log('salut')
-        var id = this.dataset.poitypeId
-        console.log(id)
-        var colorId = document.getElementById('char--poitype-') + id
-        colorId.color = this.dataset.poitypecolor
-        console.log(this.dataset)
-      }) */
       // Needed to display modal to delete poi type
-      displayModalToDeletePoiType() // eslint-disable-line no-undef
+      displayModalToDeletePoiType(); // eslint-disable-line no-undef
     })
   }
 }
 
 function sportTypesList (e) {
   if (document.getElementById('sportTypesList') != null) {
-    var dataTableSportType = new DataTable('#sportTypesList', options) // eslint-disable-line no-undef, no-new
+    var dataTableSportType = new DataTable('#sportTypesList', options); // eslint-disable-line no-undef, no-new
 
     dataTableSportType.on('datatable.page', function (page) {
       // Needed to display modal to delete sport type.
-      displayModalToDeleteSportType() // eslint-disable-line no-undef
+      displayModalToDeleteSportType(); // eslint-disable-line no-undef
+    })
+  }
+}
+
+function contactsList (e) {
+  if (document.getElementById('contactsList') != null) {
+    var dataTableContact = new DataTable('#contactsList', options); // eslint-disable-line no-undef, no-new
+
+    dataTableContact.on('datatable.page', function (page) {
+      // Needed to display modal to delete poi type
+      displayModalToDeleteContact(); // eslint-disable-line no-undef
     })
   }
 }

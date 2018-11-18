@@ -1,7 +1,8 @@
-window.addEventListener('load', displayModalToDelete)
-window.addEventListener('load', displayModalToDeletePoiType)
-window.addEventListener('load', displayModalToDeleteSportType)
-window.addEventListener('load', displayModalToDeleteCollaborator)
+window.addEventListener('load', displayModalToDelete);
+window.addEventListener('load', displayModalToDeletePoiType);
+window.addEventListener('load', displayModalToDeleteSportType);
+window.addEventListener('load', displayModalToDeleteCollaborator);
+window.addEventListener('load', displayModalToDeleteContact);
 
 function displayModalToDelete () {
   MicroModal.init();
@@ -17,7 +18,7 @@ function displayModalToDelete () {
 }
 
 function displayModalToDeletePoiType () {
-  MicroModal.init() // eslint-disable-line no-undef
+  MicroModal.init(); // eslint-disable-line no-undef
 
   document.querySelectorAll('.btn--delete-poitype').forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -30,7 +31,7 @@ function displayModalToDeletePoiType () {
 }
 
 function displayModalToDeleteSportType () {
-  MicroModal.init() // eslint-disable-line no-undef
+  MicroModal.init(); // eslint-disable-line no-undef
 
   document.querySelectorAll('.btn--delete-sporttype').forEach(function (btn) {
     btn.addEventListener('click', function () {
@@ -38,19 +39,31 @@ function displayModalToDeleteSportType () {
       var url = document.getElementById('btn--delete-sporttype').dataset.baseUrl + id;
       document.getElementById('btn--delete-sporttype').href = url;
       MicroModal.show('delete-sporttype'); // eslint-disable-line no-undef
-    })
-  })
+    });
+  });
 }
 
 function displayModalToDeleteCollaborator () {
-    MicroModal.init() // eslint-disable-line no-undef
+  MicroModal.init(); // eslint-disable-line no-undef
 
-    document.querySelectorAll('.btn--delete-collaborator').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            console.log(this.dataset);
-            var url = '/organizer/raid/'+this.dataset.raid+'/collaborator/'+this.dataset.invitation+'/delete';
-            document.getElementById('btn--delete-collaborator').href = url;
-            MicroModal.show('delete-collaborator') // eslint-disable-line no-undef
-        })
-    })
+  document.querySelectorAll('.btn--delete-collaborator').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var url = '/organizer/raid/' + this.dataset.raid + '/collaborator/' + this.dataset.invitation + '/delete';
+      document.getElementById('btn--delete-collaborator').href = url;
+      MicroModal.show('delete-collaborator'); // eslint-disable-line no-undef
+    });
+  });
+}
+
+function displayModalToDeleteContact () {
+  MicroModal.init(); // eslint-disable-line no-undef
+
+  document.querySelectorAll('.btn--delete-contact').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id = this.dataset.contactId;
+      var url = document.getElementById('btn--delete-contact').dataset.baseUrl + id;
+      document.getElementById('btn--delete-contact').href = url;
+      MicroModal.show('delete-contact'); // eslint-disable-line no-undef
+    });
+  });
 }

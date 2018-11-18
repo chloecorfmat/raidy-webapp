@@ -207,17 +207,17 @@
                                 <form name="addPoi" id="addPoi_form">
                                 <div id="addPoi">
                                     <div class="form--item">
-                                        <label for="addPoi_name" class="required">
-                                            Nom du point d'intérêt <span class="input--required">*</span>
+                                        <label for="addPoi_name">
+                                            Nom du point d'intérêt
                                         </label>
                                         <input class="form--input-text" type="text" id="addPoi_name"
-                                               required="required" maxlength="45">
+                                                maxlength="45">
                                     </div>
                                     <div class="form--item">
-                                        <label for="addPoi_nbhelper" class="required">
-                                            Nombre de bénévoles requis <span class="input--required">*</span>
+                                        <label for="addPoi_nbhelper">
+                                            Nombre de bénévoles requis
                                         </label>
-                                        <input class="form--input-text" type="number" id="addPoi_nbhelper" required="required" min="0">
+                                        <input class="form--input-text" type="number" id="addPoi_nbhelper" min="0">
                                     </div>
                                     <div class="form--item form--item-select">
                                         <label for="addPoi_type" class="required">
@@ -468,6 +468,73 @@
                         <div class="btn--actions-tutorial">
                             <button class="btn btn--editor-tutorial" data-id="2" data-current="3">Précédent</button>
                             <button class="btn btn--danger" data-micromodal-close>Terminer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Import GPX -->
+    <div id="import-gpx" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-poi-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-poi-title">
+                            Importer un fichier GPX
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="import-gpx-content" class="modal--content">
+                        <form id="import-gpx--form" class="gpx-import--form">
+                            <input type="file" id="import-gpx--input">
+
+                            <div id="import-gpx--tracks" class="import-gpx--category">
+                                <h3>Tracés</h3>
+                                <div class="import-gpx--checkboxes"></div>
+                            </div>
+                            <div id="import-gpx--routes" class="import-gpx--category">
+                                <h3>Routes</h3>
+                                <div class="import-gpx--checkboxes"></div>
+                            </div>
+                            <div id="import-gpx--waypoints" class="import-gpx--category">
+                                <h3>Points de passages</h3>
+                                <div class="import-gpx--checkboxes"></div>
+                            </div>
+
+                            <div class="actions">
+                                <button type="submit" class="btn btn--action">Importer</button>
+                                <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Export GPX -->
+    <div id="export-gpx" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-poi-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-poi-title">
+                            Exporter un fichier GPX
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="export-gpx-content" class="modal--content">
+
+                        <div class="actions">
+                            <button class="btn btn--action" id="export-gpx--track">Exporter en tant que tracés GPX</button>
+                            <button class="btn btn--action" id="export-gpx--route">Exporter en tant que routes GPX</button>
+                            <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
                         </div>
                     </div>
                 </div>

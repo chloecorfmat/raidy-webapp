@@ -23,7 +23,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   function MapManager() {
 
-    this.map = L.map('map', {editable: true}).setView([48.742917, -3.459180], 15);
+    this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
@@ -33,9 +33,10 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.waitingPoi = null;
 
-    this.poiTypesMap = new Map();
-    this.tracksMap = new Map();
-    this.poiMap = new Map();
+    this.poiTypesMap   = new Map();
+    this.sportTypesMap = new Map();
+    this.tracksMap     = new Map();
+    this.poiMap        = new Map();
 
     this.distance = 0;
     this.currentEditID = 0;
@@ -43,6 +44,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.mode = EditorMode.READING;
     this.lastMode = EditorMode.READING;
     this.editorUI = new EditorUI();
+    this.GPXImporter = new GPXImporter(this);
+    this.GPXExporter = new GPXExporter(this);
   }
 
   MapManager.prototype.initialize = function () {
@@ -105,13 +108,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       document.getElementById('map').style.cursor = 'crosshair';
     })
 
-    this.loadRessources()
+    this.loadRessources();
 
   };
   MapManager.prototype.displayTrackButton = function (b) {
   }
 
-    MapManager.prototype.loadRessources = function () {
+  MapManager.prototype.loadRessources = function () {
     var keepThis = this;
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('GET', '/organizer/raid/'+raidID+'/poitype', true);
@@ -125,9 +128,27 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           };
           keepThis.loadTracks(); // Load tracks
           keepThis.loadPois(); // Load PoiS
+          keepThis.loadSportTypes();
         }
       }
     }
+  };
+
+  MapManager.prototype.loadSportTypes = function(){
+      var keepThis = this;
+      var xhr_object = new XMLHttpRequest();
+      xhr_object.open('GET', '/organizer/sporttype', true);
+      xhr_object.send(null);
+      xhr_object.onreadystatechange = function () {
+          if (this.readyState === XMLHttpRequest.DONE) {
+              if (xhr_object.status === 200) {
+                  var sportTypes = JSON.parse(xhr_object.responseText);
+                  for (sportType of sportTypes) {
+                      keepThis.sportTypesMap.set(sportType.id, sportType);
+                  };
+              }
+          }
+      }
   };
 
   MapManager.prototype.switchMode = function (mode) {
@@ -198,9 +219,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
   MapManager.prototype.requestNewPoi = function (name, type, requiredHelpers) {
     var poi = this.waitingPoi;
-    poi.name = name;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(type));
-    poi.requiredHelpers = parseInt(requiredHelpers);
+    poi.name = name != "" ? name : poi.poiType.type;
+    poi.requiredHelpers = requiredHelpers != "" ? parseInt(requiredHelpers) : 0;
 
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/organizer/raid/' + raidID + '/poi', true);
