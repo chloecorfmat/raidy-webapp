@@ -35,7 +35,13 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.color = color;
     this.line.setStyle({
       color: color,
-    })
+    });
+
+    this.decorator = L.polylineDecorator(this.line, {
+      patterns: [
+        {offset: 25, repeat: 100, symbol: L.Symbol.arrowHead({pixelSize: 15, pathOptions: {fillOpacity: 1, color: this.color, weight: 0}})}
+      ]
+    }).addTo(this.map);
   };
 
     Track.prototype.setSportType = function (sportType) {
