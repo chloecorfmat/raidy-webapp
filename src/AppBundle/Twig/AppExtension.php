@@ -29,12 +29,16 @@ class AppExtension extends AbstractExtension
      */
     public function telephoneFilter($number)
     {
-        $str = str_split($number, 2);
-        $final = $str[0];
-        array_shift($str);
+        if (strlen($number) == 10) {
+            $str = str_split($number, 2);
+            $final = $str[0];
+            array_shift($str);
 
-        foreach ($str as $s) {
-            $final .= ' ' . $s;
+            foreach ($str as $s) {
+                $final .= ' ' . $s;
+            }
+        } else {
+            $final = $number;
         }
 
         return $final;
