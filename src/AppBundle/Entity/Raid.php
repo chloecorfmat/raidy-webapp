@@ -30,6 +30,11 @@ class Raid
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $name;
 
@@ -40,11 +45,21 @@ class Raid
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "L'adresse ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $address;
 
     /**
      * @ORM\Column(name="address_addition", type="string", length=45, nullable=true)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le complément d'adresse ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $addressAddition;
 
@@ -55,6 +70,12 @@ class Raid
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "La ville ne doit pas dépasser {{ limit }} caractères",
+     *      groups={"editProfile", "Profile"}
+     * )
      */
     protected $city;
 

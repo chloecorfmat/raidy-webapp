@@ -36,13 +36,55 @@ class OrganizerAdminController extends Controller
     {
         $formUser = new User();
 
-        $form = $this->createFormBuilder($formUser)
-            ->add('username', TextType::class, ['label' => 'Nom d\'utilisateur'])
-            ->add('firstName', TextType::class, ['label' => 'Prénom'])
-            ->add('lastName', TextType::class, ['label' => 'Nom'])
-            ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
-            ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
-            ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
+        $form = $this->createFormBuilder($formUser, array('validation_groups' => array('Profile')))
+            ->add(
+                'username',
+                TextType::class,
+                [
+                    'label' => 'Nom d\'utilisateur',
+                    'attr' => array('maxlength' => 180),
+                ]
+            )
+            ->add(
+                'firstName',
+                TextType::class,
+                [
+                    'label' => 'Prénom',
+                    'attr' => array('maxlength' => 45),
+                ]
+            )
+            ->add(
+                'lastName',
+                TextType::class,
+                [
+                    'label' => 'Nom',
+                    'attr' => array('maxlength' => 45),
+                ]
+            )
+            ->add(
+                'phone',
+                TelType::class,
+                [
+                    'label' => 'Numéro de téléphone',
+                    'attr' => array('maxlength' => 10),
+                ]
+            )
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                'label' => 'Adresse e-mail',
+                'attr' => array('maxlength' => 180),
+                ]
+            )
+            ->add(
+                'plainPassword',
+                PasswordType::class,
+                [
+                    'label' => 'Mot de passe',
+                    'attr' => array('maxlength' => 255),
+                ]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un organisateur'])
             ->getForm();
 
@@ -110,12 +152,47 @@ class OrganizerAdminController extends Controller
             throw $this->createNotFoundException('The organizer does not exist');
         }
 
-        $form = $this->createFormBuilder($formUser)
-            ->add('username', TextType::class, ['label' => 'Nom d\'utilisateur'])
-            ->add('firstName', TextType::class, ['label' => 'Prénom'])
-            ->add('lastName', TextType::class, ['label' => 'Nom'])
-            ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
-            ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
+        $form = $this->createFormBuilder($formUser, array('validation_groups' => array('Profile')))
+            ->add(
+                'username',
+                TextType::class,
+                [
+                    'label' => 'Nom d\'utilisateur',
+                    'attr' => array('maxlength' => 180),
+                ]
+            )
+            ->add(
+                'firstName',
+                TextType::class,
+                [
+                    'label' => 'Prénom',
+                    'attr' => array('maxlength' => 45),
+                ]
+            )
+            ->add(
+                'lastName',
+                TextType::class,
+                [
+                    'label' => 'Nom',
+                    'attr' => array('maxlength' => 45),
+                ]
+            )
+            ->add(
+                'phone',
+                TelType::class,
+                [
+                    'label' => 'Numéro de téléphone',
+                    'attr' => array('maxlength' => 10),
+                ]
+            )
+            ->add(
+                'email',
+                EmailType::class,
+                [
+                    'label' => 'Adresse e-mail',
+                    'attr' => array('maxlength' => 180),
+                ]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Editer un organisateur'])
             ->getForm();
 
