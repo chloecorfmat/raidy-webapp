@@ -285,7 +285,7 @@ button.active:after {
 .btn--laterale-bar {
   background-color: $tertiary-color-1;
   border-radius: 0 10rem 10rem 0;
-  font-family: 'Fontastique', 'SansSerif';
+  font-family: 'Fontastique', Sans-Serif;
   font-size: 2rem;
   height: 3rem;
   margin: auto;
@@ -582,7 +582,7 @@ input:checked + .slider::before {
 .switch-label {
   color: $tertiary-color-1;
   display: inline;
-  font-family: 'Proxima Nova', 'SansSerif';
+  font-family: 'Proxima Nova', Sans-Serif;
   font-size: .75rem;
   font-weight: bold;
   padding: 0;
@@ -993,7 +993,7 @@ input:focus {
   background-color: $secondary-color-2;
   color: white;
   display: flex;
-  font-family: 'Proxima Nova', 'SansSerif';
+  font-family: 'Proxima Nova', Sans-Serif;
   justify-content: space-between;
   padding-left: 1rem;
 
