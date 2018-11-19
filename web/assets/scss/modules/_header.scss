@@ -45,9 +45,13 @@ body {
 }
 
 .header--profile-ico {
-  display: inline-block;
+  display: none;
   font-size: 1rem;
   font-weight: 700;
   margin-right: .5rem;
   vertical-align: baseline;
+
+  @media screen and (min-width: $breakpoint-medium) {
+    display: inline-block;
+  }
 }
