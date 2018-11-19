@@ -50,7 +50,8 @@ gpxParser.prototype.parse = function (string) {
         }
     }
 
-    this.xmlSource.querySelectorAll('wpt').forEach(function(wpt){
+    var wpts = this.xmlSource.querySelectorAll('wpt');
+    for (var wpt from wpts){
         let pt  = {};
         pt.name = keepThis.getElementValue(wpt, "name")
         pt.lat  = parseFloat(wpt.getAttribute("lat"));
@@ -59,9 +60,10 @@ gpxParser.prototype.parse = function (string) {
         pt.cmt  = keepThis.getElementValue(wpt, "cmt");
         pt.desc = keepThis.getElementValue(wpt, "desc");
         keepThis.waypoints.push(pt);
-    });
+    }
 
-    this.xmlSource.querySelectorAll('rte').forEach(function(rte){
+    var rtes = this.xmlSource.querySelectorAll('rte');
+    for (var rte of rtes){
         let route = {};
 
         route.name   = keepThis.getElementValue(rte, "name");
@@ -73,21 +75,23 @@ gpxParser.prototype.parse = function (string) {
         route.type   = keepThis.getElementValue(rte, "type");
 
         let routepoints = [];
-        rte.querySelectorAll('rtept').forEach(function(rtept){
+        var rtepts = rte.querySelectorAll('rtept');
+	for (var rtept of rtepts){
             let pt    = {};
             pt.lat    = parseFloat(rtept.getAttribute("lat"));
             pt.lon    = parseFloat(rtept.getAttribute("lon"));
             pt.ele    = parseFloat(keepThis.getElementValue(rtept, "ele"));
             routepoints.push(pt);
-        });
+        }
 
         route.distance = keepThis.calculDistance(routepoints);
         route.elevation = keepThis.calcElevation(routepoints);
         route.points = routepoints;
         keepThis.routes.push(route);
-    });
+    }
 
-    this.xmlSource.querySelectorAll('trk').forEach(function(trk){
+    var trks = this.xmlSource.querySelectorAll('trk');
+    for (var trk of trks){
         let track = {};
 
         track.name   = keepThis.getElementValue(trk, "name");
@@ -99,18 +103,19 @@ gpxParser.prototype.parse = function (string) {
         track.type   = keepThis.getElementValue(trk, "type");
 
         let trackpoints = [];
-        trk.querySelectorAll('trkpt').forEach(function(trkpt){
+        var trkpt = trk.querySelectorAll('trkpt');
+	for (var trkpt of trkpts){
             let pt = {};
             pt.lat = parseFloat(trkpt.getAttribute("lat"));
             pt.lon = parseFloat(trkpt.getAttribute("lon"));
             pt.ele = parseFloat(keepThis.getElementValue(trkpt, "ele"));
             trackpoints.push(pt);
-        });
+        }
         track.distance = keepThis.calculDistance(trackpoints);
         track.elevation = keepThis.calcElevation(trackpoints);
         track.points = trackpoints;
         keepThis.tracks.push(track);
-    });
+    }
 };
 
 gpxParser.prototype.getElementValue = function(parent, needle){
