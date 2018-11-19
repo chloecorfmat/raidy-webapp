@@ -48,7 +48,7 @@ gulp.task('styles', function() {
 gulp.task('scripts', function() {
     return gulp.src('./js/**/*.js')
         .pipe(concat('../dist/js/scripts.js'))
-        .pipe(babel({presets: ['es2015']}))
+        //.pipe(babel({ presets: ['es2015'] }))
         .pipe(gulp.dest('./js'))
         // Comment the line below to have unminify files.
         //.pipe(uglify())
