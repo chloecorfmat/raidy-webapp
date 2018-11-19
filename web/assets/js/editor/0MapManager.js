@@ -175,7 +175,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       case EditorMode.ADD_POI :
         this.setPoiEditable(false);
         this.waitingPoi = new Poi(this.map);
-        document.getElementById('map').style.cursor = 'none';
+        //disable cursor none for IE
+        //document.getElementById('map').style.cursor = 'none';
         this.map.addLayer(this.waitingPoi.marker);
         this.map.on("mousemove", function (e) {
           keepThis.waitingPoi.marker.setLatLng(e.latlng);
