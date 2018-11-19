@@ -1,7 +1,9 @@
 window.addEventListener('load', helpersList);
 
 function helpersList() {
-  [].slice.call(document.getElementsByClassName('assign-poi')).forEach(function(select) {
+  var selects = document.getElementsByClassName('assign-poi');
+
+  for (var select of selects) {
     select.addEventListener('input', function () {
       if (this.value !== 'null') {
         var option = document.getElementById(this.id).querySelector('[value="' + this.value + '"]');
@@ -41,5 +43,5 @@ function helpersList() {
       }
       xhr_object.send(JSON.stringify({poi : data}));
     });
-  })
+  };
 }

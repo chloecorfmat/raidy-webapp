@@ -184,9 +184,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
      let btn = li.querySelector('.btn--track--edit');
      btn.addEventListener('click', function () {
      if (!this.parentElement.classList.contains('track--edit')) {
-       document.querySelectorAll('.track--edit').forEach(function (el) {
+       var trackEdits = document.querySelectorAll('.track--edit');
+       for (var el of trackEdits){
          el.classList.remove('track--edit');
-       });
+       };
       }
       this.parentElement.classList.toggle('track--edit');
        if (this.parentElement.classList.contains('track--edit')) {
@@ -198,7 +199,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
      });
 
       // TRACK SETTINGS COG
-      li.querySelectorAll('.btn--track--settings').forEach(function (btn) {
+      var btns = li.querySelectorAll('.btn--track--settings');
+      for (var btn of btns){
         let id = parseInt(btn.dataset.id);
         let track = mapManager.tracksMap.get(id);
 
@@ -210,7 +212,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
           MicroModal.show('edit-track-popin');
         });
-      });
+      };
 
       let panel = document.getElementById("tracks-pan");
       if (panel.style.maxHeight){
@@ -294,9 +296,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
       let select = "<select>";
 
-      mapManager.sportTypesMap.forEach(function (sportType) {
+      var sportTypes = mapManager.sportTypesMap;
+      for (var sportType of sportTypes) {
           select+= '<option value="' + sportType.id + '">' + sportType.sport + '</option>';
-      });
+      }
 
       return select+"</select>";
   }
@@ -305,22 +308,24 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
         let select = "<select>";
 
-        mapManager.poiTypesMap.forEach(function (poiType) {
+        var poiTypes = mapManager.poiTypesMap;
+        for (var poiType of poiTypes) {
             select+= '<option value="' + poiType.id + '">' + poiType.type + '</option>';
-        });
+        }
 
         return select+"</select>";
     };
 
     EditorUI.prototype.buildExportGPXPopin = function(){
-        mapManager.tracksMap.forEach(function (track) {
+        var tracks = mapManager.tracksMap;
+        for (var track of tracks) {
             let markup = '<div>' +
                 '<input type="checkbox" data-id="' + idx + '" id="track-' + idx + '" name="' + name + '" checked="checked">' +
                 '<label for="route-' + idx + '">' + name + '</label>' +
                 sportSelect +
                 '</div>';
-        });
-    }
+        }
+    };
 
         console.log("Editor UI for editor loaded");
 } else {

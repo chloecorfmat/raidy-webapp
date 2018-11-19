@@ -423,26 +423,29 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   document.getElementById("import-gpx--form").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    this.querySelectorAll('#import-gpx--tracks input[type=checkbox]').forEach(function (box) {
-        if(box.checked){
-            let sportType = box.parentNode.querySelector('select').value;
-            mapManager.GPXImporter.importTrack(parseInt(box.dataset.id), sportType);
+    var boxes = this.querySelectorAll('#import-gpx--tracks input[type=checkbox]');
+    for (var trackBox of boxes) {
+        if(trackBox.checked){
+            let sportType = trackBox.parentNode.querySelector('select').value;
+            mapManager.GPXImporter.importTrack(parseInt(trackBox.dataset.id), sportType);
         }
-    });
+    }
 
-    this.querySelectorAll('#import-gpx--routes input[type=checkbox]').forEach(function (box) {
-        if(box.checked){
-            let sportType = box.parentNode.querySelector('select').value;
-            mapManager.GPXImporter.importRoute(parseInt(box.dataset.id), sportType);
+    var routeBoxes = this.querySelectorAll('#import-gpx--routes input[type=checkbox]');
+    for (var rteBox of routeBoxes) {
+        if(rteBox.checked){
+            let sportType = rteBox.parentNode.querySelector('select').value;
+            mapManager.GPXImporter.importRoute(parseInt(rteBox.dataset.id), sportType);
         }
-    });
+    }
 
-    this.querySelectorAll('#import-gpx--waypoints input[type=checkbox]').forEach(function (box) {
+    var waypointBoxes = this.querySelectorAll('#import-gpx--waypoints input[type=checkbox]');
+    for (var box of waypointBoxes) {
         if(box.checked){
             let poiType = box.parentNode.querySelector('select').value;
             mapManager.GPXImporter.importWaypoint(parseInt(box.dataset.id), poiType);
         }
-    });
+    }
 
     MicroModal.close('import-gpx');
   });
@@ -464,3 +467,4 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   MapManager.prototype.displayTrackButton = function () {
   }
 }
+;

@@ -186,9 +186,10 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         this.map.removeEventListener("mousemove");
         document.getElementById('map').style.cursor = 'grab';
         document.getElementById('fabActionButton').classList.remove('add--poi');
-        document.querySelectorAll('.track--edit').forEach(function (el) {
+        var els = document.querySelectorAll('.track--edit');
+        for(var el of els) {
           el.classList.remove('track--edit');
-        });
+        }
         this.setTracksEditable(false);
         break;
       case EditorMode.TRACK_EDIT :
@@ -232,9 +233,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.tracksMap.get(id).hide();
   };
   MapManager.prototype.setTracksEditable = function (b) {
-    this.tracksMap.forEach(function (value) {
-      value.setEditable(b);
-    })
+    this.tracksMap.forEach(function (tr) {
+      tr.setEditable(b);
+    });
   };
   MapManager.prototype.requestNewPoi = function (name, type, requiredHelpers) {
     var poi = this.waitingPoi;
@@ -330,9 +331,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.setPoiEditable = function (b) {
-    this.poiMap.forEach(function (value, key, map) {
-      value.setEditable(b);
-    })
+    var pois = this.poiMap.forEach(function (poi) {
+      poi.setEditable(b);
+    });
   };
 
   MapManager.prototype.toggleTrackVisibility = function (track)
