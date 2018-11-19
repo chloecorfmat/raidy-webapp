@@ -109,7 +109,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
             var getDuration = function(d1, d2) {
               d3 = new Date(d2 - d1);
               d0 = new Date(0);
-
               return {
                 getHours: function(){
                   return d3.getHours() - d0.getHours();
@@ -160,7 +159,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
         controlElement.innerHTML =
           '<div class="map-controller-container" >' +
-          '<span class="switch-label">Édition des points d\'intérêt</span>' +
+          '<span class="switch-label">Déplacer les points d\'intérêt</span>' +
           '<label class="switch">' +
           '<input type="checkbox">' +
           '<span class="slider round"></span>' +
@@ -289,6 +288,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       }else if(mapManager.mode == EditorMode.TRACK_EDIT){
         e.preventDefault();
         e.stopImmediatePropagation();
+        mapManager.tracksMap.get(mapManager.currentEditID).push();
       /*  let track = mapManager.tracksMap.get(mapManager.currentEditID);
         if (track.line.editor.drawing() ) {
           track.line.editor.pop();

@@ -204,6 +204,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         document.getElementById('map').style.cursor = 'grab';
         this.setPoiEditable(false);
         this.setTracksEditable(false);
+        document.getElementById('fabActionButton').classList.remove('add--poi');
         break
     }
   };
@@ -326,7 +327,19 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     })
   };
 
-  //console.log("MapManager loaded");
+  MapManager.prototype.toggleTrackVisibility = function (track)
+  {
+   // console.log("changed : " + newTrack.visible);
+    if (!track.visible)
+    {
+      this.showTrack(track.id);
+    } else {
+      if (this.currentEditID == track.id) {
+        this.switchMode(EditorMode.READING);
+      }
+      this.hideTrack(track.id);
+    }
+  };
 }
 
 
