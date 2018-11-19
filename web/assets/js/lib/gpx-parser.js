@@ -175,7 +175,7 @@ gpxParser.prototype.parse = function (string) {
             track.type = keepThis.getElementValue(trk, "type");
 
             var trackpoints = [];
-            var trkpt = trk.querySelectorAll('trkpt');
+            var trkpts = trk.querySelectorAll('trkpt');
             var _iteratorNormalCompletion5 = true;
             var _didIteratorError5 = false;
             var _iteratorError5 = undefined;
