@@ -51,7 +51,8 @@ gpxParser.prototype.parse = function (string) {
     }
 
     var wpts = this.xmlSource.querySelectorAll('wpt');
-    for (var wpt of wpts){
+    for (let idx in wpts){
+        var wpt = wpts[idx];
         let pt  = {};
         pt.name = keepThis.getElementValue(wpt, "name")
         pt.lat  = parseFloat(wpt.getAttribute("lat"));
@@ -63,9 +64,9 @@ gpxParser.prototype.parse = function (string) {
     }
 
     var rtes = this.xmlSource.querySelectorAll('rte');
-    for (var rte of rtes){
+    for (let idx in rtes){
+        var rte = rtes[idx];
         let route = {};
-
         route.name   = keepThis.getElementValue(rte, "name");
         route.cmt    = keepThis.getElementValue(rte, "cmt");
         route.desc   = keepThis.getElementValue(rte, "desc");
@@ -76,7 +77,9 @@ gpxParser.prototype.parse = function (string) {
 
         let routepoints = [];
         var rtepts = rte.querySelectorAll('rtept');
-	for (var rtept of rtepts){
+
+        for (let idxIn in rtepts){
+            var rtept = rtepts[idxIn];
             let pt    = {};
             pt.lat    = parseFloat(rtept.getAttribute("lat"));
             pt.lon    = parseFloat(rtept.getAttribute("lon"));
@@ -91,7 +94,8 @@ gpxParser.prototype.parse = function (string) {
     }
 
     var trks = this.xmlSource.querySelectorAll('trk');
-    for (var trk of trks){
+    for (let idx in trks){
+        var trk = trks[idx];
         let track = {};
 
         track.name   = keepThis.getElementValue(trk, "name");
@@ -104,7 +108,8 @@ gpxParser.prototype.parse = function (string) {
 
         let trackpoints = [];
         var trkpts = trk.querySelectorAll('trkpt');
-	    for (var trkpt of trkpts){
+	    for (let idxIn in trkpts){
+            var trkpt = trkpts[idxIn];
             let pt = {};
             pt.lat = parseFloat(trkpt.getAttribute("lat"));
             pt.lon = parseFloat(trkpt.getAttribute("lon"));

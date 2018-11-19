@@ -296,10 +296,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
       let select = "<select>";
 
-      var sportTypes = mapManager.sportTypesMap;
-      for (var sportType of sportTypes) {
+      mapManager.sportTypesMap.forEach(function(sportType){
           select+= '<option value="' + sportType.id + '">' + sportType.sport + '</option>';
-      }
+      });
 
       return select+"</select>";
   }
@@ -308,10 +307,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
         let select = "<select>";
 
-        var poiTypes = mapManager.poiTypesMap;
-        for (var poiType of poiTypes) {
+        mapManager.poiTypesMap.forEach(function (poiType) {
             select+= '<option value="' + poiType.id + '">' + poiType.type + '</option>';
-        }
+        });
 
         return select+"</select>";
     };
