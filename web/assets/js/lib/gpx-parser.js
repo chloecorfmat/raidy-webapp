@@ -53,6 +53,7 @@ gpxParser.prototype.parse = function (string) {
     var wpts = this.xmlSource.querySelectorAll('wpt');
     for (let idx in wpts){
         var wpt = wpts[idx];
+	console.log(wpt);
         let pt  = {};
         pt.name = keepThis.getElementValue(wpt, "name")
         pt.lat  = parseFloat(wpt.getAttribute("lat"));
