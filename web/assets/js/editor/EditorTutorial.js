@@ -18,11 +18,12 @@ function initTutorial(e) {
             MicroModal.show('tutorial_1');
         });
 
-        document.querySelectorAll('.btn--editor-tutorial').forEach(function(btn) {
+        var btns = document.querySelectorAll('.btn--editor-tutorial');
+        for (var btn of btns) {
             btn.addEventListener('click', function() {
                 MicroModal.close('tutorial_' + this.dataset.current);
                 MicroModal.show('tutorial_' + this.dataset.id);
             })
-        });
+        }
     }
 }
