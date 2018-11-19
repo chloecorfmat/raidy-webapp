@@ -41,7 +41,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       patterns: [
         {offset: 25, repeat: 100, symbol: L.Symbol.arrowHead({pixelSize: 15, pathOptions: {fillOpacity: 1, color: this.color, weight: 0}})}
       ]
-    }).addTo(this.map);
+    });
+
+    this.decorator.addTo(mapManager.map);
 
     this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
       html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #78e08f'  + ';" />'
@@ -93,7 +95,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     var points = this.line.getLatLngs();
     this.distance = 0;
     if (points.length > 1) {
-      for (i = 0; i < points.length - 1; i++) {
+      for (var i = 0; i < points.length - 1; i++) {
         this.distance += points[i].distanceTo(points[i + 1]);
       }
     }
@@ -110,6 +112,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     }
     mapManager.group.removeLayer(this.line);
     this.visible = false;
+    this.name = htmlentities.decode(this.name);
     this.push();
   };
 
@@ -126,13 +129,14 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       mapManager.group.addLayer(points[point]);
     }
     this.visible = true;
+    this.name = htmlentities.decode(this.name);
     this.push();
     this.update();
   };
 
   Track.prototype.toJSON = function () {
-    latlong = [];
-    for (obj of this.line.getLatLngs()) {
+    var latlong = [];
+    for (var obj of this.line.getLatLngs()) {
       latlong.push({lat: obj.lat, lng: obj.lng});
     }
     var track =
@@ -157,7 +161,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.sportType = track.sportType;
     this.visible = track.isVisible;
     this.isCalibration = track.isCalibration;
-    test = JSON.parse(track.trackpoints);
+    var test = JSON.parse(track.trackpoints);
 
     this.line = L.polyline(test, {color: this.color});
     this.line.addTo(mapManager.group);
@@ -207,7 +211,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     //Encode html entities to display purpose only
     this.name = htmlentities.encode(this.name);
 
-    li = document.getElementById('track-li-' + this.id);
+    var li = document.getElementById('track-li-' + this.id);
     this.calculDistance();
     li.querySelector('label > div > span:nth-child(2)').innerHTML = '(' + Math.round(10 * this.distance / 1000) / 10 + ' Km)';
     mapManager.editorUI.updateTrack(this);

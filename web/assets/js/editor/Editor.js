@@ -1,3 +1,112 @@
+/* SCROLL MANAGEMENT */
+function preventDefault(e) {
+    e = e || window.event;
+    if (e.preventDefault)
+        e.preventDefault();
+    e.returnValue = false;
+}
+
+function preventDefaultForScrollKeys(e) {
+    // left: 37, up: 38, right: 39, down: 40,
+    // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
+    if ({37: 1, 38: 1, 39: 1, 40: 1}[e.keyCode]) {
+        preventDefault(e);
+        return false;
+    }
+}
+
+function disableScroll() {
+    if (window.addEventListener) // older FF
+        window.addEventListener('DOMMouseScroll', preventDefault, false);
+    window.onwheel = preventDefault; // modern standard
+    window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
+    window.ontouchmove  = preventDefault; // mobile
+    document.onkeydown  = preventDefaultForScrollKeys;
+}
+
+function enableScroll() {
+    if (window.removeEventListener)
+        window.removeEventListener('DOMMouseScroll', preventDefault, false);
+    window.onmousewheel = document.onmousewheel = null;
+    window.onwheel = null;
+    window.ontouchmove = null;
+    document.onkeydown = null;
+}
+function disableDropdown(event) {
+    if (!event.target.matches('.dropbtn')) {
+        enableScroll();
+        var dropdowns = document.getElementsByClassName("dropdown-content");
+        for (var i = 0; i < dropdowns.length; i++) {
+            var openDropdown = dropdowns[i];
+            if (openDropdown.classList.contains('show')) {
+                openDropdown.classList.remove('show');
+            }
+        }
+    }
+}
+
+function convertRem(value) {
+    return value * getRootElementFontSize();
+}
+
+function getRootElementFontSize() {
+    // Returns a number
+    return parseFloat(
+        // of the computed font-size, so in px
+        getComputedStyle(
+            // for the root <html> element
+            document.documentElement
+        ).fontSize
+    );
+}
+
+function checkoutForConflict(){
+    var keepThis = this;
+    var xhr_object = new XMLHttpRequest();
+    xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
+    xhr_object.send(null);
+    xhr_object.onreadystatechange = function () {
+        if (this.readyState === XMLHttpRequest.DONE) {
+            if (xhr_object.status === 200) {
+                var lastEdition = JSON.parse(xhr_object.responseText);
+                console.log(lastEdition);
+                if(lastEdition.lastEditor != false){
+                    var getDuration = function(d1, d2) {
+                        d3 = new Date(d2 - d1);
+                        d0 = new Date(0);
+                        return {
+                            getHours: function(){
+                                return d3.getHours() - d0.getHours();
+                            },
+                            getMinutes: function(){
+                                return d3.getMinutes() - d0.getMinutes();
+                            },
+                            getSeconds: function() {
+                                return d3.getSeconds() - d0.getSeconds();
+                            },
+                            toString: function(){
+                                return (this.getHours() != 0 ?  this.getHours()+ "h "  :"") +
+                                    (this.getMinutes() != 0 ?  this.getMinutes()+ "min "  :"") +
+                                    this.getSeconds()+"s ";
+                            },
+                        };
+                    }
+
+                    var date = new Date(Date.parse(lastEdition.lastEdition.date));
+                    console.log(new Date(date));
+                    console.log(new Date())
+                    document.getElementById("errorMessage").innerHTML = "Attention "+lastEdition.lastEditor+" a modifié ce raid il y a "+getDuration(date, new Date()).toString()+"  !  <button>X</button>";
+
+                    document.getElementById('errorMessage').querySelector('button').addEventListener('click', function(e){
+                        document.getElementById('errorMessage').style.display = "none";
+                    });
+                }
+            }
+        }
+    }
+
+}
+
 if (typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
   var UID = {
     _current: 0,
@@ -7,19 +116,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     }
   };
 
-  function convertRem(value) {
-    return value * getRootElementFontSize();
-  }
-  function getRootElementFontSize() {
-    // Returns a number
-    return parseFloat(
-      // of the computed font-size, so in px
-      getComputedStyle(
-        // for the root <html> element
-        document.documentElement
-      ).fontSize
-    );
-  }
+
   HTMLElement.prototype.pseudoStyle = function (element, prop, value) {
     var _this = this;
     var _sheetId = 'pseudoStyles';
@@ -37,52 +134,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
   var editor = {activeTab: 'tracks-pan'};
 
-/* SCROLL MANAGEMENT */
-  function preventDefault(e) {
-    e = e || window.event;
-    if (e.preventDefault)
-      e.preventDefault();
-    e.returnValue = false;
-  }
-
-  function preventDefaultForScrollKeys(e) {
-    // left: 37, up: 38, right: 39, down: 40,
-    // spacebar: 32, pageup: 33, pagedown: 34, end: 35, home: 36
-    if ({37: 1, 38: 1, 39: 1, 40: 1}[e.keyCode]) {
-      preventDefault(e);
-      return false;
-    }
-  }
-
-  function disableScroll() {
-    if (window.addEventListener) // older FF
-      window.addEventListener('DOMMouseScroll', preventDefault, false);
-    window.onwheel = preventDefault; // modern standard
-    window.onmousewheel = document.onmousewheel = preventDefault; // older browsers, IE
-    window.ontouchmove  = preventDefault; // mobile
-    document.onkeydown  = preventDefaultForScrollKeys;
-  }
-
-  function enableScroll() {
-    if (window.removeEventListener)
-      window.removeEventListener('DOMMouseScroll', preventDefault, false);
-    window.onmousewheel = document.onmousewheel = null;
-    window.onwheel = null;
-    window.ontouchmove = null;
-    document.onkeydown = null;
-  }
-  function disableDropdown(event) {
-    if (!event.target.matches('.dropbtn')) {
-      enableScroll();
-      var dropdowns = document.getElementsByClassName("dropdown-content");
-      for (var i = 0; i < dropdowns.length; i++) {
-        var openDropdown = dropdowns[i];
-        if (openDropdown.classList.contains('show')) {
-          openDropdown.classList.remove('show');
-        }
-      }
-    }
-  }
   // Close the dropdown menu if the user clicks outside of it
   window.onclick = disableDropdown;
 
@@ -95,52 +146,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     tab.classList.toggle('bar--invisible');
   });
 
-  function checkoutForConflict(){
-    var keepThis = this;
-    var xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
-    xhr_object.send(null);
-    xhr_object.onreadystatechange = function () {
-      if (this.readyState === XMLHttpRequest.DONE) {
-        if (xhr_object.status === 200) {
-          var lastEdition = JSON.parse(xhr_object.responseText);
-          console.log(lastEdition);
-          if(lastEdition.lastEditor != false){
-            var getDuration = function(d1, d2) {
-              d3 = new Date(d2 - d1);
-              d0 = new Date(0);
-              return {
-                getHours: function(){
-                  return d3.getHours() - d0.getHours();
-                },
-                getMinutes: function(){
-                  return d3.getMinutes() - d0.getMinutes();
-                },
-                getSeconds: function() {
-                  return d3.getSeconds() - d0.getSeconds();
-                },
-                toString: function(){
-                  return (this.getHours() != 0 ?  this.getHours()+ "h "  :"") +
-                    (this.getMinutes() != 0 ?  this.getMinutes()+ "min "  :"") +
-                    this.getSeconds()+"s ";
-                },
-              };
-            }
-
-            var date = new Date(Date.parse(lastEdition.lastEdition.date));
-            console.log(new Date(date));
-            console.log(new Date())
-            document.getElementById("errorMessage").innerHTML = "Attention "+lastEdition.lastEditor+" a modifié ce raid il y a "+getDuration(date, new Date()).toString()+"  !  <button>X</button>";
-
-            document.getElementById('errorMessage').querySelector('button').addEventListener('click', function(e){
-              document.getElementById('errorMessage').style.display = "none";
-            });
-          }
-        }
-      }
-    }
-
-  }
   window.addEventListener('load', function () {
 
     checkoutForConflict();

@@ -1,3 +1,5 @@
+var MapManager = {};
+
 if (typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
 
   /*
@@ -21,7 +23,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
   });
 
-  function MapManager() {
+  MapManager = function() {
     this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -65,8 +67,11 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           } else {
             keepThis.switchMode(EditorMode.READING);
           }
-          document.getElementById('fabActionButton').classList.remove('add--poi');
 
+          var fab = document.getElementById('fabActionButton');
+          if(fab != null){
+            fab.classList.remove('add--poi');
+          }
           keepThis.map.removeEventListener("mousemove");
           break;
         case EditorMode.TRACK_EDIT :
@@ -78,30 +83,29 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
 
     this.map.on('editable:middlemarker:mousedown', function () {
-      track = keepThis.tracksMap.get(keepThis.currentEditID)
+      var track = keepThis.tracksMap.get(keepThis.currentEditID)
       track.push();
     });
     this.map.on('editable:drawing:click', function () {
-      track = keepThis.tracksMap.get(keepThis.currentEditID);
+      var track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       track.push();
       track.update();
     });
 
     this.map.on('editable:drawing:clicked', function () {
-      track = keepThis.tracksMap.get(keepThis.currentEditID);
+      var track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       track.push();
       track.update();
     });
     this.map.on('editable:drawing:mouseup', function () {
-      track = keepThis.tracksMap.get(keepThis.currentEditID);
+      var track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
     });
     this.map.on('editable:vertex:dragstart', function () {
       this.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
     });
-
 
     this.map.on('editable:vertex:drag', function () {
       this.currentTrack.update();
@@ -117,7 +121,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
     this.map.on('editable:drawing:start', function () {
       document.getElementById('map').style.cursor = 'crosshair';
-    })
+    });
 
     this.loadRessources();
 
@@ -134,7 +138,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
           var poiTypes = JSON.parse(xhr_object.responseText);
-          for (poiType of poiTypes) {
+          for (var poiType of poiTypes) {
             keepThis.poiTypesMap.set(poiType.id, poiType);
           };
           keepThis.loadTracks(); // Load tracks
@@ -154,7 +158,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           if (this.readyState === XMLHttpRequest.DONE) {
               if (xhr_object.status === 200) {
                   var sportTypes = JSON.parse(xhr_object.responseText);
-                  for (sportType of sportTypes) {
+                  for (var sportType of sportTypes) {
                       keepThis.sportTypesMap.set(sportType.id, sportType);
                   };
               }
@@ -193,7 +197,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         document.getElementById('fabActionButton').classList.add('add--poi');
         this.setTracksEditable(false);
         var res = this.tracksMap.get(this.currentEditID);
-        currentTrack = this.tracksMap.get(this.currentEditID);
+        var currentTrack = this.tracksMap.get(this.currentEditID);
         currentTrack.setEditable(true);
         if(currentTrack.line.isEmpty()){
           currentTrack.line.editor.continueForward();
@@ -204,13 +208,16 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         document.getElementById('map').style.cursor = 'grab';
         this.setPoiEditable(false);
         this.setTracksEditable(false);
-        document.getElementById('fabActionButton').classList.remove('add--poi');
+        var fab = document.getElementById('fabActionButton');
+        if(fab != null){
+            fab.classList.remove('add--poi');
+        }
         break
     }
   };
 
   MapManager.prototype.addTrack = function (track) {
-    newTrack = new Track(this.map);
+    var newTrack = new Track(this.map);
     newTrack.fromObj(track);
     this.tracksMap.set(track.id, newTrack);
 
@@ -269,8 +276,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           track = JSON.parse(xhr_object.responseText);
           mapManager.addTrack(track);
           mapManager.currentEditID = track.id;
+          mapManager.currentTrack = mapManager.tracksMap.get(mapManager.currentEditID);
           mapManager.switchMode(EditorMode.TRACK_EDIT);
-          currentTrack.line.editor.continueForward();
+          mapManager.currentTrack.line.editor.continueForward();
         }
       }
     }
@@ -285,7 +293,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
           var tracks = JSON.parse(xhr_object.responseText);
-          for (track of tracks) {
+          for (var track of tracks) {
             mapManager.addTrack(track);
           }
         }
@@ -302,7 +310,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
           var pois = JSON.parse(xhr_object.responseText);
-          for (poi of pois) {
+          for (var poi of pois) {
             mapManager.addPoi(poi);
           }
           if(mapManager.group.getLayers().length > 0) {
@@ -315,7 +323,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.addPoi = function (poi) {
-    newPoi = new Poi(this.map);
+    var newPoi = new Poi(this.map);
     newPoi.fromObj(poi);
     this.poiMap.set(poi.id, newPoi);
     mapManager.editorUI.updatePoi(newPoi)

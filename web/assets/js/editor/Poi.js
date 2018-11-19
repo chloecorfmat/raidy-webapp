@@ -1,8 +1,7 @@
+var Poi = {};
+
 if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
-  function Poi(map) {
-
-
-
+  var Poi = function(map) {
     this.map = map;
     this.marker = L.marker([0, 0]);
     this.id = '';
@@ -35,7 +34,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.id = poi.id;
     this.name = poi.name;
     this.poiType = mapManager.poiTypesMap.get(poi.poiType);
-    (poiType != null) && (this.color = this.poiType.color);
+    //(poiType != null) && (this.color = this.poiType.color);
     this.requiredHelpers = poi.requiredHelpers;
     this.marker = L.marker([poi.latitude, poi.longitude]);
 

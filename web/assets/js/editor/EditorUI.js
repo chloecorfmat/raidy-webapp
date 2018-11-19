@@ -1,3 +1,4 @@
+var EditorUI = {};
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
@@ -32,7 +33,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     }
   }
 
-  function EditorUI () {
+  EditorUI = function() {
     this.trackElements = new Map();
     this.poiElements = new Map();
 
