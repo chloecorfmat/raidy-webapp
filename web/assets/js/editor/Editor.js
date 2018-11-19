@@ -72,8 +72,8 @@ function checkoutForConflict(){
                 console.log(lastEdition);
                 if(lastEdition.lastEditor != false){
                     var getDuration = function(d1, d2) {
-                        d3 = new Date(d2 - d1);
-                        d0 = new Date(0);
+                        var d3 = new Date(d2 - d1);
+                        var d0 = new Date(0);
                         return {
                             getHours: function(){
                                 return d3.getHours() - d0.getHours();
@@ -93,8 +93,6 @@ function checkoutForConflict(){
                     }
 
                     var date = new Date(Date.parse(lastEdition.lastEdition.date));
-                    console.log(new Date(date));
-                    console.log(new Date())
                     document.getElementById("errorMessage").innerHTML = "Attention "+lastEdition.lastEditor+" a modifié ce raid il y a "+getDuration(date, new Date()).toString()+"  !  <button>X</button>";
 
                     document.getElementById('errorMessage').querySelector('button').addEventListener('click', function(e){
