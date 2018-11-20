@@ -32,15 +32,20 @@
     </head>
     <body class="{{ base_class }} {% block body_class %}{% endblock %}">
         <header>
+            <div class="header--raidy">
             <a href="/" class="logo">
                 <img src="{{ asset('assets/images/logo-white.svg') }}" alt="Logo Raidy">
             </a>
 
             {% if app.user is defined and app.user is not null %}
                 {% if ("ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles) and "ROLE_HELPER" in app.user.roles %}
-                <a href="route('organizer')" class="menu">Organizer</a>
-                <a href="route('helper')" class="menu">Helper</a>
+                <div class="roles--menu">
+                    <a href="{{ path('listRaid') }}" class="roles--menu--item {% if (base_class=='organizer') %} item--active{% endif %}">Organizer</a>
+                    <span>|</span>
+                    <a href="{{ path('helper') }}" class="roles--menu--item {% if (base_class=='helper') %} item--active{% endif %}">Helper</a>
+                </div>
                 {% endif %}
+            </div>
             <nav class="header--nav">
                 <ul>
                     <li class="header--nav-item">
