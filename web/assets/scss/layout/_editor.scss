@@ -54,15 +54,6 @@
   padding: .5rem !important;
 }
 
-.editor--container {
-  // 3rem is the height of the header & 2rem is the breadcrumb height.
-  height: calc(100vh - 3rem - 2rem);
-
-  .map--container {
-    transition: width 1s linear;
-  }
-}
-
 .map {
   min-height: 100%;
   min-width: 100%;
@@ -197,10 +188,14 @@ button.active:after {
 
 .editor--container {
   display: flex;
-  height: calc(100vh - 4rem);
+  height: calc(100vh - 6rem);
   // 4rem is the height of the header.
   justify-content: space-between;
   width: 100%;
+
+  .map--container {
+    transition: width 1s linear;
+  }
 
   ::-webkit-scrollbar {
     width: .75rem;
