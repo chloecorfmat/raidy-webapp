@@ -4,6 +4,7 @@ namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use OrganizerBundle\Security\RaidVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -31,8 +32,9 @@ class TrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if (null == $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $tracks = $trackManager->findBy(array('raid' => $raidId));
@@ -93,8 +95,9 @@ class TrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $data = $request->request->all();
@@ -129,16 +132,15 @@ class TrackController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        // Find the user
-        $user = $this->get('security.token_storage')->getToken()->getUser();
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $data = $request->request->all();
@@ -178,16 +180,15 @@ class TrackController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        // Find the user
-        $user = $this->get('security.token_storage')->getToken()->getUser();
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
         }
 
         $trackManager = $em->getRepository('AppBundle:Track');

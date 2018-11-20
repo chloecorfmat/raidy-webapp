@@ -3,6 +3,7 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
+use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrganizerHelpersController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/helper/{helperId}", name="patchHelperToPoi", methods={"PATCH"})
+     * @Route("/editor/raid/{raidId}/helper/{helperId}", name="patchHelperToPoi", methods={"PATCH"})
      *
      * @param Request $request
      * @param int     $raidId   raid id
@@ -26,14 +27,14 @@ class OrganizerHelpersController extends AjaxAPIController
         $raidManager = $em->getRepository('AppBundle:Raid');
 
         // Find the user
-        $user = $this->get('security.token_storage')->getToken()->getUser();
         $raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
@@ -72,6 +73,9 @@ class OrganizerHelpersController extends AjaxAPIController
 
         $helperManager = $manager->getRepository('AppBundle:Helper');
 
+        $raidManager = $manager->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(array('id' => $id));
+
         $helpers = $helperManager->findBy([
             'raid' => $id,
         ]);
@@ -81,6 +85,7 @@ class OrganizerHelpersController extends AjaxAPIController
 
         return $this->render('OrganizerBundle:Helpers:helpers.html.twig', [
             'raid_id' => $id,
+            'raidName' => $raid->getName(),
             'helpers' => $helpers,
             'pois' => $pois,
         ]);

@@ -13,23 +13,46 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="emergency_phone_number")
+ * @ORM\Table(name="contact")
  */
-class EmergencyPhoneNumber
+class Contact
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="string", length=45, unique=true)
+     * @ORM\Column(type="integer")
+     * @ORM\GeneratedValue(strategy="AUTO")
+     */
+    protected $id;
+
+    /**
+     * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le role ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $role;
 
     /**
-     * @ORM\Column(name="phone_number", type="string", length=45)
+     * @ORM\Column(name="phone_number", type="string", length=45, nullable=true)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le numéro de téléphone ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $phoneNumber;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Helper")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $helper;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
@@ -38,17 +61,26 @@ class EmergencyPhoneNumber
     protected $raid;
 
     /**
-     * EmergencyPhoneNumber constructor.
-     *
-     * @param mixed $role        role
-     * @param mixed $phoneNumber phone number
-     * @param mixed $raid        raid
+     * Contact constructor.
      */
-    public function __construct($role, $phoneNumber, $raid)
+    public function __construct()
     {
-        $this->role = $role;
-        $this->phoneNumber = $phoneNumber;
-        $this->raid = $raid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
@@ -81,6 +113,22 @@ class EmergencyPhoneNumber
     public function setPhoneNumber($phoneNumber)
     {
         $this->phoneNumber = $phoneNumber;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getHelper()
+    {
+        return $this->helper;
+    }
+
+    /**
+     * @param mixed $helper
+     */
+    public function setHelper($helper)
+    {
+        $this->helper = $helper;
     }
 
     /**

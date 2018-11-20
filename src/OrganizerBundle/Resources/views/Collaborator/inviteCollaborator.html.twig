@@ -1,0 +1,15 @@
+{% extends 'default/external.html.twig' %}
+
+{% block title %}Être collaborateur pour le raid "{{ raid.name }}"{% endblock %}
+
+{% block content %}
+    <div class="centered--content">
+        <h1>{{ raid.name }}</h1>
+        <p class="important">Enregistrez-vous en tant que collaborateur pour le raid "{{ raid.name }}" !</p>
+
+        <div class="actions">
+            <a href="{{ path('joinCollaborator', {'invitationId': collaboration.invitationId }) }}" class="btn">Se connecter</a>
+            <a href="{{ path('registerCollaborator', {'invitationId': collaboration.invitationId }) }}" class="btn">Se créer un compte</a>
+        </div>
+    </div>
+{% endblock %}

@@ -105,29 +105,12 @@
 
     p {
       color: $secondary-color-1;
-      font-family: 'Fontastique', 'SansSerif';
+      font-family: 'Fontastique', Sans-Serif;
       font-size: 1rem;
     }
 
     .btn {
       background: $tertiary-color-2;
-    }
-
-    .downloads {
-      width: 100%;
-    }
-
-    .downloads--links {
-      a {
-        display: inline-block;
-        overflow: hidden;
-        vertical-align: middle;
-        width: 8rem;
-
-        img {
-          max-width: 100%;
-        }
-      }
     }
   }
 
@@ -138,6 +121,23 @@
       @media screen and (min-width: $breakpoint-mediumlarge) {
         display: inline-block;
       }
+    }
+  }
+}
+
+.downloads {
+  width: 100%;
+}
+
+.downloads--links {
+  a {
+    display: inline-block;
+    overflow: hidden;
+    vertical-align: middle;
+    width: 8rem;
+
+    img {
+      max-width: 100%;
     }
   }
 }

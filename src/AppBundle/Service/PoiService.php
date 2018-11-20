@@ -9,6 +9,7 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\Poi;
+use AppBundle\Entity\Raid;
 use Doctrine\ORM\EntityManagerInterface;
 
 class PoiService
@@ -168,5 +169,32 @@ class PoiService
         }
 
         return true;
+    }
+
+    /**
+     * @param Raid $raidToClone
+     * @param Raid $raid
+     */
+    public function clonePois($raidToClone, $raid)
+    {
+        // Clone POIs
+        $poiRepository = $this->em->getRepository('AppBundle:Poi');
+        $pois = $poiRepository->findBy(array('raid' => $raidToClone->getId()));
+
+        if (null != $pois) {
+            foreach ($pois as $poi) {
+                $p = new Poi();
+
+                $p->setName($poi->getName());
+                $p->setLongitude($poi->getLongitude());
+                $p->setLatitude($poi->getLatitude());
+                $p->setRequiredHelpers($poi->getRequiredHelpers());
+                $p->setPoiType($poi->getPoiType());
+                $p->setRaid($raid);
+
+                $this->em->persist($p);
+                $this->em->flush();
+            }
+        }
     }
 }

@@ -7,7 +7,7 @@ li,
 p,
 td,
 th {
-  font-family: 'Proxima Nova', 'SansSerif';
+  font-family: 'Proxima Nova', Sans-Serif;
 }
 
 a {
@@ -16,4 +16,12 @@ a {
 
 .text--important {
   font-weight: 700;
+}
+
+.text--introducing {
+  text-decoration: underline;
+}
+
+.text--medium {
+  font-style: italic;
 }

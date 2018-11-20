@@ -1,3 +1,4 @@
+var EditorUI = {};
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
@@ -14,39 +15,38 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
           drop.classList.remove("show");
         }
       dpdwn.classList.add("show");
-       // let clientHeight = document.querySelector('main').clientHeight;
-        //let click = e.screenY / screen.height;
-        //click = click * (e.screenY - document.querySelector("header").clientHeight)
       let remaining = screen.height - e.screenY;
-      console.log("--------------------");
-      console.log("remaining: "+remaining);
-      console.log("menu: "+dpdwn.clientHeight);
+     // console.log("--------------------");
+     // console.log("remaining: "+remaining);
+     // console.log("menu: "+dpdwn.clientHeight);
 
-      let topshift ;
-      if (remaining < dpdwn.clientHeight ){
-        topshift = e.pageY- dpdwn.clientHeight*1.5
+      let topshift;
+      if (remaining < dpdwn.clientHeight ) {
+        topshift = e.pageY- dpdwn.clientHeight*1.5;
         dpdwn.style.top = topshift+'px';
       } else {
-        topshift = e.pageY- dpdwn.clientHeight
+        topshift = e.pageY- dpdwn.clientHeight;
         dpdwn.style.top = topshift+'px';
       }
 
-      console.log( "top: "+dpdwn.style.top );
+  //    console.log( "top: "+dpdwn.style.top );
     }
   }
 
-  function EditorUI () {
+  EditorUI = function() {
     this.trackElements = new Map();
     this.poiElements = new Map();
 
   }
+
   EditorUI.prototype.addPoi = function(poi){
     let li = document.createElement('li');
     li.classList.add('list--pois-items');
     this.poiElements.set(poi.id, li);
     this.updatePoi(poi);
   }
-  EditorUI.prototype.updatePoi = function(poi){
+
+  EditorUI.prototype.updatePoi = function(poi) {
     let keepThis = this;
     if(!this.poiElements.has(poi.id)) {
       this.addPoi(poi);
@@ -72,9 +72,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     li.querySelector('.track--text').addEventListener('click', function(e){
 
       let poi = mapManager.poiMap.get(parseInt(this.dataset.id));
-      if (!poi.marker.isPopupOpen()){
+      if (!poi.marker.isPopupOpen()) {
         mapManager.map.panTo( poi.marker.getLatLng());
-        console.log(mapManager.map.getZoom())
       }
       //   mapManager.map.setZoom(zoom);
       poi.marker.togglePopup();
@@ -84,7 +83,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     btnDelete.addEventListener("click", function () {
       document.getElementById("btn--delete-poi").dataset.id = poi.id;
       MicroModal.show('delete-poi');
-    })
+    });
 
     document.getElementById('list--pois').appendChild(li);
     li.pseudoStyle('before', 'background-color', poi.color);
@@ -96,15 +95,17 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
       (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
       MicroModal.show('edit-poi-popin');
-    })
+    });
+
     let panel = document.getElementById("pois-pan");
-    if (panel.style.maxHeight){
+    if (panel.style.maxHeight) {
       panel.style.maxHeight = panel.scrollHeight + "px";
     }
   }
+
   EditorUI.prototype.removePoi = function(poi){
     let li = this.poiElements.get(poi.id);
-    document.getElementById('list--pois').removeChild(li)
+    document.getElementById('list--pois').removeChild(li);
   }
 
   EditorUI.prototype.addTrack = function(track){
@@ -115,18 +116,24 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     this.updateTrack(track);
   }
 
-  EditorUI.prototype.updateTrack = function(track){
-    if (!this.trackElements.has(track.id)){
+  EditorUI.prototype.updateTrack = function(track) {
+    if (!this.trackElements.has(track.id)) {
       this.addTrack(track);
     } else {
       let newTrack = track;
       let li = this.trackElements.get(track.id);
 
       li.id = 'track-li-' + newTrack.id;
+      let checked = newTrack.isVisible? ' checked = "checked"' : '';
+     // checked = 'checked = "checked"';
+
+      let checkboxAttribute = 'style =" background-color : ' + newTrack.color  + '; border-color :' + newTrack.color + '" class="checkmark"';
+
+
       li.innerHTML = '<label class="checkbox-item--label">' +
-        '             <input data-id = "' + newTrack.id + '" type="checkbox" checked="checked">' +
+        '             <input data-id = "' + newTrack.id + '" type="checkbox"'+checked+'>' +
         '             ' +
-        '             <span style ="background-color : ' + newTrack.color + '; border-color :' + newTrack.color + '" class="checkmark">' +
+        '             <span '+checkboxAttribute+'>'+
         '                  <i class="fas fa-check"></i>' +
         '             </span>' +
         '             <div class="track--text">' +
@@ -143,37 +150,33 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '            <a class="btn--track--settings" data-id = "' + newTrack.id + '"> <i class="fas fa-cog"></i> Modifier les infos</a>' +
         '            <a class="btn--track--delete" data-id = "' + newTrack.id +'"><i class="fas fa-trash"></i> Supprimer</a.btn--track--delete>' +
         '            <!-- a><i class="fas fa-clone"></i> Dupliquer</a-->' +
-        '          </div>'
+        '          </div>';
 
-       
+
+      let input = li.querySelector("input")
+      input.checked = newTrack.visible;
+      if (newTrack.visible){
+        li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor;
+      }else{
+        li.querySelector('label > span.checkmark').style.backgroundColor = '#ffffff';
+      }
       /* When the user clicks on the button, toggle between hiding and showing the dropdown content */
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
       newTrack.calculDistance();
       li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
 
-
+      //console.log(input);
       // TRACK SELECTION LISTENER
-      li.querySelectorAll('input').forEach(function (input) {
-        input.addEventListener('change', function () {
-          if (input.checked) {
-            mapManager.showTrack(parseInt(input.dataset.id));
-            li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor;
-          } else {
-            li.querySelector('label > span.checkmark').style.backgroundColor = '#ffffff';
-            if (mapManager.currentEditID == input.dataset.id) {
-              document.querySelectorAll('.track--edit').forEach(function (el) {
-                el.classList.remove('track--edit');
-              })
-              mapManager.switchMode(EditorMode.READING);
-            }
-            mapManager.hideTrack(parseInt(input.dataset.id));
-          }
-        })
+      input.addEventListener('change', function () {
+        mapManager.toggleTrackVisibility(newTrack);
       });
+
 
       let btnDelete = li.querySelector('.btn--track--delete');
       btnDelete.addEventListener("click", function () {
         document.getElementById("btn--delete-track").dataset.id = newTrack.id;
+        document.getElementById("track-name-delete").dataset.name = htmlentities.decode(newTrack.name);
+        document.getElementById("span--track-name").innerText = htmlentities.decode(newTrack.name);
         MicroModal.show('delete-track');
       });
 
@@ -181,14 +184,14 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
      let btn = li.querySelector('.btn--track--edit');
      btn.addEventListener('click', function () {
      if (!this.parentElement.classList.contains('track--edit')) {
-       document.querySelectorAll('.track--edit').forEach(function (el) {
+       var trackEdits = document.querySelectorAll('.track--edit');
+       for (var el of trackEdits){
          el.classList.remove('track--edit');
-       });
+       };
       }
-      this.parentElement.classList.toggle('track--edit')
+      this.parentElement.classList.toggle('track--edit');
        if (this.parentElement.classList.contains('track--edit')) {
          mapManager.currentEditID = parseInt(btn.dataset.id);
-         console.log(btn.dataset.id);
          mapManager.switchMode(EditorMode.TRACK_EDIT);
        } else {
          mapManager.switchMode(EditorMode.READING);
@@ -196,7 +199,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
      });
 
       // TRACK SETTINGS COG
-      li.querySelectorAll('.btn--track--settings').forEach(function (btn) {
+      var btns = li.querySelectorAll('.btn--track--settings');
+      for (var btn of btns){
         let id = parseInt(btn.dataset.id);
         let track = mapManager.tracksMap.get(id);
 
@@ -204,13 +208,11 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
           document.querySelector('#editTrack_name').value = htmlentities.decode(track.name);
           document.querySelector('#editTrack_color').value = track.color;
           document.querySelector('#editTrack_id').value = track.id;
-          console.log('ok');
           document.querySelector('#editTrack_sportType').value = track.sportType;
-          console.log(track.sportType);
 
           MicroModal.show('edit-track-popin');
         });
-      });
+      };
 
       let panel = document.getElementById("tracks-pan");
       if (panel.style.maxHeight){
@@ -224,7 +226,106 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     let li = this.trackElements.get(track.id);
     document.getElementById('editor--list').removeChild(li);
   }
-  console.log("Editor UI for editor loaded");
+
+  EditorUI.prototype.displayGPXMetadata = function(tracks, routes, waypoints){
+
+    var form = document.getElementById('import-gpx--form');
+
+    let sportSelect = this.buildSportTypeSelect();
+    let poiTypeSelect = this.buildPoiTypeSelect();
+
+    for(let idx in tracks) {
+      let track = tracks[idx];
+      let name = (track.name != null && track.name !== '') ? track.name : ('track #' + (parseInt(idx)+1));
+      let markup = '<div>'+
+       '<input type="checkbox" data-id="'+idx+'" id="track-'+idx+'" name="'+name+'" checked="checked">'+
+       '<label for="track-'+idx+'">'+name+'</label>'+
+        sportSelect +
+      '</div>';
+
+      let div = form.querySelector('#import-gpx--tracks .import-gpx--checkboxes');
+        div.parentNode.style.display = "block";
+        div.innerHTML += markup;
+    };
+
+    for(let idx in routes) {
+        let route = routes[idx];
+        let name = (route.name != null && route.name !== '') ? route.name : ('route #' + (parseInt(idx)+1));
+        let markup = '<div>' +
+            '<input type="checkbox" data-id="' + idx + '" id="route-' + idx + '" name="' + name + '" checked="checked">' +
+            '<label for="route-' + idx + '">' + name + '</label>' +
+            sportSelect +
+            '</div>';
+
+        let div = form.querySelector('#import-gpx--routes .import-gpx--checkboxes');
+        div.parentNode.style.display = "block";
+        div.innerHTML += markup;
+    }
+
+
+    for(let idx in waypoints){
+        let waypoint = waypoints[idx];
+        let name = (waypoint.name != null && waypoint.name !== '') ? waypoint.name : ('POI #' + (parseInt(idx)+1));
+        let markup = '<div>' +
+            '<input type="checkbox" data-id="' + idx + '" id="poi-' + idx + '" name="' + name + '" checked="checked">' +
+            '<label for="poi-' + idx + '">' + name + '</label>' +
+            poiTypeSelect +
+            '</div>';
+
+        let div = form.querySelector('#import-gpx--waypoints .import-gpx--checkboxes');
+        div.parentNode.style.display = "block";
+        div.innerHTML += markup;
+    }
+  }
+
+  EditorUI.prototype.cleanImportGPXPopin = function(){
+      var form = document.getElementById('import-gpx--form');
+
+      form.querySelector('input[type=file]').value = '';
+
+      form.querySelector('#import-gpx--tracks').style.display = 'none';
+      form.querySelector('#import-gpx--routes').style.display = 'none';
+      form.querySelector('#import-gpx--waypoints').style.display = 'none';
+
+      form.querySelector('#import-gpx--tracks .import-gpx--checkboxes').innerHTML = '';
+      form.querySelector('#import-gpx--routes .import-gpx--checkboxes').innerHTML = '';
+      form.querySelector('#import-gpx--waypoints .import-gpx--checkboxes').innerHTML = '';
+  }
+
+  EditorUI.prototype.buildSportTypeSelect = function() {
+
+      let select = "<select>";
+
+      mapManager.sportTypesMap.forEach(function(sportType){
+          select+= '<option value="' + sportType.id + '">' + sportType.sport + '</option>';
+      });
+
+      return select+"</select>";
+  }
+
+  EditorUI.prototype.buildPoiTypeSelect = function(){
+
+        let select = "<select>";
+
+        mapManager.poiTypesMap.forEach(function (poiType) {
+            select+= '<option value="' + poiType.id + '">' + poiType.type + '</option>';
+        });
+
+        return select+"</select>";
+    };
+
+    EditorUI.prototype.buildExportGPXPopin = function(){
+        var tracks = mapManager.tracksMap;
+        for (var track of tracks) {
+            let markup = '<div>' +
+                '<input type="checkbox" data-id="' + idx + '" id="track-' + idx + '" name="' + name + '" checked="checked">' +
+                '<label for="route-' + idx + '">' + name + '</label>' +
+                sportSelect +
+                '</div>';
+        }
+    };
+
+        console.log("Editor UI for editor loaded");
 } else {
   if (document.querySelector('#map') != undefined) {
     var EditorUI = function () {}

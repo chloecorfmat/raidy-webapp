@@ -9,7 +9,7 @@ header {
 
 body {
   > header {
-    height: 4rem;
+    height: 3rem;
   }
 }
 
@@ -45,9 +45,59 @@ body {
 }
 
 .header--profile-ico {
-  display: inline-block;
+  display: none;
   font-size: 1rem;
   font-weight: 700;
   margin-right: .5rem;
   vertical-align: baseline;
+
+  @media screen and (min-width: $breakpoint-mediumlarge) {
+    display: inline-block;
+  }
+}
+
+.header--raidy {
+  align-items: center;
+  display: flex;
+
+  .roles--menu {
+    align-items: center;
+
+    @media screen and (min-width: $breakpoint-medium) {
+      display: flex;
+      flex-grow: 0;
+      flex-shrink: 0;
+    }
+
+    span {
+      display: none;
+
+      @media screen and (min-width: $breakpoint-medium) {
+        color: $white;
+        display: inline;
+        padding-left: 1rem;
+      }
+    }
+
+    .roles--menu--item {
+      color: $white;
+      display: block;
+      padding-left: 1rem;
+      text-decoration: none;
+
+      @media screen and (min-width: $breakpoint-medium) {
+        display: inline;
+      }
+
+      &.item--active {
+        font-weight: bold;
+        opacity: .7;
+      }
+
+      &:hover {
+        font-weight: bold;
+        opacity: 1;
+      }
+    }
+  }
 }

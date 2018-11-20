@@ -2,6 +2,10 @@
   display: none;
   z-index: 1000;
 
+  p {
+    margin: .5rem 0;
+  }
+
   &.is-open {
     background: $white07;
     display: block;
@@ -18,7 +22,7 @@
       max-width: 100%;
       width: 100%;
 
-      @media screen and (min-width: $breakpoint-large) {
+      @media screen and (min-width: $breakpoint-medium) {
         height: initial;
         margin: 20vh auto;
         max-width: 30rem;
@@ -30,12 +34,12 @@
 
     .modal--content {
       background: $white;
-      flex-grow: 1;
     }
   }
 
   .modal--header {
     color: $white;
+    height: 10vh;
 
     @media screen and (min-width: $breakpoint-medium) {
       border-top-left-radius: 10px;
@@ -47,10 +51,12 @@
     background: $white;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+    height: 90vh;
     padding: 1rem;
 
     @media screen and (min-width: $breakpoint-medium) {
       border: 1px solid $main-color;
+      height: initial;
     }
   }
 

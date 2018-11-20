@@ -30,6 +30,11 @@ class Raid
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $name;
 
@@ -40,11 +45,21 @@ class Raid
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "L'adresse ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $address;
 
     /**
      * @ORM\Column(name="address_addition", type="string", length=45, nullable=true)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "Le complément d'adresse ne doit pas dépasser {{ limit }} caractères",
+     * )
      */
     protected $addressAddition;
 
@@ -55,6 +70,12 @@ class Raid
 
     /**
      * @ORM\Column(type="string", length=45)
+     * @Assert\Length(
+     *      min = 1,
+     *      max = 45,
+     *      maxMessage = "La ville ne doit pas dépasser {{ limit }} caractères",
+     *      groups={"editProfile", "Profile"}
+     * )
      */
     protected $city;
 
@@ -77,6 +98,18 @@ class Raid
      *    )
      */
     protected $picture;
+
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    protected $lastEdition;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    protected $lastEditor;
 
     /**
      * Raid constructor.
@@ -243,5 +276,48 @@ class Raid
     public function setPicture($picture = null)
     {
         $this->picture = $picture;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastEdition()
+    {
+        return $this->lastEdition;
+    }
+
+    /**
+     * @param mixed $lastEdition
+     */
+    public function setLastEdition($lastEdition)
+    {
+        $this->lastEdition = $lastEdition;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastEditor()
+    {
+        return $this->lastEditor;
+    }
+
+    /**
+     * @param mixed $lastEditor
+     */
+    public function setLastEditor($lastEditor)
+    {
+        $this->lastEditor = $lastEditor;
+    }
+
+    /**
+     * @param mixed $lastEditor
+     * @param mixed $em
+     */
+    public function notifyChange($lastEditor, $em)
+    {
+        $this->setLastEdition(new \DateTime(date('Y-m-d H:i:s')));
+        $this->setLastEditor($lastEditor);
+        $em->flush();
     }
 }

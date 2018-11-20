@@ -60,17 +60,31 @@
                 </a>
             </div>
             <div class="card">
-                {# @TODO : change the url #}
-                <a href="{{ path('listHelpers', {'id': raid.id}) }}">
+                <a href="{{ path('listContacts', {'raidId': raid.id}) }}">
                     <i class="fas fa-phone fa-2x"></i>
                     <p>Contacts</p>
+                </a>
+            </div>
+            {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
+                <div class="card">
+                    <a href="{{ path('listCollaborators', {'raidId': raid.id}) }}">
+                        <i class="fas fa-hands-helping fa-2x"></i>
+                        <p>Collaborateurs</p>
+                    </a>
+                </div>
+            {% endif %}
+
+            <div class="card">
+                <a href="{{ path('cloneRaid', {'raidId': raid.id}) }}">
+                    <i class="far fa-clone fa-2x"></i>
+                    <p>Cloner le raid</p>
                 </a>
             </div>
 
             <div class="useful-links">
                 <h2>Liens utiles</h2>
                 <p>
-                    Inviter des bénévoles :
+                    <i class="far fa-envelope-open"></i> Lien d'invitation des bénévoles :
                     <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
                 </p>
             </div>

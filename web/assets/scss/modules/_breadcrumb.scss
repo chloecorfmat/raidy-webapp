@@ -5,7 +5,7 @@
 
 .breadcrumb--list-item {
   color: $tertiary-color-1;
-  display: inline-block;
+  display: block;
   font-size: .9rem;
 
   &:not(:first-child) {
@@ -29,5 +29,9 @@
     &:hover {
       font-style: italic;
     }
+  }
+
+  @media screen and (min-width: $breakpoint-medium) {
+    display: inline-block;
   }
 }

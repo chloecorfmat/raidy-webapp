@@ -1,8 +1,7 @@
+var Poi = {};
+
 if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
-  function Poi(map) {
-
-
-
+  var Poi = function(map) {
     this.map = map;
     this.marker = L.marker([0, 0]);
     this.id = '';
@@ -35,7 +34,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.id = poi.id;
     this.name = poi.name;
     this.poiType = mapManager.poiTypesMap.get(poi.poiType);
-    (poiType != null) && (this.color = this.poiType.color);
+    //(poiType != null) && (this.color = this.poiType.color);
     this.requiredHelpers = poi.requiredHelpers;
     this.marker = L.marker([poi.latitude, poi.longitude]);
 
@@ -43,6 +42,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.marker.disableEdit();
     this.marker.on('dragend', function () {
+      keepThis.name = htmlentities.decode(keepThis.name);
       keepThis.push();
     });
     keepThis.buildUI();
@@ -57,7 +57,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Poi.prototype.push = function () {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('PATCH', '/organizer/raid/' + raidID + '/poi/' + this.id, true);
+    xhr_object.open('PATCH', '/editor/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(this.toJSON());
 
@@ -95,13 +95,14 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Poi.prototype.remove = function () {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('DELETE', '/organizer/raid/' + raidID + '/poi/' + this.id, true);
+    xhr_object.open('DELETE', '/editor/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(null);
 
     this.map.removeLayer(this.marker);
 
     mapManager.editorUI.removePoi(this);
+    mapManager.poiMap.delete(this.id);
   };
 
   console.log("Track POI loaded");

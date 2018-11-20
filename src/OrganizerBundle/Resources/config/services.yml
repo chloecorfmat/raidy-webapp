@@ -1,5 +1,6 @@
 services:
   organizer.security.voter.solution:
     class: OrganizerBundle\Security\RaidVoter
+    arguments: ['@doctrine.orm.entity_manager']
     tags:
     - { name: security.voter }

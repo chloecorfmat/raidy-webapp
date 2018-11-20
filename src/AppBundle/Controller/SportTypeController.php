@@ -39,6 +39,7 @@ class SportTypeController extends Controller
             ->add('icon', FileType::class, [
                 'label' => 'Icone',
                 'label_attr' => ['class' => 'form--fixed-label'],
+                'attr' => ['class' => 'form-input--image'],
                 'data_class' => null,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un sport'])
@@ -108,6 +109,10 @@ class SportTypeController extends Controller
                 'label' => 'Icone',
                 'required' => false,
                 'data_class' => null,
+                'attr' => [
+                    'data_url' => 'uploads/sporttypes/',
+                    'class' => 'form-input--image',
+                ],
             ])
             ->add('submit', SubmitType::class, ['label' => 'Editer le sport'])
             ->getForm();
@@ -134,6 +139,8 @@ class SportTypeController extends Controller
 
                 $em->persist($sportType);
                 $em->flush();
+
+                $this->addFlash('success', 'Le sport a bien été modifié.');
 
                 return $this->redirectToRoute('listSportType');
             }
@@ -174,6 +181,8 @@ class SportTypeController extends Controller
         $em->remove($sportType);
         $em->flush();
 
+        $this->addFlash('success', 'Le sport a bien été supprimé.');
+
         return $this->redirectToRoute('listSportType');
     }
 
@@ -196,6 +205,7 @@ class SportTypeController extends Controller
             ->add('icon', FileType::class, [
                 'label' => 'Icone',
                 'label_attr' => ['class' => 'form--fixed-label'],
+                'attr' => ['class' => 'form-input--image'],
                 'data_class' => null,
             ])
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un sport'])

@@ -7,6 +7,9 @@ const autoprefixer = require('gulp-autoprefixer');
 const sassLint = require('gulp-sass-lint');
 const esLint = require('gulp-eslint');
 const cleanCSS = require('gulp-clean-css');
+const babel = require('gulp-babel');
+const merge = require('merge-stream');
+
 
 // Linter.
 gulp.task('lint', function() {
@@ -45,13 +48,26 @@ gulp.task('styles', function() {
 });
 
 gulp.task('scripts', function() {
-    return gulp.src('./js/**/*.js')
+    var core = gulp.src(['./js/*.js', './js/editor/*.js'])
         .pipe(concat('../dist/js/scripts.js'))
+        .pipe(babel({
+            presets: ['es2015']
+        }))
         .pipe(gulp.dest('./js'))
         // Comment the line below to have unminify files.
         //.pipe(uglify())
         .pipe(rename('js/scripts.min.js'))
         .pipe(gulp.dest('./dist'));
+
+    var lib = gulp.src(['./js/lib/*.js'])
+        .pipe(concat('../dist/js/lib.js'))
+        .pipe(gulp.dest('./js'))
+        // Comment the line below to have unminify files.
+        //.pipe(uglify())
+        .pipe(rename('js/lib.min.js'))
+        .pipe(gulp.dest('./dist'));
+
+    return lib;
 });
 
 gulp.task('default', ['lint', 'styles', 'scripts'], function() {

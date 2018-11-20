@@ -4,6 +4,9 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Track;
+use AppBundle\Entity\Raid;
+
+use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -11,7 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 class OrganizerTrackController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/track", name="addTrack", methods={"PUT"})
+     * @Route("/editor/raid/{raidId}/track", name="addTrack", methods={"PUT"})
      *
      * @param Request $request request
      * @param int     $raidId  raidId
@@ -33,7 +36,8 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
@@ -53,7 +57,7 @@ class OrganizerTrackController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}", name="editTrack", methods={"PATCH"})
+     * @Route("/editor/raid/{raidId}/track/{trackId}", name="editTrack", methods={"PATCH"})
      *
      * @param Request $request request
      * @param int     $raidId  raidId
@@ -76,7 +80,8 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
@@ -97,11 +102,14 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
 
+        //Log change on db
+        $raid->notifyChange($user, $em);
+
         return new Response($trackService->trackToJson($track));
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track", name="listTrack", methods={"GET"})
+     * @Route("/editor/raid/{raidId}/track", name="listTrack", methods={"GET"})
      *
      * @param mixed $raidId raidId
      *
@@ -120,7 +128,8 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid) && !$authChecker->isGranted(RaidVoter::HELPER, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
@@ -131,7 +140,7 @@ class OrganizerTrackController extends AjaxAPIController
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/track/{trackId}", name="deleteTrack", methods={"DELETE"})
+     * @Route("/editor/raid/{raidId}/track/{trackId}", name="deleteTrack", methods={"DELETE"})
      *
      * @param Request $request request
      * @param mixed   $raidId  raidId
@@ -154,7 +163,8 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        if ($raid->getUser()->getId() != $user->getId()) {
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
@@ -167,6 +177,9 @@ class OrganizerTrackController extends AjaxAPIController
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
+
+        //Log change on db
+        $raid->notifyChange($user, $em);
 
         return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
     }

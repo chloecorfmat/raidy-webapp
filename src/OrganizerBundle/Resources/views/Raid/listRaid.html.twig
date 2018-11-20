@@ -2,7 +2,7 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item">Administration</li>
+        <li class="breadcrumb--list-item">Organizer</li>
     </ol>
 {% endblock %}
 
@@ -11,11 +11,13 @@
         <div class="raids--list">
             <h1>Mes raids</h1>
             <div class="raids--list-items">
-                <div class="raid raid--add">
-                    <a href="{{ path('addRaid') }}">
-                        <span>+</span>
-                    </a>
-                </div>
+                {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
+                    <div class="raid raid--add">
+                        <a href="{{ path('addRaid') }}">
+                            <span>+</span>
+                        </a>
+                    </div>
+                {% endif %}
                 {% for raid in raids %}
                     <div class="raid" style="background-image: url('{{ asset('uploads/raids/' ~ raid.picture) }}');">
                         <a href="{{ path('displayRaid', {'id': raid.id}) }}">
@@ -41,10 +43,23 @@
             </div>
             <h2>Liens utiles</h2>
             <ul>
-                <li>
-                    <a href="{{ path('listPoiType') }}">Gérer les types de points d'intérêt</a>
-                </li>
+                {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
+                    <li>
+                        <a href="{{ path('listPoiType') }}">Gérer les types de points d'intérêt</a>
+                    </li>
+                {% endif %}
             </ul>
+            <div class="downloads">
+                <h2>Téléchargez l'application Raidy</h2>
+				<div class="downloads--links">
+					<a href="#" download>
+						<img src="{{ asset('assets/images/app-store-badge.png') }}" alt="">
+					</a>
+					<a href="assets/mobile_apps/raidy-organizer.apk" download>
+						<img src="{{ asset('assets/images/google-play-badge.png') }}" alt="">
+					</a>
+				</div>
+			</div>
         </div>
     </div>
 {% endblock %}

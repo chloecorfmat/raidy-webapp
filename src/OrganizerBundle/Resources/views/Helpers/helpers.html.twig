@@ -25,7 +25,8 @@
 
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid_id}) }}">{{ raidName }}</a></li>
         <li class="breadcrumb--list-item">Liste des bénévoles</li>
     </ol>
 {% endblock %}
@@ -43,10 +44,11 @@
                     <caption class="sr-only">Liste des organisateurs</caption>
                     <thead class="table--headers">
                     <tr>
-                        <th scope="col">Nom</th>
-                        <th scope="col">Prénom</th>
+                        <th scope="col">Nom Prénom</th>
+                        <th scope="col">Statut</th>
                         <th scope="col">Poste souhaité</th>
                         <th scope="col">Poste affecté</th>
+                        <th scope="col">Validé</th>
                     </tr>
                     </thead>
                     {% for helper in helpers %}
@@ -56,8 +58,19 @@
                             {% set value = '' %}
                         {% endif %}
                         <tr class="table--line">
-                            <td>{{ helper.user.lastname }}</td>
-                            <td>{{ helper.user.firstname }}</td>
+                            <td>{{ helper.user.lastname }} {{ helper.user.firstname }}</td>
+                            <td id="status-{{ helper.id }}">
+                                {% if value is empty %}
+                                    <span class="helper-check helper-check--no-assign"></span>
+                                    <span class="helper-check--text sr-only">Aucun POI assigné</span>
+                                {% elseif helper.isCheckedIn %}
+                                    <span class="helper-check helper-check--in"></span>
+                                    <span class="helper-check--text sr-only">Validé</span>
+                                {% else %}
+                                    <span class="helper-check helper-check--not"></span>
+                                    <span class="helper-check--text sr-only">Non validé</span>
+                                {% endif %}
+                            </td>
                             <td>{{ helper.favoritePoiType.type }}</td>
                             <td>
                                 <select id="{{ helper.id }}" class="assign-poi">
@@ -84,6 +97,7 @@
                                     {% endfor %}
                                 </select>
                             </td>
+                            <td>{% if helper.isCheckedIn==0 %}Non{% else %}Oui{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </table>

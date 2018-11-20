@@ -21,7 +21,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.decorator = null;
     this.visible = true;
-    this.calibration = false;
+    this.isCalibration = false;
     this.waypoints = [];
 
     this.line = L.polyline([]);
@@ -35,7 +35,23 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.color = color;
     this.line.setStyle({
       color: color,
-    })
+    });
+
+    this.decorator = L.polylineDecorator(this.line, {
+      patterns: [
+        {offset: 25, repeat: 100, symbol: L.Symbol.arrowHead({pixelSize: 15, pathOptions: {fillOpacity: 1, color: this.color, weight: 0}})}
+      ]
+    });
+
+    this.decorator.addTo(mapManager.map);
+
+    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
+      html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #78e08f'  + ';" />'
+    }));
+    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
+      html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #f74a45' +  ';" />'
+    }));
+
   };
 
     Track.prototype.setSportType = function (sportType) {
@@ -46,8 +62,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     if(b){
       this.line.enableEdit();
       this.decorator.removeFrom(this.map);
-      this.startMarker.removeFrom(this.map);
-      this.endMarker.removeFrom(this.map);
+      //this.startMarker.removeFrom(this.map);
+      //this.endMarker.removeFrom(this.map);
     }else{
       this.line.disableEdit();
       if(this.visible) {
@@ -57,7 +73,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
           this.startMarker.setLatLng(latLngs[0]);
           this.startMarker.addTo(this.map);
           if (latLngs.length > 1) {
-            console.log(latLngs);
             this.endMarker.setLatLng(latLngs[latLngs.length - 1]);
             this.endMarker.addTo(this.map);
           }
@@ -65,12 +80,22 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       }
     }
   };
+  Track.prototype.update = function () {
 
+    if (!this.line.isEmpty()) {
+      let latLngs = this.line.getLatLngs();
+      this.startMarker.setLatLng(latLngs[0]);
+      if (latLngs.length > 1) {
+       // console.log(latLngs);
+        this.endMarker.setLatLng(latLngs[latLngs.length - 1]);
+      }
+    }
+  }
   Track.prototype.calculDistance = function () {
     var points = this.line.getLatLngs();
     this.distance = 0;
     if (points.length > 1) {
-      for (i = 0; i < points.length - 1; i++) {
+      for (var i = 0; i < points.length - 1; i++) {
         this.distance += points[i].distanceTo(points[i + 1]);
       }
     }
@@ -87,24 +112,31 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     }
     mapManager.group.removeLayer(this.line);
     this.visible = false;
+    this.name = htmlentities.decode(this.name);
+    this.push();
   };
 
   Track.prototype.show = function () {
+    this.hide();
+    mapManager.group.addLayer(this.line);
+
     this.decorator.addTo(this.map);
     this.startMarker.addTo(this.map);
-    this.endMarker.addTo(this.map);
 
+    this.endMarker.addTo(this.map);
     var points = this.waypoints;
     for (var point in points) {
       mapManager.group.addLayer(points[point]);
     }
-    mapManager.group.addLayer(this.line);
     this.visible = true;
+    this.name = htmlentities.decode(this.name);
+    this.push();
+    this.update();
   };
 
   Track.prototype.toJSON = function () {
-    latlong = [];
-    for (obj of this.line.getLatLngs()) {
+    var latlong = [];
+    for (var obj of this.line.getLatLngs()) {
       latlong.push({lat: obj.lat, lng: obj.lng});
     }
     var track =
@@ -114,7 +146,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         color: this.color,
         sportType: this.sportType,
         isVisible: this.visible,
-        isCalibration: this.calibration,
+        isCalibration: this.isCalibration,
         trackpoints: this.line != null ? JSON.stringify(latlong) : null
       };
 
@@ -127,11 +159,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.color = track.color;
     this.name = track.name;
     this.sportType = track.sportType;
-    this.isVisible = track.isVisible;
+    this.visible = track.isVisible;
     this.isCalibration = track.isCalibration;
-    test = JSON.parse(track.trackpoints);
+    var test = JSON.parse(track.trackpoints);
 
-    this.line = L.polyline(test, {color: this.color}).addTo(mapManager.group);
+    this.line = L.polyline(test, {color: this.color});
+    this.line.addTo(mapManager.group);
 
     this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
       html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #78e08f'  + ';" />'
@@ -156,6 +189,13 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       ]
     }).addTo(this.map);
 
+    if(!this.visible) {
+      this.map.removeLayer(this.line);
+      this.map.removeLayer(this.decorator);
+      this.map.removeLayer(this.startMarker);
+      this.map.removeLayer(this.endMarker);
+    }
+
   };
   Track.prototype.fromJSON = function (json) {
     var track = JSON.parse(json);
@@ -164,14 +204,14 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Track.prototype.push = function () {
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('PATCH', '/organizer/raid/' + raidID + '/track/' + this.id, true);
+    xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(this.toJSON());
 
     //Encode html entities to display purpose only
     this.name = htmlentities.encode(this.name);
 
-    li = document.getElementById('track-li-' + this.id);
+    var li = document.getElementById('track-li-' + this.id);
     this.calculDistance();
     li.querySelector('label > div > span:nth-child(2)').innerHTML = '(' + Math.round(10 * this.distance / 1000) / 10 + ' Km)';
     mapManager.editorUI.updateTrack(this);
@@ -179,7 +219,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
   Track.prototype.remove = function () {
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('DELETE', '/organizer/raid/' + raidID + '/track/' + this.id, true);
+    xhr_object.open('DELETE', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
 
     xhr_object.send(null);
@@ -190,6 +230,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.map.removeLayer(this.endMarker);
 
     mapManager.editorUI.removeTrack(this);
+    mapManager.tracksMap.delete(this.id);
   };
   Track.prototype.buildUI = function () {
     mapManager.editorUI.updatePoi()

@@ -1,0 +1,132 @@
+{% extends 'default/helper.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <style>
+        .map {
+            height: 50%;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 980px) {
+            .map {
+                height: 50vh;
+                width: 100%;
+            }
+        }
+
+        .map--container {
+            height: 100%;
+            margin-top: 2rem;
+            width: 100% !important;
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('helper') }}">Accueil</a></li>
+        <li class="breadcrumb--list-item">{{ raid.name }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+<h1>{{ raid.name }} (édition {{ raid.editionNumber }})</h1>
+<div class="content">
+    <div class="content--quarter">
+        <h2>Informations</h2>
+        <div class="content-important">
+            <div class="content-important--part">
+                <p>
+                    <span class="text--important">Date : </span>
+                    {{ raid.date|date("d/m/Y") }}
+                </p>
+            </div>
+            <div class="content-important--part">
+                <h3>Organisateur</h3>
+                <p class="text--important">{{ raid.user.firstname }} {{ raid.user.lastname }}</p>
+                <p>
+                    Téléphone :
+                    <a href="tel:{{ raid.user.phone }}">{{ raid.user.phone|telephone }}</a>
+                </p>
+                <p>
+                    Adresse e-mail :
+                    <a href="mailto:{{ raid.user.email }}">{{ raid.user.email }}</a>
+                </p>
+            </div>
+            <div class="content-important--part">
+                <h3>Adresse</h3>
+                <p>{{ raid.address }}</p>
+                <p>{{ raid.addressAddition }}</p>
+                <p>{{ raid.postCode }} {{ raid.city }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="content--quarter">
+        <div>
+            <h2>Affectation</h2>
+            <div>
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="map--container">
+            <div class="map" id="map"></div>
+        </div>
+    </div>
+
+    <div class="content--half">
+        <h2>Contacts</h2>
+        <div class="table--container">
+            <table class="table" id="contactsList">
+                <caption class="sr-only">Liste des contacts</caption>
+                <thead class="table--headers">
+                <tr>
+                    <th scope="col">Rôle</th>
+                    <th scope="col">Bénévole</th>
+                    <th scope="col">Coordonnées</th>
+                </tr>
+                </thead>
+
+                {% for contact in contacts %}
+                    <tr class="table--line">
+                        <td>{{ contact.role }}</td>
+                        <td>
+                            {% if contact.helper %}
+                                {{ contact.helper.user.firstName }} {{ contact.helper.user.lastName }}
+                            {% else %}
+                                Pas de bénévole associé.
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if contact.helper %}
+                                {{ contact.helper.user.phone|telephone }}
+                            {% else %}
+                                {{ contact.phoneNumber|telephone }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script>
+        var mapManager;
+        var raidID;
+        document.addEventListener("DOMContentLoaded", function () {
+            mapManager = new MapManager();
+            raidID = parseInt({{ raid.id }});
+            mapManager.initialize();
+        });
+    </script>
+{% endblock %}

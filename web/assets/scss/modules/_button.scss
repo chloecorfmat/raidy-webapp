@@ -11,6 +11,12 @@ button {
   &:hover {
     opacity: .8;
   }
+
+  &[disabled] {
+    &:hover {
+      opacity: 1;
+    }
+  }
 }
 
 .btn {
@@ -36,6 +42,10 @@ button {
 
 .btn--danger {
   background: $secondary-color-2 !important; // sass-lint:disable-line no-important
+
+  &[disabled] {
+    background: $secondary-color-12 !important; // sass-lint:disable-line no-important
+  }
 }
 
 .btn--action {
@@ -57,7 +67,7 @@ button {
   span {
     color: $white;
     display: block;
-    font-family: 'Fontastique', 'SansSerif';
+    font-family: 'Fontastique', Sans-Serif;
   }
 
   @media screen and (min-width: $breakpoint-large) {
@@ -93,3 +103,10 @@ button {
     right: 0;
   }
 }
+
+.btn-ico {
+  background: none;
+  color: $tertiary-color-1;
+  cursor: pointer;
+}
+

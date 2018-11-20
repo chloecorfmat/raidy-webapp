@@ -8,11 +8,24 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\Poi;
 use AppBundle\Entity\Raid;
+use AppBundle\Entity\Track;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RaidService
 {
+    /**
+     * RaidService constructor.
+     *
+     * @param EntityManagerInterface $em
+     * @param UploadedFileService    $uploadedFileService
+     */
+    public function __construct(EntityManagerInterface $em, UploadedFileService $uploadedFileService)
+    {
+        $this->em = $em;
+        $this->uploadedFileService = $uploadedFileService;
+    }
 
     /**
      * @param array $raids
@@ -74,5 +87,47 @@ class RaidService
         $obj['picture'] = $raid->getPicture();
 
         return json_encode($obj);
+    }
+
+    /**
+     * @param Raid   $obj
+     * @param String $directory
+     * @param String $oldPicture
+     *
+     * @return Raid
+     */
+    public function cloneRaid($obj, $directory, $oldPicture)
+    {
+        $raid = new Raid();
+
+        $raid->setName($obj->getName());
+        $raid->setDate($obj->getDate());
+        $raid->setAddress($obj->getAddress());
+
+        if (null != $obj->getAddressAddition()) {
+            $raid->setAddressAddition($obj->getAddressAddition());
+        } else {
+            $raid->setAddressAddition(null);
+        }
+
+        $raid->setPostCode($obj->getPostCode());
+        $raid->setCity($obj->getCity());
+        $raid->setEditionNumber($obj->getEditionNumber());
+
+        if (null != $obj->getPicture()) {
+            $picture = $this->uploadedFileService->saveFile($obj->getPicture(), $directory);
+            $raid->setPicture($picture);
+        } else {
+            $raid->setPicture($oldPicture);
+        }
+
+        $userRepository = $this->em->getRepository('AppBundle:User');
+        $user = $userRepository->find($obj->getUser());
+        $raid->setUser($user);
+
+        $this->em->persist($raid);
+        $this->em->flush();
+
+        return $raid;
     }
 }
