@@ -14,14 +14,18 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ContactService
 {
+
+    private $helperService;
+
     /**
      * ContactService constructor.
-     *
      * @param EntityManagerInterface $em
+     * @param HelperService          $helperService
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, HelperService $helperService)
     {
-        $this->em = $em;
+        $this->em            = $em;
+        $this->helperService = $helperService;
     }
 
     /**
@@ -48,9 +52,15 @@ class ContactService
             $obj['raid'] = $contact->getRaid()->getId();
 
             if (null != $contact->getHelper()) {
-                $obj['helper'] = $contact->getHelper()->getId();
+                $h = json_decode($this->helperService->helperToJson($contact->getHelper()));
+                $obj['helper'] = $h;
+
+                $obj['user']['id'] = $contact->getHelper()->getUser()->getId();
+                $obj['user']['firstname'] = $contact->getHelper()->getUser()->getFirstName();
+                $obj['user']['lastname'] = $contact->getHelper()->getUser()->getLastName();
             } else {
                 $obj['helper'] = '';
+                $obj['user'] = '';
             }
 
             $contactsObj[] = $obj;
