@@ -48,6 +48,7 @@
                         <th scope="col">Statut</th>
                         <th scope="col">Poste souhaité</th>
                         <th scope="col">Poste affecté</th>
+                        <th scope="col">Validé</th>
                     </tr>
                     </thead>
                     {% for helper in helpers %}
@@ -96,6 +97,7 @@
                                     {% endfor %}
                                 </select>
                             </td>
+                            <td>{% if helper.isCheckedIn==0 %}Non{% else %}Oui{% endif %}</td>
                         </tr>
                     {% endfor %}
                 </table>
