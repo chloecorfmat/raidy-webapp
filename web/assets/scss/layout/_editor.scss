@@ -4,24 +4,14 @@
   .breadcrumb {
     align-items: center;
     display: flex;
-    padding: .5rem 3rem;
-    justify-content: space-between;
     height: 2rem;
+    justify-content: space-between;
+    padding: .5rem 3rem;
 
     .btn-ico {
-      &:hover {
-        span {
-          display: inline;
-        }
-      }
-
-      span {
-        display: none;
-      }
-
       i {
-        margin-left: 1rem;
         display: inline;
+        margin-left: 1rem;
       }
     }
 
@@ -843,7 +833,7 @@ input:focus {
   position: fixed;
   right: 0;
   width: 5rem;
-  z-index: 50000;
+  z-index: 500;
 }
 
 .fab:hover .fab-buttons {
@@ -995,5 +985,11 @@ input:focus {
   button {
     background-color: inherit;
     cursor: pointer;
+  }
+}
+
+.leaflet-control-container {
+  .leaflet-top {
+    z-index: 500;
   }
 }

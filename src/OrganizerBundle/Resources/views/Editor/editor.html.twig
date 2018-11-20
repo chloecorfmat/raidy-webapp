@@ -280,9 +280,9 @@
                                             Type du point d'intérêt <span class="input--required">*</span>
                                         </label>
                                         <select id="editPoi_type" required>
-                                            <option value="1" selected>Parking</option>
-                                            <option value="2" >Point dangereux</option>
-                                            <option value="3">Restauration</option>
+                                            {% for poiType in poiTypes %}
+                                                <option value="{{ poiType.id }}">{{ poiType.type }}</option>
+                                            {% endfor %}
                                         </select>
                                     </div>
                                     <input class="form--input-text" type="hidden" id="editPoi_id" >
@@ -332,7 +332,6 @@
         </div>
     </div>
 
-
     <!-- [1] -->
     <div id="delete-poi" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
         <!-- [2] -->
@@ -377,13 +376,17 @@
                     </header>
                     <div class="modal--content">
                         <div>
-                            <p>Avant de commencer, nous vous proposons de suivre un rapide tutoriel. Vous pouvez retrouver à tout moment ce tutoriel à partir du menu d'actions.</p>
+                            <div class="capture-container">
+                                <img class="capture" src="{{ asset('assets/images/tutorial/001_Complete.png') }}" alt="">
+                            </div>
+                            <p>Avant de commencer, nous vous proposons de suivre un rapide <span class="text--important">tutoriel</span>.</p>
                             <p>L'éditeur de carte Raidy vous permettra de préparer votre raid.</p>
-                            <p class="text--introducing">Vous pourrez :</p>
+                            <p class="text--introducing">Vous pourrez : </p>
                             <ul>
                                 <li>Créer et gérer des parcours</li>
                                 <li>Créer et gérer des points d'intérêt</li>
-                                <li>Importer et exporter des fichiers .gpx</li>
+                                <li>Importer des fichiers .gpx</li>
+                                <li>Exporter des fichiers .gpx</li>
                             </ul>
                         </div>
                         <div class="btn--actions-tutorial">
@@ -410,8 +413,11 @@
                                     data-micromodal-close class="fas fa-times"></i></button>
                     </header>
                     <div class="modal--content">
+                        <div class="capture-container">
+                            <img class="capture" src="{{ asset('assets/images/tutorial/001_Complete.png') }}" alt="">
+                        </div>
                         <div>
-                            <ol>
+                            <ol class="main-list">
                                 <li>
                                     <h2>La barre latérale</h2>
                                     <p>Cette barre latérale liste les différents parcours et points d'intérêt créés. Au clic sur un accordéon, la liste concernée est cachée ou affichée.</p>
@@ -432,7 +438,6 @@
                                     <ol>
                                         <li>Création d'un parcours</li>
                                         <li>Création d'un point d'intérêt</li>
-                                        <li>Tutoriel</li>
                                     </ol>
                                 </li>
                             </ol>
@@ -461,19 +466,136 @@
                                     data-micromodal-close class="fas fa-times"></i></button>
                     </header>
                     <div class="modal--content">
+                        <div class="capture-container">
+                            <img class="capture" src="{{ asset('assets/images/tutorial/003_Track.png') }}" alt="">
+                        </div>
                         <div>
-                            <p>L'éditeur de carte Raidy vous permettra de préparer votre raid.</p>
-                            <p>Vous pourrez :</p>
+                            <p>Pour créer un parcours, vous pouvez utiliser le bouton "+" en bas à droite de l'écran et cliquer sur le bouton "Ajouter un parcours".</p>
+                            <p>Une fois les informations complétées, vous pouvez commencer à tracer le parcours : </p>
                             <ul>
-                                <li>Créer et gérer des parcours</li>
-                                <li>Créer et gérer des points d'intérêt</li>
-                                <li>Importer les fichiers .gpx d'autres services</li>
-                                <li>Exporter le raid en .gpx</li>
+                                <li>Chaque clic créera un point sur la carte.</li>
+                                <li>Double-cliquer sur un point le supprimera.</li>
+                                <li>Pour ajuster le parcours, vous pouvez déplacer le point qui vous intéresse.</li>
+                                <li>Pour ajouter un point entre 2 autres, vous devez déplacer les poignées translucides présentes entre deux points du parcours.</li>
+                                <li>Pour finaliser un parcours, vous pouvez cliquer sur le dernier point créé.</li>
                             </ul>
+                            <p>Pour terminer l'édition d'un parcours, vous pouvez cliquer sur le bouton rouge en bas à droite de l'écran.</p>
                         </div>
 
                         <div class="btn--actions-tutorial">
                             <button class="btn btn--editor-tutorial" data-id="2" data-current="3">Précédent</button>
+                            <button class="btn btn--editor-tutorial" data-id="4" data-current="3">Suivant</button>
+                            <!--<button class="btn btn--danger" data-micromodal-close>Terminer</button>-->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tutorial_4" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="add-poi-title" data-micromodal-close>
+                <div class="modal-container modal-tutorial">
+                    <header class="modal--header ">
+                        <h2>
+                            Les points d'intérêt (4)
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div class="modal--content">
+                        <div class="capture-container">
+                            <img class="capture" src="{{ asset('assets/images/tutorial/002_POI.png') }}" alt="">
+                        </div>
+                        <div>
+                            <p>Les points d'intérêt sont des emplacements importants liés à l'organisation d'un raid.</p>
+                            <p>Ils sont tous associés à un type (virage dangereux, buvette, ...) que vous créez en amont <a href="{{ path('addPoiType') }}" title="Créer des types de points d'intérêt - Nouvelle fenêtre" target="_blank">sur cette page</a>.</p>
+                            <p>Pour créer un point d'intérêt, vous devez utiliser le bouton "+" en bas à droite de l'écran et cliquer sur le bouton "Ajouter un point d'intérêt".</p>
+                            <p>Pour le positionner, il suffit de cliquer sur la carte puis de compléter les informations du formulaire qui s'affichera.</p>
+                            <ul>
+                                <li>Pour annuler l'ajout d'un point d'intérêt, vous pouvez cliquer sur le bouton rouge en bas à droite de l'écran.</li>
+                                <li>Pour déplacer les points d'intérêt, il faut cliquer sur le bouton en haut à droite de la fenêtre.</li>
+                                <li>Au clic sur un point d'intérêt, les informations qui y sont relatives s'affichent.</li>
+                            </ul>
+                        </div>
+
+                        <div class="btn--actions-tutorial">
+                            <button class="btn btn--editor-tutorial" data-id="3" data-current="4">Précédent</button>
+                            <button class="btn btn--editor-tutorial" data-id="5" data-current="4">Suivant</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tutorial_5" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="add-poi-title" data-micromodal-close>
+                <div class="modal-container modal-tutorial">
+                    <header class="modal--header ">
+                        <h2>
+                            L'import de fichiers GPX (5)
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div class="modal--content">
+                        <div class="capture-container">
+                            <img class="capture" src="{{ asset('assets/images/tutorial/004_Import.png') }}" alt="">
+                        </div>
+                        <div>
+                            <p>L’éditeur Raidy vous propose de créer automatiquement vos raids grâce à l’import de fichiers GPX. Les fichiers GPX sont des fichiers standardisés.</p>
+                            <p>Au clic sur l’icône <i class="fas fa-file-import"></i>, une fenêtre s’ouvrira. Il vous faudra alors sélectionner à partir de vos fichiers, le fichier .gpx que vous souhaitez importer.</p>
+                        </div>
+
+                        <div class="btn--actions-tutorial">
+                            <button class="btn btn--editor-tutorial" data-id="4" data-current="5">Précédent</button>
+                            <button class="btn btn--editor-tutorial" data-id="6" data-current="5">Suivant</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="tutorial_6" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="add-poi-title" data-micromodal-close>
+                <div class="modal-container modal-tutorial">
+                    <header class="modal--header ">
+                        <h2>
+                            L'export de fichiers GPX (6)
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div class="modal--content">
+                        <div class="capture-container">
+                            <img class="capture" src="{{ asset('assets/images/tutorial/005_Export.png') }}" alt="">
+                        </div>
+                        <div>
+                            <p>L’éditeur Raidy vous permet d’exporter la totalité d’un raid sous format GPX.
+                                Au clic sur l’icône <i class="fas fa-file-export"></i>, vous devez choisir le format “Route” ou “Tracé” sous lequel votre raid sera exporté automatiquement.
+                            </p>
+                        </div>
+                        <div>
+                            <h2>Fin du tutoriel</h2>
+                            <p>Vous savez désormais tout ce qu'il y a à savoir sur l'éditeur Raidy. Vous pouvez consulter à tout moment ces informations en cliquant sur l'icône <i class="fas fa-lightbulb"></i> disponible au-dessus de la carte.</p>
+                        </div>
+
+                        <div class="btn--actions-tutorial">
+                            <button class="btn btn--editor-tutorial" data-id="5" data-current="6">Précédent</button>
                             <button class="btn btn--danger" data-micromodal-close>Terminer</button>
                         </div>
                     </div>
@@ -481,6 +603,40 @@
             </div>
         </div>
     </div>
+
+    <div id="tutorial_7" aria-hidden="true" class="modal" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="add-poi-title" data-micromodal-close>
+                <div class="modal-container modal-tutorial">
+                    <header class="modal--header ">
+                        <h2>
+                            Fin du tutoriel
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i
+                                    data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div class="modal--content">
+                        <div>
+                            <p>Vous savez désormais tout ce qu'il y a à savoir sur l'éditeur Raidy. Vous pouvez consulter à tout moment ces informations en cliquant sur l'icône <i class="fas fa-lightbulb"></i> disponible au-dessus de la carte.</p>
+                        </div>
+                        <div class="btn--actions-tutorial">
+                            <button class="btn btn--editor-tutorial" data-id="6" data-current="7">Précédent</button>
+                            <button class="btn btn--danger" data-micromodal-close>Terminer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
     <!-- Import GPX -->
     <div id="import-gpx" aria-hidden="true" class="modal" data-micromodal-close>
         <!-- [2] -->

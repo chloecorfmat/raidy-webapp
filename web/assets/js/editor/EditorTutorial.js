@@ -11,7 +11,6 @@ function initTutorial(e) {
             xhr_object.open('PATCH', '/organizer/checkTutorial', true);
             xhr_object.setRequestHeader('Content-Type', 'application/json');
             xhr_object.send();
-            console.log('toto');
         }
 
         document.getElementById('editorTutorial').addEventListener('click', function () {
@@ -23,7 +22,7 @@ function initTutorial(e) {
             btn.addEventListener('click', function() {
                 MicroModal.close('tutorial_' + this.dataset.current);
                 MicroModal.show('tutorial_' + this.dataset.id);
-            })
+            });
         }
     }
 }

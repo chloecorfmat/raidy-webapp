@@ -66,7 +66,7 @@ class OrganizerAdminController extends Controller
                 TelType::class,
                 [
                     'label' => 'Numéro de téléphone',
-                    'attr' => array('maxlength' => 10),
+                    //'attr' => array('maxlength' => 10),
                 ]
             )
             ->add(
@@ -182,7 +182,7 @@ class OrganizerAdminController extends Controller
                 TelType::class,
                 [
                     'label' => 'Numéro de téléphone',
-                    'attr' => array('maxlength' => 10),
+                    //'attr' => array('maxlength' => 10),
                 ]
             )
             ->add(
