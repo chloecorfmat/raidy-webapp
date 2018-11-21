@@ -62,7 +62,7 @@ class OrganizerContactController extends Controller
 
         $form = $this->createFormBuilder($formContact)
             ->add('role', TextType::class, ['label' => 'Rôle'])
-            ->add('phoneNumber', TextType::class, ['label' => 'Téléphone'])
+            ->add('phoneNumber', TextType::class, ['label' => 'Téléphone', 'required' => false])
             ->add('submit', SubmitType::class, ['label' => 'Editer le contact'])
             ->getForm();
 
