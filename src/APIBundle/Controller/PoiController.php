@@ -107,9 +107,9 @@ class PoiController extends AjaxAPIController
         $helperManager = $em->getRepository('AppBundle:Helper');
         $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
 
-//        if ($helper->getisCheckedIn()==1) {
-//            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You have already checked in for this raid');
-//        }
+        if ($helper->getisCheckedIn()==1) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You have already checked in for this raid');
+        }
         $now = new \DateTime("now");
 
         $diff = $raid->getDate()->diff($now);
