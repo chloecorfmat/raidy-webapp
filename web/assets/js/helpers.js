@@ -35,6 +35,7 @@ function helpersList() {
           }
       }
       xhr_object.send(JSON.stringify({poi : data}));
+      location.reload(true);
     });
   };
 }

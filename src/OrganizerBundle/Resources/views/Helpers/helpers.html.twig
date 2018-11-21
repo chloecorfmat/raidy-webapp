@@ -72,7 +72,13 @@
                             </td>
                             <td>{{ helper.favoritePoiType.type }}</td>
                             <td>
-                                <select id="{{ helper.id }}" class="assign-poi">
+                                <select
+                                        id="{{ helper.id }}"
+                                        class="assign-poi"
+                                        {% if helper.isCheckedIn %}
+                                            disabled
+                                        {% endif %}
+                                >
                                         <option
                                             value="null"
                                             {% if value is not defined %}
