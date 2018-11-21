@@ -298,11 +298,15 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           for (var track of tracks) {
             mapManager.addTrack(track);
           }
+          if(mapManager.group.getLayers().length > 0) {
+              mapManager.map.fitBounds(mapManager.group.getBounds());
+          }
         }
       }
       mapManager.switchMode(EditorMode.READING);
     }
   };
+
   MapManager.prototype.loadPois = function () {
     var xhr_object = new XMLHttpRequest();
     xhr_object.open('GET', '/editor/raid/' + raidID + '/poi', true);
