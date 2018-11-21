@@ -113,7 +113,7 @@ class CollaborationController extends Controller
     }
 
     /**
-     * @Route("/organizer/raid/{raidId}/collaborator/{invitationId}/delete", name="deleteCollaborator")
+     * @Route("/editor/raid/{raidId}/collaborator/{invitationId}/delete", name="deleteCollaborator")
      * @param Request $request
      * @param int     $raidId
      * @param int     $invitationId
