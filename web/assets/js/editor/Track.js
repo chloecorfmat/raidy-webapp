@@ -181,7 +181,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       'padding: 0rem 3rem;">' +
       '<h3>' + this.name + '</h3>' +
       '</header>');
-    this.line.enableEdit();
+
+    //this.line.enableEdit(); Perfs leak, disable for tests
 
     this.decorator = L.polylineDecorator(this.line, {
       patterns: [
