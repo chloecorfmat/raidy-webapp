@@ -1,28 +1,22 @@
-var MapManager = {};
+let MapManager;
+let EditorMode = Object.freeze({
+  'READING': 0,
+  'ADD_POI': 1,
+  'TRACK_EDIT': 2,
+  'POI_EDIT': 3,
+  properties: {
+    0: {name: 'READING', value: 0},
+    1: {name: 'ADD_POI', value: 1},
+    2: {name: 'TRACK_EDIT', value: 2},
+    3: {name: 'POI_EDIT', value: 3}
+  }
+});
 
 if (typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
 
-  /*
-  * Map editor mode :
-  * 0 = reading
-  * 1 = add poi
-  * 2 = track edition
-  */
-
-  var EditorMode = Object.freeze({
-    'READING': 0,
-    'ADD_POI': 1,
-    'TRACK_EDIT': 2,
-    'POI_EDIT': 3,
-    properties: {
-      0: {name: 'READING', value: 0},
-      1: {name: 'ADD_POI', value: 1},
-      2: {name: 'TRACK_EDIT', value: 2},
-      3: {name: 'POI_EDIT', value: 3}
-
-    }
-  });
-
+  /**
+   * MapManager is the data to map content manager
+   */
   MapManager = function() {
     this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
@@ -51,10 +45,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   MapManager.prototype.initialize = function () {
     /* MAP LISTENERS */
-    var keepThis = this;
+    let keepThis = this;
 
     this.map.addEventListener('click', function (e) {
-      // console.log("Mode : "+EditorMode.properties[keepThis.mode].name);
       switch (keepThis.mode) {
         case EditorMode.READING :
           break;
@@ -68,7 +61,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
             keepThis.switchMode(EditorMode.READING);
           }
 
-          var fab = document.getElementById('fabActionButton');
+          let fab = document.getElementById('fabActionButton');
           if(fab != null){
             fab.classList.remove('add--poi');
           }
@@ -81,26 +74,26 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         default :
       }
     });
-
+    /* Save track when middle marker is mouved */
     this.map.on('editable:middlemarker:mousedown', function () {
-      var track = keepThis.tracksMap.get(keepThis.currentEditID)
+      let track = keepThis.tracksMap.get(keepThis.currentEditID)
       track.push();
     });
     this.map.on('editable:drawing:click', function () {
-      var track = keepThis.tracksMap.get(keepThis.currentEditID);
+      let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       track.push();
       track.update();
     });
 
     this.map.on('editable:drawing:clicked', function () {
-      var track = keepThis.tracksMap.get(keepThis.currentEditID);
+      let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       track.push();
       track.update();
     });
     this.map.on('editable:drawing:mouseup', function () {
-      var track = keepThis.tracksMap.get(keepThis.currentEditID);
+      let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
     });
     this.map.on('editable:vertex:dragstart', function () {
@@ -130,15 +123,15 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   }
 
   MapManager.prototype.loadRessources = function () {
-    var keepThis = this;
-    var xhr_object = new XMLHttpRequest();
+    let keepThis = this;
+    let xhr_object = new XMLHttpRequest();
     xhr_object.open('GET', '/editor/raid/'+raidID+'/poitype', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
-          var poiTypes = JSON.parse(xhr_object.responseText);
-          for (var poiType of poiTypes) {
+          let poiTypes = JSON.parse(xhr_object.responseText);
+          for (let poiType of poiTypes) {
             keepThis.poiTypesMap.set(poiType.id, poiType);
           };
           keepThis.loadTracks(); // Load tracks
@@ -150,15 +143,15 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.loadSportTypes = function(){
-      var keepThis = this;
-      var xhr_object = new XMLHttpRequest();
+      let keepThis = this;
+      let xhr_object = new XMLHttpRequest();
       xhr_object.open('GET', '/editor/sporttype', true);
       xhr_object.send(null);
       xhr_object.onreadystatechange = function () {
           if (this.readyState === XMLHttpRequest.DONE) {
               if (xhr_object.status === 200) {
-                  var sportTypes = JSON.parse(xhr_object.responseText);
-                  for (var sportType of sportTypes) {
+                  let sportTypes = JSON.parse(xhr_object.responseText);
+                  for (let sportType of sportTypes) {
                       keepThis.sportTypesMap.set(sportType.id, sportType);
                   };
               }
@@ -168,15 +161,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   MapManager.prototype.switchMode = function (mode) {
     if (this.mode != mode) this.lastMode = this.mode;
-    var keepThis = this;
+    let keepThis = this;
     this.mode = mode;
 
     switch (mode) {
       case EditorMode.ADD_POI :
         this.setPoiEditable(false);
         this.waitingPoi = new Poi(this.map);
-        //disable cursor none for IE
-        //document.getElementById('map').style.cursor = 'none';
         this.map.addLayer(this.waitingPoi.marker);
         this.map.on("mousemove", function (e) {
           keepThis.waitingPoi.marker.setLatLng(e.latlng);
@@ -187,10 +178,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         this.map.removeEventListener("mousemove");
         document.getElementById('map').style.cursor = 'grab';
         document.getElementById('fabActionButton').classList.remove('add--poi');
-        var els = document.querySelectorAll('.track--edit');
-        for(var el of els) {
-          el.classList.remove('track--edit');
-        }
         this.setTracksEditable(false);
         break;
       case EditorMode.TRACK_EDIT :
@@ -198,8 +185,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         document.getElementById('map').style.cursor = 'grab';
         document.getElementById('fabActionButton').classList.add('add--poi');
         this.setTracksEditable(false);
-        var res = this.tracksMap.get(this.currentEditID);
-        var currentTrack = this.tracksMap.get(this.currentEditID);
+        let res = this.tracksMap.get(this.currentEditID);
+        let currentTrack = this.tracksMap.get(this.currentEditID);
         currentTrack.setEditable(true);
         if(currentTrack.line.isEmpty()){
           currentTrack.line.editor.continueForward();
@@ -210,7 +197,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         document.getElementById('map').style.cursor = 'grab';
         this.setPoiEditable(false);
         this.setTracksEditable(false);
-        var fab = document.getElementById('fabActionButton');
+        let fab = document.getElementById('fabActionButton');
         if(fab != null){
             fab.classList.remove('add--poi');
         }
@@ -219,7 +206,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.addTrack = function (track) {
-    var newTrack = new Track(this.map);
+    let newTrack = new Track(this.map);
     newTrack.fromObj(track);
     this.tracksMap.set(track.id, newTrack);
 
@@ -239,12 +226,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
   };
   MapManager.prototype.requestNewPoi = function (name, type, requiredHelpers) {
-    var poi = this.waitingPoi;
+    let poi = this.waitingPoi;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(type));
     poi.name = name != "" ? name : poi.poiType.type;
     poi.requiredHelpers = requiredHelpers != "" ? parseInt(requiredHelpers) : 0;
 
-    var xhr_object = new XMLHttpRequest();
+    let xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/editor/raid/' + raidID + '/poi', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(poi.toJSON());
@@ -261,18 +248,17 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.requestNewTrack = function (name, color, sportType) {
-    var track = new Track();
+    let track = new Track();
     track.name = name;
     track.color = color;
     track.sportType = sportType;
 
-    var xhr_object = new XMLHttpRequest();
+    let xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/editor/raid/' + raidID + '/track', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(track.toJSON());
 
     xhr_object.onreadystatechange = function (event) {
-      // XMLHttpRequest.DONE === 4
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
           track = JSON.parse(xhr_object.responseText);
@@ -287,15 +273,14 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.loadTracks = function () {
-    var xhr_object = new XMLHttpRequest();
+    let xhr_object = new XMLHttpRequest();
     xhr_object.open('GET', '/editor/raid/' + raidID + '/track', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function (event) {
-      // XMLHttpRequest.DONE === 4
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
-          var tracks = JSON.parse(xhr_object.responseText);
-          for (var track of tracks) {
+          let tracks = JSON.parse(xhr_object.responseText);
+          for (let track of tracks) {
             mapManager.addTrack(track);
           }
           if(mapManager.group.getLayers().length > 0) {
@@ -308,19 +293,18 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.loadPois = function () {
-    var xhr_object = new XMLHttpRequest();
+    let xhr_object = new XMLHttpRequest();
     xhr_object.open('GET', '/editor/raid/' + raidID + '/poi', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function (event) {
-      // XMLHttpRequest.DONE === 4
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
-          var pois = JSON.parse(xhr_object.responseText);
-          for (var poi of pois) {
-            mapManager.addPoi(poi);
+          let pois = JSON.parse(xhr_object.responseText);
+          for (let poi of pois) {
+              mapManager.addPoi(poi);
           }
           if(mapManager.group.getLayers().length > 0) {
-            mapManager.map.fitBounds(mapManager.group.getBounds());
+              mapManager.map.fitBounds(mapManager.group.getBounds());
           }
         }
       }
@@ -329,21 +313,19 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.addPoi = function (poi) {
-    var newPoi = new Poi(this.map);
+    let newPoi = new Poi(this.map);
     newPoi.fromObj(poi);
     this.poiMap.set(poi.id, newPoi);
-    mapManager.editorUI.updatePoi(newPoi)
+    mapManager.editorUI.updatePoi(newPoi);
   };
 
   MapManager.prototype.setPoiEditable = function (b) {
-    var pois = this.poiMap.forEach(function (poi) {
-      poi.setEditable(b);
-    });
+      this.poiMap.forEach(function (poi) {
+          poi.setEditable(b);
+      });
   };
 
-  MapManager.prototype.toggleTrackVisibility = function (track)
-  {
-   // console.log("changed : " + newTrack.visible);
+  MapManager.prototype.toggleTrackVisibility = function (track) {
     if (!track.visible)
     {
       this.showTrack(track.id);

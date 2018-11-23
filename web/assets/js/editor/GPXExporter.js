@@ -1,6 +1,5 @@
-var GPXExporter = function (mapManager) {
+let GPXExporter = function (mapManager) {
     this.mapManager = mapManager;
-    
 };
 
 GPXExporter.prototype.buildGPXBase = function(){
@@ -63,7 +62,7 @@ GPXExporter.prototype.exportAsTracks = function () {
        gpx.appendChild(trk);
     });
 
-    var blob = new Blob([gpx.outerHTML], {
+    let blob = new Blob([gpx.outerHTML], {
         type: "text/plain;charset=utf-8"
     });
 
@@ -93,7 +92,7 @@ GPXExporter.prototype.exportAsRoutes = function () {
 GPXExporter.prototype.download = function (gpx, filename) {
     let xmlHeader = '<?xml version="1.0" encoding="UTF-8" ?>\n';
     let content = xmlHeader + gpx.outerHTML;
-    var blob = new Blob([content], {
+    let blob = new Blob([content], {
         type: "text/plain;charset=utf-8"
     });
 

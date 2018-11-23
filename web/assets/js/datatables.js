@@ -26,7 +26,7 @@ function organizersList (e) {
 
 function helpers (e) {
   if (document.getElementById('helpersList') != null) {
-    new DataTable('#helpersList', options);
+    var d = new DataTable('#helpersList', options);
   }
 }
 

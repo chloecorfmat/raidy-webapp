@@ -55,7 +55,7 @@ class HelperService
         $obj['favoritePoiType'] = $helper->getFavoritePoiType()->getId();
 
         if (null != $helper->getCheckInTime()) {
-            $obj['checkInTime'] = $helper->getCheckInTime()->getId();
+            $obj['checkInTime'] = $helper->getCheckInTime();
         } else {
             $obj['checkInTime'] = '';
         }
