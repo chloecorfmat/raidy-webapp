@@ -107,6 +107,29 @@ class PoiController extends AjaxAPIController
         $helperManager = $em->getRepository('AppBundle:Helper');
         $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
 
+
+        $reqLocation = $request->request->all();
+        //calcul of distance
+
+        // convert from degrees to radians
+        $poiLat = deg2rad($helper->getPoi()->getLatitude());
+        $poiLng = deg2rad($helper->getPoi()->getLongitude());
+        $userLat = deg2rad(doubleval($reqLocation['lat']));
+        $userLng = deg2rad(doubleval($reqLocation['lng']));
+
+        $lonDelta = $userLng - $poiLng;
+        $a = pow(cos($userLat) * sin($lonDelta), 2) +
+        pow(cos($poiLat) * sin($userLat) - sin($poiLat) * cos($userLat) * cos($lonDelta), 2);
+        $b = sin($poiLat) * sin($userLat) + cos($poiLat) * cos($userLat) * cos($lonDelta);
+
+        $angle = atan2(sqrt($a), $b);
+        $d = $angle * 6371000;
+        
+        if ($d>10) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Out of zone');
+        }
+        
+        
         if ($helper->getisCheckedIn()==1) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You have already checked in for this raid');
         }
