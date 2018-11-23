@@ -1,25 +1,23 @@
-var EditorUI = {};
+/**
+ * Editor UI is used to manage map information that are not display on the map
+ * On the editor view it's the left tab
+ */
+let EditorUI;
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
     e.stopPropagation();
-    var dpdwn = this.nextElementSibling;
-
+    let dpdwn = this.nextElementSibling;
     if(dpdwn.classList.contains("show")){
         dpdwn.classList.remove("show");
     }else{
         disableScroll();
-
         let drop = document.querySelector(".dropdown-content.show");
         if(drop != null){
           drop.classList.remove("show");
         }
       dpdwn.classList.add("show");
       let remaining = screen.height - e.screenY;
-     // console.log("--------------------");
-     // console.log("remaining: "+remaining);
-     // console.log("menu: "+dpdwn.clientHeight);
-
       let topshift;
       if (remaining < dpdwn.clientHeight ) {
         topshift = e.pageY- dpdwn.clientHeight*1.5;
@@ -28,37 +26,33 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         topshift = e.pageY- dpdwn.clientHeight;
         dpdwn.style.top = topshift+'px';
       }
-
-  //    console.log( "top: "+dpdwn.style.top );
     }
-  }
+  };
 
   EditorUI = function() {
     this.trackElements = new Map();
     this.poiElements = new Map();
-
-  }
+  };
 
   EditorUI.prototype.addPoi = function(poi){
     let li = document.createElement('li');
     li.classList.add('list--pois-items');
     this.poiElements.set(poi.id, li);
     this.updatePoi(poi);
-  }
+  };
 
   EditorUI.prototype.updatePoi = function(poi) {
     let keepThis = this;
     if(!this.poiElements.has(poi.id)) {
       this.addPoi(poi);
     }
+
     let li = this.poiElements.get(poi.id);
 
     li.innerHTML =
-      //'<span class="test">' +
       '             <div data-id = "' + poi.id + '" class="track--text">' +
       '                <span>' + poi.name + '</span>' +
       '            </div>' +
-      //'         </span>' +
       '         <button id="moreButton" data-id = "' + poi.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
       '             <i class="fas fa-ellipsis-v"></i>' +
       '         </button>' +
@@ -70,12 +64,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
 
     li.querySelector('.track--text').addEventListener('click', function(e){
-
       let poi = mapManager.poiMap.get(parseInt(this.dataset.id));
       if (!poi.marker.isPopupOpen()) {
         mapManager.map.panTo( poi.marker.getLatLng());
       }
-      //   mapManager.map.setZoom(zoom);
       poi.marker.togglePopup();
     });
 
@@ -101,12 +93,12 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     if (panel.style.maxHeight) {
       panel.style.maxHeight = panel.scrollHeight + "px";
     }
-  }
+  };
 
   EditorUI.prototype.removePoi = function(poi){
     let li = this.poiElements.get(poi.id);
     document.getElementById('list--pois').removeChild(li);
-  }
+  };
 
   EditorUI.prototype.addTrack = function(track){
     let li = document.createElement('li');
@@ -114,7 +106,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     this.trackElements.set(track.id, li);
     document.getElementById('editor--list').appendChild(li);
     this.updateTrack(track);
-  }
+  };
 
   EditorUI.prototype.updateTrack = function(track) {
     if (!this.trackElements.has(track.id)) {
@@ -125,10 +117,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
 
       li.id = 'track-li-' + newTrack.id;
       let checked = newTrack.isVisible? ' checked = "checked"' : '';
-     // checked = 'checked = "checked"';
-
       let checkboxAttribute = 'style =" background-color : ' + newTrack.color  + '; border-color :' + newTrack.color + '" class="checkmark"';
-
 
       li.innerHTML = '<label class="checkbox-item--label">' +
         '             <input data-id = "' + newTrack.id + '" type="checkbox"'+checked+'>' +
@@ -149,11 +138,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '            <a class="btn--track--edit" data-id = "' + newTrack.id + '"> <i class="fas fa-pen"></i> Éditer le tracé</a>' +
         '            <a class="btn--track--settings" data-id = "' + newTrack.id + '"> <i class="fas fa-cog"></i> Modifier les infos</a>' +
         '            <a class="btn--track--delete" data-id = "' + newTrack.id +'"><i class="fas fa-trash"></i> Supprimer</a.btn--track--delete>' +
-        '            <!-- a><i class="fas fa-clone"></i> Dupliquer</a-->' +
         '          </div>';
 
-
-      let input = li.querySelector("input")
+      let input = li.querySelector("input");
       input.checked = newTrack.visible;
       if (newTrack.visible){
         li.querySelector('label > span.checkmark').style.backgroundColor = li.querySelector('label > span.checkmark').style.borderColor;
@@ -165,12 +152,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       newTrack.calculDistance();
       li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
 
-      //console.log(input);
       // TRACK SELECTION LISTENER
       input.addEventListener('change', function () {
         mapManager.toggleTrackVisibility(newTrack);
       });
-
 
       let btnDelete = li.querySelector('.btn--track--delete');
       btnDelete.addEventListener("click", function () {
@@ -180,39 +165,37 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         MicroModal.show('delete-track');
       });
 
+
       // TRACK EDIT PENCIL
-     let btn = li.querySelector('.btn--track--edit');
-     btn.addEventListener('click', function () {
-     if (!this.parentElement.classList.contains('track--edit')) {
-       var trackEdits = document.querySelectorAll('.track--edit');
-       for (var el of trackEdits){
-         el.classList.remove('track--edit');
-       };
-      }
-      this.parentElement.classList.toggle('track--edit');
-       if (this.parentElement.classList.contains('track--edit')) {
-         mapManager.currentEditID = parseInt(btn.dataset.id);
-         mapManager.switchMode(EditorMode.TRACK_EDIT);
-       } else {
-         mapManager.switchMode(EditorMode.READING);
-       }
-     });
+      let btnEdit = li.querySelector('.btn--track--edit');
+      btnEdit.addEventListener('click', function () {
+        if (!this.parentElement.classList.contains('track--edit')) {
+          let trackEdits = document.querySelectorAll('.track--edit');
+          for (let el of trackEdits){
+            el.classList.remove('track--edit');
+          }
+        }
+        this.parentElement.classList.toggle('track--edit');
+        if (this.parentElement.classList.contains('track--edit')) {
+          mapManager.currentEditID = parseInt(btnEdit.dataset.id);
+          mapManager.switchMode(EditorMode.TRACK_EDIT);
+        } else {
+          mapManager.switchMode(EditorMode.READING);
+        }
+      });
 
       // TRACK SETTINGS COG
-      var btns = li.querySelectorAll('.btn--track--settings');
-      for (var btn of btns){
-        let id = parseInt(btn.dataset.id);
+      let btnSettings = li.querySelector('.btn--track--settings');
+      btnSettings.addEventListener('click', function () {
+        let id = parseInt(btnSettings.dataset.id);
         let track = mapManager.tracksMap.get(id);
-
-        btn.addEventListener('click', function () {
-          document.querySelector('#editTrack_name').value = htmlentities.decode(track.name);
-          document.querySelector('#editTrack_color').value = track.color;
-          document.querySelector('#editTrack_id').value = track.id;
+        document.querySelector('#editTrack_name')     .value = htmlentities.decode(track.name);
+          document.querySelector('#editTrack_color')    .value = track.color;
+          document.querySelector('#editTrack_id')       .value = track.id;
           document.querySelector('#editTrack_sportType').value = track.sportType;
 
           MicroModal.show('edit-track-popin');
-        });
-      };
+      });
 
       let panel = document.getElementById("tracks-pan");
       if (panel.style.maxHeight){
@@ -220,12 +203,12 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       }
       return li;
     }
-  }
+  };
 
   EditorUI.prototype.removeTrack = function(track) {
     let li = this.trackElements.get(track.id);
     document.getElementById('editor--list').removeChild(li);
-  }
+  };
 
   EditorUI.prototype.displayGPXMetadata = function(tracks, routes, waypoints){
 
@@ -246,7 +229,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       let div = form.querySelector('#import-gpx--tracks .import-gpx--checkboxes');
         div.parentNode.style.display = "block";
         div.innerHTML += markup;
-    };
+    }
 
     for(let idx in routes) {
         let route = routes[idx];
@@ -276,41 +259,35 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         div.parentNode.style.display = "block";
         div.innerHTML += markup;
     }
-  }
+  };
 
   EditorUI.prototype.cleanImportGPXPopin = function(){
-      var form = document.getElementById('import-gpx--form');
+      let form = document.getElementById('import-gpx--form');
 
       form.querySelector('input[type=file]').value = '';
 
-      form.querySelector('#import-gpx--tracks').style.display = 'none';
-      form.querySelector('#import-gpx--routes').style.display = 'none';
+      form.querySelector('#import-gpx--tracks')   .style.display = 'none';
+      form.querySelector('#import-gpx--routes')   .style.display = 'none';
       form.querySelector('#import-gpx--waypoints').style.display = 'none';
 
-      form.querySelector('#import-gpx--tracks .import-gpx--checkboxes').innerHTML = '';
-      form.querySelector('#import-gpx--routes .import-gpx--checkboxes').innerHTML = '';
+      form.querySelector('#import-gpx--tracks .import-gpx--checkboxes')   .innerHTML = '';
+      form.querySelector('#import-gpx--routes .import-gpx--checkboxes')   .innerHTML = '';
       form.querySelector('#import-gpx--waypoints .import-gpx--checkboxes').innerHTML = '';
-  }
+  };
 
   EditorUI.prototype.buildSportTypeSelect = function() {
-
       let select = "<select>";
-
       mapManager.sportTypesMap.forEach(function(sportType){
           select+= '<option value="' + sportType.id + '">' + sportType.sport + '</option>';
       });
-
       return select+"</select>";
-  }
+  };
 
   EditorUI.prototype.buildPoiTypeSelect = function(){
-
         let select = "<select>";
-
         mapManager.poiTypesMap.forEach(function (poiType) {
             select+= '<option value="' + poiType.id + '">' + poiType.type + '</option>';
         });
-
         return select+"</select>";
     };
 
@@ -328,13 +305,13 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         console.log("Editor UI for editor loaded");
 } else {
   if (document.querySelector('#map') != undefined) {
-    var EditorUI = function () {}
-    EditorUI.prototype.addPoi = function(poi){}
-    EditorUI.prototype.updatePoi = function(id, poi){}
-    EditorUI.prototype.removePoi = function(id){}
-    EditorUI.prototype.addTrack = function(poi){}
-    EditorUI.prototype.updateTrack = function(id, poi){}
-    EditorUI.prototype.removeTrack = function(id){}
+    let EditorUI = function () {}
+    EditorUI.prototype.addPoi      = function(poi){};
+    EditorUI.prototype.updatePoi   = function(id, poi){};
+    EditorUI.prototype.removePoi   = function(id){};
+    EditorUI.prototype.addTrack    = function(poi){};
+    EditorUI.prototype.updateTrack = function(id, poi){};
+    EditorUI.prototype.removeTrack = function(id){};
 
     console.log("Editor UI for display only loaded");
   }

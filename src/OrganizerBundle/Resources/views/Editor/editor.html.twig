@@ -708,8 +708,8 @@
 {% block javascripts %}
     <!-- Make sure you put this AFTER Leaflet's CSS -->
     <script>
-        var mapManager;
-        var raidID;
+        let mapManager;
+        let raidID;
         document.addEventListener("DOMContentLoaded", function () {
             mapManager = new MapManager();
             raidID = parseInt({{ id }});

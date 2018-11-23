@@ -1,20 +1,20 @@
-var GPXImporter = function (mapManager) {
+let GPXImporter = function (mapManager) {
   this.mapManager = mapManager;
   this.gpxParser = new gpxParser();
 };
 
 GPXImporter.prototype.openGPX = function (file) {
-    var keepThis = this;
+    let keepThis = this;
 
-    var reader = new FileReader();
+    let reader = new FileReader();
     reader.onload = function(event) {
         keepThis.gpxParser = new gpxParser();
         keepThis.gpxParser.parse(reader.result);
         console.log(keepThis.gpxParser);
 
-        var tracks = keepThis.gpxParser['tracks'];
-        var routes = keepThis.gpxParser['routes'];
-        var waypoints = keepThis.gpxParser['waypoints'];
+        let tracks = keepThis.gpxParser['tracks'];
+        let routes = keepThis.gpxParser['routes'];
+        let waypoints = keepThis.gpxParser['waypoints'];
 
         keepThis.mapManager.editorUI.cleanImportGPXPopin();
         keepThis.mapManager.editorUI.displayGPXMetadata(tracks, routes, waypoints);
@@ -39,7 +39,7 @@ GPXImporter.prototype.importGPXTrack = function(id, sportType, gpxTrack){
     track.setColor("#000000");
     track.line.setLatLngs(latLngs);
 
-    var xhr_object = new XMLHttpRequest();
+    let xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/editor/raid/' + raidID + '/track', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(track.toJSON());
@@ -79,7 +79,7 @@ GPXImporter.prototype.importWaypoint = function (id, poiType) {
     poi.marker = L.marker([gpxWaypoint.lat, gpxWaypoint.lon]);
     console.log(poi);
 
-    var xhr_object = new XMLHttpRequest();
+    let xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/editor/raid/' + raidID + '/poi', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(poi.toJSON());
