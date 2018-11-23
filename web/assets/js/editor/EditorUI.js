@@ -2,7 +2,14 @@
  * Editor UI is used to manage map information that are not display on the map
  * On the editor view it's the left tab
  */
-let EditorUI;
+let EditorUI = function () {};
+EditorUI.prototype.addPoi      = function(poi){};
+EditorUI.prototype.updatePoi   = function(id, poi){};
+EditorUI.prototype.removePoi   = function(id){};
+EditorUI.prototype.addTrack    = function(track){};
+EditorUI.prototype.updateTrack = function(id, track){};
+EditorUI.prototype.removeTrack = function(id){};
+
 if(typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
 
   let moreButtonBehaviour =  function (e){
