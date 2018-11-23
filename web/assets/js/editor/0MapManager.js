@@ -29,6 +29,10 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
 
+    L.DomEvent.addListener(document, 'keydown', onKeyDown, this.map);
+    console.log("event loaded");
+
+    this.redoBuffer = [];
     this.group = new L.featureGroup();
     this.group.addTo(this.map);
 
@@ -48,6 +52,28 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.GPXImporter = new GPXImporter(this);
     this.GPXExporter = new GPXExporter(this);
   }
+
+  onKeyDown = function (e) {
+    var latlng;
+    console.log(mapManager.map.editTools);
+   // console.log(mapManager.map.editTools);
+   // console.log(mapManager.map.editTools._drawingEditor);
+    if (e.keyCode == 90) {
+      var currentTrack = mapManager.tracksMap.get(mapManager.currentEditID);
+      console.log("Z");
+      if (!currentTrack.line.editor) return;
+      console.log(currentTrack.line.editor);
+      currentTrack.line.editor.pop();
+     /* if (e.shiftKey) {
+        console.log("CTRL-SHIFT-Z");
+        if (this.redoBuffer.length) currentTrack.line.editor.push(mapManager.redoBuffer.pop());
+      } else {
+        console.log("CTRL-Z");
+        latlng = currentTrack.line.editor.pop();
+        if (latlng) mapManager.redoBuffer.push(latlng);
+      }*/
+    }
+  };
 
   MapManager.prototype.initialize = function () {
     /* MAP LISTENERS */
@@ -109,6 +135,10 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.map.on('editable:vertex:drag', function () {
       this.currentTrack.update();
+    });
+    this.map.on('editable:drawing:mouseup', function () {
+      track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.update();
     });
 
     this.map.on('editable:vertex:rawclick', function (e) {
