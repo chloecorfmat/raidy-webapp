@@ -21,13 +21,6 @@ function helpersList() {
 
       if (this.value === 'null') {
         data = 'null';
-        if (status.classList.contains('helper-check--in')) {
-          status.classList.remove('helper-check--in');
-          status.classList.add('helper-check--no-assign');
-          text.innerHTML = 'Aucun POI assigné';
-
-        }
-
         if (status.classList.contains('helper-check--not')) {
           status.classList.remove('helper-check--not');
           status.classList.add('helper-check--no-assign');
@@ -42,6 +35,7 @@ function helpersList() {
           }
       }
       xhr_object.send(JSON.stringify({poi : data}));
+      location.reload(true);
     });
   };
 }

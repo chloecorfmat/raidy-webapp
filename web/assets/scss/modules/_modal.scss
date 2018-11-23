@@ -57,6 +57,8 @@
     @media screen and (min-width: $breakpoint-medium) {
       border: 1px solid $main-color;
       height: initial;
+      max-height: 50vh;
+      overflow-y: scroll;
     }
   }
 
