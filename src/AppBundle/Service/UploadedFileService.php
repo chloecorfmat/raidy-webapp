@@ -8,6 +8,8 @@
 
 namespace AppBundle\Service;
 
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
+
 class UploadedFileService
 {
     /**
