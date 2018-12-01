@@ -49,7 +49,10 @@ class OrganizerRaidController extends Controller
             ->add('addressAddition', TextType::class, ['required' => false, 'label' => 'Complément d\'adresse'])
             ->add('postCode', IntegerType::class, ['label' => 'Code postal'])
             ->add('city', TextType::class, ['label' => 'Ville'])
-            ->add('editionNumber', IntegerType::class, ['label' => 'Numéro d\'édition'])
+            ->add('editionNumber', IntegerType::class, [
+                'label' => 'Numéro d\'édition',
+                'attr' => ['min' => 0],
+            ])
             ->add('picture', FileType::class, [
                 'label' => 'Photo',
                 'label_attr' => ['class' => 'form--fixed-label'],
@@ -148,7 +151,10 @@ class OrganizerRaidController extends Controller
             ->add('addressAddition', TextType::class, ['required' => false, 'label' => 'Complément d\'adresse'])
             ->add('postCode', IntegerType::class, ['label' => 'Code postal'])
             ->add('city', TextType::class, ['label' => 'Ville'])
-            ->add('editionNumber', IntegerType::class, ['label' => 'Numéro d\'édition'])
+            ->add('editionNumber', IntegerType::class, [
+                'label' => 'Numéro d\'édition',
+                'attr' => ['min' => 0],
+            ])
             ->add('picture', FileType::class, [
                 'label_attr' => ['class' => 'form--fixed-label'],
                 'label' => 'Photo',
