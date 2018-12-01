@@ -7,16 +7,48 @@ td {
   vertical-align: middle !important; // sass-lint:disable-line no-important
 }
 
+thead {
+  th {
+    padding: 0;
+  }
+
+  .btn-sort {
+    background: $white !important; // sass-lint:disable-line no-important
+    border: 0;
+    color: $tertiary-color-1;
+    cursor: pointer;
+    display: flex;
+    font-size: 1rem;
+    justify-content: space-between;
+    margin: 0 !important; // sass-lint:disable-line no-important
+    text-transform: uppercase;
+    width: 100% !important; // sass-lint:disable-line no-important
+
+    &:focus {
+      outline: none;
+    }
+
+    &.asc,
+    &.desc {
+      .fas {
+        opacity: 1;
+      }
+    }
+
+    .fas {
+      margin-right: .5rem;
+      opacity: .7;
+    }
+  }
+}
+
 .table--container {
   border: 1px solid $grey-light;
   border-radius: 10px;
   overflow-x: scroll;
   overflow-y: hidden;
   padding: 0;
-
-  //@media screen and (min-width: $breakpoint-large) {
-  //  overflow-x: hidden; // @TODO : Why this line was here ?
-  //}
+  width: 100%;
 }
 
 .table {
@@ -25,7 +57,7 @@ td {
   width: 100%;
 
   a,
-  button {
+  button:not(.btn-sort) { // sass-lint:disable-line force-pseudo-nesting
     display: block;
     margin-top: .5rem;
     width: 100%;
@@ -55,5 +87,27 @@ td {
 
   &:nth-child(2n+1) {
     background: $grey-light;
+  }
+}
+
+.table-search {
+
+  .search {
+    border: 1px solid $tertiary-color-1;
+    border-radius: 5px;
+    font-size: 1rem;
+    line-height: 1.2;
+    margin-bottom: 1rem;
+    padding-left: .3rem;
+    width: calc(100% - 3rem);
+
+    @media screen and (min-width: $breakpoint-medium) {
+      width: 50%;
+    }
+  }
+
+  .fa-search {
+    color: $tertiary-color-1;
+    width: 2rem;
   }
 }
