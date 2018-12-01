@@ -142,6 +142,14 @@ class OrganizerPOIController extends AjaxAPIController
         $poiManager = $em->getRepository('AppBundle:Poi');
         $poi = $poiManager->find($poiId);
 
+        $helperManager = $em->getRepository('AppBundle:Helper');
+        $helper        = $helperManager->findOneBy(['poi' => $poi]);
+
+        if ($helper != null) {
+            $helper->setPoi(null);
+            $em->flush();
+        }
+
         if (null != $poi) {
             $em->remove($poi);
             $em->flush();
