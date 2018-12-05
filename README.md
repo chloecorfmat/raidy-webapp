@@ -8,3 +8,4 @@ into-the-woods-webapp
 `php bin/console doctrine:schema:update` to update scheme database
 
 `php bin/console server:start` or `php bin/console server:run` to start the development server
+
