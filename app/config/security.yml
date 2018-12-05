@@ -39,6 +39,7 @@ security:
             logout:       true
             anonymous:    true
             access_denied_handler: AccessDeniedService
+            logout_on_user_change: true
 
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
