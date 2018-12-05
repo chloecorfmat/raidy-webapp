@@ -62,6 +62,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     };
 
   Track.prototype.setEditable = function (b) {
+    console.log(this.decorator);
     if(b){
       this.line.enableEdit();
       this.decorator.removeFrom(this.map);
@@ -70,6 +71,14 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       if(this.visible) {
         this.decorator.addTo(this.map);
         if (!this.line.isEmpty()) {
+          this.decorator.removeFrom(mapManager.map);
+          this.decorator = L.polylineDecorator(this.line, {
+            patterns: [
+              {offset: 25, repeat: 100, symbol: L.Symbol.arrowHead({pixelSize: 15, pathOptions: {fillOpacity: 1, color: this.color, weight: 0}})}
+            ]
+          });
+          this.decorator.addTo(mapManager.map);
+
           let latLngs = this.line.getLatLngs();
           this.startMarker.setLatLng(latLngs[0]);
           this.startMarker.addTo(this.map);
@@ -186,7 +195,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       patterns: [
         {offset: 25, repeat: 100, symbol: L.Symbol.arrowHead({pixelSize: 15, pathOptions: {fillOpacity: 1, color: this.color, weight: 0}})}
       ]
-    }).addTo(this.map);
+    });
+    this.decorator.addTo(mapManager.map);
 
     if(!this.visible) {
       this.map.removeLayer(this.line);
@@ -223,8 +233,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     xhr_object.send(null);
 
-    this.map.removeLayer(this.line);
     this.map.removeLayer(this.decorator);
+    this.map.removeLayer(this.line);
     this.map.removeLayer(this.startMarker);
     this.map.removeLayer(this.endMarker);
 
