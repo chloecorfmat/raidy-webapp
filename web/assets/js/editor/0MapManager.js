@@ -78,6 +78,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:middlemarker:mousedown', function () {
       let track = keepThis.tracksMap.get(keepThis.currentEditID)
       track.push();
+      track.update();
     });
     this.map.on('editable:drawing:click', function () {
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
@@ -97,16 +98,29 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       track.update();
     });
     this.map.on('editable:vertex:dragstart', function () {
-      this.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
+      keepThis.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
+    });
+    this.map.on('editable:vertex:dragend', function () {
+      let track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.name = htmlentities.decode(track.name);
+      track.push();
+      track.update();
     });
 
     this.map.on('editable:vertex:drag', function () {
-      this.currentTrack.update();
+      keepThis.currentTrack.update();
+      keepThis.editorUI.updateTrack(keepThis.currentTrack)
     });
 
-    this.map.on('editable:vertex:rawclick', function (e) {
+    this.map.on('editable:vertex:rawclick', function (e) { // click on a point
+      keepThis.tracksMap.get(keepThis.currentEditID).update();
       e.cancel();
       e.vertex.continue();
+    });
+
+    this.map.on('editable:vertex:remove', function (e) { //point on track is removed
+      let track = keepThis.tracksMap.get(keepThis.currentEditID);
+      track.update();
     });
 
     this.map.on('editable:drawing:end', function () {

@@ -288,7 +288,7 @@
                                     <input class="form--input-text" type="hidden" id="editPoi_id" >
                                     <div class="actions">
                                         <button type="submit" id="editPoi_submit" class="btn">Mettre à jour</button>
-                                        <button type="button" class="btn btn--danger" id="editPoi_delete">Annuler</button>
+                                        <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
                                     </div>
                                 </div>
                             </form>
@@ -320,7 +320,7 @@
                         <p>Pour supprimer le parcours, veuillez entrer son nom "<span class="text--medium" id="span--track-name"></span>" dans le champ ci-dessous : </p>
 
                         <input class="form--input-text" type="text" id="track-name-delete"
-                               required="required" maxlength="45">
+                               required="required" maxlength="100">
 
                         <div class="modal--actions">
                             <button type="button" class="btn btn--danger" id="btn--delete-track"  data-id="" disabled>Supprimer</button>

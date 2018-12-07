@@ -41,14 +41,14 @@
                 <p>Téléphone : <a href="tel:{{ user.phone|replace({' ' : ''}) }}">{{ user.phone|telephone }}</a></p>
                 <p>E-mail : <a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             </div>
+            {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
             <h2>Liens utiles</h2>
             <ul>
-                {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
-                    <li>
-                        <a href="{{ path('listPoiType') }}">Gérer les types de points d'intérêt</a>
-                    </li>
-                {% endif %}
+                <li>
+                    <a href="{{ path('listPoiType') }}">Gérer les types de points d'intérêt</a>
+                </li>
             </ul>
+            {% endif %}
             <div class="downloads">
                 <h2>Téléchargez l'application Raidy</h2>
 				<div class="downloads--links">

@@ -390,16 +390,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('editPoi_nbhelper').value = '';
   });
 
-// EDIT POI DELETE
-  document.getElementById('editPoi_delete').addEventListener('click', function () {
-    let poiId = document.getElementById('editPoi_id').value;
-    let poi = mapManager.poiMap.get(parseInt(poiId));
-    poi.remove();
-
-    MicroModal.close('edit-poi-popin');
-  });
-
-
   //Import GPX
   document.getElementById("import-gpx--input").addEventListener("change", function () {
     let file = this.files[0];
