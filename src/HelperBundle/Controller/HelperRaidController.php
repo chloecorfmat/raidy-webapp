@@ -34,7 +34,8 @@ class HelperRaidController extends Controller
         $em =  $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->find($id);
+        //$raid = $raidManager->find($id);
+        $raid = $raidManager->findOneBy(['uniqid' => $id]);
 
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');

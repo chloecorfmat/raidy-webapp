@@ -146,7 +146,8 @@
       var raidID;
       document.addEventListener("DOMContentLoaded", function () {
         mapManager = new MapManager();
-        raidID = parseInt({{ raid_id }});
+        {# raidID = parseInt({{ raid_id }}); #}
+        raidID = "{{ raid_id }}";
         mapManager.initialize();
       });
     </script>

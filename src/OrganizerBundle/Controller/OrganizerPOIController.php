@@ -30,9 +30,10 @@ class OrganizerPOIController extends AjaxAPIController
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $raidId = (int) $raidId;
+        //$raidId = (int) $raidId;
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
@@ -50,7 +51,7 @@ class OrganizerPOIController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Tous les champs doivent être remplis.');
         }
 
-        $poi = $poiService->poiFromArray($data, $raidId);
+        $poi = $poiService->poiFromArray($data, $raid->getId());
 
         $em->persist($poi);
         $em->flush();
@@ -76,7 +77,8 @@ class OrganizerPOIController extends AjaxAPIController
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
@@ -98,7 +100,7 @@ class OrganizerPOIController extends AjaxAPIController
         $poi = $poiManager->find($poiId);
 
         if (null != $poi) {
-            $poi = $poiService->updatePoiFromArray($poi, $raidId, $data);
+            $poi = $poiService->updatePoiFromArray($poi, $raid->getId(), $data);
             $em->flush();
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Ce point d\'intérêt n\'existe pas.');
@@ -128,7 +130,8 @@ class OrganizerPOIController extends AjaxAPIController
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
@@ -176,7 +179,8 @@ class OrganizerPOIController extends AjaxAPIController
         $poiManager = $em->getRepository('AppBundle:Poi');
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         // Get the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -190,7 +194,7 @@ class OrganizerPOIController extends AjaxAPIController
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid) && !$authChecker->isGranted(RaidVoter::HELPER, $raid)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         } elseif ($authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            $pois = $poiManager->findBy(array('raid' => $raidId));
+            $pois = $poiManager->findBy(array('raid' => $raid));
         } else {
             $helperManager = $em->getRepository('AppBundle:Helper');
             $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);

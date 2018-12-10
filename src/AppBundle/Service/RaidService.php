@@ -54,6 +54,7 @@ class RaidService
             $obj['city'] = $raid->getCity();
             $obj['editionNumber'] = $raid->getEditionNumber();
             $obj['picture'] = $raid->getPicture();
+            $obj['uniqid'] = $raid->getUniqid();
 
             $raidsObj[] = $obj;
         }
@@ -85,6 +86,7 @@ class RaidService
         $obj['city'] = $raid->getCity();
         $obj['editionNumber'] = $raid->getEditionNumber();
         $obj['picture'] = $raid->getPicture();
+        $obj['uniqid'] = $raid->getUniqid();
 
         return json_encode($obj);
     }
@@ -120,6 +122,8 @@ class RaidService
         } else {
             $raid->setPicture($oldPicture);
         }
+
+        $raid->setUniqid(uniqid());
 
         $userRepository = $this->em->getRepository('AppBundle:User');
         $user = $userRepository->find($obj->getUser());

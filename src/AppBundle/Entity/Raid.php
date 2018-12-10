@@ -112,6 +112,11 @@ class Raid
     protected $lastEditor;
 
     /**
+     * @ORM\Column(name="uniqid", type="string", unique=true)
+     */
+    protected $uniqid;
+
+    /**
      * Raid constructor.
      */
     public function __construct()
@@ -319,5 +324,21 @@ class Raid
         $this->setLastEdition(new \DateTime(date('Y-m-d H:i:s')));
         $this->setLastEditor($lastEditor);
         $em->flush();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUniqid()
+    {
+        return $this->uniqid;
+    }
+
+    /**
+     * @param mixed $uniqid
+     */
+    public function setUniqid($uniqid)
+    {
+        $this->uniqid = $uniqid;
     }
 }

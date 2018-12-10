@@ -62,7 +62,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     };
 
   Track.prototype.setEditable = function (b) {
-    console.log(this.decorator);
     if(b){
       this.line.enableEdit();
       this.decorator.removeFrom(this.map);

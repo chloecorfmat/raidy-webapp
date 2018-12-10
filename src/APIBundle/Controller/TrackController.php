@@ -25,7 +25,9 @@ class TrackController extends AjaxAPIController
         $raidManager = $em->getRepository('AppBundle:Raid');
         $trackManager = $em->getRepository('AppBundle:Track');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if (null == $raid) {
@@ -37,7 +39,7 @@ class TrackController extends AjaxAPIController
             throw $this->createAccessDeniedException();
         }
 
-        $tracks = $trackManager->findBy(array('raid' => $raidId));
+        $tracks = $trackManager->findBy(array('raid' => $raid->getId()));
         $trackService = $this->container->get('TrackService');
 
         return new Response($trackService->tracksArrayToJson($tracks));
@@ -58,14 +60,16 @@ class TrackController extends AjaxAPIController
         $raidManager = $em->getRepository('AppBundle:Raid');
         $trackManager = $em->getRepository('AppBundle:Track');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
         $user = $this->getUser();
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
-        $tracks = $trackManager->findBy(array('raid' => $raidId));
+        $tracks = $trackManager->findBy(array('raid' => $raid->getId()));
         $trackService = $this->container->get('TrackService');
 
         return new Response($trackService->tracksArrayToJson($tracks));
@@ -89,7 +93,8 @@ class TrackController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
@@ -107,7 +112,7 @@ class TrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled');
         }
 
-        $track = $trackService->trackFromArray($data, $raidId);
+        $track = $trackService->trackFromArray($data, $raid->getId());
 
         $em->persist($track);
         $em->flush();
@@ -132,7 +137,8 @@ class TrackController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
@@ -154,7 +160,7 @@ class TrackController extends AjaxAPIController
         $track = $trackManager->find($trackId);
 
         if (null != $track) {
-            $track = $trackService->updateTrackFromArray($track, $raidId, $data);
+            $track = $trackService->updateTrackFromArray($track, $raid->getId(), $data);
             $em->flush();
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
@@ -180,7 +186,8 @@ class TrackController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');

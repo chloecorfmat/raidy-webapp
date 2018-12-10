@@ -31,7 +31,8 @@ class RaidLastEditionController extends AjaxAPIController
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if (null == $raid) {

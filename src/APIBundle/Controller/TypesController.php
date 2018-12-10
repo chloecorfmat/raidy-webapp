@@ -57,7 +57,8 @@ class TypesController extends AjaxAPIController
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
-        $raid = $raidManager->find($raidId);
+        //$raid = $raidManager->find($raidId);
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         if ($raid == null) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "Ce raid n'existe pas");

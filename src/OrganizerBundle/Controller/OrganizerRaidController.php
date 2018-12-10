@@ -93,6 +93,8 @@ class OrganizerRaidController extends Controller
                 $raid->setUser($this->getUser());
                 $raid->setPicture($fileName);
 
+                $raid->setUniqid(uniqid());
+
                 $em->persist($raid);
                 $em->flush();
 
@@ -110,7 +112,7 @@ class OrganizerRaidController extends Controller
      * @Route("/organizer/raid/{id}", name="displayRaid")
      *
      * @param Request $request request
-     * @param int     $id      raid identifier
+     * @param string  $id      raid identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -120,7 +122,9 @@ class OrganizerRaidController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->find($id);
+        //$raid = $raidManager->find($id);
+
+        $raid = $raidManager->findOneBy(['uniqid' => $id]);
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
@@ -130,7 +134,7 @@ class OrganizerRaidController extends Controller
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $formRaid = $raidManager->findOneBy(['id' => $id]);
+        $formRaid = $raidManager->findOneBy(['uniqid' => $id]);
 
         $oldPicture = $formRaid->getPicture();
 
@@ -229,7 +233,7 @@ class OrganizerRaidController extends Controller
         $trackManager = $em->getRepository('AppBundle:Track');
         $poiManager = $em->getRepository('AppBundle:Poi');
 
-        $raid = $raidManager->findOneBy(['id' => $id]);
+        $raid = $raidManager->findOneBy(['uniqid' => $id]);
 
         if (null === $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -314,7 +318,9 @@ class OrganizerRaidController extends Controller
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $cloneRaid = $raidManager->find($raidId);
+        //$cloneRaid = $raidManager->find($raidId);
+
+        $cloneRaid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         if (null === $cloneRaid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');

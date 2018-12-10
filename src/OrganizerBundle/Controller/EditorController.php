@@ -23,7 +23,7 @@ class EditorController extends Controller
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
-        $raid = $raidManager->findOneBy(['id' => $id]);
+        $raid = $raidManager->findOneBy(['uniqid' => $id]);
 
         if ($raid == null) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -44,7 +44,7 @@ class EditorController extends Controller
         $sportTypes = $sportManager->findAll();
 
         return $this->render('OrganizerBundle:Editor:editor.html.twig', [
-            'id' => $id,
+            'id' => $raid->getUniqid(),
             'raidName' => $raid->getName(),
             'poiTypes' => $poiTypes,
             'sportTypes' => $sportTypes,

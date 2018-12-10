@@ -56,7 +56,8 @@ class CollaborationController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->find($raidId);
+        //$raid = $raidManager->find($raidId);
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
@@ -125,7 +126,8 @@ class CollaborationController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->find($raidId);
+        //$raid = $raidManager->find($raidId);
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {

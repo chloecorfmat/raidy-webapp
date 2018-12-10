@@ -3,8 +3,8 @@
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
-        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.id}) }}">{{ raid.name }}</a></li>
-        <li class="breadcrumb--list-item"><a href="{{ path('listContacts', {'raidId': raid.id}) }}">Liste des contacts</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.uniqid}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('listContacts', {'raidId': raid.uniqid}) }}">Liste des contacts</a></li>
         <li class="breadcrumb--list-item">{{ contact.role }}</li>
     </ol>
 {% endblock %}
@@ -18,7 +18,7 @@
             {{ form_widget(form) }}
             {{ form_end(form) }}
 
-            <a href="{{ path('deleteContact', {'contactId': contact.id, 'raidId': contact.raid.id}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
+            <a href="{{ path('deleteContact', {'contactId': contact.id, 'raidId': contact.raid.uniqid}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
         </div>
     </div>
 

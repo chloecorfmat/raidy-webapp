@@ -38,7 +38,8 @@ class OrganizerContactController extends Controller
         // Get managers
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -99,7 +100,7 @@ class OrganizerContactController extends Controller
         return $this->render('OrganizerBundle:Contact:contact.html.twig', [
             'form' => $form->createView(),
             'raid' => $raid,
-            'raidId' => $raidId,
+            'raidId' => $raid->getUniqId(),
             'contact' => $contact,
         ]);
     }
@@ -119,7 +120,8 @@ class OrganizerContactController extends Controller
         $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -140,7 +142,7 @@ class OrganizerContactController extends Controller
             throw $this->createNotFoundException('Ce contact n\'existe pas');
         }
 
-        return $this->redirectToRoute('listContacts', array('raid' => $raid, 'raidId' => $raidId));
+        return $this->redirectToRoute('listContacts', array('raid' => $raid, 'raidId' => $raid->getUniqId()));
     }
 
     /**
@@ -156,7 +158,8 @@ class OrganizerContactController extends Controller
         $em =  $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
-        $raid = $raidManager->find($raidId);
+        //$raid = $raidManager->find($raidId);
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -240,7 +243,7 @@ class OrganizerContactController extends Controller
         }
 
         $contactManager = $em->getRepository('AppBundle:Contact');
-        $contacts = $contactManager->findBy(array('raid' => $raid));
+        $contacts = $contactManager->findBy(array('raid' => $raid->getId()));
 
         return $this->render(
             'OrganizerBundle:Contact:listContact.html.twig',
