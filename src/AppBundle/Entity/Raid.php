@@ -112,7 +112,7 @@ class Raid
     protected $lastEditor;
 
     /**
-     * @ORM\Column(name="uniqid", type="string", unique=true)
+     * @ORM\Column(name="uniqid", type="string")
      */
     protected $uniqid;
 
