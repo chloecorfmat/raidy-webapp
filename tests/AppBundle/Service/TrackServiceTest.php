@@ -39,6 +39,7 @@ class TrackServiceTest extends TestCase
         $obj['sportType'] = 3;
         $obj['trackpoints'] = [];
         $obj['isVisible'] = false;
+        $obj['isCalibration'] = false;
 
         $track = $this->trackService->trackFromArray($obj, 2);
 
@@ -71,7 +72,7 @@ class TrackServiceTest extends TestCase
 
         $json = $this->trackService->trackToJson($track);
 
-        $this->assertEquals('{"id":1,"name":"trackname","color":"#f2f2f2","raid":2,"sportType":3,"trackpoints":[],"isVisible":true}', $json);
+        $this->assertEquals('{"id":1,"name":"trackname","color":"#f2f2f2","raid":2,"sportType":3,"trackpoints":[],"isVisible":true,"isCalibration":false}', $json);
     }
 
     public function testTracksArrayToJson(){
@@ -96,7 +97,7 @@ class TrackServiceTest extends TestCase
 
         $json = $this->trackService->tracksArrayToJson($tracks);
 
-        $this->assertEquals('[{"id":1,"name":"trackname","color":"#f2f2f2","raid":2,"sportType":3,"trackpoints":[],"isVisible":true}]', $json);
+        $this->assertEquals('[{"id":1,"name":"trackname","color":"#f2f2f2","raid":2,"sportType":3,"trackpoints":[],"isVisible":true,"isCalibration":false}]', $json);
     }
 
     public function testCheckDataArray(){
@@ -108,6 +109,7 @@ class TrackServiceTest extends TestCase
         $obj['sportType'] = 3;
         $obj['trackpoints'] = [];
         $obj['isVisible'] = false;
+        $obj['isCalibration'] = false;
         $check = $this->trackService->checkDataArray($obj, true);
         $this->assertTrue($check);
 
@@ -118,6 +120,7 @@ class TrackServiceTest extends TestCase
         $obj['sportType'] = 3;
         $obj['trackpoints'] = [];
         $obj['isVisible'] = false;
+        $obj['isCalibration'] = false;
         $check = $this->trackService->checkDataArray($obj, true);
         $this->assertFalse($check);
 
@@ -128,6 +131,7 @@ class TrackServiceTest extends TestCase
         $obj['sportType'] = 3;
         $obj['trackpoints'] = [];
         $obj['isVisible'] = false;
+        $obj['isCalibration'] = false;
         $check = $this->trackService->checkDataArray($obj, true);
         $this->assertFalse($check);
 
@@ -139,6 +143,7 @@ class TrackServiceTest extends TestCase
         $obj['sportType'] = 3;
         $obj['trackpoints'] = [];
         $obj['isVisible'] = false;
+        $obj['isCalibration'] = false;
         $check = $this->trackService->checkDataArray($obj, true);
         $this->assertFalse($check);
 

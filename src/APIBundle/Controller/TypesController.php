@@ -18,6 +18,33 @@ class TypesController extends AjaxAPIController
 
     /**
      * @Rest\View(statusCode=Response::HTTP_OK)
+     * @Rest\Get("/api/organizer/poitype")
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getPoiTypesOrganizer(Request $request)
+    {
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+
+        // Get the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
+        }
+
+        $poiTypes = $poiTypeManager->findAll();
+        $poiTypesService = $this->container->get('PoiTypeService');
+
+        return new Response($poiTypesService->poiTypesArrayToJson($poiTypes));
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Get("/api/helper/raid/{raidId}/poitype")
      * @Rest\Get("/api/organizer/raid/{raidId}/poitype")
      *

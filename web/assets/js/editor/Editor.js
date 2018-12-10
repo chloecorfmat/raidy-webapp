@@ -61,52 +61,48 @@ function getRootElementFontSize() {
 }
 
 function checkoutForConflict(){
-    var keepThis = this;
-    var xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
-    xhr_object.send(null);
-    xhr_object.onreadystatechange = function () {
-        if (this.readyState === XMLHttpRequest.DONE) {
-            if (xhr_object.status === 200) {
-                var lastEdition = JSON.parse(xhr_object.responseText);
-                console.log(lastEdition);
-                if(lastEdition.lastEditor != false){
-                    var getDuration = function(d1, d2) {
-                        var d3 = new Date(d2 - d1);
-                        var d0 = new Date(0);
-                        return {
-                            getHours: function(){
-                                return d3.getHours() - d0.getHours();
-                            },
-                            getMinutes: function(){
-                                return d3.getMinutes() - d0.getMinutes();
-                            },
-                            getSeconds: function() {
-                                return d3.getSeconds() - d0.getSeconds();
-                            },
-                            toString: function(){
-                                return (this.getHours() != 0 ?  this.getHours()+ "h "  :"") +
-                                    (this.getMinutes() != 0 ?  this.getMinutes()+ "min "  :"") +
-                                    this.getSeconds()+"s ";
-                            },
-                        };
-                    }
-
-                    var date = new Date(Date.parse(lastEdition.lastEdition.date));
-                    document.getElementById("errorMessage").innerHTML = "Attention "+lastEdition.lastEditor+" a modifié ce raid il y a "+getDuration(date, new Date()).toString()+"  !  <button>X</button>";
-
-                    document.getElementById('errorMessage').querySelector('button').addEventListener('click', function(e){
-                        document.getElementById('errorMessage').style.display = "none";
-                    });
-                }
+  let keepThis = this;
+  let xhr_object = new XMLHttpRequest();
+  xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
+  xhr_object.send(null);
+  xhr_object.onreadystatechange = function () {
+    if (this.readyState === XMLHttpRequest.DONE) {
+      if (xhr_object.status === 200) {
+        let lastEdition = JSON.parse(xhr_object.responseText);
+          if(lastEdition.lastEditor != false){
+            let getDuration = function(d1, d2) {
+            let d3 = new Date(d2 - d1);
+            let d0 = new Date(0);
+            return {
+              getHours: function(){
+                return d3.getHours() - d0.getHours();
+                },
+              getMinutes: function(){
+                return d3.getMinutes() - d0.getMinutes();
+                },
+              getSeconds: function() {
+                return d3.getSeconds() - d0.getSeconds();
+                },
+              toString: function(){
+                return (this.getHours() != 0 ?  this.getHours()+ "h "  :"") +
+                (this.getMinutes() != 0 ?  this.getMinutes()+ "min "  :"") +
+                this.getSeconds()+"s ";
+                },
+              };
             }
-        }
+            let date = new Date(Date.parse(lastEdition.lastEdition.date));
+            document.getElementById("errorMessage").innerHTML = "Attention "+lastEdition.lastEditor+" a modifié ce raid il y a "+getDuration(date, new Date()).toString()+"  !  <button>X</button>";
+            document.getElementById('errorMessage').querySelector('button').addEventListener('click', function(e){
+              document.getElementById('errorMessage').style.display = "none";
+            });
+           }
+         }
     }
-
+  }
 }
 
 if (typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null) {
-  var UID = {
+  let UID = {
     _current: 0,
     getNew: function () {
       this._current++;
@@ -114,14 +110,13 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     }
   };
 
-
   HTMLElement.prototype.pseudoStyle = function (element, prop, value) {
-    var _this = this;
-    var _sheetId = 'pseudoStyles';
-    var _head = document.head || document.getElementsByTagName('head')[0];
-    var _sheet = document.getElementById(_sheetId) || document.createElement('style');
+    let _this = this;
+    let _sheetId = 'pseudoStyles';
+    let _head = document.head || document.getElementsByTagName('head')[0];
+    let _sheet = document.getElementById(_sheetId) || document.createElement('style');
     _sheet.id = _sheetId;
-    var className = 'pseudoStyle' + UID.getNew();
+    let className = 'pseudoStyle' + UID.getNew();
 
     _this.className += ' ' + className;
 
@@ -130,17 +125,15 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     return this
   };
 
-  var editor = {activeTab: 'tracks-pan'};
-
   // Close the dropdown menu if the user clicks outside of it
   window.onclick = disableDropdown;
 
   document.querySelector('.bar').addEventListener('transitionend', function () {
-      mapManager.map.invalidateSize();
+    mapManager.map.invalidateSize();
   });
 
   document.getElementById('btn--laterale-bar').addEventListener('click', function () {
-    var tab = this.parentElement.parentElement;
+    let tab = this.parentElement.parentElement;
     tab.classList.toggle('bar--invisible');
   });
 
@@ -204,9 +197,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         // Continue initializing the control plugin here.
       },
       onAdd: function (map) {
-        var controlElementTag = 'div';
-        var controlElementClass = 'my-leaflet-control';
-        var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
+        let controlElementTag = 'div';
+        let controlElementClass = 'my-leaflet-control';
+        let controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
         controlElement.innerHTML =
           '<div class="map-controller-container" >' +
           '<span class="switch-label">Déplacer les points d\'intérêt</span>' +
@@ -217,7 +210,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
           '</div>';
         // Continue implementing the control here.
         controlElement.querySelector("input[type='checkbox']").addEventListener('change',function(){
-            mapManager.setPoiEditable(this.checked);
+          mapManager.setPoiEditable(this.checked);
         });
         return controlElement;
       }
@@ -235,9 +228,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         // Continue initializing the control plugin here.
       },
       onAdd: function () {
-        var controlElementTag = 'div';
-        var controlElementClass = 'my-leaflet-control';
-        var controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
+        let controlElementTag = 'div';
+        let controlElementClass = 'my-leaflet-control';
+        let controlElement = L.DomUtil.create(controlElementTag, controlElementClass);
         controlElement.innerHTML =
           '<div class="map-controller-container" >' +
           '<span class="switch-label">Édition du parcours</span>' +
@@ -261,43 +254,43 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       }
     });
 
-    var ImportGPXCtrl = L.Control.extend({
-        options: {
-            position: 'topleft'
-        },
-        onAdd: function(map) {
-            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-            container.style.backgroundColor = 'white';
-            container.style.width = '30px';
-            container.style.height = '30px';
-            container.innerHTML = "<i class=\"fas fa-file-import fa-2x\"></i>";
-            container.setAttribute("title", "Importer un fichier GPX");
-            container.onclick = function(e) {
-                e.preventDefault();
-                mapManager.editorUI.cleanImportGPXPopin();
-                MicroModal.show('import-gpx');
-            }
-            return container;
-        },
+    let ImportGPXCtrl = L.Control.extend({
+      options: {
+        position: 'topleft'
+      },
+      onAdd: function(map) {
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.style.backgroundColor = 'white';
+        container.style.width = '30px';
+        container.style.height = '30px';
+        container.innerHTML = "<i class=\"fas fa-file-import fa-2x\"></i>";
+        container.setAttribute("title", "Importer un fichier GPX");
+        container.onclick = function(e) {
+          e.preventDefault();
+          mapManager.editorUI.cleanImportGPXPopin();
+          MicroModal.show('import-gpx');
+        }
+        return container;
+      },
     });
 
-    var ExportGPXCtrl = L.Control.extend({
-        options: {
-            position: 'topleft'
-        },
-        onAdd: function(map) {
-            var container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
-            container.style.backgroundColor = 'white';
-            container.style.width = '30px';
-            container.style.height = '30px';
-            container.innerHTML = "<i class=\"fas fa-file-export fa-2x\"></i>";
-            container.setAttribute("title", "Exporter un fichier GPX");
-            container.onclick = function(e) {
-                e.preventDefault();
-                MicroModal.show('export-gpx');
-            }
-            return container;
-        },
+    let ExportGPXCtrl = L.Control.extend({
+      options: {
+        position: 'topleft'
+      },
+      onAdd: function(map) {
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.style.backgroundColor = 'white';
+        container.style.width = '30px';
+        container.style.height = '30px';
+        container.innerHTML = "<i class=\"fas fa-file-export fa-2x\"></i>";
+        container.setAttribute("title", "Exporter un fichier GPX");
+        container.onclick = function(e) {
+          e.preventDefault();
+          MicroModal.show('export-gpx');
+        };
+        return container;
+      },
     });
 
     mapManager.map.addControl(new ImportGPXCtrl());
@@ -309,12 +302,12 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     }
     mapManager.map.addControl(new L.POIEditControl());
 
-    var acc = document.getElementsByClassName("accordion");
+    let acc = document.getElementsByClassName("accordion");
 
-    for (var i = 0; i < acc.length; i++) {
+    for (let i = 0; i < acc.length; i++) {
       acc[i].addEventListener("click", function() {
         this.classList.toggle("active");
-        var panel = this.nextElementSibling;
+        let panel = this.nextElementSibling;
         if (panel.style.maxHeight){
           panel.style.maxHeight = null;
         } else {
@@ -323,10 +316,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       });
       acc[i].nextElementSibling.style.maxHeight = acc[i].nextElementSibling.scrollHeight +"px";
     }
-   //document.getElementById("tracks-pan").style.maxHeight = "3rem";
-  //  document.getElementById("pois-pan").style.maxHeight = 0;
   });
-
 
   document.getElementById('fabActionButton').addEventListener('click', function (e) {
     if (this.classList.contains('add--poi')) {
@@ -339,18 +329,13 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         e.preventDefault();
         e.stopImmediatePropagation();
         mapManager.tracksMap.get(mapManager.currentEditID).push();
-      /*  let track = mapManager.tracksMap.get(mapManager.currentEditID);
-        if (track.line.editor.drawing() ) {
-          track.line.editor.pop();
-        }*/
       }
       mapManager.switchMode(mapManager.lastMode);
       this.classList.remove('add--poi')
     }
   });
 
-
-    document.getElementById('addPoiButton').addEventListener('click', function () {
+  document.getElementById('addPoiButton').addEventListener('click', function () {
     let fabActionButton = document.getElementById("fabActionButton");
     fabActionButton.classList.toggle('add--poi');
     if (fabActionButton.classList.contains('add--poi')) {
@@ -370,9 +355,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
   document.getElementById('addTrack_form').addEventListener('submit', function (e) {
     e.preventDefault();
-    var trName = document.getElementById('addTrack_name').value;
-    var trColor = document.getElementById('addTrack_color').value;
-    var trSport = document.getElementById('addTrack_sportType').value;
+    let trName = document.getElementById('addTrack_name').value;
+    let trColor = document.getElementById('addTrack_color').value;
+    let trSport = document.getElementById('addTrack_sportType').value;
     mapManager.requestNewTrack(trName, trColor, trSport);
     MicroModal.close('add-track-popin');
 
@@ -382,12 +367,12 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
   document.getElementById('editTrack_form').addEventListener('submit', function (e) {
     e.preventDefault();
-    var trName = document.getElementById('editTrack_name').value;
-    var trColor = document.getElementById('editTrack_color').value;
-    var trId = document.getElementById('editTrack_id').value;
-    var trSport = document.getElementById('editTrack_sportType').value;
+    let trName = document.getElementById('editTrack_name').value;
+    let trColor = document.getElementById('editTrack_color').value;
+    let trId = document.getElementById('editTrack_id').value;
+    let trSport = document.getElementById('editTrack_sportType').value;
 
-    var track = mapManager.tracksMap.get(parseInt(trId));
+    let track = mapManager.tracksMap.get(parseInt(trId));
 
     track.setName(trName);
     track.setColor(trColor);
@@ -401,9 +386,10 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     MicroModal.close('edit-track-popin');
   });
 
+  // DELETE TRACK
   document.getElementById('btn--delete-track').addEventListener('click', function () {
-    var trId = parseInt(this.dataset.id);
-    var track = mapManager.tracksMap.get(parseInt(trId));
+    let trId = parseInt(this.dataset.id);
+    let track = mapManager.tracksMap.get(parseInt(trId));
     track.remove();
     MicroModal.close('delete-track');
 
@@ -412,8 +398,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   });
 
   document.getElementById('btn--delete-poi').addEventListener('click', function () {
-    var poiId = this.dataset.id;
-    var poi = mapManager.poiMap.get(parseInt(poiId));
+    let poiId = this.dataset.id;
+    let poi = mapManager.poiMap.get(parseInt(poiId));
     poi.remove();
     MicroModal.close('delete-poi');
   });
@@ -421,9 +407,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 // ADD POI SUBMIT
   document.getElementById('addPoi_form').addEventListener('submit', function (e) {
     e.preventDefault();
-    var poiName = document.getElementById('addPoi_name').value;
-    var poiType = document.getElementById('addPoi_type').value;
-    var poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
+    let poiName = document.getElementById('addPoi_name').value;
+    let poiType = document.getElementById('addPoi_type').value;
+    let poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
 
     MicroModal.close('add-poi-popin');
     mapManager.requestNewPoi(poiName, poiType, poiHelpersCount);
@@ -436,8 +422,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 // EDIT POI SUBMIT
   document.getElementById('editPoi_form').addEventListener('submit', function (e) {
     e.preventDefault();
-    var poiId = document.getElementById('editPoi_id').value;
-    var poi = mapManager.poiMap.get(parseInt(poiId));
+    let poiId = document.getElementById('editPoi_id').value;
+    let poi = mapManager.poiMap.get(parseInt(poiId));
 
     poi.name = document.getElementById('editPoi_name').value;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(document.querySelector('#editPoi_type').value));
@@ -451,47 +437,37 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('editPoi_nbhelper').value = '';
   });
 
-// EDIT POI DELETE
-  document.getElementById('editPoi_delete').addEventListener('click', function () {
-    var poiId = document.getElementById('editPoi_id').value;
-    var poi = mapManager.poiMap.get(parseInt(poiId));
-    poi.remove();
-
-    MicroModal.close('edit-poi-popin');
-  });
-
-
   //Import GPX
   document.getElementById("import-gpx--input").addEventListener("change", function () {
-    var file = this.files[0];
+    let file = this.files[0];
     mapManager.GPXImporter.openGPX(file);
   });
 
   document.getElementById("import-gpx--form").addEventListener("submit", function (e) {
     e.preventDefault();
 
-    var boxes = this.querySelectorAll('#import-gpx--tracks input[type=checkbox]');
-    for (var trackBox of boxes) {
-        if(trackBox.checked){
-            let sportType = trackBox.parentNode.querySelector('select').value;
-            mapManager.GPXImporter.importTrack(parseInt(trackBox.dataset.id), sportType);
-        }
+    let boxes = this.querySelectorAll('#import-gpx--tracks input[type=checkbox]');
+    for (let trackBox of boxes) {
+      if(trackBox.checked){
+        let sportType = trackBox.parentNode.querySelector('select').value;
+        mapManager.GPXImporter.importTrack(parseInt(trackBox.dataset.id), sportType);
+      }
     }
 
-    var routeBoxes = this.querySelectorAll('#import-gpx--routes input[type=checkbox]');
-    for (var rteBox of routeBoxes) {
-        if(rteBox.checked){
-            let sportType = rteBox.parentNode.querySelector('select').value;
-            mapManager.GPXImporter.importRoute(parseInt(rteBox.dataset.id), sportType);
-        }
+    let routeBoxes = this.querySelectorAll('#import-gpx--routes input[type=checkbox]');
+    for (let rteBox of routeBoxes) {
+      if(rteBox.checked){
+        let sportType = rteBox.parentNode.querySelector('select').value;
+        mapManager.GPXImporter.importRoute(parseInt(rteBox.dataset.id), sportType);
+      }
     }
 
-    var waypointBoxes = this.querySelectorAll('#import-gpx--waypoints input[type=checkbox]');
-    for (var box of waypointBoxes) {
-        if(box.checked){
-            let poiType = box.parentNode.querySelector('select').value;
-            mapManager.GPXImporter.importWaypoint(parseInt(box.dataset.id), poiType);
-        }
+    let waypointBoxes = this.querySelectorAll('#import-gpx--waypoints input[type=checkbox]');
+    for (let box of waypointBoxes) {
+      if(box.checked){
+        let poiType = box.parentNode.querySelector('select').value;
+        mapManager.GPXImporter.importWaypoint(parseInt(box.dataset.id), poiType);
+      }
     }
 
     MicroModal.close('import-gpx');
@@ -513,5 +489,4 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
   MapManager.prototype.displayTrackButton = function () {
   }
-}
-;
+};

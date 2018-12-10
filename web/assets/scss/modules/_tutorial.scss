@@ -5,13 +5,38 @@
     max-width: 75% !important; // sass-lint:disable-line no-important
     min-height: 80vh;
   }
-}
 
-.modal--content {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  overflow-y: scroll;
+  .modal--content {
+    display: flex;
+    flex-direction: column;
+    height: 90vh;
+    justify-content: space-between;
+    overflow-y: scroll;
+
+    @media screen and (min-width: $breakpoint-large) {
+      height: 70vh;
+      max-height: 70vh;
+    }
+  }
+
+  .modal--header {
+    height: 10vh;
+  }
+
+  .capture-container {
+    text-align: center;
+    width: 100%;
+  }
+
+  .capture {
+    border: 1px solid $main-color;
+    margin: auto;
+    max-width: 50%;
+  }
+
+  .main-list {
+    list-style-type: none;
+  }
 }
 
 .btn--actions-tutorial {

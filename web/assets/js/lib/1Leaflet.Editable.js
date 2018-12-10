@@ -488,7 +488,8 @@
             this.on('click', this.onClick);
             this.on('dblclick',function (e) {
                 this.delete();
-             });
+                this.editor.fireAndForward('editable:vertex:remove', e);
+            });
             this.on('contextmenu', this.onContextMenu);
             this.on('mousedown touchstart', this.onMouseDown);
             this.on('mouseover', this.onMouseOver);

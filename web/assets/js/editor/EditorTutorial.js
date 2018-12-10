@@ -11,19 +11,18 @@ function initTutorial(e) {
             xhr_object.open('PATCH', '/organizer/checkTutorial', true);
             xhr_object.setRequestHeader('Content-Type', 'application/json');
             xhr_object.send();
-            console.log('toto');
         }
 
         document.getElementById('editorTutorial').addEventListener('click', function () {
             MicroModal.show('tutorial_1');
         });
 
-        var btns = document.querySelectorAll('.btn--editor-tutorial');
-        for (var btn of btns) {
+        let btns = document.querySelectorAll('.btn--editor-tutorial');
+        for (let btn of btns) {
             btn.addEventListener('click', function() {
                 MicroModal.close('tutorial_' + this.dataset.current);
                 MicroModal.show('tutorial_' + this.dataset.id);
-            })
+            });
         }
     }
 }

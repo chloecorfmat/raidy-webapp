@@ -38,66 +38,98 @@
 {% block body %}
     <h1>Liste des bénévoles</h1>
     <div class="content">
-        <div class="content--half">
+        <div class="content--half" id="helpers">
+            <div class="table-search">
+                <i class="fas fa-search"></i>
+                <input class="search" placeholder="Rechercher" />
+            </div>
             <div class="table--container">
-                <table class="table" id="helpersList">
+                <table class="table">
                     <caption class="sr-only">Liste des organisateurs</caption>
                     <thead class="table--headers">
                     <tr>
-                        <th scope="col">Nom Prénom</th>
-                        <th scope="col">Statut</th>
-                        <th scope="col">Poste souhaité</th>
-                        <th scope="col">Poste affecté</th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="name">
+                                <span>Nom Prénom</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="status">
+                                <span>Statut</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="favorite-type">
+                                <span>Poste souhaité</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="assigned-poi">
+                                <span>Poste affecté</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
                     </tr>
                     </thead>
-                    {% for helper in helpers %}
-                        {% if helper.poi and helper.poi.id %}
-                            {% set value = helper.poi.id %}
-                        {% else %}
-                            {% set value = '' %}
-                        {% endif %}
-                        <tr class="table--line">
-                            <td>{{ helper.user.lastname }} {{ helper.user.firstname }}</td>
-                            <td id="status-{{ helper.id }}">
-                                {% if value is empty %}
-                                    <span class="helper-check helper-check--no-assign"></span>
-                                    <span class="helper-check--text sr-only">Aucun POI assigné</span>
-                                {% elseif helper.isCheckedIn %}
-                                    <span class="helper-check helper-check--in"></span>
-                                    <span class="helper-check--text sr-only">Validé</span>
-                                {% else %}
-                                    <span class="helper-check helper-check--not"></span>
-                                    <span class="helper-check--text sr-only">Non validé</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ helper.favoritePoiType.type }}</td>
-                            <td>
-                                <select id="{{ helper.id }}" class="assign-poi">
-                                        <option
-                                            value="null"
-                                            {% if value is not defined %}
-                                                selected
+                    <tbody class="list">
+                        {% for helper in helpers %}
+                            {% if helper.poi and helper.poi.id %}
+                                {% set value = helper.poi.id %}
+                            {% else %}
+                                {% set value = '' %}
+                            {% endif %}
+                            <tr class="table--line">
+                                <td class="name">{{ helper.user.lastname }} {{ helper.user.firstname }}</td>
+                                <td class="status" id="status-{{ helper.id }}">
+                                    {% if value is empty %}
+                                        <span class="helper-check helper-check--no-assign"></span>
+                                        <span class="helper-check--text sr-only">Aucun POI assigné</span>
+                                    {% elseif helper.isCheckedIn %}
+                                        <span class="helper-check helper-check--in"></span>
+                                        <span class="helper-check--text sr-only">Validé</span>
+                                    {% else %}
+                                        <span class="helper-check helper-check--not"></span>
+                                        <span class="helper-check--text sr-only">Non validé</span>
+                                    {% endif %}
+                                </td>
+                                <td class="favorite-type">{{ helper.favoritePoiType.type }}</td>
+                                <td class="assigned-poi">
+                                    <select
+                                            id="{{ helper.id }}"
+                                            class="assign-poi"
+                                            {% if helper.isCheckedIn %}
+                                                disabled
                                             {% endif %}
+                                    >
+                                        <option
+                                                value="null"
+                                                {% if value is not defined %}
+                                                    selected
+                                                {% endif %}
                                         >
                                             Non défini
                                         </option>
-                                    {% for poi in pois %}
-                                        <option
-                                            value="{{ poi.id }}"
-                                            data-longitude="{{ poi.longitude }}"
-                                            data-latitude="{{ poi.latitude }}"
+                                        {% for poi in pois %}
+                                            <option
+                                                    value="{{ poi.id }}"
+                                                    data-longitude="{{ poi.longitude }}"
+                                                    data-latitude="{{ poi.latitude }}"
 
-                                            {% if (value is defined) and (value == poi.id)  %}
-                                                selected
-                                            {% endif %}
-                                        >
-                                            {{ poi.name }}
-                                        </option>
-                                    {% endfor %}
-                                </select>
-                            </td>
-                        </tr>
-                    {% endfor %}
+                                                    {% if (value is defined) and (value == poi.id)  %}
+                                                        selected
+                                                    {% endif %}
+                                            >
+                                                {{ poi.name }}
+                                            </option>
+                                        {% endfor %}
+                                    </select>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -117,5 +149,13 @@
         raidID = parseInt({{ raid_id }});
         mapManager.initialize();
       });
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    <script>
+        var options = {
+            valueNames: [ 'name', 'status', 'favorite-type', 'assigned-poi' ]
+        };
+
+        var userList = new List('helpers', options);
     </script>
 {% endblock %}
