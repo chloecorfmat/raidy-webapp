@@ -79,7 +79,6 @@ class RaidController extends AjaxAPIController
      */
     public function getRaidHelper(Request $request, $raidId)
     {
-
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
