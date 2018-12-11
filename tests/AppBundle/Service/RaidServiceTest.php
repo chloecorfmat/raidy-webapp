@@ -47,10 +47,12 @@ class RaidServiceTest extends TestCase
         $raid->setCity("city");
         $raid->setPostCode("22300");
         $raid->setEditionNumber(2);
+        $uniqid = uniqid();
+        $raid->setUniqid($uniqid);
 
         $json = $this->raidService->raidToJson($raid);
 
-        self::assertEquals('{"id":1,"name":"Raid test","date":null,"address":"address","addressAddition":"address addition","postCode":"22300","city":"city","editionNumber":2,"picture":null}', $json);
+        self::assertEquals('{"id":1,"name":"Raid test","date":null,"address":"address","addressAddition":"address addition","postCode":"22300","city":"city","editionNumber":2,"picture":null,"uniqid":"'.$uniqid.'"}', $json);
     }
 
     public function testRaidsArrayToJson()
@@ -70,13 +72,15 @@ class RaidServiceTest extends TestCase
         $raid->setCity("city");
         $raid->setPostCode("22300");
         $raid->setEditionNumber(2);
+        $uniqid = uniqid();
+        $raid->setUniqid($uniqid);
 
         $obj = [];
         $obj[] = $raid;
 
         $json = $this->raidService->raidsArrayToJson($obj);
 
-        self::assertEquals('[{"id":1,"name":"Raid test","date":null,"address":"address","addressAddition":"address addition","postCode":"22300","city":"city","editionNumber":2,"picture":null}]', $json);
+        self::assertEquals('[{"id":1,"name":"Raid test","date":null,"address":"address","addressAddition":"address addition","postCode":"22300","city":"city","editionNumber":2,"picture":null,"uniqid":"'.$uniqid.'"}]', $json);
     }
 
 }
