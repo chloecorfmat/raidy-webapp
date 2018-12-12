@@ -62,7 +62,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     };
 
   Track.prototype.setEditable = function (b) {
-    console.log(this.decorator);
+ // d   console.log(this.decorator);
     if(b){
       this.line.enableEdit();
       this.decorator.removeFrom(this.map);
@@ -170,9 +170,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.sportType = track.sportType;
     this.visible = track.isVisible;
     this.isCalibration = track.isCalibration;
-    let test = JSON.parse(track.trackpoints);
+    let waypoints = JSON.parse(track.trackpoints);
 
-    this.line = L.polyline(test, {color: this.color});
+    this.line = L.polyline(waypoints, {color: this.color});
     this.line.addTo(mapManager.group);
 
     this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],

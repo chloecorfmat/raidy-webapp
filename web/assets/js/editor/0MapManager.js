@@ -22,8 +22,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
-
-    L.DomEvent.addListener(document, 'keydown', onKeyDown, this.map);
     console.log("event loaded");
 
     this.redoBuffer = [];
@@ -47,31 +45,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.GPXExporter = new GPXExporter(this);
   }
 
-  onKeyDown = function (e) {
-    var latlng;
-    console.log(mapManager.map.editTools);
-   // console.log(mapManager.map.editTools);
-   // console.log(mapManager.map.editTools._drawingEditor);
-    if (e.keyCode == 90) {
-      var currentTrack = mapManager.tracksMap.get(mapManager.currentEditID);
-      console.log("Z");
-      if (!currentTrack.line.editor) return;
-      console.log(currentTrack.line.editor);
-      currentTrack.line.editor.pop();
-     /* if (e.shiftKey) {
-        console.log("CTRL-SHIFT-Z");
-        if (this.redoBuffer.length) currentTrack.line.editor.push(mapManager.redoBuffer.pop());
-      } else {
-        console.log("CTRL-Z");
-        latlng = currentTrack.line.editor.pop();
-        if (latlng) mapManager.redoBuffer.push(latlng);
-      }*/
-    }
-  };
+
 
   MapManager.prototype.initialize = function () {
     /* MAP LISTENERS */
     let keepThis = this;
+    this.initializeKeyboardControl();
 
     this.map.addEventListener('click', function (e) {
       switch (keepThis.mode) {
@@ -100,6 +79,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         default :
       }
     });
+
     /* Save track when middle marker is mouved */
     this.map.on('editable:middlemarker:mousedown', function () {
       let track = keepThis.tracksMap.get(keepThis.currentEditID)
@@ -110,6 +90,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       track.push();
+     // keepThis.mapHistory.logModification({type : "ADD_TRACK_MARKER", target : e.Marker, lastPostition : keepThis.lastPostition, newPosition : e.vertex.latlng})
       track.update();
     });
 
@@ -123,14 +104,26 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
     });
-    this.map.on('editable:vertex:dragstart', function () {
+    this.map.on('editable:vertex:dragstart', function (e) {
       keepThis.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
+      keepThis.lastPostition  = [];
+      let latLngArray =  keepThis.currentTrack.line.getLatLngs();
+      for (let element in latLngArray){
+        keepThis.lastPostition.push({
+          lat : latLngArray[element].lat,
+          lng : latLngArray[element].lng
+        });
+      }
     });
-    this.map.on('editable:vertex:dragend', function () {
+    this.map.on('editable:vertex:dragend', function (e) {
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       track.push();
       track.update();
+      keepThis.mapHistory.logModification({
+        type : "MOVE_TRACK_MARKER",
+        track : track,
+        lastPosition : keepThis.lastPostition, })
     });
 
     this.map.on('editable:vertex:drag', function () {
@@ -138,7 +131,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       keepThis.editorUI.updateTrack(keepThis.currentTrack)
     });
     this.map.on('editable:drawing:mouseup', function () {
-      track = keepThis.tracksMap.get(keepThis.currentEditID);
+      let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
     });
 
@@ -151,14 +144,44 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:vertex:remove', function (e) { //point on track is removed
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
+      keepThis.mapHistory.logModification({
+        type : "MOVE_TRACK_MARKER",
+        track : track,
+        lastPosition : keepThis.lastPostition
+      });
+      let latLngArray =  keepThis.currentTrack.line.getLatLngs();
+      keepThis.lastPostition  = [];
+      for (let element in latLngArray){
+        keepThis.lastPostition.push({
+          lat : latLngArray[element].lat,
+          lng : latLngArray[element].lng
+        });
+      }
     });
 
+    this.map.on(' editable:vertex:new', function () {
+      keepThis.mapHistory.logModification({
+        type : "MOVE_TRACK_MARKER",
+        track : keepThis.tracksMap.get(keepThis.currentEditID),
+        lastPosition : keepThis.lastPostition
+      });
+      let latLngArray =  keepThis.currentTrack.line.getLatLngs();
+      keepThis.lastPostition  = [];
+      
+      for (let element in latLngArray){
+        keepThis.lastPostition.push({
+          lat : latLngArray[element].lat,
+          lng : latLngArray[element].lng
+        });
+      }
+    });
     this.map.on('editable:drawing:end', function () {
       document.getElementById('map').style.cursor = 'grab';
     });
     this.map.on('editable:drawing:start', function () {
       document.getElementById('map').style.cursor = 'crosshair';
     });
+
 
     this.loadRessources();
 
@@ -380,6 +403,37 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       this.hideTrack(track.id);
     }
   };
+
+
+  MapManager.prototype.initializeKeyboardControl = function(){
+    let Z = 90, Y = 89;
+    this.mapHistory = new MapHistory();
+    let keepThis = this;
+    console.log("Load keyboard listeners")
+    let onKeyDown = function (e) {
+        if (e.ctrlKey && e.keyCode == Z) {
+          if (e.shiftKey) {
+            keepThis.mapHistory.redo();
+          } else {
+            keepThis.mapHistory.undo();
+          }
+        }
+        if (e.ctrlKey && e.keyCode == Y) {
+          keepThis.mapHistory.redo();
+        }
+        if(e.key === "Escape") {
+          console.log("ECHAP");
+          if(keepThis.currentTrack != undefined ){
+            if(keepThis.currentTrack.line.editor.drawing()){
+              keepThis.currentTrack.line.editor.disable()
+            }else{
+              keepThis.switchMode(keepThis.lastMode);
+            }
+          }
+        }
+      };
+    L.DomEvent.addListener(document, 'keydown', onKeyDown, keepThis.map);
+  }
 }
 
 
