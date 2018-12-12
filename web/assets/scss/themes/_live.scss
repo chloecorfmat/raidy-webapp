@@ -1,0 +1,18 @@
+$theme-color: $live-color;
+$theme-color-secondary: $live-color;
+
+.live {
+  h1 {
+    color: $tertiary-color-2;
+  }
+
+  footer,
+  header {
+    background: $theme-color;
+  }
+
+  .btn {
+    background: $tertiary-color-2;
+  }
+}
+

@@ -7,7 +7,8 @@
             "AppBundle\\": "src/AppBundle",
             "OrganizerBundle\\": "src/OrganizerBundle",
             "HelperBundle\\": "src/HelperBundle",
-            "APIBundle\\": "src/APIBundle"
+            "APIBundle\\": "src/APIBundle",
+            "LiveBundle\\": "src/LiveBundle"
         },
         "classmap": [
             "app/AppKernel.php",
