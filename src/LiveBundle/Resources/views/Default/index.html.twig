@@ -1,1 +1,12 @@
 {% extends 'default/live.html.twig' %}
+
+{% block body %}
+    <div id="app">
+        <example></example>
+    </div>
+{% endblock %}
+
+
+{% block stylesheets %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}
