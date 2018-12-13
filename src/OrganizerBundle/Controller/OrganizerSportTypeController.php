@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 13/11/18
- * Time: 22:57
+ * Time: 22:57.
  */
 
 namespace OrganizerBundle\Controller;
@@ -14,7 +14,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class OrganizerSportTypeController extends AjaxAPIController
 {
-
     /**
      * @Route("/editor/sporttype", name="listsporttypeeditor", methods={"GET"})
      *

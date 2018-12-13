@@ -100,7 +100,7 @@ class OrganizerAdminController extends Controller
                 if (!$usernameExist) {
                     $phone = $formatService->telephoneNumber($formUser->getPhone());
 
-                    if (strlen($phone) === 10) {
+                    if (10 === strlen($phone)) {
                         $formUser = $form->getData();
 
                         $user = $userManager->createUser();
@@ -130,9 +130,11 @@ class OrganizerAdminController extends Controller
             }
         }
 
-        return $this->render('AppBundle:Admin:addOrganizer.html.twig', [
+        return $this->render(
+            'AppBundle:Admin:addOrganizer.html.twig', [
             'form' => $form->createView(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -206,7 +208,7 @@ class OrganizerAdminController extends Controller
                 $formUser = $form->getData();
                 $phone = $formatService->telephoneNumber($formUser->getPhone());
 
-                if (strlen($phone) === 10) {
+                if (10 === strlen($phone)) {
                     $user = $userManager->findUserBy(['id' => $formUser->getId()]);
                     $user->setUsername($formUser->getUsername());
                     $user->setLastName($formUser->getLastName());
@@ -226,11 +228,13 @@ class OrganizerAdminController extends Controller
             }
         }
 
-        return $this->render('AppBundle:Admin:editOrganizer.html.twig', [
+        return $this->render(
+            'AppBundle:Admin:editOrganizer.html.twig', [
             'form' => $form->createView(),
             'username' => $formUser->getUsername() ?? '',
             'userId' => $id,
-        ]);
+            ]
+        );
     }
 
     /**

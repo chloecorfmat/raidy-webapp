@@ -30,8 +30,8 @@ class FormatService
     public function mobilePhoneNumber($phone)
     {
         $number = $this->telephoneNumber($phone);
-        if (0 === strpos($number, '06') ||
-            0 === strpos($number, '07')
+        if (0 === strpos($number, '06') 
+            || 0 === strpos($number, '07')
         ) {
             return $number;
         }

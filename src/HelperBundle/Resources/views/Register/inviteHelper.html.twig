@@ -8,8 +8,8 @@
         <p class="important">Enregistrez-vous en tant que bénévole pour le raid "{{ raid.name }}" !</p>
 
         <div class="actions">
-            <a href="{{ path('joinHelper', {'id': raid.id }) }}" class="btn">Se connecter</a>
-            <a href="{{ path('registerHelper', {'id': raid.id }) }}" class="btn">Se créer un compte</a>
+            <a href="{{ path('joinHelper', {'id': raid.uniqid }) }}" class="btn">Se connecter</a>
+            <a href="{{ path('registerHelper', {'id': raid.uniqid }) }}" class="btn">Se créer un compte</a>
         </div>
     </div>
 {% endblock %}

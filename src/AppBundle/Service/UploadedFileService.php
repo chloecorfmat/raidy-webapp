@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 02/11/2018
- * Time: 13:36
+ * Time: 13:36.
  */
 
 namespace AppBundle\Service;
@@ -21,8 +21,10 @@ class UploadedFileService
     public function saveFile($file, $directory)
     {
         // $file stores the uploaded file
-        /** @var Symfony\Component\HttpFoundation\File\UploadedFile $file */
-        $fileName = $this->generateUniqueFileName() . '.' . $file->getClientOriginalExtension();
+        /**
+ * @var Symfony\Component\HttpFoundation\File\UploadedFile $file 
+*/
+        $fileName = $this->generateUniqueFileName().'.'.$file->getClientOriginalExtension();
         // Move the file to the directory where brochures are stored
         try {
             $file->move(

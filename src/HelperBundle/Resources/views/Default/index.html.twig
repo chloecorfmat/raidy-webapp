@@ -13,7 +13,7 @@
             <div class="raids--list-items">
                 {% for raid in raids %}
                     <div class="raid" style="background-image: url('{{ asset('uploads/raids/' ~ raid.picture) }}');">
-                        <a href="{{ path('displayHelperRaid', {'id': raid.id }) }}">
+                        <a href="{{ path('displayHelperRaid', {'id': raid.uniqid }) }}">
                             <div class="raid--content">
                                 <div class="raid--content-container">
                                     <p class="raid--name">{{ raid.name }}</p>

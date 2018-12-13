@@ -61,14 +61,16 @@ class DefaultController extends Controller
             array('validation_groups' => array('changePassword'))
         )
             ->add('oldPassword', PasswordType::class, ['label' => 'Ancien mot de passe'])
-            ->add('plainPassword', RepeatedType::class, array(
+            ->add(
+                'plainPassword', RepeatedType::class, array(
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
                 'options' => array('attr' => array('class' => 'password-field')),
                 'required' => true,
                 'first_options' => array('label' => 'Nouveau mot de passe'),
                 'second_options' => array('label' => 'Répétez le mot de passe'),
-            ))
+                )
+            )
             ->add('submit', SubmitType::class, ['label' => 'Modifier le mot de passe'])
             ->getForm();
 
@@ -105,9 +107,11 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->render('OrganizerBundle:Profile:editProfile.html.twig', [
+        return $this->render(
+            'OrganizerBundle:Profile:editProfile.html.twig', [
             'form' => $form->createView(),
             'editPasswordForm' => $editPasswordform->createView(),
-        ]);
+            ]
+        );
     }
 }

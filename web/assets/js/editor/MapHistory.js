@@ -14,15 +14,19 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     switch (action.type) {
       case "MOVE_TRACK_MARKER" :
         let line = action.track.line;
-        console.log("------------------");
-        action.track.setEditable(false);
-        console.log(line.getLatLngs());
-        console.log(action.lastPosition);
+        //console.log("------------------");
+//        action.track.setEditable(false);
+        //console.log(line.getLatLngs());
+        //console.log(action.lastPosition);
 
         line.setLatLngs(action.lastPosition);
-        console.log(line.getLatLngs());
+       // console.log(line.getLatLngs());
 
-        action.track.setEditable(true);
+        if(line.editor != undefined){
+          line.editor.reset();
+        }else{
+          action.track.updateDecorator();
+        }
         action.track.update();
         break;
     }
@@ -32,7 +36,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   MapHistory.prototype.undo = function () {
     let action = this.undoBuffer.pop();
     if(action != undefined) {
+
       console.log("undo");
+      console.log(action);
       switch (action.type) {
         case "MOVE_TRACK_MARKER" :
           let toRedo = [];
@@ -51,6 +57,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
           break;
       }
       this.apply(action);
+
     }
   };
 
@@ -81,7 +88,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
 
   MapHistory.prototype.logModification = function (obj) {
-    console.log(obj);
+    //console.log(obj);
     this.undoBuffer.push(obj);
   };
 }

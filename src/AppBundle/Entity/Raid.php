@@ -17,7 +17,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="raid")
+ * @ORM\Table(name="raid", uniqueConstraints={
+ *     @ORM\UniqueConstraint(name="uniqid", columns={"uniqid"})})
  */
 class Raid
 {
@@ -99,7 +100,6 @@ class Raid
      */
     protected $picture;
 
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -110,6 +110,11 @@ class Raid
      * @ORM\JoinColumn(nullable=true)
      */
     protected $lastEditor;
+
+    /**
+     * @ORM\Column(name="uniqid", type="string", unique=true)
+     */
+    protected $uniqid;
 
     /**
      * Raid constructor.
@@ -319,5 +324,21 @@ class Raid
         $this->setLastEdition(new \DateTime(date('Y-m-d H:i:s')));
         $this->setLastEditor($lastEditor);
         $em->flush();
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getUniqid()
+    {
+        return $this->uniqid;
+    }
+
+    /**
+     * @param mixed $uniqid
+     */
+    public function setUniqid($uniqid)
+    {
+        $this->uniqid = $uniqid;
     }
 }

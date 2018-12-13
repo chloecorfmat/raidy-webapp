@@ -37,8 +37,7 @@ class CreateSuperAdminCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this->setName('superadmin:create')
-            ->setDescription('Create a new Super Admin')
-        ;
+            ->setDescription('Create a new Super Admin');
     }
 
     /**

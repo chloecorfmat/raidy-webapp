@@ -1,4 +1,5 @@
 <?php
+
 namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
@@ -25,7 +26,8 @@ class PoiController extends AjaxAPIController
         $poiManager = $em->getRepository('AppBundle:Poi');
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         // Get the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
@@ -39,7 +41,7 @@ class PoiController extends AjaxAPIController
             throw $this->createAccessDeniedException();
         }
 
-        $pois = $poiManager->findBy(array('raid' => $raidId));
+        $pois = $poiManager->findBy(array('raid' => $raid->getId()));
         $poiService = $this->container->get('PoiService');
 
         return new Response($poiService->poisArrayToJson($pois));
@@ -61,16 +63,18 @@ class PoiController extends AjaxAPIController
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $raid = $raidManager->find($raidId);
-        if ($raid == null) {
+        //$raid = $raidManager->find($raidId);
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
+
+        if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "Ce raid n'existe pas");
         }
 
         $helperManager = $em->getRepository('AppBundle:Helper');
-        $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
+        $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);
 
         $poiService = $this->container->get('PoiService');
-        if ($helper != null && $helper->getPoi() != null) {
+        if (null != $helper && null != $helper->getPoi()) {
             return new Response($poiService->poiToJson($helper->getPoi()));
         }
 
@@ -98,15 +102,16 @@ class PoiController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
         }
 
         $helperManager = $em->getRepository('AppBundle:Helper');
-        $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
-
+        $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);
 
         $reqLocation = $request->request->all();
         //calcul of distance
@@ -124,19 +129,19 @@ class PoiController extends AjaxAPIController
 
         $angle = atan2(sqrt($a), $b);
         $d = $angle * 6371000;
-        
-        if ($d>10) {
+
+        if ($d > 10) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Out of zone');
         }
-        
-        
-        if ($helper->getisCheckedIn()==1) {
+
+        if (1 == $helper->getisCheckedIn()) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You have already checked in for this raid');
         }
-        $now = new \DateTime("now");
+
+        $now = new \DateTime('now');
 
         $diff = $raid->getDate()->diff($now);
-        if ($diff->days > 0 || ($diff->invert == 0 && $diff->days > 0)) {
+        if ($diff->days > 0 || (0 == $diff->invert && $diff->days > 0)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You can not check in for this raid today');
         }
         $helper->setIsCheckedIn(1);
@@ -168,7 +173,8 @@ class PoiController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
@@ -186,7 +192,7 @@ class PoiController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled');
         }
 
-        $poi = $poiService->poiFromArray($data, $raidId);
+        $poi = $poiService->poiFromArray($data, $raid->getId());
 
         $em->persist($poi);
         $em->flush();
@@ -213,7 +219,8 @@ class PoiController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
@@ -235,7 +242,7 @@ class PoiController extends AjaxAPIController
         $poi = $poiManager->find($poiId);
 
         if (null != $poi) {
-            $poi = $poiService->updatePoiFromArray($poi, $raidId, $data);
+            $poi = $poiService->updatePoiFromArray($poi, $raid->getId(), $data);
             $em->flush();
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This poi does not exist');
@@ -263,7 +270,8 @@ class PoiController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
@@ -306,7 +314,8 @@ class PoiController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');

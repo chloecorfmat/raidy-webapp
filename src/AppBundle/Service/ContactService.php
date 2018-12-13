@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 15/11/2018
- * Time: 15:41
+ * Time: 15:41.
  */
 
 namespace AppBundle\Service;
@@ -14,17 +14,17 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class ContactService
 {
-
     private $helperService;
 
     /**
      * ContactService constructor.
+     *
      * @param EntityManagerInterface $em
      * @param HelperService          $helperService
      */
     public function __construct(EntityManagerInterface $em, HelperService $helperService)
     {
-        $this->em            = $em;
+        $this->em = $em;
         $this->helperService = $helperService;
     }
 
@@ -43,7 +43,7 @@ class ContactService
             $obj['id'] = $contact->getId();
             $obj['role'] = htmlentities($contact->getRole());
 
-            if ($contact->getHelper() != null) {
+            if (null != $contact->getHelper()) {
                 $obj['phoneNumber'] = htmlentities($contact->getHelper()->getUser()->getPhone());
             } else {
                 $obj['phoneNumber'] = htmlentities($contact->getPhoneNumber());

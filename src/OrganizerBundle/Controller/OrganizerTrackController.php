@@ -5,7 +5,6 @@ namespace OrganizerBundle\Controller;
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Track;
 use AppBundle\Entity\Raid;
-
 use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -30,7 +29,8 @@ class OrganizerTrackController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
@@ -48,7 +48,7 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled');
         }
 
-        $track = $trackService->trackFromArray($data, $raidId);
+        $track = $trackService->trackFromArray($data, $raid->getId());
 
         $em->persist($track);
         $em->flush();
@@ -74,7 +74,8 @@ class OrganizerTrackController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
@@ -96,7 +97,7 @@ class OrganizerTrackController extends AjaxAPIController
         $track = $trackManager->find($trackId);
 
         if (null != $track) {
-            $track = $trackService->updateTrackFromArray($track, $raidId, $data);
+            $track = $trackService->updateTrackFromArray($track, $raid->getId(), $data);
             $em->flush();
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
@@ -121,7 +122,8 @@ class OrganizerTrackController extends AjaxAPIController
         $raidManager = $em->getRepository('AppBundle:Raid');
         $trackManager = $em->getRepository('AppBundle:Track');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
         if (null == $raid) {
@@ -133,7 +135,7 @@ class OrganizerTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
-        $tracks = $trackManager->findBy(array('raid' => $raidId));
+        $tracks = $trackManager->findBy(array('raid' => $raid->getId()));
         $trackService = $this->container->get('TrackService');
 
         return new Response($trackService->tracksArrayToJson($tracks));
@@ -157,7 +159,9 @@ class OrganizerTrackController extends AjaxAPIController
 
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');

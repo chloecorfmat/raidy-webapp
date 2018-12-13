@@ -31,10 +31,11 @@ class HelperRaidController extends Controller
      */
     public function displayHelperRaid(Request $request, $id)
     {
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->find($id);
+        //$raid = $raidManager->find($id);
+        $raid = $raidManager->findOneBy(['uniqid' => $id]);
 
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
@@ -51,9 +52,11 @@ class HelperRaidController extends Controller
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
 
-        $poiTypes = $poiTypeManager->findBy([
+        $poiTypes = $poiTypeManager->findBy(
+            [
             'user' => $raid->getUser(),
-        ]);
+            ]
+        );
 
         $choices = [];
         foreach ($poiTypes as $poiType) {
@@ -63,15 +66,19 @@ class HelperRaidController extends Controller
         $defaultData = [];
 
         $form = $this->createFormBuilder($defaultData)
-            ->add('poitype', ChoiceType::class, [
+            ->add(
+                'poitype', ChoiceType::class, [
                 'label' => 'Type de poste souhaité pour le bénévolat',
                 'choices' => $choices,
                 'data' => $helper->getFavoritePoiType()->getId(),
-            ])
-            ->add('submit', SubmitType::class, [
+                ]
+            )
+            ->add(
+                'submit', SubmitType::class, [
                 'label' => 'Modifier ma préférence',
                 'attr' => array('class' => 'btn'),
-            ])
+                ]
+            )
             ->getForm();
 
         $form->handleRequest($request);
@@ -89,10 +96,12 @@ class HelperRaidController extends Controller
         $contactManager = $em->getRepository('AppBundle:Contact');
         $contacts = $contactManager->findBy(array('raid' => $raid));
 
-        return $this->render('HelperBundle:Raid:raid.html.twig', [
+        return $this->render(
+            'HelperBundle:Raid:raid.html.twig', [
             'raid' => $raid,
             'contacts' => $contacts,
             'form' => $form->createView(),
-        ]);
+            ]
+        );
     }
 }

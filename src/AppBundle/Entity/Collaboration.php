@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 05/11/18
- * Time: 11:44
+ * Time: 11:44.
  */
 
 namespace AppBundle\Entity;
@@ -17,11 +17,9 @@ use Symfony\Component\Validator\Constraints as Assert;
  */
 class Collaboration
 {
-
     /**
      * @ORM\Id
      * @ORM\Column(name="invitationId", type="string", length=13)
-     *
      */
     private $invitationId;
 
