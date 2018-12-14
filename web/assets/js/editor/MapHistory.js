@@ -23,7 +23,23 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
        // console.log(line.getLatLngs());
 
         if(line.editor != undefined){
-          line.editor.reset();
+         // console.log("editable");
+          if(line.editor.drawing()) {
+          //  console.log("drawing");
+            line.editor.endDrawing();
+            if (line.editor._drawing === L.Editable.FORWARD) {
+            //  console.log("forward");
+              line.editor.endDrawing();
+              line.editor.continueForward();
+            } else {
+           //   console.log("backward");
+              line.editor.endDrawing();
+              line.editor.continueBackward();
+            }
+          }else{
+            line.editor.reset();
+          }
+
         }else{
           action.track.updateDecorator();
         }

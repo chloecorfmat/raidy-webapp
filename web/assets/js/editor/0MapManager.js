@@ -60,17 +60,18 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           MicroModal.show('add-poi-popin');
           keepThis.waitingPoi.marker.setLatLng(e.latlng);
           keepThis.map.removeLayer(keepThis.waitingPoi.marker); // mapManager.addPoiFromClick(e);
-          if (editor.activeTab = 'pois-pan') {
-            keepThis.switchMode(EditorMode.POI_EDIT);
-          } else {
-            keepThis.switchMode(EditorMode.READING);
-          }
+
+          keepThis.switchMode(EditorMode.READING);
+
 
           let fab = document.getElementById('fabActionButton');
           if(fab != null){
             fab.classList.remove('add--poi');
           }
           keepThis.map.removeEventListener("mousemove");
+          keepThis.map.on("mousemove", function (e) {
+            keepThis.mousePosition = e.latlng;
+          });
           break;
         case EditorMode.TRACK_EDIT :
           break;
@@ -231,22 +232,43 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   MapManager.prototype.switchMode = function (mode) {
-    if (this.mode != mode) this.lastMode = this.mode;
+    if (this.mode == mode) return;
+    switch (this.mode){ //leaving mode
+      case EditorMode.ADD_POI :
+        if (this.waitingPoi !=null ){
+          this.map.removeEventListener("mousemove");
+          this.map.on("mousemove", function (e) {
+            keepThis.mousePosition = e.latlng;
+          });
+          this.map.removeLayer(this.waitingPoi.marker);
+          document.getElementById("fabActionButton").classList.remove('add--poi');
+        }
+        break;
+    }
+    this.lastMode = this.mode;
     let keepThis = this;
     this.mode = mode;
-
-    switch (mode) {
+    //console.log(this.lastMode);
+   // console.log(this.mode);
+    switch (mode) { //entering mode
       case EditorMode.ADD_POI :
+        console.log("ADD POI");
+        document.getElementById("fabActionButton").classList.add('add--poi');
         this.setPoiEditable(false);
         this.waitingPoi = new Poi(this.map);
         this.map.addLayer(this.waitingPoi.marker);
+        if(keepThis.mousePosition != undefined) keepThis.waitingPoi.marker.setLatLng(keepThis.mousePosition);
+        keepThis.map.removeEventListener("mousemove");
         this.map.on("mousemove", function (e) {
           keepThis.waitingPoi.marker.setLatLng(e.latlng);
         });
         break;
       case EditorMode.POI_EDIT :
         if (this.waitingPoi != null) this.map.removeLayer(this.waitingPoi.marker);
-        this.map.removeEventListener("mousemove");
+        keepThis.map.removeEventListener("mousemove");
+        this.map.on("mousemove", function (e) {
+          keepThis.mousePosition = e.latlng;
+        });
         document.getElementById('map').style.cursor = 'grab';
         document.getElementById('fabActionButton').classList.remove('add--poi');
         this.setTracksEditable(false);
@@ -408,8 +430,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
   };
 
-
   MapManager.prototype.initializeKeyboardControl = function(){
+
+    this.map.on("mousemove", function (e) {
+      keepThis.mousePosition = e.latlng;
+    });
+
     let Z = 90, Y = 89;
     this.mapHistory = new MapHistory();
     let keepThis = this;
@@ -425,14 +451,23 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         if (e.ctrlKey && e.keyCode == Y) {
           keepThis.mapHistory.redo();
         }
+      if (e.keyCode == 80) { //P
+        keepThis.switchMode(EditorMode.ADD_POI);
+      }
+      if (e.keyCode == 84) { //T
+        MicroModal.show('add-track-popin');
+      }
         if(e.key === "Escape") {
           console.log("ECHAP");
-          if(keepThis.currentTrack != undefined ){
+          if(keepThis.mode == EditorMode.TRACK_EDIT){
             if(keepThis.currentTrack.line.editor.drawing()){
-              keepThis.currentTrack.line.editor.disable()
+              keepThis.currentTrack.line.editor.endDrawing()
+
             }else{
               keepThis.switchMode(keepThis.lastMode);
             }
+          }else{
+            keepThis.switchMode(EditorMode.READING);
           }
         }
       };

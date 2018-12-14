@@ -10,16 +10,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
    // console.log(patternParameters.symbol.options.pathOptions);
     this.line = [];
-    let startMarkerParameters = {className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
-      html: '<span class="track-marker" style=" border:1px solid black; background-color: #78e08f'  + ';" >D</span>'
-    };
-    let endMarkerParameters = {className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
-      html: '<span class="track-marker" style=" border:1px solid black; background-color: #f74a45' +  ';" />'
-    };
+
     this.startMarker = L.marker([0, 0]);
-    this.startMarker.setIcon(L.divIcon(startMarkerParameters));
     this.endMarker = L.marker([0, 0]);
-      this.endMarker.setIcon(L.divIcon(endMarkerParameters));
 
     this.id = '';
       this.name = '';
@@ -56,12 +49,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     //patternParameters.symbol.options.pathOptions.color = this.color;
    // patternParameters.symbol.color = this.color;
     patternParameters = {
-      offset: 0,
-      endOffset : 0,
+      offset: 25,
+      endOffset : 25,
       repeat: 100,
       symbol: L.Symbol.arrowHead({
-        pixelSize: 15,
-        pathOptions: {fillOpacity: 1, color: this.color, weight: 0}
+        pixelSize: 8,
+        pathOptions: {fillOpacity: 1, color: this.color, weight: 5}
       })
     };
 
@@ -183,15 +176,15 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.isCalibration = track.isCalibration;
     let waypoints = JSON.parse(track.trackpoints);
 
-    this.line = L.polyline(waypoints, {color: this.color});
+    this.line = L.polyline(waypoints, {weight: 3, color: this.color});
     this.line.addTo(mapManager.group);
 
     this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
-      html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #78e08f'  + ';" />'
+      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #78e08f'  + ';" />'
     }));
     this.endMarker = L.marker([0, 0]);
     this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
-      html: '<span class="track-marker" style=" border:0.1rem solid '+this.color+'; background-color: #f74a45' +  ';" />'
+      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #f74a45' +  ';" />'
     }));
 
     this.line.bindPopup('' +
@@ -203,6 +196,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       '</header>');
 
     this.addDecorator();
+    this.update();
 
     if(!this.visible) {
       this.map.removeLayer(this.line);

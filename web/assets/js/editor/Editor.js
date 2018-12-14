@@ -337,16 +337,12 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
   document.getElementById('addPoiButton').addEventListener('click', function () {
     let fabActionButton = document.getElementById("fabActionButton");
-    fabActionButton.classList.toggle('add--poi');
-    if (fabActionButton.classList.contains('add--poi')) {
+   // fabActionButton.classList.toggle('add--poi');
+//    if (fabActionButton.classList.contains('add--poi')) {
       mapManager.switchMode(EditorMode.ADD_POI);
-    } else {
-      if (mapManager.waitingPoi !=null ){
-        mapManager.map.removeEventListener("mousemove");
-        mapManager.map.removeLayer(mapManager.waitingPoi.marker);
-      }
-      mapManager.switchMode(mapManager.lastMode);
-    }
+    //} else {
+   //   mapManager.switchMode(mapManager.lastMode);
+   // }
   });
 
   document.getElementById('addTrackButton').addEventListener('click', function () {
