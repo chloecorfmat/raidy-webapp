@@ -1,0 +1,36 @@
+{
+  "name": "into-the-woods-webapp",
+  "version": "1.0.0",
+  "description": "into-the-woods-webapp =====================",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "dependencies": {
+    "node-sass": "^4.11.0",
+    "sass-loader": "^7.1.0"
+  },
+  "devDependencies": {
+    "@symfony/webpack-encore": "^0.22.2",
+    "vue": "^2.5.21",
+    "vue-loader": "^15.4.2",
+    "vue-template-compiler": "^2.5.21"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chloecorfmat/into-the-woods-webapp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chloecorfmat/into-the-woods-webapp/issues"
+  },
+  "homepage": "https://github.com/chloecorfmat/into-the-woods-webapp#readme",
+  "scripts": {
+    "watch": "./node_modules/.bin/encore dev --watch",
+    "dev": "./node_modules/.bin/encore dev"
+  }
+}

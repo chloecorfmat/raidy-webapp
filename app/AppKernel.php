@@ -23,6 +23,8 @@ class AppKernel extends Kernel
             new FOS\RestBundle\FOSRestBundle(),
             new APIBundle\APIBundle(),
             new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new \Symfony\WebpackEncoreBundle\WebpackEncoreBundle(),
+            new LiveBundle\LiveBundle(),
         ];
 
         if (in_array($this->getEnvironment(), ['dev', 'test'], true)) {
