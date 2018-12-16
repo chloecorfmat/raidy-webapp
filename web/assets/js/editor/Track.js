@@ -41,8 +41,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.addDecorator();
 
-    this.startMarker.setIcon(L.divIcon(startMarkerParameters));
-    this.endMarker.setIcon(L.divIcon(endMarkerParameters));
+    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
+      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #78e08f'  + ';" />'
+    }));
+    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
+      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #f74a45' +  ';" />'
+    }));
 
   };
   Track.prototype.addDecorator = function(){
@@ -133,7 +137,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.hide();
     mapManager.group.addLayer(this.line);
 
-    this.decorator.addTo(this.map);
+   this.addDecorator();
     this.startMarker.addTo(this.map);
 
     this.endMarker.addTo(this.map);
@@ -182,7 +186,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
       html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #78e08f'  + ';" />'
     }));
-    this.endMarker = L.marker([0, 0]);
     this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
       html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #f74a45' +  ';" />'
     }));
@@ -194,6 +197,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       'padding: 0rem 3rem;">' +
       '<h3>' + this.name + '</h3>' +
       '</header>');
+
+    this.startMarker.addTo(this.map);
+    this.endMarker.addTo(this.map);
 
     this.addDecorator();
     this.update();

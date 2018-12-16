@@ -16,12 +16,18 @@ $grey-light: #f4f4f4;
 $white: #fff;
 $white07: rgba(255, 255, 255, .7);
 $white09: rgba(255, 255, 255, .9);
-
+$grey-c: #ccc;
+$grey-d: #ddd;
+$grey-e: #eee;
 // APPS COLORS.
 $organizer-color: $main-color;
 $helper-color: $secondary-color-1;
 $live-color: $secondary-color-2;
+$semi-transparent-dark: rgba(0, 0, 0, .2);
+$poi-shadow-color: rgba(0, 0, 0, .7);
 
+
+$box-shadow-color: rgba(0, 0, 0, .12);
 // FONTS.
 @font-face {
   font-family: 'Fontastique';

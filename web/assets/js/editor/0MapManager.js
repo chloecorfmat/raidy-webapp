@@ -45,8 +45,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.GPXExporter = new GPXExporter(this);
   }
 
-
-
   MapManager.prototype.initialize = function () {
     /* MAP LISTENERS */
     let keepThis = this;
@@ -62,7 +60,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           keepThis.map.removeLayer(keepThis.waitingPoi.marker); // mapManager.addPoiFromClick(e);
 
           keepThis.switchMode(EditorMode.READING);
-
 
           let fab = document.getElementById('fabActionButton');
           if(fab != null){
@@ -189,6 +186,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
 
     this.loadRessources();
+    this.switchMode(EditorMode.READING);
 
   };
   MapManager.prototype.displayTrackButton = function (b) {
@@ -257,7 +255,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         this.setPoiEditable(false);
         this.waitingPoi = new Poi(this.map);
         this.map.addLayer(this.waitingPoi.marker);
-        if(keepThis.mousePosition != undefined) keepThis.waitingPoi.marker.setLatLng(keepThis.mousePosition);
+        if(keepThis.mousePosition != undefined){
+          keepThis.waitingPoi.marker.setLatLng(keepThis.mousePosition);
+        }
         keepThis.map.removeEventListener("mousemove");
         this.map.on("mousemove", function (e) {
           keepThis.waitingPoi.marker.setLatLng(e.latlng);
@@ -394,14 +394,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         if (xhr_object.status === 200) {
           let pois = JSON.parse(xhr_object.responseText);
           for (let poi of pois) {
-              mapManager.addPoi(poi);
+            mapManager.addPoi(poi);
           }
-          if(mapManager.group.getLayers().length > 0) {
-              mapManager.map.fitBounds(mapManager.group.getBounds());
+          if (mapManager.group.getLayers().length > 0) {
+            mapManager.map.fitBounds(mapManager.group.getBounds());
           }
         }
       }
-      mapManager.switchMode(EditorMode.READING);
     }
   };
 
@@ -436,19 +435,18 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       keepThis.mousePosition = e.latlng;
     });
 
-    let Z = 90, Y = 89;
     this.mapHistory = new MapHistory();
     let keepThis = this;
-    console.log("Load keyboard listeners")
+    console.log("Load keyboard listeners");
     let onKeyDown = function (e) {
-        if (e.ctrlKey && e.keyCode == Z) {
+        if (e.ctrlKey && e.keyCode == 90) { //Z
           if (e.shiftKey) {
             keepThis.mapHistory.redo();
           } else {
             keepThis.mapHistory.undo();
           }
         }
-        if (e.ctrlKey && e.keyCode == Y) {
+        if (e.ctrlKey && e.keyCode == 89) { //Y
           keepThis.mapHistory.redo();
         }
       if (e.keyCode == 80) { //P
@@ -461,8 +459,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           console.log("ECHAP");
           if(keepThis.mode == EditorMode.TRACK_EDIT){
             if(keepThis.currentTrack.line.editor.drawing()){
-              keepThis.currentTrack.line.editor.endDrawing()
-
+              keepThis.currentTrack.line.editor.endDrawing();
             }else{
               keepThis.switchMode(keepThis.lastMode);
             }
@@ -471,7 +468,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           }
         }
       };
-    L.DomEvent.addListener(document, 'keydown', onKeyDown, keepThis.map);
+    //L.DomEvent.addListener(document, 'keydown', onKeyDown, keepThis.map);
+    document.getElementById("map").addEventListener("keydown", onKeyDown);
+
   }
 }
 
