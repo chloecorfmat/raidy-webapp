@@ -5,6 +5,12 @@
         "/build/runtime.js",
         "/build/app.js"
       ]
+    },
+    "race": {
+      "js": [
+        "/build/runtime.js",
+        "/build/race.js"
+      ]
     }
   }
 }

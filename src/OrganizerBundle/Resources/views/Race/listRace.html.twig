@@ -1,0 +1,231 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <style>
+        .map--container {
+            transition: none;
+        }
+
+        .map {
+            height: 50%;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 980px) {
+            .map {
+                height: 50vh;
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id':raid.uniqid}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item">Edition des épreuves</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="content raceEditor">
+
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert--success">
+                <p>{{ flash_message }}</p>
+            </div>
+        {% endfor %}
+
+
+        <section class="content--half">
+            <h1>Edition des épreuves</h1>
+            <button class="btn">Ajouter une épreuve</button>
+            <section class="race">
+                <header>
+                    <h3>Parcours débutant</h3>
+                    <nav class="race--toolbar">
+                        <button class="btn">Ajouter un parcours</button>
+                    </nav>
+                </header>
+                <ul class="race--tracks">
+                    <li class="race--track">
+                        <header>
+                            <h4>Kayak</h4>
+                            <nav class="race--track--toolbar">
+                                <button class="btn">Ajouter un Checkpoint</button>
+                                <div class="race--track--checkpoint--order">
+                                    <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                </div>
+                                <button class="btn btn--danger"><i class="fa fa-trash"></i></button>
+                            </nav>
+                        </header>
+                        <ul class="race--track--checkpoints">
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="race--track">
+                        <header>
+                            <h4>Kayak</h4>
+                            <nav class="race--track--toolbar">
+                                <button class="btn">Ajouter un Checkpoint</button>
+                                <div class="race--track--checkpoint--order">
+                                    <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                </div>
+                                <button class="btn btn--danger"><i class="fa fa-trash"></i></button>
+                            </nav>
+                        </header>
+                        <ul class="race--track--checkpoints">
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="race--track">
+                        <header>
+                            <h4>Kayak</h4>
+                            <nav class="race--track--toolbar">
+                                <button class="btn">Ajouter un Checkpoint</button>
+                                <div class="race--track--checkpoint--order">
+                                    <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                    <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                </div>
+                                <button class="btn btn--danger"><i class="fa fa-trash"></i></button>
+                            </nav>
+                        </header>
+                        <ul class="race--track--checkpoints">
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                            <li class="race--track--checkpoint">
+                                <h5>CP#1</h5>
+                                <div class="race--track--checkpoint--tools">
+                                    <div class="race--track--checkpoint--order">
+                                        <button class="btn"><i class="fa fa-caret-up"></i></button>
+                                        <button class="btn"><i class="fa fa-caret-down"></i></button>
+                                    </div>
+                                    <button id="moreButton" class="race--track--checkpoint--dropbtn">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+            </section>
+        </section>
+
+        <section class="map--container content--half">
+            <div id="map" class="map"></div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var mapManager;
+        var raidID;
+        document.addEventListener("DOMContentLoaded", function () {
+            mapManager = new MapManager();
+            raidID = "{{ raid.uniqid }}";
+            mapManager.initialize();
+        });
+    </script>
+{% endblock %}
+
+
+
