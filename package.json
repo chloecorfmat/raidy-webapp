@@ -28,5 +28,9 @@
   "bugs": {
     "url": "https://github.com/chloecorfmat/into-the-woods-webapp/issues"
   },
-  "homepage": "https://github.com/chloecorfmat/into-the-woods-webapp#readme"
+  "homepage": "https://github.com/chloecorfmat/into-the-woods-webapp#readme",
+  "scripts": {
+    "watch": "./node_modules/.bin/encore dev --watch",
+    "dev": "./node_modules/.bin/encore dev"
+  }
 }
