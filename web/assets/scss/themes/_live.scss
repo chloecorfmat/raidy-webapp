@@ -3,7 +3,15 @@ $theme-color-secondary: $live-color;
 
 .live {
   h1 {
-    color: $tertiary-color-2;
+    color: $theme-color;
+  }
+
+  a {
+    color: $theme-color;
+
+    &:hover {
+      opacity: .7;
+    }
   }
 
   footer,

@@ -3,6 +3,20 @@
 {% block content %}
 <div class="centered--content">
     <h1>Mon super raid</h1>
+    <div class="social-media-share">
+        <ul>
+            <li>
+                <a href="https://www.facebook.com/sharer/sharer.php?u={{ meta['url'] }}" class="share-facebook" target="_blank">
+                    <i class="fab fa-facebook-square fa-2x"></i>
+                </a>
+            </li>
+            <li>
+                <a href="https://twitter.com/intent/tweet?text=Rejoins le raid {{ raid.name }}&url={{ meta['url'] }}&via=Raidy" class="share-twitter" target="_blank">
+                    <i class="fab fa-twitter-square fa-2x"></i>
+                </a>
+            </li>
+        </ul>
+    </div>
     <p class="important">Vous avez bien été enregistré en tant que bénévole pour ce raid !</p>
 
     <div class="actions">

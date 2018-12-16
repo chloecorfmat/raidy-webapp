@@ -1,6 +1,5 @@
 import Vue from 'vue';
-
-import Example from './components/Example'
+import SocialMediaShare from './components/SocialMediaShare';
 
 /**
  * Create a fresh Vue Application instance
@@ -8,6 +7,6 @@ import Example from './components/Example'
 window.addEventListener('load', function() {
     new Vue({
         el: '#app',
-        components: {Example}
+        components: {SocialMediaShare}
     });
 });

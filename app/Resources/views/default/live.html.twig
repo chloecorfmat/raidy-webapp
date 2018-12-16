@@ -1,7 +1,27 @@
 {% extends 'base.html.twig' %}
 
 {% set base_class = 'live' %}
+{% set logo_url = '/live' %}
+
 
 {% block title %}Live{% endblock %}
+
+{% block meta %}
+    <!-- Open Graph meta (Facebook) -->
+    <meta property="og:title" content="{{ meta['title'] }}" />
+    <meta property="og:url" content="{{ meta['url'] }}" />
+    <meta property="og:image" content="{{ meta['image'] }}" />
+    <meta property="og:description" content="{{ meta['description'] }}" />
+    <meta property="og:site_name" content="Live | Raidy" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card meta -->
+    <meta name="twitter:site" content="Live | Raidy">
+    <meta name="twitter:title" content="{{ meta['title'] }}">
+    <meta name="twitter:description" content="{{ meta['description'] }}">
+    <meta name="twitter:url" content="{{ meta['url'] }}" />
+    <meta name="twitter:image:src" content="{{ meta['image'] }}">
+{% endblock %}
 
 

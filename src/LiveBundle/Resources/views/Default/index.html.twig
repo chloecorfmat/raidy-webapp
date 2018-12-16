@@ -2,11 +2,11 @@
 
 {% block body %}
     <div id="app">
-        <example></example>
+        <social-media-share url="{{ meta['url'] }}"></social-media-share>
     </div>
 {% endblock %}
 
 
-{% block stylesheets %}
+{% block javascripts %}
     {{ encore_entry_script_tags('app') }}
 {% endblock %}

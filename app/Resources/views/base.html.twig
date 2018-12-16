@@ -10,6 +10,10 @@
     {% set user_edit_page = '' %}
 {% endif %}
 
+{% if logo_url is not defined %}
+    {% set logo_url = '/' %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -29,11 +33,12 @@
             <meta name="msapplication-TileColor" content="#0f5e54">
             <meta name="theme-color" content="#ffffff">
         {% endblock %}
+        {% block meta %}{% endblock %}
     </head>
     <body class="{{ base_class }} {% block body_class %}{% endblock %}">
         <header>
             <div class="header--raidy">
-            <a href="/" class="logo">
+            <a href="{{ logo_url }}" class="logo">
                 <img src="{{ asset('assets/images/logo-white.svg') }}" alt="Logo Raidy">
             </a>
 
