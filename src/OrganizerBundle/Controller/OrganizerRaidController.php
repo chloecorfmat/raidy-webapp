@@ -152,12 +152,21 @@ class OrganizerRaidController extends Controller
                 'html5' => true,
             ])
             ->add('address', TextType::class, ['label' => 'Adresse'])
-            ->add('addressAddition', TextType::class, ['required' => false, 'label' => 'Complément d\'adresse'])
+            ->add(
+                'addressAddition',
+                TextType::class,
+                [
+                    'required' => false,
+                    'label' => 'Complément d\'adresse',
+                ]
+            )
             ->add('postCode', IntegerType::class, ['label' => 'Code postal'])
             ->add('city', TextType::class, ['label' => 'Ville'])
             ->add('editionNumber', IntegerType::class, [
                 'label' => 'Numéro d\'édition',
-                'attr' => ['min' => 0],
+                'attr' => [
+                    'min' => 0,
+                ],
             ])
             ->add('picture', FileType::class, [
                 'label_attr' => ['class' => 'form--fixed-label'],

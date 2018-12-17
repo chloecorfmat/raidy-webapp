@@ -181,6 +181,9 @@ class OrganizerContactController extends Controller
             ->add('phoneNumber', TextType::class, [
                 'label' => 'Téléphone',
                 'required' => false,
+                'attr' => [
+                    'data-help' => 'Le numéro de téléphone doit comporter 10 chiffres.',
+                ],
             ])
             ->add('helper', ChoiceType::class, array(
                 'label' => 'Bénévole responsable',
