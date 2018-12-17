@@ -4,6 +4,13 @@ namespace LiveBundle\Service;
 
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
+/**
+ * Class TwitterService
+ *
+ * This service is inspired from https://github.com/J7mbo/twitter-api-php
+ *
+ * @package LiveBundle\Service
+ */
 class TwitterService
 {
 
