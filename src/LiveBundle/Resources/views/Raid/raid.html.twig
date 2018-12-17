@@ -4,12 +4,11 @@
     <div id="app">
         <social-media-share url="{{ meta['url'] }}"></social-media-share>
     </div>
-
-    {% for tweet in tweets %}
-        <ol>
+    <ol>
+        {% for tweet in tweets %}
             <li>{{ tweet.text }}</li>
-        </ol>
-    {% endfor %}
+        {% endfor %}
+    </ol>
 {% endblock %}
 
 
