@@ -1,0 +1,62 @@
+{% extends 'admin/admin.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('admin') }}">Administration</a></li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>Configuration</h1>
+    <div class="content">
+        <div id="configs">
+            <p>Pour modifier cette configuration, il faut modifier le fichier <span class="text--important">config.yml</span> lors de l'installation ou la mise à jour de l'application.</p>
+            <div class="table-search">
+                <i class="fas fa-search"></i>
+                <input class="search" placeholder="Rechercher" />
+            </div>
+            <div class="table--container">
+                <table class="table">
+                    <caption class="sr-only">Configuration</caption>
+                    <thead class="table--headers">
+                    <tr>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="parameter">
+                                <span>Paramètre</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="value">
+                                <span>Valeur</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="list">
+                    {% for key, config in configs %}
+                        <tr class="table--line">
+                            <td class="parameter"><span class="text--important">{{ key }}</span></td>
+                            <td class="value">
+                                {{ config }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    <script>
+        var options = {
+            valueNames: ['parameter', 'value']
+        };
+
+        var configsList = new List('configs', options);
+    </script>
+{% endblock %}
