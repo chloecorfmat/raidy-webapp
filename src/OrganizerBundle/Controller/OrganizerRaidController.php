@@ -67,8 +67,9 @@ class OrganizerRaidController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $raidManager = $em->getRepository('AppBundle:Raid');
+            $user = $this->getUser();
             $raidExist = $raidManager->findBy(
-                ['name' => $formRaid->getName(), 'editionNumber' => $formRaid->getEditionNumber()]
+                ['name' => $formRaid->getName(), 'editionNumber' => $formRaid->getEditionNumber(), 'user' => $user]
             );
             if (!$raidExist) {
                 $formRaid = $form->getData();
@@ -90,7 +91,7 @@ class OrganizerRaidController extends Controller
                 $raid->setPostCode($formRaid->getPostCode());
                 $raid->setCity($formRaid->getCity());
                 $raid->setEditionNumber($formRaid->getEditionNumber());
-                $raid->setUser($this->getUser());
+                $raid->setUser($user);
                 $raid->setPicture($fileName);
 
                 $raid->setUniqid(uniqid());
@@ -98,7 +99,24 @@ class OrganizerRaidController extends Controller
                 $em->persist($raid);
                 $em->flush();
 
-                return $this->redirectToRoute('listRaid');
+                $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+                $poiTypes = $poiTypeManager->findBy(
+                    ['user' => $user]
+                );
+
+                if (count($poiTypes) !== 0) {
+                    return $this->redirectToRoute('listRaid');
+                } else {
+                    $this->addFlash(
+                        'info',
+                        'Pour pouvoir tracer vos parcours simplement, ' .
+                        'nous vous conseillons de commencer par ajouter des ' .
+                        'types de points d\'intérêt (par exemple : Ravitaillement,' .
+                        ' Virage dangereux ou Poste de secours).'
+                    );
+
+                    return $this->redirectToRoute('listPoiType');
+                }
             }
             $form->addError(new FormError('Ce raid existe déjà.'));
         }
