@@ -106,6 +106,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   MapHistory.prototype.logModification = function (obj) {
     //console.log(obj);
     this.undoBuffer.push(obj);
+    this.redoBuffer = [];
   };
 }
 /*

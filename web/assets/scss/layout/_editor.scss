@@ -50,14 +50,14 @@
 }
 
 .poi-marker {
-  border: 1px solid $poi-shadow-color;
-
-  border-radius: 3rem 3rem 0;
+  border: 0.1rem solid $poi-shadow-color;
+  $poi-size: 1.5rem;
+  border-radius: 3rem 3rem 0rem;
   display: block;
-  height: 2rem;
+  height: $poi-size;
   position: relative;
-  transform: translateX(-1rem) translateY(-2rem) rotate(45deg);
-  width: 2rem;
+  transform:  translateX(-$poi-size/2) translateY(-$poi-size) rotate(45deg);
+  width: $poi-size;
 }
 
 .track-marker {
@@ -480,7 +480,6 @@ button {
   }
 }
 
-
 // TOGGLE.
 
 // The switch - the box around the slider.
@@ -580,10 +579,9 @@ input {
   text-align: center;
 }
 
-
-
-
-
+.leaflet-marker-draggable{
+  border-radius: 50%
+}
 
 .switch-alternative {
   display: inline-block;

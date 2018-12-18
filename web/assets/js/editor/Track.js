@@ -38,7 +38,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       color: color,
     });
 
-
     this.addDecorator();
 
     this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
@@ -50,23 +49,25 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   };
   Track.prototype.addDecorator = function(){
-    //patternParameters.symbol.options.pathOptions.color = this.color;
-   // patternParameters.symbol.color = this.color;
+    if(this.decorator != undefined) {
+      this.map.removeLayer(this.decorator);
+    }
     patternParameters = {
-      offset: 25,
-      endOffset : 25,
+      offset: 100,
+      endOffset : 100,
       repeat: 100,
       symbol: L.Symbol.arrowHead({
-        pixelSize: 8,
-        pathOptions: {fillOpacity: 1, color: this.color, weight: 5}
+        pixelSize: 12,
+        pathOptions: {fillOpacity: 1, color: this.color,  weight: 1}
       })
     };
+    console.log(this.color);
 
     this.decorator = L.polylineDecorator(this.line, {
       patterns: [patternParameters]
     });
 
-    this.decorator.addTo(mapManager.map);
+    this.decorator.addTo(this.map);
   }
   Track.prototype.setSportType = function (sportType) {
         this.sportType = sportType;
@@ -81,7 +82,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       if(this.visible) {
         this.decorator.addTo(this.map);
         if (!this.line.isEmpty()) {
-          this.decorator.removeFrom(mapManager.map);
+          this.decorator.removeFrom(this.map);
           this.addDecorator();
 
           let latLngs = this.line.getLatLngs();
@@ -183,10 +184,10 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.line = L.polyline(waypoints, {weight: 3, color: this.color});
     this.line.addTo(mapManager.group);
 
-    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
+    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0],
       html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #78e08f'  + ';" />'
     }));
-    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
+    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0],
       html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #f74a45' +  ';" />'
     }));
 
