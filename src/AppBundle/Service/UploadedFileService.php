@@ -22,9 +22,10 @@ class UploadedFileService
     {
         // $file stores the uploaded file
         /**
- * @var Symfony\Component\HttpFoundation\File\UploadedFile $file 
-*/
-        $fileName = $this->generateUniqueFileName().'.'.$file->getClientOriginalExtension();
+         * @var Symfony\Component\HttpFoundation\File\UploadedFile $file
+         */
+        $fileName = $this->generateUniqueFileName() . '.' . $file->getClientOriginalExtension();
+
         // Move the file to the directory where brochures are stored
         try {
             $file->move(

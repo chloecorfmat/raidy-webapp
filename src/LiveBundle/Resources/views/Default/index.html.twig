@@ -1,0 +1,12 @@
+{% extends 'default/live.html.twig' %}
+
+{% block body %}
+    <div id="app">
+        <social-media-share url="{{ meta['url'] }}"></social-media-share>
+    </div>
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}

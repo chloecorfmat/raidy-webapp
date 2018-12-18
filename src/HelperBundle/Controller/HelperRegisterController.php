@@ -48,11 +48,15 @@ class HelperRegisterController extends Controller
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
-        return $this->render(
-            'HelperBundle:Register:inviteHelper.html.twig', [
+        $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        $meta['title'] = 'Helper | Raidy';
+        $meta['image'] = '/uploads/raids/' . $raid->getPicture();
+        $meta['description'] = 'Rejoindre le raid' . $raid->getName();
+
+        return $this->render('HelperBundle:Register:inviteHelper.html.twig', [
             'raid' => $raid,
-            ]
-        );
+            'meta' => $meta,
+        ]);
     }
 
     /**
@@ -82,11 +86,9 @@ class HelperRegisterController extends Controller
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
-        return $this->render(
-            'HelperBundle:Register:registerSuccessHelper.html.twig', [
+        return $this->render('HelperBundle:Register:registerSuccessHelper.html.twig', [
             'raid' => $raid,
-            ]
-        );
+        ]);
     }
 
     /**
@@ -139,15 +141,19 @@ class HelperRegisterController extends Controller
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
             ->add(
-                'poitype', ChoiceType::class, [
-                'label' => 'Type de poste souhaité pour le bénévolat',
-                'choices' => $choices,
+                'poitype',
+                ChoiceType::class,
+                [
+                    'label' => 'Type de poste souhaité pour le bénévolat',
+                    'choices' => $choices,
                 ]
             )
             ->add(
-                'submit', SubmitType::class, [
-                'label' => 'S\'inscrire',
-                'attr' => array('class' => 'btn'),
+                'submit',
+                SubmitType::class,
+                [
+                    'label' => 'S\'inscrire',
+                    'attr' => array('class' => 'btn'),
                 ]
             )
             ->getForm();
@@ -219,7 +225,7 @@ class HelperRegisterController extends Controller
             } else {
                 $form->addError(
                     new FormError(
-                        'Le numéro de téléphone d\'un bénévole doit être un mobile et commencer par 06 ou 07. '.
+                        'Le numéro de téléphone d\'un bénévole doit être un mobile et commencer par 06 ou 07. ' .
                         'Il comporte 10 numéros.'
                     )
                 );
@@ -227,8 +233,9 @@ class HelperRegisterController extends Controller
         }
 
         return $this->render(
-            'HelperBundle:Register:registerHelper.html.twig', [
-            'form' => $form->createView(),
+            'HelperBundle:Register:registerHelper.html.twig',
+            [
+                'form' => $form->createView(),
             ]
         );
     }
@@ -280,9 +287,11 @@ class HelperRegisterController extends Controller
             ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
             //->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
             ->add(
-                'poitype', ChoiceType::class, [
-                'label' => 'Type de poste souhaité pour le bénévolat',
-                'choices' => $choices,
+                'poitype',
+                ChoiceType::class,
+                [
+                    'label' => 'Type de poste souhaité pour le bénévolat',
+                    'choices' => $choices,
                 ]
             )
             ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
@@ -349,12 +358,10 @@ class HelperRegisterController extends Controller
             }
         }
 
-        return $this->render(
-            'HelperBundle:Register:joinHelper.html.twig', [
+        return $this->render('HelperBundle:Register:joinHelper.html.twig', [
             'form' => $form->createView(),
             'raid' => $raid,
-            ]
-        );
+        ]);
     }
 
     /**

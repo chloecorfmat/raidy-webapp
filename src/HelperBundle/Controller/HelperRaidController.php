@@ -67,14 +67,18 @@ class HelperRaidController extends Controller
 
         $form = $this->createFormBuilder($defaultData)
             ->add(
-                'poitype', ChoiceType::class, [
+                'poitype',
+                ChoiceType::class,
+                [
                 'label' => 'Type de poste souhaité pour le bénévolat',
                 'choices' => $choices,
                 'data' => $helper->getFavoritePoiType()->getId(),
                 ]
             )
             ->add(
-                'submit', SubmitType::class, [
+                'submit',
+                SubmitType::class,
+                [
                 'label' => 'Modifier ma préférence',
                 'attr' => array('class' => 'btn'),
                 ]
@@ -97,7 +101,8 @@ class HelperRaidController extends Controller
         $contacts = $contactManager->findBy(array('raid' => $raid));
 
         return $this->render(
-            'HelperBundle:Raid:raid.html.twig', [
+            'HelperBundle:Raid:raid.html.twig',
+            [
             'raid' => $raid,
             'contacts' => $contacts,
             'form' => $form->createView(),

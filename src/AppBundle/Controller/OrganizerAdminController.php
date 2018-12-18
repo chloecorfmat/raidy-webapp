@@ -131,8 +131,9 @@ class OrganizerAdminController extends Controller
         }
 
         return $this->render(
-            'AppBundle:Admin:addOrganizer.html.twig', [
-            'form' => $form->createView(),
+            'AppBundle:Admin:addOrganizer.html.twig',
+            [
+                'form' => $form->createView(),
             ]
         );
     }
@@ -229,7 +230,8 @@ class OrganizerAdminController extends Controller
         }
 
         return $this->render(
-            'AppBundle:Admin:editOrganizer.html.twig', [
+            'AppBundle:Admin:editOrganizer.html.twig',
+            [
             'form' => $form->createView(),
             'username' => $formUser->getUsername() ?? '',
             'userId' => $id,

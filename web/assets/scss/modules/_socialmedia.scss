@@ -1,0 +1,26 @@
+.social-media-share {
+  margin-top: 1rem;
+
+  .share-twitter {
+    color: $twitter-color;
+  }
+
+  .share-facebook {
+    color: $facebook-color;
+  }
+
+  ul {
+    padding: 0;
+    text-align: center;
+  }
+
+  li {
+    display: inline-block;
+    list-style-type: none;
+    text-align: center;
+
+    &:not(:first-child) {
+      margin-left: .5rem;
+    }
+  }
+}

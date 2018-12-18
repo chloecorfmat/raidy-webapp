@@ -40,7 +40,9 @@ class OrganizerRaidController extends Controller
         $form = $this->createFormBuilder($formRaid)
             ->add('name', TextType::class, ['label' => 'Nom du raid'])
             ->add(
-                'date', DateType::class, [
+                'date',
+                DateType::class,
+                [
                 'label' => 'Date',
                 'widget' => 'single_text',
                 'html5' => true,
@@ -51,13 +53,17 @@ class OrganizerRaidController extends Controller
             ->add('postCode', IntegerType::class, ['label' => 'Code postal'])
             ->add('city', TextType::class, ['label' => 'Ville'])
             ->add(
-                'editionNumber', IntegerType::class, [
+                'editionNumber',
+                IntegerType::class,
+                [
                 'label' => 'Numéro d\'édition',
                 'attr' => ['min' => 0],
                 ]
             )
             ->add(
-                'picture', FileType::class, [
+                'picture',
+                FileType::class,
+                [
                 'label' => 'Photo',
                 'label_attr' => ['class' => 'form--fixed-label'],
                 'attr' => ['class' => 'form-input--image'],
@@ -72,8 +78,9 @@ class OrganizerRaidController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $em = $this->getDoctrine()->getManager();
             $raidManager = $em->getRepository('AppBundle:Raid');
+            $user = $this->getUser();
             $raidExist = $raidManager->findBy(
-                ['name' => $formRaid->getName(), 'editionNumber' => $formRaid->getEditionNumber()]
+                ['name' => $formRaid->getName(), 'editionNumber' => $formRaid->getEditionNumber(), 'user' => $user]
             );
             if (!$raidExist) {
                 $formRaid = $form->getData();
@@ -95,7 +102,7 @@ class OrganizerRaidController extends Controller
                 $raid->setPostCode($formRaid->getPostCode());
                 $raid->setCity($formRaid->getCity());
                 $raid->setEditionNumber($formRaid->getEditionNumber());
-                $raid->setUser($this->getUser());
+                $raid->setUser($user);
                 $raid->setPicture($fileName);
 
                 $raid->setUniqid(uniqid());
@@ -103,13 +110,31 @@ class OrganizerRaidController extends Controller
                 $em->persist($raid);
                 $em->flush();
 
-                return $this->redirectToRoute('listRaid');
+                $poiTypeManager = $em->getRepository('AppBundle:PoiType');
+                $poiTypes = $poiTypeManager->findBy(
+                    ['user' => $user]
+                );
+
+                if (count($poiTypes) !== 0) {
+                    return $this->redirectToRoute('listRaid');
+                } else {
+                    $this->addFlash(
+                        'info',
+                        'Pour pouvoir tracer vos parcours simplement, ' .
+                        'nous vous conseillons de commencer par ajouter des ' .
+                        'types de points d\'intérêt (par exemple : Ravitaillement,' .
+                        ' Virage dangereux ou Poste de secours).'
+                    );
+
+                    return $this->redirectToRoute('listPoiType');
+                }
             }
             $form->addError(new FormError('Ce raid existe déjà.'));
         }
 
         return $this->render(
-            'OrganizerBundle:Raid:addRaid.html.twig', [
+            'OrganizerBundle:Raid:addRaid.html.twig',
+            [
             'form' => $form->createView(),
             ]
         );
@@ -152,7 +177,9 @@ class OrganizerRaidController extends Controller
         $form = $this->createFormBuilder($formRaid)
             ->add('name', TextType::class, ['label' => 'Nom du raid'])
             ->add(
-                'date', DateType::class, [
+                'date',
+                DateType::class,
+                [
                 'label' => 'Date',
                 'widget' => 'single_text',
 
@@ -161,17 +188,30 @@ class OrganizerRaidController extends Controller
                 ]
             )
             ->add('address', TextType::class, ['label' => 'Adresse'])
-            ->add('addressAddition', TextType::class, ['required' => false, 'label' => 'Complément d\'adresse'])
+            ->add(
+                'addressAddition',
+                TextType::class,
+                [
+                    'required' => false,
+                    'label' => 'Complément d\'adresse',
+                ]
+            )
             ->add('postCode', IntegerType::class, ['label' => 'Code postal'])
             ->add('city', TextType::class, ['label' => 'Ville'])
             ->add(
-                'editionNumber', IntegerType::class, [
+                'editionNumber',
+                IntegerType::class,
+                [
                 'label' => 'Numéro d\'édition',
-                'attr' => ['min' => 0],
+                'attr' => [
+                        'min' => 0,
+                    ],
                 ]
             )
             ->add(
-                'picture', FileType::class, [
+                'picture',
+                FileType::class,
+                [
                 'label_attr' => ['class' => 'form--fixed-label'],
                 'label' => 'Photo',
                 'required' => false,
@@ -226,7 +266,8 @@ class OrganizerRaidController extends Controller
         }
 
         return $this->render(
-            'OrganizerBundle:Raid:raid.html.twig', [
+            'OrganizerBundle:Raid:raid.html.twig',
+            [
             'form' => $form->createView(),
             'raid' => $raid,
             ]
@@ -344,6 +385,7 @@ class OrganizerRaidController extends Controller
         }
 
         $authChecker = $this->get('security.authorization_checker');
+
         if (!$authChecker->isGranted(RaidVoter::COLLAB, $cloneRaid)) {
             throw $this->createAccessDeniedException();
         }
@@ -354,13 +396,17 @@ class OrganizerRaidController extends Controller
 
         $form = $this->createFormBuilder($formRaid)
             ->add(
-                'name', TextType::class, [
+                'name',
+                TextType::class,
+                [
                 'label' => 'Nom du raid',
                 'data' => $cloneRaid->getName(),
                 ]
             )
             ->add(
-                'date', DateType::class, [
+                'date',
+                DateType::class,
+                [
                 'label' => 'Date',
                 'widget' => 'single_text',
                 'data' => $cloneRaid->getDate(),
@@ -370,47 +416,60 @@ class OrganizerRaidController extends Controller
                 ]
             )
             ->add(
-                'address', TextType::class, [
+                'address',
+                TextType::class,
+                [
                 'label' => 'Adresse',
                 'data' => $cloneRaid->getAddress(),
                 ]
             )
             ->add(
-                'addressAddition', TextType::class, [
+                'addressAddition',
+                TextType::class,
+                [
                 'required' => false,
                 'label' => 'Complément d\'adresse',
                 'data' => (null != $cloneRaid->getAddressAddition()) ? $cloneRaid->getAddressAddition() : '',
                 ]
             )
             ->add(
-                'postCode', IntegerType::class, [
+                'postCode',
+                IntegerType::class,
+                [
                 'label' => 'Code postal',
                 'data' => $cloneRaid->getPostCode(),
                 ]
             )
             ->add(
-                'city', TextType::class, [
+                'city',
+                TextType::class,
+                [
                 'label' => 'Ville',
                 'data' => $cloneRaid->getCity(),
                 ]
             )
             ->add(
-                'editionNumber', IntegerType::class, [
+                'editionNumber',
+                IntegerType::class,
+                [
                 'label' => 'Numéro d\'édition',
                 'data' => $cloneRaid->getEditionNumber(),
                 ]
             )
             ->add(
-                'picture', FileType::class, [
-                'label_attr' => ['class' => 'form--fixed-label'],
-                'label' => 'Photo',
-                'data' => $cloneRaid->getPicture(),
-                'required' => false,
-                'data_class' => null,
-                'attr' => [
-                    'data_url' => '/uploads/raids/',
-                    'class' => 'form-input--image',
-                ],
+                'picture',
+                FileType::class,
+                [
+                    'label_attr' => ['class' => 'form--fixed-label'],
+                    'label' => 'Photo',
+                    'data' => $cloneRaid->getPicture(),
+                    'required' => false,
+                    'data_class' => null,
+                    'attr' =>
+                        [
+                            'data_url' => '/uploads/raids/',
+                            'class' => 'form-input--image',
+                        ],
                 ]
             )
             ->add('submit', SubmitType::class, ['label' => 'Cloner ce raid'])
@@ -450,7 +509,8 @@ class OrganizerRaidController extends Controller
         }
 
         return $this->render(
-            'OrganizerBundle:Raid:cloneRaid.html.twig', [
+            'OrganizerBundle:Raid:cloneRaid.html.twig',
+            [
             'form' => $form->createView(),
             'user' => $user,
             'raidId' => $cloneRaid->getId(),

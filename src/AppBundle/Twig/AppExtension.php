@@ -35,7 +35,7 @@ class AppExtension extends AbstractExtension
             array_shift($str);
 
             foreach ($str as $s) {
-                $final .= ' '.$s;
+                $final .= ' ' . $s;
             }
         } else {
             $final = $number;

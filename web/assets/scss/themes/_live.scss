@@ -1,0 +1,26 @@
+$theme-color: $live-color;
+$theme-color-secondary: $live-color;
+
+.live {
+  h1 {
+    color: $theme-color;
+  }
+
+  a {
+    color: $theme-color;
+
+    &:hover {
+      opacity: .7;
+    }
+  }
+
+  footer,
+  header {
+    background: $theme-color;
+  }
+
+  .btn {
+    background: $tertiary-color-2;
+  }
+}
+

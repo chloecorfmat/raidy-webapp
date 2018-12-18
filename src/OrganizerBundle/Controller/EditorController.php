@@ -46,7 +46,8 @@ class EditorController extends Controller
         $sportTypes = $sportManager->findAll();
 
         return $this->render(
-            'OrganizerBundle:Editor:editor.html.twig', [
+            'OrganizerBundle:Editor:editor.html.twig',
+            [
             'id' => $raid->getUniqid(),
             'raidName' => $raid->getName(),
             'poiTypes' => $poiTypes,

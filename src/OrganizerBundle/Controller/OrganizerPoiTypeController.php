@@ -63,7 +63,8 @@ class OrganizerPoiTypeController extends AjaxAPIController
         }
 
         return $this->render(
-            'OrganizerBundle:PoiType:addPoiType.html.twig', [
+            'OrganizerBundle:PoiType:addPoiType.html.twig',
+            [
             'form' => $form->createView(),
             ]
         );
@@ -131,7 +132,8 @@ class OrganizerPoiTypeController extends AjaxAPIController
         }
 
         return $this->render(
-            'OrganizerBundle:PoiType:poiType.html.twig', [
+            'OrganizerBundle:PoiType:poiType.html.twig',
+            [
             'form' => $form->createView(),
             'poiType' => $poiType,
             ]

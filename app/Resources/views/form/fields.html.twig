@@ -74,4 +74,7 @@
     {%- set type = type|default('text') -%}
     {%- set class = attr.class|default('') -%}
     <input class="form--input-{{ type }} {{ class }}" type="{{ type }}" {{ block('widget_attributes') }} {% if value is not empty %}value="{{ value }}" {% endif %}/>
+    {% if form.vars.attr['data-help'] is defined %}
+        <p class="input--help">{{ form.vars.attr['data-help'] }}</p>
+    {% endif %}
 {%- endblock form_widget_simple -%}

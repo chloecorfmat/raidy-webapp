@@ -97,7 +97,8 @@ class OrganizerContactController extends Controller
         }
 
         return $this->render(
-            'OrganizerBundle:Contact:contact.html.twig', [
+            'OrganizerBundle:Contact:contact.html.twig',
+            [
             'form' => $form->createView(),
             'raid' => $raid,
             'raidId' => $raid->getUniqId(),
@@ -180,21 +181,28 @@ class OrganizerContactController extends Controller
         $form = $this->createFormBuilder($formContact)
             ->add('role', TextType::class, ['label' => 'Rôle'])
             ->add(
-                'phoneNumber', TextType::class, [
-                'label' => 'Téléphone',
-                'required' => false,
+                'phoneNumber',
+                TextType::class,
+                [
+                    'label' => 'Téléphone',
+                    'required' => false,
+                    'attr' => [
+                        'data-help' => 'Le numéro de téléphone doit comporter 10 chiffres.',
+                    ],
                 ]
             )
             ->add(
-                'helper', ChoiceType::class, array(
+                'helper',
+                ChoiceType::class,
+                array(
                 'label' => 'Bénévole responsable',
                 'required' => false,
                 'choices' => $helpers,
                 'choice_label' => function ($helper) {
                     /**
-                * @var Helper $helper 
-                */
-                    $helperName = $helper->getUser()->getFirstName().' '.$helper->getUser()->getLastName();
+                    * @var Helper $helper
+                    */
+                    $helperName = $helper->getUser()->getFirstName() . ' ' . $helper->getUser()->getLastName();
 
                     return $helperName;
                 },

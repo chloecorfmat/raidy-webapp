@@ -104,7 +104,8 @@ class CollaborationController extends Controller
         $collaborations = $collaborationManager->findBy(['raid' => $raid]);
 
         return $this->render(
-            'OrganizerBundle:Collaborator:listCollaborator.html.twig', [
+            'OrganizerBundle:Collaborator:listCollaborator.html.twig',
+            [
                 'collaborations' => $collaborations,
                 'form' => $form->createView(),
                 'raid' => $raid,
@@ -181,7 +182,8 @@ class CollaborationController extends Controller
         }
 
         return $this->render(
-            'OrganizerBundle:Collaborator:inviteCollaborator.html.twig', [
+            'OrganizerBundle:Collaborator:inviteCollaborator.html.twig',
+            [
             'raid' => $collaboration->getRaid(),
             'collaboration' => $collaboration,
             ]
@@ -220,8 +222,9 @@ class CollaborationController extends Controller
         }
 
         return $this->render(
-            'OrganizerBundle:Collaborator:registerSuccessCollaborator.html.twig', [
-            'raid' => $raid,
+            'OrganizerBundle:Collaborator:registerSuccessCollaborator.html.twig',
+            [
+                'raid' => $raid,
             ]
         );
     }
@@ -259,9 +262,11 @@ class CollaborationController extends Controller
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
             ->add(
-                'submit', SubmitType::class, [
-                'label' => 'S\'inscrire',
-                'attr' => array('class' => 'btn'),
+                'submit',
+                SubmitType::class,
+                [
+                    'label' => 'S\'inscrire',
+                    'attr' => array('class' => 'btn'),
                 ]
             )
             ->getForm();
@@ -323,8 +328,9 @@ class CollaborationController extends Controller
                             $em->flush();
 
                             return $this->redirectToRoute(
-                                'registerSuccessCollaborator', [
-                                'invitationId' => $invitationId,
+                                'registerSuccessCollaborator',
+                                [
+                                    'invitationId' => $invitationId,
                                 ]
                             );
                         }
@@ -348,8 +354,9 @@ class CollaborationController extends Controller
         }
 
         return $this->render(
-            'OrganizerBundle:Collaborator:registerCollaborator.html.twig', [
-            'form' => $form->createView(),
+            'OrganizerBundle:Collaborator:registerCollaborator.html.twig',
+            [
+                'form' => $form->createView(),
             ]
         );
     }
@@ -438,8 +445,9 @@ class CollaborationController extends Controller
                             $em->flush();
 
                             return $this->redirectToRoute(
-                                'registerSuccessCollaborator', [
-                                'invitationId' => $invitationId,
+                                'registerSuccessCollaborator',
+                                [
+                                    'invitationId' => $invitationId,
                                 ]
                             );
                         }
@@ -451,9 +459,10 @@ class CollaborationController extends Controller
         }
 
         return $this->render(
-            'OrganizerBundle:Collaborator:joinCollaborator.html.twig', [
-            'raid' => $raid,
-            'form' => $form->createView(),
+            'OrganizerBundle:Collaborator:joinCollaborator.html.twig',
+            [
+                'raid' => $raid,
+                'form' => $form->createView(),
             ]
         );
     }
