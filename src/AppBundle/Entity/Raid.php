@@ -100,7 +100,6 @@ class Raid
      */
     protected $picture;
 
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */

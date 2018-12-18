@@ -19,7 +19,7 @@ gulp.task('lint', function() {
         //.pipe(esLint.failAfterError());
 
       gulp.src('./js/editor/*.js')
-        //.pipe(esLint())
+       // .pipe(esLint())
         .pipe(esLint.format());
       //.pipe(esLint.failAfterError());
 

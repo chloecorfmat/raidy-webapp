@@ -141,7 +141,6 @@ class PoiService
      */
     public function checkDataArray($obj, $checkId)
     {
-
         if ($checkId) {
             if (!isset($obj['id']) || '' == $obj['id']) {
                 return false;

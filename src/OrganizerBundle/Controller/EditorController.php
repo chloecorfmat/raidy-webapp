@@ -25,7 +25,7 @@ class EditorController extends Controller
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->findOneBy(['uniqid' => $id]);
 
-        if ($raid == null) {
+        if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
@@ -36,19 +36,24 @@ class EditorController extends Controller
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
 
-        $poiTypes = $poiTypeManager->findBy([
+        $poiTypes = $poiTypeManager->findBy(
+            [
             'user' => $raid->getUser(),
-        ]);
+            ]
+        );
 
         $sportManager = $em->getRepository('AppBundle:SportType');
         $sportTypes = $sportManager->findAll();
 
-        return $this->render('OrganizerBundle:Editor:editor.html.twig', [
+        return $this->render(
+            'OrganizerBundle:Editor:editor.html.twig',
+            [
             'id' => $raid->getUniqid(),
             'raidName' => $raid->getName(),
             'poiTypes' => $poiTypes,
             'sportTypes' => $sportTypes,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -63,7 +68,7 @@ class EditorController extends Controller
         // Find the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $datetime = new \DateTime("now");
+        $datetime = new \DateTime('now');
 
         $user->setTutorialTime($datetime);
         $userManager = $this->get('fos_user.user_manager');

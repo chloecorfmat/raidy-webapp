@@ -5,7 +5,6 @@ namespace OrganizerBundle\Controller;
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Track;
 use AppBundle\Entity\Raid;
-
 use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;

@@ -37,9 +37,11 @@ class DefaultController extends Controller
 
         /* @todo refacto with DQL join to remove useless queries */
         $em = $this->get('doctrine.orm.entity_manager');
-        $helpers = $em->getRepository('AppBundle:Helper')->findBy([
+        $helpers = $em->getRepository('AppBundle:Helper')->findBy(
+            [
             'user' => $user,
-        ]);
+            ]
+        );
 
         $raidIds = [];
         foreach ($helpers as $h) {
@@ -47,14 +49,19 @@ class DefaultController extends Controller
             $raidIds[] = $rid;
         }
 
-        $raids = $em->getRepository('AppBundle:Raid')->findBy([
-            'id' => $raidIds,
-        ]);
+        $raids = $em->getRepository('AppBundle:Raid')->findBy(
+            [
+                'id' => $raidIds,
+            ]
+        );
 
-        return $this->render('HelperBundle:Default:index.html.twig', [
-            'raids' => $raids,
-            'user' => $user,
-        ]);
+        return $this->render(
+            'HelperBundle:Default:index.html.twig',
+            [
+                'raids' => $raids,
+                'user' => $user,
+            ]
+        );
     }
 
     /**
@@ -76,13 +83,13 @@ class DefaultController extends Controller
             $user,
             array('validation_groups' => array('editProfile', 'Profile'))
         )
-        ->add('username', TextType::class, ['label' => 'Nom d\'utilisateur'])
-        ->add('firstName', TextType::class, ['label' => 'Prénom'])
-        ->add('lastName', TextType::class, ['label' => 'Nom'])
-        ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
-        ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
-        ->add('submit', SubmitType::class, ['label' => 'Modifier le profil', 'attr' => array('class' => 'btn')])
-        ->getForm();
+            ->add('username', TextType::class, ['label' => 'Nom d\'utilisateur'])
+            ->add('firstName', TextType::class, ['label' => 'Prénom'])
+            ->add('lastName', TextType::class, ['label' => 'Nom'])
+            ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
+            ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
+            ->add('submit', SubmitType::class, ['label' => 'Modifier le profil', 'attr' => array('class' => 'btn')])
+            ->getForm();
 
         $data = [];
         $editPasswordform = $formFactory->createNamedBuilder(
@@ -91,17 +98,25 @@ class DefaultController extends Controller
             $data,
             array('validation_groups' => array('changePassword'))
         )
-        ->add('oldPassword', PasswordType::class, ['label' => 'Ancien mot de passe'])
-        ->add('plainPassword', RepeatedType::class, array(
-            'type' => PasswordType::class,
-            'invalid_message' => 'Les mots de passe doivent être identiques.',
-            'options' => array('attr' => array('class' => 'password-field')),
-            'required' => true,
-            'first_options' => array('label' => 'Nouveau mot de passe'),
-            'second_options' => array('label' => 'Répétez le mot de passe'),
-        ))
-        ->add('submit', SubmitType::class, ['label' => 'Modifier le mot de passe', 'attr' => array('class' => 'btn')])
-        ->getForm();
+            ->add('oldPassword', PasswordType::class, ['label' => 'Ancien mot de passe'])
+            ->add(
+                'plainPassword',
+                RepeatedType::class,
+                array(
+                    'type' => PasswordType::class,
+                    'invalid_message' => 'Les mots de passe doivent être identiques.',
+                    'options' => array('attr' => array('class' => 'password-field')),
+                    'required' => true,
+                    'first_options' => array('label' => 'Nouveau mot de passe'),
+                    'second_options' => array('label' => 'Répétez le mot de passe'),
+                )
+            )
+            ->add(
+                'submit',
+                SubmitType::class,
+                ['label' => 'Modifier le mot de passe', 'attr' => array('class' => 'btn')]
+            )
+            ->getForm();
 
         $form->handleRequest($request);
         $editPasswordform->handleRequest($request);
@@ -144,9 +159,12 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->render('HelperBundle:Profile:editProfile.html.twig', [
+        return $this->render(
+            'HelperBundle:Profile:editProfile.html.twig',
+            [
             'form' => $form->createView(),
             'editPasswordForm' => $editPasswordform->createView(),
-        ]);
+            ]
+        );
     }
 }

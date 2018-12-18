@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 02/11/2018
- * Time: 11:04
+ * Time: 11:04.
  */
 
 namespace AppBundle\Controller;
@@ -36,12 +36,16 @@ class SportTypeController extends Controller
 
         $form = $this->createFormBuilder($formSportType)
             ->add('sport', TextType::class, ['label' => 'Sport'])
-            ->add('icon', FileType::class, [
-                'label' => 'Icone',
-                'label_attr' => ['class' => 'form--fixed-label'],
-                'attr' => ['class' => 'form-input--image'],
-                'data_class' => null,
-            ])
+            ->add(
+                'icon',
+                FileType::class,
+                [
+                    'label' => 'Icone',
+                    'label_attr' => ['class' => 'form--fixed-label'],
+                    'attr' => ['class' => 'form-input--image'],
+                    'data_class' => null,
+                ]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un sport'])
             ->getForm();
 
@@ -67,9 +71,12 @@ class SportTypeController extends Controller
             $form->addError(new FormError('Ce type de sport existe déjà.'));
         }
 
-        return $this->render('AppBundle:SportType:addSportType.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'AppBundle:SportType:addSportType.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -104,16 +111,20 @@ class SportTypeController extends Controller
 
         $form = $this->createFormBuilder($formSportType)
             ->add('sport', TextType::class, ['label' => 'Sport'])
-            ->add('icon', FileType::class, [
-                'label_attr' => ['class' => 'form--fixed-label'],
-                'label' => 'Icone',
-                'required' => false,
-                'data_class' => null,
-                'attr' => [
-                    'data_url' => 'uploads/sporttypes/',
-                    'class' => 'form-input--image',
-                ],
-            ])
+            ->add(
+                'icon',
+                FileType::class,
+                [
+                    'label_attr' => ['class' => 'form--fixed-label'],
+                    'label' => 'Icone',
+                    'required' => false,
+                    'data_class' => null,
+                    'attr' => [
+                        'data_url' => 'uploads/sporttypes/',
+                        'class' => 'form-input--image',
+                    ],
+                ]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Editer le sport'])
             ->getForm();
 
@@ -146,10 +157,13 @@ class SportTypeController extends Controller
             }
         }
 
-        return $this->render('AppBundle:SportType:sportType.html.twig', [
-            'form' => $form->createView(),
-            'sportType' => $sportType,
-        ]);
+        return $this->render(
+            'AppBundle:SportType:sportType.html.twig',
+            [
+                'form' => $form->createView(),
+                'sportType' => $sportType,
+            ]
+        );
     }
 
     /**
@@ -202,12 +216,16 @@ class SportTypeController extends Controller
 
         $form = $this->createFormBuilder($formSportType)
             ->add('sport', TextType::class, ['label' => 'Sport'])
-            ->add('icon', FileType::class, [
-                'label' => 'Icone',
-                'label_attr' => ['class' => 'form--fixed-label'],
-                'attr' => ['class' => 'form-input--image'],
-                'data_class' => null,
-            ])
+            ->add(
+                'icon',
+                FileType::class,
+                [
+                    'label' => 'Icone',
+                    'label_attr' => ['class' => 'form--fixed-label'],
+                    'attr' => ['class' => 'form-input--image'],
+                    'data_class' => null,
+                ]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un sport'])
             ->getForm();
 

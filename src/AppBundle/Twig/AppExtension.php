@@ -29,7 +29,7 @@ class AppExtension extends AbstractExtension
      */
     public function telephoneFilter($number)
     {
-        if (strlen($number) == 10) {
+        if (10 == strlen($number)) {
             $str = str_split($number, 2);
             $final = $str[0];
             array_shift($str);
