@@ -303,12 +303,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         ignTileUrl,
         {attribution: '&copy; <a href="http://www.ign.fr/">IGN</a>'}
     );
-      ignTiles.addTo(mapManager.map);
 
-     L.control.layers({"OpenStreetMap":mapManager.OSMTiles, "IGN":ignTiles}).addTo(mapManager.map);
+    ignTiles.addTo(mapManager.map);
+    L.control.layers({"OpenStreetMap":mapManager.OSMTiles, "IGN":ignTiles}).addTo(mapManager.map);
 
-
-      mapManager.map.addControl(new ImportGPXCtrl());
+    mapManager.map.addControl(new ImportGPXCtrl());
     mapManager.map.addControl(new ExportGPXCtrl());
 
     mapManager.trackControl = new L.TrackEditControl();

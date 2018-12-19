@@ -968,3 +968,13 @@
     }
   }
 }
+
+div {
+  .leaflet-control-layers-base > label {
+    bottom: 0;
+
+    input {
+      width: auto;
+    }
+  }
+}
