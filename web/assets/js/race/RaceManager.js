@@ -1,3 +1,0 @@
-var RaceManager = function () {
-
-};
