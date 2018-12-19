@@ -3,6 +3,6 @@ parameters:
     bin_dir: vendor/bin
     tasks:
         phpcs:
-            standard: Symfony3Custom
+            standard: vendor/endouble/symfony3-custom-coding-standard/Symfony3Custom
             whitelist_patterns:
                 - /^src\/(.*)/
