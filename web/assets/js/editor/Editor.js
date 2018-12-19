@@ -305,7 +305,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     );
 
     ignTiles.addTo(mapManager.map);
-    L.control.layers({"OpenStreetMap":mapManager.OSMTiles, "IGN":ignTiles}).addTo(mapManager.map);
+    L.control.layers({"IGN":ignTiles, "OpenStreetMap":mapManager.OSMTiles}).addTo(mapManager.map);
 
     mapManager.map.addControl(new ImportGPXCtrl());
     mapManager.map.addControl(new ExportGPXCtrl());
