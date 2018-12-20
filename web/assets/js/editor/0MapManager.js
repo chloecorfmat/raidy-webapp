@@ -46,6 +46,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   }
 
   MapManager.prototype.initialize = function () {
+    this.elevator = new MapElevation();
+
     /* MAP LISTENERS */
     let keepThis = this;
     this.initializeKeyboardControl();
@@ -87,6 +89,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       let track = keepThis.tracksMap.get(keepThis.currentEditID)
       track.push();
       track.update();
+
     });
     this.map.on('editable:drawing:click', function () {
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
@@ -120,6 +123,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:vertex:dragend', function (e) {
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
+      keepThis.elevator.getElevationAt(e.vertex.latlng,function(){track.push()});
       track.push();
       track.update();
       keepThis.mapHistory.logModification({
@@ -161,7 +165,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       }
     });
 
-    this.map.on(' editable:vertex:new', function () {
+    this.map.on(' editable:vertex:new', function (e) {
+      keepThis.elevator.getElevationAt(e.vertex.latlng, function(){track.push()});
+
       keepThis.mapHistory.logModification({
         type : "MOVE_TRACK_MARKER",
         track : keepThis.tracksMap.get(keepThis.currentEditID),

@@ -55,6 +55,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
   Poi.prototype.setEditable = function (b) {
     b ? this.marker.enableEdit() : this.marker.disableEdit();
+
   };
 
   Poi.prototype.push = function () {
