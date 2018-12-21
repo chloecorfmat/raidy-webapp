@@ -49,7 +49,7 @@ class OrganizerRaidController extends Controller
                     'label' => 'Twitter : hashtags',
                     'attr' => [
                         'data-help' => 'Les différents hashtags doivent être séparés par une virgule.',
-                    ]
+                    ],
                 ]
             )
             ->add(
@@ -61,7 +61,7 @@ class OrganizerRaidController extends Controller
                     'label' => 'Twitter : comptes à suivre',
                     'attr' => [
                         'data-help' => 'Les différents comptes à suivre doivent être séparés par une virgule.',
-                    ]
+                    ],
                 ]
             )
             ->add(
@@ -69,7 +69,8 @@ class OrganizerRaidController extends Controller
                 SubmitType::class,
                 [
                     'label' => 'Enregistrer',
-                ])
+                ]
+            )
             ->getForm();
 
         $form->handleRequest($request);
@@ -84,7 +85,6 @@ class OrganizerRaidController extends Controller
             $em->flush();
 
             $this->addFlash('success', "Les données ont bien été mises à jour.");
-
         }
 
         return $this->render('LiveBundle:Organizer:live.html.twig', [
