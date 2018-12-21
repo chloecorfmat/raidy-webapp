@@ -27,7 +27,7 @@
                 let twitter = "https://twitter.com/intent/tweet";
 
                 if (this.raidName !== undefined) {
-                    twitter += '?text=Comme moi, suivez le raid "' + this.raidname + '"';
+                    twitter += '?text=Comme moi, vous pouvez suivre le raid "' + this.raidname + '"';
                 } else {
                     twitter += '?text='
                 }
