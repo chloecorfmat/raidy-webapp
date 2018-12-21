@@ -1,0 +1,25 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item">Live !</li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+    <div class="main-form">
+        <h1>Live !</h1>
+
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert--success">
+                <p>{{ flash_message }}</p>
+            </div>
+        {% endfor %}
+
+        {{ form_start(form) }}
+        {{ form_widget(form) }}
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

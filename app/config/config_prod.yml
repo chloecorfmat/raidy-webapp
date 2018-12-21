@@ -23,6 +23,7 @@ monolog:
 
 app:
     twitter:
+        account: "chloecorfmat"
         oauth_access_token: "276392501-O82rBonkZL3P7V70Gz8zVdAzM2o45jBKIYsM1LzX"
         oauth_access_token_secret: "11i6uN6VFgUfOfonMum5hNnOihCpH0tCPYNtkmGCL4sIM"
         consumer_key: "rfeiA23fHb2wdt4qbycQ07VZc"

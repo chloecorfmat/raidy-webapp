@@ -46,6 +46,9 @@ class DefaultController extends Controller
      */
     public function adminConfig()
     {
+        $configs['app.twitter.account'] =
+            $this->container->getParameter('app.twitter.account');
+
         $configs['app.twitter.oauth_access_token'] =
             $this->container->getParameter('app.twitter.oauth_access_token');
 

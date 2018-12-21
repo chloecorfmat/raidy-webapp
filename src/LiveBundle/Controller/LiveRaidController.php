@@ -36,8 +36,34 @@ class LiveRaidController extends Controller
 
         // Get tweets.
         $twitterService = $this->container->get('TwitterService');
-        $url = 'https://api.twitter.com/1.1/statuses/user_timeline/chloecorfmat.json';
-        $getfield = '?count=3';
+
+        // API used : https://developer.twitter.com/en/docs/tweets/search/overview.
+        $url = 'https://api.twitter.com/1.1/search/tweets.json';
+
+        // Get fields according to data saved in database.
+        $twitterAccounts = explode(',', str_replace(' ', '', $raid->getTwitterAccounts()));
+
+        foreach ($twitterAccounts as $key => $account) {
+            $twitterAccounts[$key] = '@' . $account;
+        }
+
+        $twitterHashtags = explode(',', str_replace(' ', '', $raid->getTwitterHashtags()));
+
+        $filters = array_merge($twitterAccounts, $twitterHashtags);
+
+        $data = "";
+
+        foreach ($filters as $key => $filter) {
+            if ($filter !== '@' && $filter !== '') {
+                $data .= $filter;
+
+                if (next($filters)) {
+                    $data .= "%20OR%20";
+                }
+            }
+        }
+
+        $getfield = '?q=' . $data . '&result_type=recent&include_entities=false';
         $requestMethod = 'GET';
 
         $jsonResults = $twitterService->setGetfield($getfield)
@@ -49,7 +75,7 @@ class LiveRaidController extends Controller
         return $this->render('LiveBundle:Raid:raid.html.twig', [
             'raid' => $raid,
             'meta' => $meta,
-            'tweets' => $tweets,
+            'tweets' => $tweets->statuses,
         ]);
     }
 }
