@@ -51,11 +51,12 @@ class HelperRegisterController extends Controller
         $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
         $meta['title'] = 'Helper | Raidy';
         $meta['image'] = '/uploads/raids/' . $raid->getPicture();
-        $meta['description'] = 'Rejoindre le raid' . $raid->getName();
+        $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';
 
         return $this->render('HelperBundle:Register:inviteHelper.html.twig', [
             'raid' => $raid,
             'meta' => $meta,
+            'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }
 
@@ -86,8 +87,15 @@ class HelperRegisterController extends Controller
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
+        $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        $meta['title'] = 'Helper | Raidy';
+        $meta['image'] = '/uploads/raids/' . $raid->getPicture();
+        $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';
+
         return $this->render('HelperBundle:Register:registerSuccessHelper.html.twig', [
             'raid' => $raid,
+            'meta' => $meta,
+            'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }
 
@@ -358,9 +366,16 @@ class HelperRegisterController extends Controller
             }
         }
 
+        $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        $meta['title'] = 'Helper | Raidy';
+        $meta['image'] = '/uploads/raids/' . $raid->getPicture();
+        $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';
+
         return $this->render('HelperBundle:Register:joinHelper.html.twig', [
             'form' => $form->createView(),
             'raid' => $raid,
+            'via' => $this->container->getParameter('app.twitter.account'),
+            'meta' => $meta,
         ]);
     }
 

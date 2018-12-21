@@ -31,6 +31,7 @@ class LiveRaidController extends Controller
 
         $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
         $meta['title'] = 'Live | Raidy';
+        // @TODO.
         $meta['image'] = '/uploads/raids/dc015d1aa7f746d65707ce2815452229.png';
         $meta['description'] = 'Accéder au live de raids';
 
@@ -76,6 +77,7 @@ class LiveRaidController extends Controller
             'raid' => $raid,
             'meta' => $meta,
             'tweets' => $tweets->statuses,
+            'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }
 }
