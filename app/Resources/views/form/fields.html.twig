@@ -6,8 +6,8 @@
     {% else %}
         <div class="form--item">
     {% endif %}
-        {{- form_label(form) -}}
         {{- form_errors(form) -}}
+        {{- form_label(form) -}}
         {{- form_widget(form) -}}
     </div>
 {%- endblock form_row -%}
