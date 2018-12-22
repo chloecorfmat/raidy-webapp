@@ -103,6 +103,8 @@ class DefaultController extends Controller
                 'plainPassword',
                 RepeatedType::class,
                 array(
+                    'error_bubbling' => true,
+                    'validation_groups' => ['changePassword'],
                     'type' => PasswordType::class,
                     'invalid_message' => 'Les mots de passe doivent être identiques.',
                     'options' => array('attr' => array('class' => 'password-field')),
@@ -151,11 +153,15 @@ class DefaultController extends Controller
             if (!$isPasswordValid) {
                 $editPasswordform->addError(new FormError('Identifiants invalides'));
             } else {
-                $user->setPlainPassword($formData['plainPassword']);
-                $userManager = $this->get('fos_user.user_manager');
-                $userManager->updateUser($user);
+                $formatService = $this->container->get('FormatService');
 
-                $this->addFlash('success', 'Le mot de passe a bien été modifié.');
+                if ($formatService->checkPassword($formData['plainPassword'], $editPasswordform)) {
+                    $user->setPlainPassword($formData['plainPassword']);
+                    $userManager = $this->get('fos_user.user_manager');
+                    $userManager->updateUser($user);
+
+                    $this->addFlash('success', 'Le mot de passe a bien été modifié.');
+                }
             }
         }
 

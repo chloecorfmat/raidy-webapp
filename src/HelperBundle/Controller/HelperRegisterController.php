@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class HelperRegisterController extends Controller
 {
@@ -146,8 +147,22 @@ class HelperRegisterController extends Controller
             ->add('firstName', TextType::class, ['label' => 'Prénom'])
             ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
-            ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
-            ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
+            //->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
+            //->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
+            ->add(
+                'plainPassword',
+                RepeatedType::class,
+                array(
+                    'error_bubbling' => true,
+                    'validation_groups' => ['changePassword'],
+                    'type' => PasswordType::class,
+                    'invalid_message' => 'Les mots de passe doivent être identiques.',
+                    'options' => array('attr' => array('class' => 'password-field')),
+                    'required' => true,
+                    'first_options' => array('label' => 'Mot de passe'),
+                    'second_options' => array('label' => 'Répétez le mot de passe'),
+                )
+            )
             ->add(
                 'poitype',
                 ChoiceType::class,
@@ -177,8 +192,9 @@ class HelperRegisterController extends Controller
             if (!is_null($phone) && 10 === strlen($phone)) {
                 $emailExist = $userManager->findUserByEmail($formData['email']);
 
-                if ($formData['plainPassword'] == $formData['repeatPassword']) {
-                    if (!$emailExist) {
+                //if ($formData['plainPassword'] == $formData['repeatPassword']) {
+                if (!$emailExist) {
+                    if ($formatService->checkPassword($formData['plainPassword'], $form)) {
                         $user = $userManager->createUser();
                         $user->setUsername($formData['email']);
                         $user->setLastName($formData['lastName']);
@@ -220,14 +236,10 @@ class HelperRegisterController extends Controller
 
                             return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
                         }
-                    } else {
-                        $form->addError(
-                            new FormError('Un utilisateur avec cette adresse email est déjà enregistré')
-                        );
                     }
                 } else {
                     $form->addError(
-                        new FormError('Le champ Répéter le mot de passe n\'est pas rempli correctectement')
+                        new FormError('Un utilisateur avec cette adresse email est déjà enregistré')
                     );
                 }
             } else {
