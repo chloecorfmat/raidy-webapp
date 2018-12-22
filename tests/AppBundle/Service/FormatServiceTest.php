@@ -11,6 +11,7 @@ namespace Tests\AppBundle\Service;
 
 use AppBundle\Service\FormatService;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Form\Form;
 
 class FormatServiceTest extends TestCase
 {
@@ -19,6 +20,8 @@ class FormatServiceTest extends TestCase
 
     /** @var FormatService $formatService */
     private $formatService;
+
+    private $formFactory;
 
     public function __construct()
     {
@@ -60,6 +63,29 @@ class FormatServiceTest extends TestCase
         $phone3 = "0213865838";
         $isMobile3 = $this->formatService->mobilePhoneNumber($phone3);
         $this->assertNull($isMobile3);
+    }
+
+    public function testCheckPassword() {
+        $passwords = [
+            "p" => false,
+            "pass" => false,
+            "PASSWORD" => false,
+            "password" => false,
+            "1234567890" => false,
+            "pass;1234" => false,
+            "Pass;1234Pass;1234Pass;1234Pass;1234Pass;1234Pass;1234" => false,
+            "Pass;1234" => true
+        ];
+
+        foreach ($passwords as $password => $isValid) {
+            $checker = $this->formatService->checkPassword($password);
+
+            if ($isValid) {
+                $this->assertTrue($checker);
+            } else {
+                $this->assertFalse($checker);
+            }
+        }
     }
 
 }

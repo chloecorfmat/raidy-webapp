@@ -48,43 +48,53 @@ class FormatService
      * @param Form   $form     Form to add errors if needed.
      * @return bool If password contains errors.
      */
-    public function checkPassword($password, &$form)
+    public function checkPassword($password, &$form = null)
     {
         $noErrors = true;
 
         // Check length.
         if (!preg_match("(^.{8,50}$)", $password)) {
             $noErrors = false;
-            $form->addError(new FormError('Le mot de passe doit comporter entre 8 et 50 caractères.'));
+            if ($form) {
+                $form->addError(new FormError('Le mot de passe doit comporter entre 8 et 50 caractères.'));
+            }
         }
 
         // Check uppercase.
         if (!preg_match("([A-Z]+)", $password)) {
             $noErrors = false;
-            $form->addError(new FormError('Le mot de passe doit comporter au moins une lettre majuscule.'));
+            if ($form) {
+                $form->addError(new FormError('Le mot de passe doit comporter au moins une lettre majuscule.'));
+            }
         }
 
         // Check lowercase.
         if (!preg_match("([a-z]+)", $password)) {
             $noErrors = false;
-            $form->addError(new FormError('Le mot de passe doit comporter au moins une lettre minuscule.'));
+            if ($form) {
+                $form->addError(new FormError('Le mot de passe doit comporter au moins une lettre minuscule.'));
+            }
         }
 
         // Check number.
         if (!preg_match("(\d+)", $password)) {
             $noErrors = false;
-            $form->addError(new FormError('Le mot de passe doit comporter au moins un chiffre.'));
+            if ($form) {
+                $form->addError(new FormError('Le mot de passe doit comporter au moins un chiffre.'));
+            }
         }
 
         // Check special char.
         if (!preg_match('([@;,&()!?:%*€$£+=#_\/\\.\[\]\{\}-]+)', $password)) {
             $noErrors = false;
-            $form->addError(
-                new FormError(
-                    'Le mot de passe doit comporter au moins un caractère spécial parmi la liste suivante : ' .
-                    '@ ; , & ( ) ! ? : % * € $ £ + = # _ \ / [ ] { } - .'
-                )
-            );
+            if ($form) {
+                $form->addError(
+                    new FormError(
+                        'Le mot de passe doit comporter au moins un caractère spécial parmi la liste suivante : ' .
+                        '@ ; , & ( ) ! ? : % * € $ £ + = # _ \ / [ ] { } - .'
+                    )
+                );
+            }
         }
 
         return $noErrors;
