@@ -61,14 +61,20 @@ class DefaultController extends Controller
             array('validation_groups' => array('changePassword'))
         )
             ->add('oldPassword', PasswordType::class, ['label' => 'Ancien mot de passe'])
-            ->add('plainPassword', RepeatedType::class, array(
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe doivent être identiques.',
-                'options' => array('attr' => array('class' => 'password-field')),
-                'required' => true,
-                'first_options' => array('label' => 'Nouveau mot de passe'),
-                'second_options' => array('label' => 'Répétez le mot de passe'),
-            ))
+            ->add(
+                'plainPassword',
+                RepeatedType::class,
+                array(
+                    'error_bubbling' => true,
+                    'validation_groups' => ['changePassword'],
+                    'type' => PasswordType::class,
+                    'invalid_message' => 'Les mots de passe doivent être identiques.',
+                    'options' => array('attr' => array('class' => 'password-field')),
+                    'required' => true,
+                    'first_options' => array('label' => 'Nouveau mot de passe'),
+                    'second_options' => array('label' => 'Répétez le mot de passe'),
+                )
+            )
             ->add('submit', SubmitType::class, ['label' => 'Modifier le mot de passe'])
             ->getForm();
 
@@ -97,17 +103,23 @@ class DefaultController extends Controller
             if (!$isPasswordValid) {
                 $editPasswordform->addError(new FormError('Identifiants invalides'));
             } else {
-                $user->setPlainPassword($formData['plainPassword']);
-                $userManager = $this->get('fos_user.user_manager');
-                $userManager->updateUser($user);
+                $formatService = $this->container->get('FormatService');
+                if ($formatService->checkPassword($formData['plainPassword'], $editPasswordform)) {
+                    $user->setPlainPassword($formData['plainPassword']);
+                    $userManager = $this->get('fos_user.user_manager');
+                    $userManager->updateUser($user);
 
-                $this->addFlash('success', 'Le mot de passe a bien été mis à jour.');
+                    $this->addFlash('success', 'Le mot de passe a bien été mis à jour.');
+                }
             }
         }
 
-        return $this->render('OrganizerBundle:Profile:editProfile.html.twig', [
-            'form' => $form->createView(),
-            'editPasswordForm' => $editPasswordform->createView(),
-        ]);
+        return $this->render(
+            'OrganizerBundle:Profile:editProfile.html.twig',
+            [
+                'form' => $form->createView(),
+                'editPasswordForm' => $editPasswordform->createView(),
+            ]
+        );
     }
 }

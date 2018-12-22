@@ -2,6 +2,24 @@
 
 {% block title %}Être bénévole au raid "{{ raid.name }}"{% endblock %}
 
+{% block meta %}
+    <!-- Open Graph meta (Facebook) -->
+    <meta property="og:title" content="{{ meta['title'] }}" />
+    <meta property="og:url" content="{{ meta['url'] }}" />
+    <meta property="og:image" content="{{ asset(meta['image']) }}" />
+    <meta property="og:description" content="{{ meta['description'] }}" />
+    <meta property="og:site_name" content="Helper | Raidy" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card meta -->
+    <meta name="twitter:site" content="Helper | Raidy">
+    <meta name="twitter:title" content="{{ meta['title'] }}">
+    <meta name="twitter:description" content="{{ meta['description'] }}">
+    <meta name="twitter:url" content="{{ meta['url'] }}" />
+    <meta name="twitter:image:src" content="{{ meta['image'] }}">
+{% endblock %}
+
 {% block content %}
     <div class="centered--content">
         <h1>{{ raid.name }}</h1>
@@ -13,7 +31,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="https://twitter.com/intent/tweet?text=Rejoins le raid {{ raid.name }}&url={{ meta['url'] }}&via=Raidy" class="share-twitter" target="_blank">
+                    <a href="https://twitter.com/intent/tweet?text=Rejoins le raid {{ raid.name }}&url={{ meta['url'] }}&via={{ via }}" class="share-twitter" target="_blank">
                         <i class="fab fa-twitter-square fa-2x"></i>
                     </a>
                 </li>

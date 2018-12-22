@@ -66,6 +66,21 @@ class Poi
     protected $raid;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    protected $isCheckpoint;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $image;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $description;
+
+    /**
      * Poi constructor.
      */
     public function __construct()
@@ -182,5 +197,53 @@ class Poi
     public function setRaid($raid)
     {
         $this->raid = $raid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisCheckpoint()
+    {
+        return $this->isCheckpoint;
+    }
+
+    /**
+     * @param mixed $isCheckpoint
+     */
+    public function setIsCheckpoint($isCheckpoint)
+    {
+        $this->isCheckpoint = $isCheckpoint;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getImage()
+    {
+        return $this->image;
+    }
+
+    /**
+     * @param mixed $image
+     */
+    public function setImage($image)
+    {
+        $this->image = $image;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    /**
+     * @param mixed $description
+     */
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 }

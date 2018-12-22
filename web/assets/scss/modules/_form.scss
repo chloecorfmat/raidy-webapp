@@ -111,6 +111,7 @@ form {
   border-radius: 5px;
   color: $secondary-color-2;
   font-size: .8rem;
+  margin-top: 1rem;
   padding: 1rem;
 
   li {
@@ -121,4 +122,10 @@ form {
 .input--required {
   color: $secondary-color-2;
   font-weight: 700;
+}
+
+.input--help {
+  color: $text-color;
+  font-size: .8rem;
+  margin-top: .5rem;
 }

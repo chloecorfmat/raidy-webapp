@@ -1,4 +1,5 @@
 <?php
+
 namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
@@ -65,15 +66,15 @@ class PoiController extends AjaxAPIController
         //$raid = $raidManager->find($raidId);
         $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
-        if ($raid == null) {
+        if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "Ce raid n'existe pas");
         }
 
         $helperManager = $em->getRepository('AppBundle:Helper');
-        $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
+        $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);
 
         $poiService = $this->container->get('PoiService');
-        if ($helper != null && $helper->getPoi() != null) {
+        if (null != $helper && null != $helper->getPoi()) {
             return new Response($poiService->poiToJson($helper->getPoi()));
         }
 
@@ -110,7 +111,7 @@ class PoiController extends AjaxAPIController
         }
 
         $helperManager = $em->getRepository('AppBundle:Helper');
-        $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
+        $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);
 
         $reqLocation = $request->request->all();
         //calcul of distance
@@ -133,14 +134,14 @@ class PoiController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Out of zone');
         }
 
-        if ($helper->getisCheckedIn() == 1) {
+        if (1 == $helper->getisCheckedIn()) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You have already checked in for this raid');
         }
 
-        $now = new \DateTime("now");
+        $now = new \DateTime('now');
 
         $diff = $raid->getDate()->diff($now);
-        if ($diff->days > 0 || ($diff->invert == 0 && $diff->days > 0)) {
+        if ($diff->days > 0 || (0 == $diff->invert && $diff->days > 0)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You can not check in for this raid today');
         }
         $helper->setIsCheckedIn(1);

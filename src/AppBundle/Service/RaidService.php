@@ -3,14 +3,12 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 25/10/2018
- * Time: 22:42
+ * Time: 22:42.
  */
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\Poi;
 use AppBundle\Entity\Raid;
-use AppBundle\Entity\Track;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RaidService
@@ -93,8 +91,8 @@ class RaidService
 
     /**
      * @param Raid   $obj
-     * @param String $directory
-     * @param String $oldPicture
+     * @param string $directory
+     * @param string $oldPicture
      *
      * @return Raid
      */

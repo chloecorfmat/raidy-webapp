@@ -9,23 +9,28 @@
       justify-content: space-between;
       padding: .5rem 3rem;
 
-      .btn-ico {
-        i {
+      .btn-ico { // sass-lint:disable-line nesting-depth
+
+        i { // sass-lint:disable-line nesting-depth
           display: inline;
           margin-left: 1rem;
         }
       }
 
-      li:first-child {
-        display: none;
+      li { // sass-lint:disable-line nesting-depth
+        &:first-child { // sass-lint:disable-line nesting-depth
+          display: none;
+        }
       }
 
       @media screen and (min-width: $breakpoint-medium) {
         height: initial;
         padding: 0 3rem;
 
-        li:first-child {
-          display: inline-block;
+        li {
+          &:first-child {
+            display: inline-block;
+          }
         }
       }
     }
@@ -40,9 +45,9 @@
     background-color: $live-color;
     border-radius: 3rem;
     font-family: Fontastique;
-    margin: 0 !important;
-    margin-left: .5rem !important;
-    padding: .5rem !important;
+    margin: 0;
+    margin-left: .5rem;
+    padding: .5rem;
   }
 
   .map {
@@ -50,33 +55,19 @@
     min-width: 100%;
   }
 
-  .map-tooltip {
-    background: #666;
-    border: 1px dashed #999;
-    color: $white;
-    display: none;
-    font-family: sans-serif;
-    font-size: 12px;
-    height: 20px;
-    line-height: 20px;
-    opacity: .5;
-    padding: 10px;
-    position: absolute;
-    z-index: 1000;
-  }
-
   .poi-marker {
-    border: 1px solid black;
+    border: .1rem solid $poi-shadow-color;
+    $poi-size: 1.5rem;
     border-radius: 3rem 3rem 0;
     display: block;
-    height: 2rem;
+    height: $poi-size;
     position: relative;
-    transform: translateX(-1rem) translateY(-2rem) rotate(45deg);
-    width: 2rem;
+    transform:  translateX(-$poi-size/2) translateY(-$poi-size) rotate(45deg);
+    width: $poi-size;
   }
 
   .track-marker {
-    border-radius: 3rem 3rem;
+    border-radius: 3rem;
     display: block;
     height: 1rem;
     position: relative;
@@ -95,11 +86,24 @@
     text-align: left;
     transition: .4s;
     width: 100%;
+
+    &::after {
+      color: $white;
+      content: '\f107';
+      float: right;
+      font-family: 'Font Awesome 5 Free';
+      font-size: 1rem;
+      font-weight: 900;
+      margin-left: 5px;
+    }
+
+    &:hover {
+      background-color: $tertiary-color-1;
+    }
   }
 
   // Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover).
-  .active,
-  .accordion:hover {
+  .active {
     background-color: $tertiary-color-1;
   }
 
@@ -112,20 +116,12 @@
     transition: max-height .2s ease-out;
   }
 
-  .accordion {
-    &:after {
-      color: #fff;
-      content: '\f107';
-      float: right;
-      font-family: 'Font Awesome 5 Free';
-      font-size: 1rem;
-      font-weight: 900;
-      margin-left: 5px;
+  button {
+    &.active {
+      &::after {
+        content: '\f106'; // Unicode character for 'minus' sign (-).
+      }
     }
-  }
-
-  button.active:after {
-    content: '\f106'; // Unicode character for 'minus' sign (-).
   }
 
   // LEFT TAB BAR.
@@ -144,14 +140,14 @@
     width: 90%;
   }
 
-  .track--isCalibration {
+  .track--is-calibration {
     display: flex;
     flex-direction: column;
     justify-content: center;
     margin-left: .3rem;
   }
 
-  .checkbox-item--label > div > span:nth-child(1) {
+  .track-name {
     display: inline-block;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -188,28 +184,25 @@
       transition: width 1s linear;
     }
 
-    ::-webkit-scrollbar {
+    ::-webkit-scrollbar { // sass-lint:disable-line no-vendor-prefixes
       width: .75rem;
     }
 
     // Track.
-    ::-webkit-scrollbar-track {
-      background: #eeeeee;
+    ::-webkit-scrollbar-track { // sass-lint:disable-line no-vendor-prefixes
+      background: $grey-e;
     }
 
     // Handle.
-    ::-webkit-scrollbar-thumb {
-      background: #CCCCCC;
+    ::-webkit-scrollbar-thumb { // sass-lint:disable-line no-vendor-prefixes
+      background: $grey-c;
+
+      // Handle on hover.
+      &:hover {
+        background: $grey-d;
+      }
     }
 
-    // Handle on hover.
-    ::-webkit-scrollbar-thumb:hover {
-      background: #DDDDDD;
-    }
-
-    .map--container {
-      transition: width 1s linear;
-    }
   }
 
   .tab-bar {
@@ -282,12 +275,14 @@
     width: 1.5rem;
     z-index: 1000;
 
-    div:not(.tab-bar--actions) {
-      i {
-        position: absolute;
-        right: 15%;
-        top: 20%;
-        transform: translateX(-75%);
+    div {
+      :not(.tab-bar--actions) {
+        i { // sass-lint:disable-line nesting-depth
+          position: absolute;
+          right: 15%;
+          top: 20%;
+          transform: translateX(-75%);
+        }
       }
     }
   }
@@ -344,10 +339,12 @@
     display: flex;
     flex-direction: row;
     width: 100%;
+
     input {
       display: none;
 
       &:checked {
+
         + .checkmark { // sass-lint:disable-line nesting-depth
           background-color: $tertiary-color-1; // Set color by js.
 
@@ -380,14 +377,11 @@
       display: flex;
       flex-direction: row;
       width: 87%;
+
       &:hover {
         cursor: pointer;
       }
     }
-  }
-
-  .checkbox-list {
-    //margin-top: 1rem;
   }
 
   .track--edit {
@@ -411,8 +405,8 @@
 
   // Dropdown Content (Hidden by Default).
   .dropdown-content {
-    background-color: #FFFFFF;
-    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
+    background-color: $white;
+    box-shadow: 0 8px 16px 0 $semi-transparent-dark;
     cursor: pointer;
     display: none;
     left: 100%;
@@ -499,10 +493,6 @@
     }
   }
 
-  .leaflet-marker-icon.leaflet-interactive, .leaflet-image-layer.leaflet-interactive, .leaflet-pane > svg path.leaflet-interactive {
-    border-radius: 50%;
-  }
-
   // TOGGLE.
 
   // The switch - the box around the slider.
@@ -512,10 +502,7 @@
     margin-left: .5rem;
     position: relative;
     width: 2.4rem;
-  }
 
-  // Hide default HTML checkbox.
-  .switch {
     input {
       height: 0;
       opacity: 0;
@@ -525,7 +512,7 @@
 
   // The slider.
   .slider {
-    background-color: #ccc;
+    background-color: $grey-light;
     bottom: 0;
     cursor: pointer;
     left: 0;
@@ -533,10 +520,8 @@
     right: 0;
     top: 0;
     transition: .4s;
-  }
 
-  .slider {
-    &:before {
+    &::before {
       background-color: $white;
       bottom: .16rem;
       content: '';
@@ -546,23 +531,39 @@
       transition: .4s;
       width: 1rem;
     }
+
+    &.round {
+      border-radius: 1.4rem;
+
+      &::before {
+        border-radius: 50%;
+      }
+    }
   }
 
-  #map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-in,
-  #map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-out {
-    color: $tertiary-color-1;
+  a {
+    &.leaflet-control-zoom-in,
+    &.leaflet-control-zoom-out {
+      color: $tertiary-color-1;
+    }
   }
 
-  input:checked + .slider {
-    background-color: $tertiary-color-1;
-  }
+  input {
+    &:checked {
+      +.slider {
+        background-color: $tertiary-color-1;
 
-  input:focus + .slider {
-    box-shadow: 0 0 .08rem $tertiary-color-1;
-  }
+        &::before { // sass-lint:disable-line nesting-depth
+          transform: translateX(1rem);
+        }
+      }
+    }
 
-  input:checked + .slider::before {
-    transform: translateX(1rem);
+    &:focus {
+      + .slider {
+        box-shadow: 0 0 .08rem $tertiary-color-1;
+      }
+    }
   }
 
   .switch-label {
@@ -578,67 +579,21 @@
   .map-controller-container {
     background-clip: padding-box;
     background-color: $white;
-    border: 2px solid rgba(0, 0, 0, .2);
+    border: 2px solid $semi-transparent-dark;
     border-radius: 4px;
     padding: .4rem;
   }
 
   .leaflet-control-custom {
-    text-align: center;
-    padding-top: .2rem;
-    font-size: .6rem;
     box-sizing: border-box;
-    color : $tertiary-color-1;
+    color: $tertiary-color-1;
+    font-size: .6rem;
+    padding-top: .2rem;
+    text-align: center;
   }
 
-  // Rounded sliders.
-  .slider.round {
-    border-radius: 1.4rem;
-  }
-
-  .slider.round:before {
+  .leaflet-marker-draggable {
     border-radius: 50%;
-  }
-
-  // Alternative.
-  .slider-alternative {
-    background-color: #ccc;
-    bottom: 0;
-    cursor: pointer;
-    left: 0;
-    position: absolute;
-    right: 0;
-    top: 0;
-    transition: .4s;
-
-    &.round {
-      border-radius: 1.4rem;
-
-      &::before {
-        border-radius: 50%;
-      }
-    }
-  }
-
-  .slider-alternative::before {
-    content: 'X';
-    font-family: Fontastique;
-    height: .5rem;
-    position: absolute;
-    right: .25rem;
-    top: .25rem;
-    transition: .4s;
-    width: .5rem;
-  }
-
-  input:checked + .slider-alternative {
-    background-color: $tertiary-color-1;
-  }
-
-  input:focus {
-    + .slider-alternative {
-      box-shadow: 0 0 .08rem $tertiary-color-1;
-    }
   }
 
   .switch-alternative {
@@ -762,7 +717,7 @@
     background-clip: padding-box;
     background-color: $tertiary-color-1;
 
-    border: 2px solid rgba(0, 0, 0, .2);
+    border: 2px solid $semi-transparent-dark;
     border-radius: 50%;
 
     bottom: 0;
@@ -804,6 +759,7 @@
           visibility: hidden;
         }
       }
+
       .btn--editor {
         svg {
           fill: $secondary-color-2;
@@ -836,25 +792,35 @@
     right: 0;
     width: 5rem;
     z-index: 500;
+
+    &:hover {
+      .fab-buttons {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .fab-buttons-link {
+        transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0);
+      }
+    }
   }
 
-  .fab:hover .fab-buttons {
-    opacity: 1;
-    visibility: visible;
+  .fab-action-button {
+    :hover  {
+      + .fab-buttons {
+        .fab-buttons-link { // sass-lint:disable-line nesting-depth
+          &::before { // sass-lint:disable-line nesting-depth
+            opacity: 1;
+            transform: scale(1);
+            transform-origin: right center 0;
+            transition-delay: .3s;
+            visibility: visible;
+          }
+        }
+      }
+    }
   }
 
-  .fab:hover .fab-buttons__link {
-    transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0);
-  }
-
-  .fab-action-button:hover + .fab-buttons .fab-buttons__link:before {
-    opacity: 1;
-    transform: scale(1);
-    transform-origin: right center 0;
-    transition-delay: .3s;
-    visibility: visible;
-
-  }
 
   .fab-buttons {
     bottom: 4rem;
@@ -869,23 +835,23 @@
     visibility: hidden;
   }
 
-  .fab-action-button__icon {
-    background: url('data:image/svg+xml;utf8,<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 895.05 895"><defs><style>.cls-1{fill:#fff;}</style></defs><title>plus</title><text x="-52.48" y="-52.5"/><path class="cls-1" d="M947.52,402.52q0,88.65-49.17,141.81t-139.6,53.15H597.48v350q-88.65,0-141.81-49.15T402.52,758.72V597.48h-350q0-88.62,49.14-141.78t139.66-53.18H402.52V52.5q88.62,0,141.78,49.17t53.18,139.61V402.52Z" transform="translate(-52.48 -52.5)"/></svg>') center no-repeat;
+  .fab-action-button-icon {
+    background: url('data:image/svg+xml;utf8,<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 895.05 895"><defs><style>.cls-1{fill:#fffffsf;}</style></defs><title>plus</title><text x="-52.48" y="-52.5"/><path class="cls-1" d="M947.52,402.52q0,88.65-49.17,141.81t-139.6,53.15H597.48v350q-88.65,0-141.81-49.15T402.52,758.72V597.48h-350q0-88.62,49.14-141.78t139.66-53.18H402.52V52.5q88.62,0,141.78,49.17t53.18,139.61V402.52Z" transform="translate(-52.48 -52.5)"/></svg>') center no-repeat;
     display: block;
     height: 3rem;
     width: 3rem;
   }
 
-  .fab-buttons__item {
+  .fab-buttons-item {
     display: block;
     margin: 1.2rem;
     text-align: center;
   }
 
-  .fab-buttons__link {
-    background-color: #ffffff;
+  .fab-buttons-link {
+    background-color: $white;
     border-radius: 50%;
-    box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2);
+    box-shadow: 0 2px 2px 0 $box-shadow-color, 0 1px 5px 0 $box-shadow-color, 0 3px 1px -2px $semi-transparent-dark;
     display: inline-block;
     height: 3rem;
     text-decoration: none;
@@ -894,34 +860,40 @@
     width: 3rem;
   }
 
-  [data-tooltip]:before {
-    background: $tertiary-color-1;
-    border-radius: 2px;
-    color: #fff;
-    content: attr(data-tooltip);
-    font-size: 1rem;
-    font-weight: 600;
-    margin-right: 1.2rem;
-    margin-top: -1.1rem;
-    opacity: 0;
-    padding: .4rem .7rem;
-    position: absolute;
-    right: 100%;
-    text-decoration: none;
-    top: 50%;
-    transform: scale(0);
-    transform-origin: top right;
-    transition: all .3s cubic-bezier(.25, .8, .25, 1);
-    visibility: hidden;
-    white-space: nowrap;
+  [data-tooltip] {
+    &::before {
+      background: $tertiary-color-1;
+      border-radius: 2px;
+      color: $white;
+      content: attr(data-tooltip);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-right: 1.2rem;
+      margin-top: -1.1rem;
+      opacity: 0;
+      padding: .4rem .7rem;
+      position: absolute;
+      right: 100%;
+      text-decoration: none;
+      top: 50%;
+      transform: scale(0);
+      transform-origin: top right;
+      transition: transform .3s cubic-bezier(.25, .8, .25, 1);
+      visibility: hidden;
+      white-space: nowrap;
+    }
+
+    &:hover {
+
+      &::before {
+        opacity: 1;
+        transform: scale(1);
+        transform-origin: right center 0;
+        visibility: visible;
+      }
+    }
   }
 
-  [data-tooltip]:hover:before {
-    opacity: 1;
-    transform: scale(1);
-    transform-origin: right center 0;
-    visibility: visible;
-  }
 
   .fab-icon {
     display: inline-block;
@@ -934,7 +906,7 @@
   ') center no-repeat;
   }
 
-  /* GPX import */
+  // GPX import
   .gpx-import--form {
     h3 {
       margin-bottom: .3rem;
@@ -963,8 +935,8 @@
 
   .modal--delete-track {
     .form--input-text {
-      border-radius: 5px;
       border: 1px solid $secondary-color-2;
+      border-radius: 5px;
       font-size: 1rem;
       line-height: 1.5;
       margin-bottom: 1rem;
@@ -975,10 +947,10 @@
     }
   }
 
-  #errorMessage {
+  .editor-error--message {
     align-items: center;
     background-color: $secondary-color-2;
-    color: white;
+    color: $white;
     display: flex;
     font-family: 'Proxima Nova', Sans-Serif;
     justify-content: space-between;
@@ -993,6 +965,16 @@
   .leaflet-control-container {
     .leaflet-top {
       z-index: 500;
+    }
+  }
+}
+
+div {
+  .leaflet-control-layers-base > label {
+    bottom: 0;
+
+    input {
+      width: auto;
     }
   }
 }

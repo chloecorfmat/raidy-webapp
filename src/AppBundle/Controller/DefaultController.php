@@ -38,4 +38,29 @@ class DefaultController extends Controller
             return $this->redirectToRoute('helper');
         }
     }
+
+    /**
+     * @Route("/admin/config", name="adminConfig")
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function adminConfig()
+    {
+        $configs['app.twitter.account'] =
+            $this->container->getParameter('app.twitter.account');
+
+        $configs['app.twitter.oauth_access_token'] =
+            $this->container->getParameter('app.twitter.oauth_access_token');
+
+        $configs['app.twitter.oauth_access_token_secret'] =
+            $this->container->getParameter('app.twitter.oauth_access_token_secret');
+
+        $configs['app.twitter.consumer_key'] =
+            $this->container->getParameter('app.twitter.consumer_key');
+
+        $configs['app.twitter.consumer_secret'] =
+            $this->container->getParameter('app.twitter.consumer_secret');
+
+        return $this->render('AppBundle:Admin:config.html.twig', compact('configs'));
+    }
 }

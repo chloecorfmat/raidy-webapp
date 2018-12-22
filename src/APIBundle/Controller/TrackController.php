@@ -11,14 +11,14 @@ use Symfony\Component\HttpFoundation\Response;
 class TrackController extends AjaxAPIController
 {
     /**
- * @Rest\View(statusCode=Response::HTTP_OK)
- * @Rest\Get("/api/organizer/raid/{raidId}/track")
- *
- * @param Request $request request
- * @param int     $raidId  raid id
- *
- * @return \Symfony\Component\HttpFoundation\Response
- */
+     * @Rest\View(statusCode=Response::HTTP_OK)
+     * @Rest\Get("/api/organizer/raid/{raidId}/track")
+     *
+     * @param Request $request request
+     * @param int     $raidId  raid id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function getTrackAction(Request $request, $raidId)
     {
         $em = $this->getDoctrine()->getManager();

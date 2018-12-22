@@ -3,14 +3,13 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 13/11/2018
- * Time: 13:52
+ * Time: 13:52.
  */
 
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Entity\Contact;
 use AppBundle\Entity\Helper;
-use FOS\UserBundle\Event\FormEvent;
 use OrganizerBundle\Security\RaidVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -18,8 +17,6 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\Form\FormEvents;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class OrganizerContactController extends Controller
@@ -73,11 +70,13 @@ class OrganizerContactController extends Controller
             $formatService = $this->container->get('FormatService');
             $phone = $formatService->telephoneNumber($formContact->getPhoneNumber());
 
-            $contactExist = $contactManager->findOneBy([
+            $contactExist = $contactManager->findOneBy(
+                [
                 'phoneNumber' => $phone,
                 'role' => $formContact->getRole(),
                 'raid' => $formContact->getRaid(),
-            ]);
+                ]
+            );
 
             if (!$contactExist || $contactExist->getId() === $formContact->getId()) {
                 $formContact = $form->getData();
@@ -97,12 +96,15 @@ class OrganizerContactController extends Controller
             }
         }
 
-        return $this->render('OrganizerBundle:Contact:contact.html.twig', [
+        return $this->render(
+            'OrganizerBundle:Contact:contact.html.twig',
+            [
             'form' => $form->createView(),
             'raid' => $raid,
             'raidId' => $raid->getUniqId(),
             'contact' => $contact,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -155,7 +157,7 @@ class OrganizerContactController extends Controller
      */
     public function listContacts(Request $request, $raidId)
     {
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         //$raid = $raidManager->find($raidId);
@@ -178,21 +180,34 @@ class OrganizerContactController extends Controller
 
         $form = $this->createFormBuilder($formContact)
             ->add('role', TextType::class, ['label' => 'Rôle'])
-            ->add('phoneNumber', TextType::class, [
-                'label' => 'Téléphone',
-                'required' => false,
-            ])
-            ->add('helper', ChoiceType::class, array(
+            ->add(
+                'phoneNumber',
+                TextType::class,
+                [
+                    'label' => 'Téléphone',
+                    'required' => false,
+                    'attr' => [
+                        'data-help' => 'Le numéro de téléphone doit comporter 10 chiffres.',
+                    ],
+                ]
+            )
+            ->add(
+                'helper',
+                ChoiceType::class,
+                array(
                 'label' => 'Bénévole responsable',
                 'required' => false,
-                'choices'  => $helpers,
+                'choices' => $helpers,
                 'choice_label' => function ($helper) {
-                    /** @var Helper $helper */
+                    /**
+                    * @var Helper $helper
+                    */
                     $helperName = $helper->getUser()->getFirstName() . ' ' . $helper->getUser()->getLastName();
 
                     return $helperName;
                 },
-            ))
+                )
+            )
             ->add('submit', SubmitType::class, ['label' => 'Créer un contact'])
             ->getForm();
 
@@ -201,11 +216,13 @@ class OrganizerContactController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $contactManager = $em->getRepository('AppBundle:Contact');
 
-            $contactExit = $contactManager->findBy([
+            $contactExit = $contactManager->findBy(
+                [
                 'phoneNumber' => $formContact->getPhoneNumber(),
                 'role' => $formContact->getRole(),
                 'raid' => $formContact->getRaid(),
-            ]);
+                ]
+            );
 
             if (!$contactExit) {
                 if (null != $formContact->getHelper() || null != $formContact->getPhoneNumber()) {

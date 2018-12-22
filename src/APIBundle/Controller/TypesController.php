@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TypesController extends AjaxAPIController
 {
-
     /**
      * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Get("/api/organizer/poitype")
@@ -50,6 +49,7 @@ class TypesController extends AjaxAPIController
      *
      * @param Request $request
      * @param int     $raidId
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function getPoiTypesHelper(Request $request, $raidId)
@@ -60,14 +60,14 @@ class TypesController extends AjaxAPIController
         //$raid = $raidManager->find($raidId);
         $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
-        if ($raid == null) {
+        if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, "Ce raid n'existe pas");
         }
 
         $raidOwner = $raid->getUser();
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
-        $poiTypes = $poiTypeManager->findBy(["user" => $raidOwner]);
+        $poiTypes = $poiTypeManager->findBy(['user' => $raidOwner]);
         $poiTypesService = $this->container->get('PoiTypeService');
 
         return new Response($poiTypesService->poiTypesArrayToJson($poiTypes));

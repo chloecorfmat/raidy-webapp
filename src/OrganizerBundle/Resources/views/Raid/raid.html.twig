@@ -7,7 +7,7 @@
           crossorigin=""/>
     <style>
         .map {
-            height: 50%;
+            height: 100%;
             width: 100%;
         }
 
@@ -63,6 +63,13 @@
                 <a href="{{ path('listContacts', {'raidId': raid.uniqid}) }}">
                     <i class="fas fa-phone fa-2x"></i>
                     <p>Contacts</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{{ path('liveRaid', {'id': raid.uniqid}) }}">
+                    <i class="fas fa-microphone fa-2x"></i>
+                    <p>Live!</p>
                 </a>
             </div>
             {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}

@@ -13,7 +13,6 @@
 namespace OrganizerBundle\Security;
 
 use AppBundle\Entity\Raid;
-use AppBundle\Entity\User;
 use Doctrine\ORM\EntityManager;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
@@ -29,6 +28,7 @@ class RaidVoter implements VoterInterface
 
     /**
      * RaidVoter constructor.
+     *
      * @param EntityManager $em
      */
     public function __construct(EntityManager $em)
@@ -55,9 +55,9 @@ class RaidVoter implements VoterInterface
             if (in_array(self::EDIT, $attributes)) {
                 if (!$isOwner) {
                     $collaborationManager = $this->em->getRepository('AppBundle:Collaboration');
-                    $collaboration = $collaborationManager->findOneBy(["user" => $user, "raid" => $raid]);
+                    $collaboration = $collaborationManager->findOneBy(['user' => $user, 'raid' => $raid]);
 
-                    if ($collaboration != null) {
+                    if (null != $collaboration) {
                         $isCollaborator = true;
                     }
                 }
@@ -66,9 +66,9 @@ class RaidVoter implements VoterInterface
             if (in_array(self::HELPER, $attributes)) {
                 if (!$isHelper) {
                     $helperManager = $this->em->getRepository('AppBundle:Helper');
-                    $helper = $helperManager->findOneBy(["user" => $user, "raid" => $raid]);
+                    $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);
 
-                    if ($helper != null) {
+                    if (null != $helper) {
                         $isHelper = true;
                     }
                 }

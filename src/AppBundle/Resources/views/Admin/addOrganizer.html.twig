@@ -11,6 +11,11 @@
 {% block body %}
     <div class="main-form">
         <h1>Ajouter un organisateur</h1>
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert--success">
+                <p>{{ flash_message }}</p>
+            </div>
+        {% endfor %}
         <div>
             {{ form_start(form) }}
             {{ form_widget(form) }}
