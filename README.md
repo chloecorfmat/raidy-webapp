@@ -27,18 +27,17 @@ into-the-woods-webapp
 const types = internalBinding('types');
               ^
 ReferenceError: internalBinding is not defined
-    at internal/util/inspect.js:31:15
-    at req_ (D:\Google Drive\ENSSAT\IMR3\Projet GL\into-the-woods-webapp\web\assets\node_modules\natives\index.js:140:5)
-    at require (D:\Google Drive\ENSSAT\IMR3\Projet GL\into-the-woods-webapp\web\assets\node_modules\natives\index.js:113:12)
-    at util.js:25:21
-    at req_ (D:\Google Drive\ENSSAT\IMR3\Projet GL\into-the-woods-webapp\web\assets\node_modules\natives\index.js:140:5)
-    at require (D:\Google Drive\ENSSAT\IMR3\Projet GL\into-the-woods-webapp\web\assets\node_modules\natives\index.js:113:12)
-    at fs.js:42:21
-    at req_ (D:\Google Drive\ENSSAT\IMR3\Projet GL\into-the-woods-webapp\web\assets\node_modules\natives\index.js:140:5)
-    at Object.req [as require] (D:\Google Drive\ENSSAT\IMR3\Projet GL\into-the-woods-webapp\web\assets\node_modules\natives\index.js:54:10)
-    at Object.<anonymous> (D:\Google Drive\ENSSAT\IMR3\Projet GL\into-the-woods-webapp\web\assets\node_modules\vinyl-fs\node_modules\graceful-fs\fs.js:1:99)
+   [...]
 `
 
 Run `npm install natives@1.1.6` and then `./node_modules/.bin/gulp`
 
 ### Symfony checker with GrumPHP
+
+1. Install **phpcs** locally: `composer --dev require "squizlabs/php_codesniffer=2.9.2"`
+2. Install the coding standard: `composer require endouble/symfony3-custom-coding-standard`
+3. Configure path: `vendor/bin/phpcs --config-set installed_paths ../../endouble/symfony3-custom-coding-standard`
+
+
+
+	
