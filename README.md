@@ -36,7 +36,8 @@ Run `npm install natives@1.1.6` and then `./node_modules/.bin/gulp`
 
 1. Install **phpcs** locally: `composer --dev require "squizlabs/php_codesniffer=2.9.2"`
 2. Install the coding standard: `composer require endouble/symfony3-custom-coding-standard`
-3. Configure path: `phpcs --config-set installed_paths ../../endouble/symfony3-custom-coding-standard`
+3. Configure path: `vendor/bin/phpcs --config-set installed_paths ../../endouble/symfony3-custom-coding-standard`
+
 
 
 	
