@@ -1,0 +1,106 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
+        <li class="breadcrumb--list-item">Liste des utilisateurs</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>Liste des utilisateurs</h1>
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert--success">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
+    {% for flash_message in app.session.flashBag.get('danger') %}
+        <div class="alert alert--danger">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
+    <div class="table--container">
+        <table class="table" id="usersList">
+            <caption class="sr-only">Liste des utilisateurs</caption>
+            <thead class="table--headers">
+            <tr>
+                <th scope="col">Nom</th>
+                <th scope="col">Adresse e-mail</th>
+                <th scope="col">Téléphone</th>
+                <th scope="col">Rôle</th>
+                <th scope="col">Organizer ?</th>
+                <th scope="col">Actions</th>
+            </tr>
+            </thead>
+
+            {% for user in users %}
+                <tr class="table--line">
+                    <td>{{ user.firstname }} {{ user.lastname }}</td>
+                    <td>{{ user.email }}</td>
+                    <td>{{ user.phone|telephone }}</td>
+                    <td>
+                        <ul>
+                            {% for role in user.roles %}
+                                <li>{{ role }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>
+                        <input
+                                type="checkbox"
+
+                                id="user-{{ user.id }}"
+                                class="js-has-role-organizer"
+
+                                {% if "ROLE_ORGANIZER" in user.roles %}
+                                checked
+                                {% endif %}
+
+                                {% if app.user.id == user.id %}
+                                disabled
+                                {% endif %}
+                        >
+                    </td>
+                    <td>
+                        <a href="{{ path('editOrganizer', {'id': user.id}) }}" class="btn">Editer</a>
+                        <button data-organizer-id="{{ user.id }}" class="btn btn--danger btn--delete-organizer">Supprimer</button> {#data-micromodal-trigger="delete-organizer" #}
+                    </td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+
+    <button class="btn" id="btn-save-roles">Enregistrer les modifications de rôle</button>
+
+
+    <!-- [1] -->
+    <div id="delete-organizer" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-organizer-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-organizer-title">
+                            Supprimer un organisateur
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-organizer-content" class="modal--content">
+                        <p>Êtes-vous certains de vouloir supprimer cet organisateur ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <a href="" id="btn--delete-organizer" class="btn btn--danger" data-base-url="/admin/organizer/delete/">Supprimer</a>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+    </script>
+{% endblock %}
