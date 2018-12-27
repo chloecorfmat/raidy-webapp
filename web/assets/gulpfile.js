@@ -23,7 +23,7 @@ gulp.task('lint', function() {
         .pipe(esLint.format());
       //.pipe(esLint.failAfterError());
 
-    gulp.src('./scss/**/*.scss')
+    gulp.src(['./scss/**/*.scss', '!./scss/lib/*.scss'])
         .pipe(sassLint())
         .pipe(sassLint.format())
         .pipe(sassLint.failOnError());

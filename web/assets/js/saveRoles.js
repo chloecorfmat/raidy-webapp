@@ -40,6 +40,12 @@ function saveRoles() {
             });
 
             xhr_object.send(JSON.stringify({data: data}));
+
+            iziToast.success({
+                message: 'Les modifications ont bien été enregistrées.',
+                position: 'topRight',
+
+            });
         });
     }
 }
