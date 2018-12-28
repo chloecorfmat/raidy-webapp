@@ -12,6 +12,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.poiType = null;
     this.requiredHelpers = 0;
     this.color = '#0f5e54';
+    this.description = '';
+    this.image = '';
     this.buildUI();
 
     this.marker.unbindPopup();
@@ -25,7 +27,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         latitude: this.marker.getLatLng().lat,
         longitude: this.marker.getLatLng().lng,
         requiredHelpers: this.requiredHelpers,
-        poiType: this.poiType.id
+        poiType: this.poiType.id,
+        description: this.description,
+        image: this.image
       };
     let json = JSON.stringify(poi);
     return json;
@@ -33,11 +37,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Poi.prototype.fromObj = function (poi) {
     let keepThis = this;
-
     this.id = poi.id;
     this.name = poi.name;
     this.poiType = mapManager.poiTypesMap.get(poi.poiType);
     this.requiredHelpers = poi.requiredHelpers;
+    this.description = poi.description;
+    this.image = poi.image;
     this.marker = L.marker([poi.latitude, poi.longitude]);
 
     this.marker.addTo(mapManager.group);

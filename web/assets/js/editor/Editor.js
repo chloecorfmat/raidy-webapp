@@ -420,13 +420,28 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poiName = document.getElementById('addPoi_name').value;
     let poiType = document.getElementById('addPoi_type').value;
     let poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
+    let poiDescription = document.getElementById('addPoi_description').value;
+    let poiImageData = document.getElementById('addPoi_image').files[0];
+    let reader = new FileReader();
+    let poiImage = null;
 
     MicroModal.close('add-poi-popin');
-    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount);
+
+    if (poiImageData) {
+      reader.readAsDataURL(poiImageData);
+      reader.onloadend = function() {
+        poiImage = reader.result;
+        mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, poiImage);
+      };
+    } else {
+      mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, null);
+    }
 
     document.getElementById('addPoi_name').value = '';
     document.getElementById('addPoi_type').value = '';
     document.getElementById('addPoi_nbhelper').value = '';
+    document.getElementById('addPoi_description').value = '';
+    document.getElementById('addPoi_image').value = '';
   });
 
 // EDIT POI SUBMIT
@@ -438,13 +453,28 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     poi.name = document.getElementById('editPoi_name').value;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(document.querySelector('#editPoi_type').value));
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
-    poi.push();
+    poi.description = document.getElementById('editPoi_description').value;
+    let poiImageData = document.getElementById('editPoi_image').files[0];
+    let reader = new FileReader();
+
+    if (poiImageData) {
+      reader.readAsDataURL(poiImageData);
+      reader.onloadend = function() {
+        let dataUrl = reader.result;
+        poi.image = dataUrl.split(',')[1];
+        poi.push();
+      };
+    } else {
+      poi.push();
+    }
 
     MicroModal.close('edit-poi-popin');
 
     document.getElementById('editPoi_name').value = '';
     document.getElementById('editPoi_type').value = '';
     document.getElementById('editPoi_nbhelper').value = '';
+    document.getElementById('editPoi_description').value = '';
+    document.getElementById('editPoi_image').value = '';
   });
 
   //Import GPX

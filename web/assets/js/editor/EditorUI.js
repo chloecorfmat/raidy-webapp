@@ -93,6 +93,8 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);
       document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
       (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
+      document.getElementById('editPoi_description').value = poi.description;
+
       MicroModal.show('edit-poi-popin');
     });
 
@@ -198,9 +200,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         let id = parseInt(btnSettings.dataset.id);
         let track = mapManager.tracksMap.get(id);
         document.querySelector('#editTrack_name')     .value = htmlentities.decode(track.name);
-          document.querySelector('#editTrack_color')    .value = track.color;
-          document.querySelector('#editTrack_id')       .value = track.id;
-          document.querySelector('#editTrack_sportType').value = track.sportType;
+        document.querySelector('#editTrack_color')    .value = track.color;
+        document.querySelector('#editTrack_id')       .value = track.id;
+        document.querySelector('#editTrack_sportType').value = track.sportType;
 
           MicroModal.show('edit-track-popin');
       });
