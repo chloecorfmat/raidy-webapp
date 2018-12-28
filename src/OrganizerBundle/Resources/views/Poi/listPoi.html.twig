@@ -18,6 +18,8 @@
             <th scope="col">Nombre de bénévoles</th>
             <th scope="col">Type de bénévoles</th>
             <th scope="col">Raid</th>
+            <th scope="col">Description</th>
+            <th scope="col">Image</th>
             <td></td>
             <td></td>
             <td></td>
@@ -30,8 +32,10 @@
                 <td>{{ poi.requiredHelpers }} </td>
                 <td>{{ poi.poiType.type }} </td>
                 <td>{{ poi.raid.id }} </td>
-                <td><a href="{{ path('displayPoi', {'id': poi.id, 'raidId': poi.raid.id}) }}">Voir</a></td>
-                <td><a href="{{ path('deletePoi', {'id': poi.id, 'raidId': poi.raid.id}) }}">Supprimer</a></td>
+                <td>{{ poi.description }}</td>
+                <td><img alt="image_{{ poi.name }}" src="{{ poi.image }}" /></td>
+                <td><a href="{{ path('displayPoi', {'poiId': poi.id, 'raidId': poi.raid.id}) }}">Voir</a></td>
+                <td><a href="{{ path('deletePoi', {'poiId': poi.id, 'raidId': poi.raid.id}) }}">Supprimer</a></td>
             </tr>
         {% endfor %}
     </table>
