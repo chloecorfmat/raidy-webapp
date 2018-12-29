@@ -239,8 +239,10 @@ class OrganizerPOIController extends AjaxAPIController
         return $this->render(
             'OrganizerBundle:Poi:listPoi.html.twig',
             [
+                'raidId' => $raidId,
                 'pois' => $pois,
                 'user' => $user,
+                'raid' => $raid,
             ]
         );
     }
