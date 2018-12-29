@@ -100,7 +100,7 @@ class PoiServiceTest extends TestCase
         $pois[] = $poi;
 
         $json = $this->poiService->poisArrayToJson($pois);
-        $this->assertEquals('[{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"poiType":1,"description":"Test description","image":"")]', $json);
+        $this->assertEquals('[{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"image":"","description":"Test description","poiType":1)]', $json);
     }
 
     public function testCheckDataArray()
