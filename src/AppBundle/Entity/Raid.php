@@ -100,7 +100,6 @@ class Raid
      */
     protected $picture;
 
-
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
@@ -116,6 +115,16 @@ class Raid
      * @ORM\Column(name="uniqid", type="string", unique=true)
      */
     protected $uniqid;
+
+    /**
+     * @ORM\Column(name="twitterHashtags", type="string", nullable=true)
+     */
+    protected $twitterHashtags;
+
+    /**
+     * @ORM\Column(name="twitterAccounts", type="string", nullable=true)
+     */
+    protected $twitterAccounts;
 
     /**
      * Raid constructor.
@@ -341,5 +350,37 @@ class Raid
     public function setUniqid($uniqid)
     {
         $this->uniqid = $uniqid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTwitterHashtags()
+    {
+        return $this->twitterHashtags;
+    }
+
+    /**
+     * @param mixed $twitterHashtags
+     */
+    public function setTwitterHashtags($twitterHashtags)
+    {
+        $this->twitterHashtags = $twitterHashtags;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTwitterAccounts()
+    {
+        return $this->twitterAccounts;
+    }
+
+    /**
+     * @param mixed $twitterAccounts
+     */
+    public function setTwitterAccounts($twitterAccounts)
+    {
+        $this->twitterAccounts = $twitterAccounts;
     }
 }

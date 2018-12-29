@@ -146,10 +146,10 @@ class OrganizerPOIController extends AjaxAPIController
         $poi = $poiManager->find($poiId);
 
         $helperManager = $em->getRepository('AppBundle:Helper');
-        $helpers        = $helperManager->findBy(['poi' => $poi]);
+        $helpers = $helperManager->findBy(['poi' => $poi]);
 
         foreach ($helpers as $helper) {
-            if ($helper != null) {
+            if (null != $helper) {
                 $helper->setPoi(null);
                 $em->flush();
             }

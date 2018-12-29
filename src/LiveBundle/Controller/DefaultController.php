@@ -22,6 +22,8 @@ class DefaultController extends Controller
         $meta['image'] = '/uploads/raids/dc015d1aa7f746d65707ce2815452229.png';
         $meta['description'] = 'Accéder au live de raids';
 
-        return $this->render('LiveBundle:Default:index.html.twig', compact('meta'));
+        $via = $this->container->getParameter('app.twitter.account');
+
+        return $this->render('LiveBundle:Default:index.html.twig', compact('meta', 'via'));
     }
 }

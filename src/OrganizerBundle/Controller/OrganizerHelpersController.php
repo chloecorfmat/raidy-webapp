@@ -76,18 +76,23 @@ class OrganizerHelpersController extends AjaxAPIController
         $raidManager = $manager->getRepository('AppBundle:Raid');
         $raid = $raidManager->findOneBy(array('uniqid' => $id));
 
-        $helpers = $helperManager->findBy([
+        $helpers = $helperManager->findBy(
+            [
             'raid' => $raid->getId(),
-        ]);
+            ]
+        );
 
         $poiManager = $manager->getRepository('AppBundle:Poi');
         $pois = $poiManager->findBy(['raid' => $raid->getId()]);
 
-        return $this->render('OrganizerBundle:Helpers:helpers.html.twig', [
+        return $this->render(
+            'OrganizerBundle:Helpers:helpers.html.twig',
+            [
             'raid_id' => $id,
             'raidName' => $raid->getName(),
             'helpers' => $helpers,
             'pois' => $pois,
-        ]);
+            ]
+        );
     }
 }

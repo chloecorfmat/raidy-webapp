@@ -18,6 +18,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
 use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 
 class HelperRegisterController extends Controller
 {
@@ -51,11 +52,12 @@ class HelperRegisterController extends Controller
         $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
         $meta['title'] = 'Helper | Raidy';
         $meta['image'] = '/uploads/raids/' . $raid->getPicture();
-        $meta['description'] = 'Rejoindre le raid' . $raid->getName();
+        $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';
 
         return $this->render('HelperBundle:Register:inviteHelper.html.twig', [
             'raid' => $raid,
             'meta' => $meta,
+            'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }
 
@@ -89,11 +91,12 @@ class HelperRegisterController extends Controller
         $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
         $meta['title'] = 'Helper | Raidy';
         $meta['image'] = '/uploads/raids/' . $raid->getPicture();
-        $meta['description'] = 'Merci d\'avoir rejoins le raid' . $raid->getName();
+        $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';
 
         return $this->render('HelperBundle:Register:registerSuccessHelper.html.twig', [
             'raid' => $raid,
             'meta' => $meta,
+            'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }
 
@@ -123,9 +126,11 @@ class HelperRegisterController extends Controller
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
 
-        $poiTypes = $poiTypeManager->findBy([
+        $poiTypes = $poiTypeManager->findBy(
+            [
             'user' => $raid->getUser(),
-        ]);
+            ]
+        );
 
         $choices = [];
         foreach ($poiTypes as $poiType) {
@@ -142,16 +147,38 @@ class HelperRegisterController extends Controller
             ->add('firstName', TextType::class, ['label' => 'Prénom'])
             ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
-            ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
-            ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
-            ->add('poitype', ChoiceType::class, [
-                'label' => 'Type de poste souhaité pour le bénévolat',
-                'choices' => $choices,
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'S\'inscrire',
-                'attr' => array('class' => 'btn'),
-            ])
+            //->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
+            //->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
+            ->add(
+                'plainPassword',
+                RepeatedType::class,
+                array(
+                    'error_bubbling' => true,
+                    'validation_groups' => ['changePassword'],
+                    'type' => PasswordType::class,
+                    'invalid_message' => 'Les mots de passe doivent être identiques.',
+                    'options' => array('attr' => array('class' => 'password-field')),
+                    'required' => true,
+                    'first_options' => array('label' => 'Mot de passe'),
+                    'second_options' => array('label' => 'Répétez le mot de passe'),
+                )
+            )
+            ->add(
+                'poitype',
+                ChoiceType::class,
+                [
+                    'label' => 'Type de poste souhaité pour le bénévolat',
+                    'choices' => $choices,
+                ]
+            )
+            ->add(
+                'submit',
+                SubmitType::class,
+                [
+                    'label' => 'S\'inscrire',
+                    'attr' => array('class' => 'btn'),
+                ]
+            )
             ->getForm();
 
         $form->handleRequest($request);
@@ -162,11 +189,12 @@ class HelperRegisterController extends Controller
 
             $userManager = $this->get('fos_user.user_manager');
             $phone = $formatService->mobilePhoneNumber($formData['phone']);
-            if (!is_null($phone) && strlen($phone) === 10) {
+            if (!is_null($phone) && 10 === strlen($phone)) {
                 $emailExist = $userManager->findUserByEmail($formData['email']);
 
-                if ($formData['plainPassword'] == $formData['repeatPassword']) {
-                    if (!$emailExist) {
+                //if ($formData['plainPassword'] == $formData['repeatPassword']) {
+                if (!$emailExist) {
+                    if ($formatService->checkPassword($formData['plainPassword'], $form)) {
                         $user = $userManager->createUser();
                         $user->setUsername($formData['email']);
                         $user->setLastName($formData['lastName']);
@@ -208,14 +236,10 @@ class HelperRegisterController extends Controller
 
                             return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
                         }
-                    } else {
-                        $form->addError(
-                            new FormError('Un utilisateur avec cette adresse email est déjà enregistré')
-                        );
                     }
                 } else {
                     $form->addError(
-                        new FormError('Le champ Répéter le mot de passe n\'est pas rempli correctectement')
+                        new FormError('Un utilisateur avec cette adresse email est déjà enregistré')
                     );
                 }
             } else {
@@ -228,9 +252,12 @@ class HelperRegisterController extends Controller
             }
         }
 
-        return $this->render('HelperBundle:Register:registerHelper.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'HelperBundle:Register:registerHelper.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -263,9 +290,11 @@ class HelperRegisterController extends Controller
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
 
-        $poiTypes = $poiTypeManager->findBy([
+        $poiTypes = $poiTypeManager->findBy(
+            [
             'user' => $raid->getUser(),
-        ]);
+            ]
+        );
 
         $choices = [];
         foreach ($poiTypes as $poiType) {
@@ -277,10 +306,14 @@ class HelperRegisterController extends Controller
             ->add('email', TextType::class, ['label' => 'Email'])
             ->add('password', PasswordType::class, ['label' => 'Mot de passe'])
             //->add('poitype', TextType::class, ['label' => 'Type de poste']) // @todo : Use list instead of raw data
-            ->add('poitype', ChoiceType::class, [
-                'label' => 'Type de poste souhaité pour le bénévolat',
-                'choices' => $choices,
-            ])
+            ->add(
+                'poitype',
+                ChoiceType::class,
+                [
+                    'label' => 'Type de poste souhaité pour le bénévolat',
+                    'choices' => $choices,
+                ]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
             ->getForm();
 
@@ -348,11 +381,12 @@ class HelperRegisterController extends Controller
         $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
         $meta['title'] = 'Helper | Raidy';
         $meta['image'] = '/uploads/raids/' . $raid->getPicture();
-        $meta['description'] = 'Rejoindre le raid' . $raid->getName();
+        $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';
 
         return $this->render('HelperBundle:Register:joinHelper.html.twig', [
             'form' => $form->createView(),
             'raid' => $raid,
+            'via' => $this->container->getParameter('app.twitter.account'),
             'meta' => $meta,
         ]);
     }
@@ -371,9 +405,11 @@ class HelperRegisterController extends Controller
             ->getRepository('AppBundle:Raid');
 
         //$raids = $raidManager->findAll();
-        $raids = $raidManager->findBy([
+        $raids = $raidManager->findBy(
+            [
             'user' => $user,
-        ]);
+            ]
+        );
 
         return $this->render(
             'OrganizerBundle:Raid:listRaid.html.twig',

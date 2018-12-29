@@ -22,6 +22,11 @@
                     <p>{{ flash_message }}</p>
                 </div>
             {% endfor %}
+            {% for flash_message in app.session.flashBag.get('info') %}
+                <div class="alert alert--info">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
             <div class="table--container">
                 <table class="table" id="helpersList">
                     <caption class="sr-only">Liste des types de points d'intérêt</caption>

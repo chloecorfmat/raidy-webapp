@@ -10,7 +10,6 @@ namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use OrganizerBundle\Security\RaidVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
