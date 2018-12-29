@@ -206,7 +206,7 @@
                             {% endif %}
 
                                 <form name="addPoi" id="addPoi_form">
-                                <div id="addPoi">
+                                <div id="addPoi" class="modal--poi">
                                     <div class="form--item">
                                         <label for="addPoi_name">
                                             Nom du point d'intérêt
@@ -229,6 +229,12 @@
                                             <option value="{{ poiType.id }}">{{ poiType.type }}</option>
                                             {% endfor %}
                                         </select>
+                                    </div>
+                                    <div class="form--item form--item-checkbox">
+                                        <input type="checkbox" class="form--input-checkbox form--checkbox" id="addPoi_isCheckpoint">
+                                        <label for="addPoi_isCheckpoint">
+                                            Ce point d'intérêt est un checkpoint
+                                        </label>
                                     </div>
                                     <div class="actions">
                                         <button type="submit" id="addPoi_submit">Ajouter</button>
@@ -261,7 +267,7 @@
                     <div id="edit-poi-content" class="modal--content">
                         <div>
                             <form name="editPoi" id="editPoi_form">
-                                <div id="editPoi">
+                                <div id="editPoi" class="modal--poi">
                                     <div class="form--item form--input-focused">
                                         <label for="editPoi_name" class="required">
                                             Nom du point d'intérêt <span class="input--required">*</span>
@@ -284,6 +290,12 @@
                                                 <option value="{{ poiType.id }}">{{ poiType.type }}</option>
                                             {% endfor %}
                                         </select>
+                                    </div>
+                                    <div class="form--item form--item-checkbox">
+                                        <input type="checkbox" class="form--input-checkbox form--checkbox" id="editPoi_isCheckpoint">
+                                        <label for="editPoi_isCheckpoint">
+                                            Ce point d'intérêt est un checkpoint
+                                        </label>
                                     </div>
                                     <input class="form--input-text" type="hidden" id="editPoi_id" >
                                     <div class="actions">

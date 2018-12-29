@@ -420,13 +420,15 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poiName = document.getElementById('addPoi_name').value;
     let poiType = document.getElementById('addPoi_type').value;
     let poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
+    let poiIsCheckpoint = document.getElementById('addPoi_isCheckpoint').checked;
 
     MicroModal.close('add-poi-popin');
-    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount);
+    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiIsCheckpoint);
 
     document.getElementById('addPoi_name').value = '';
     document.getElementById('addPoi_type').value = '';
     document.getElementById('addPoi_nbhelper').value = '';
+    document.getElementById('addPoi_isCheckpoint').checked = false;
   });
 
 // EDIT POI SUBMIT
@@ -436,6 +438,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poi = mapManager.poiMap.get(parseInt(poiId));
 
     poi.name = document.getElementById('editPoi_name').value;
+    poi.isCheckpoint = document.getElementById('editPoi_isCheckpoint').checked;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(document.querySelector('#editPoi_type').value));
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
     poi.push();
@@ -445,6 +448,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('editPoi_name').value = '';
     document.getElementById('editPoi_type').value = '';
     document.getElementById('editPoi_nbhelper').value = '';
+    document.getElementById('editPoi_isCheckpoint').checked = false;
   });
 
   //Import GPX

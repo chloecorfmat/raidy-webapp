@@ -10,6 +10,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.id = '';
     this.name = '';
     this.poiType = null;
+    this.isCheckpoint = false;
     this.requiredHelpers = 0;
     this.color = '#0f5e54';
     this.buildUI();
@@ -25,7 +26,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         latitude: this.marker.getLatLng().lat,
         longitude: this.marker.getLatLng().lng,
         requiredHelpers: this.requiredHelpers,
-        poiType: this.poiType.id
+        poiType: this.poiType.id,
+        isCheckpoint: this.isCheckpoint
       };
     let json = JSON.stringify(poi);
     return json;
@@ -38,6 +40,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.name = poi.name;
     this.poiType = mapManager.poiTypesMap.get(poi.poiType);
     this.requiredHelpers = poi.requiredHelpers;
+    this.isCheckpoint = poi.isCheckpoint;
     this.marker = L.marker([poi.latitude, poi.longitude]);
 
     this.marker.addTo(mapManager.group);
@@ -72,24 +75,26 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     let keepThis = this;
     this.poiType != null && (this.color = this.poiType.color );
 
+    let checkpointIcon = this.isCheckpoint ? ' <i class="fas fa-flag"></i>' : '';
     this.marker.bindPopup('' +
       '<header style="' +
           'background: ' + this.color + ' ;' +
           'color: #ffffff ;' +
           'padding: 0rem 3rem;">' +
-        '<h3>' + this.name + '</h3>' +
+        '<h3>' + this.name + checkpointIcon +'</h3>' +
       '</header>' +
       '<div> ' +
         '<h4>Bénévoles</h4>' +
         '<p>' + this.requiredHelpers + ' Requis </p>' +
       '</div>');
 
+    let checkpointClass = this.isCheckpoint ? ' poi-checkpoint' : '';
     let icon = L.divIcon({
       className: 'my-custom-pin',
       iconAnchor: [0, 5],
       labelAnchor: [0, 0],
       popupAnchor: [0, -35],
-      html: '<span class="poi-marker" style="background-color:' + this.color + ';" />'
+      html: '<span class="poi-marker"' + checkpointClass + ' style="background-color:' + this.color + ';" />'
     });
 
     this.marker.setIcon(icon);

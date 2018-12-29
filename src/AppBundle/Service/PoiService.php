@@ -48,6 +48,8 @@ class PoiService
         $raid = $raidRepository->find($raidId);
         $poi->setRaid($raid);
 
+        $poi->setIsCheckpoint($obj['isCheckpoint']);
+
         return $poi;
     }
 
@@ -66,6 +68,7 @@ class PoiService
         $obj['latitude'] = htmlentities($poi->getLatitude());
         $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
         $obj['raid'] = $poi->getRaid()->getId();
+        $obj['isCheckpoint'] = htmlentities($poi->getisCheckpoint());
 
         if (null != $poi->getPoiType()) {
             $obj['poiType'] = $poi->getPoiType()->getId();
@@ -99,6 +102,8 @@ class PoiService
         $raid = $raidRepository->find($raidId);
         $poi->setRaid($raid);
 
+        $poi->setIsCheckpoint($obj['isCheckpoint']);
+
         return $poi;
     }
 
@@ -120,6 +125,7 @@ class PoiService
             $obj['latitude'] = htmlentities($poi->getLatitude());
             $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
             $obj['raid'] = $poi->getRaid()->getId();
+            $obj['isCheckpoint'] = htmlentities($poi->getisCheckpoint());
 
             if (null != $poi->getPoiType()) {
                 $obj['poiType'] = $poi->getPoiType()->getId();
@@ -167,6 +173,10 @@ class PoiService
             return false;
         }
 
+        if (!isset($obj['isCheckpoint']) || "boolean" != gettype($obj['isCheckpoint'])) {
+            return false;
+        }
+
         return true;
     }
 
@@ -190,6 +200,7 @@ class PoiService
                 $p->setRequiredHelpers($poi->getRequiredHelpers());
                 $p->setPoiType($poi->getPoiType());
                 $p->setRaid($raid);
+                $p->setIsCheckpoint($poi->getIsCheckpoint());
 
                 $this->em->persist($p);
                 $this->em->flush();
