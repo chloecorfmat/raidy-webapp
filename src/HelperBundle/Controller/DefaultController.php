@@ -92,7 +92,7 @@ class DefaultController extends Controller
                 'label' => 'Numéro de permis',
                 'required' => false,
                 'attr' => [
-                    'maxlength' => 9,
+                    'maxlength' => 12,
                     'data-help' =>
                         'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
                 ],
