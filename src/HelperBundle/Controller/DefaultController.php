@@ -88,6 +88,15 @@ class DefaultController extends Controller
             ->add('lastName', TextType::class, ['label' => 'Nom'])
             ->add('phone', TelType::class, ['label' => 'Numéro de téléphone'])
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
+            ->add('licenceNumber', TextType::class, [
+                'label' => 'Numéro de permis',
+                'required' => false,
+                'attr' => [
+                    'maxlength' => 9,
+                    'data-help' =>
+                        'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
+                ],
+            ])
             ->add('submit', SubmitType::class, ['label' => 'Modifier le profil', 'attr' => array('class' => 'btn')])
             ->getForm();
 
