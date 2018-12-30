@@ -60,6 +60,11 @@ class Helper
     protected $raid;
 
     /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $acceptConditions;
+
+    /**
      * Helper constructor.
      */
     public function __construct()
@@ -176,5 +181,21 @@ class Helper
     public function setRaid($raid)
     {
         $this->raid = $raid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAcceptConditions()
+    {
+        return $this->acceptConditions;
+    }
+
+    /**
+     * @param mixed $acceptConditions
+     */
+    public function setAcceptConditions($acceptConditions)
+    {
+        $this->acceptConditions = $acceptConditions;
     }
 }

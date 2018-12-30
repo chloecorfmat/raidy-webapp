@@ -6,6 +6,7 @@ use AppBundle\Entity\Helper;
 use AppBundle\Entity\PoiType;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -172,6 +173,17 @@ class HelperRegisterController extends Controller
                 ]
             )
             ->add(
+                'acceptConditions',
+                CheckboxType::class,
+                [
+                    'label' => 'Accepter les conditions',
+                    'attr' => [
+                        'data-help' =>
+                            'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
+                    ],
+                ],
+            )
+            ->add(
                 'submit',
                 SubmitType::class,
                 [
@@ -187,66 +199,75 @@ class HelperRegisterController extends Controller
             $formData = $form->getData();
             $formatService = $this->container->get('FormatService');
 
-            $userManager = $this->get('fos_user.user_manager');
-            $phone = $formatService->mobilePhoneNumber($formData['phone']);
-            if (!is_null($phone) && 10 === strlen($phone)) {
-                $emailExist = $userManager->findUserByEmail($formData['email']);
+            if ($formData['acceptConditions']) {
+                $userManager = $this->get('fos_user.user_manager');
+                $phone = $formatService->mobilePhoneNumber($formData['phone']);
+                if (!is_null($phone) && 10 === strlen($phone)) {
+                    $emailExist = $userManager->findUserByEmail($formData['email']);
 
-                //if ($formData['plainPassword'] == $formData['repeatPassword']) {
-                if (!$emailExist) {
-                    if ($formatService->checkPassword($formData['plainPassword'], $form)) {
-                        $user = $userManager->createUser();
-                        $user->setUsername($formData['email']);
-                        $user->setLastName($formData['lastName']);
-                        $user->setFirstName($formData['firstName']);
-                        $user->setPhone($phone);
-                        $user->setEmail($formData['email']);
-                        $user->setEmailCanonical($formData['email']);
-                        $user->setEnabled(1);
-                        $user->setPlainPassword($formData['plainPassword']);
-                        $user->addRole('ROLE_HELPER');
+                    //if ($formData['plainPassword'] == $formData['repeatPassword']) {
+                    if (!$emailExist) {
+                        if ($formatService->checkPassword($formData['plainPassword'], $form)) {
+                            $user = $userManager->createUser();
+                            $user->setUsername($formData['email']);
+                            $user->setLastName($formData['lastName']);
+                            $user->setFirstName($formData['firstName']);
+                            $user->setPhone($phone);
+                            $user->setEmail($formData['email']);
+                            $user->setEmailCanonical($formData['email']);
+                            $user->setEnabled(1);
+                            $user->setPlainPassword($formData['plainPassword']);
+                            $user->addRole('ROLE_HELPER');
 
-                        $userManager->updateUser($user);
+                            $userManager->updateUser($user);
 
-                        // Connect the user manually
-                        $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
-                        $this->get('security.token_storage')->setToken($token);
+                            // Connect the user manually
+                            $token = new UsernamePasswordToken($user, null, 'main', $user->getRoles());
+                            $this->get('security.token_storage')->setToken($token);
 
-                        $this->get('session')->set('_security_main', serialize($token));
+                            $this->get('session')->set('_security_main', serialize($token));
 
-                        $event = new InteractiveLoginEvent($request, $token);
-                        $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
+                            $event = new InteractiveLoginEvent($request, $token);
+                            $this->get('event_dispatcher')->dispatch('security.interactive_login', $event);
 
-                        $helperManager = $em->getRepository('AppBundle:Helper');
-                        $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
+                            $helperManager = $em->getRepository('AppBundle:Helper');
+                            $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
 
-                        if ($alreadyRegistered) {
-                            return $this->redirectToRoute('helper');
-                        } else {
-                            $poitype = $em->getRepository('AppBundle:PoiType')->find($formData['poitype']);
+                            if ($alreadyRegistered) {
+                                return $this->redirectToRoute('helper');
+                            } else {
+                                $poitype = $em->getRepository('AppBundle:PoiType')->find($formData['poitype']);
 
-                            $helper = new Helper();
-                            $helper->setRaid($raid);
-                            $helper->setFavoritePoiType($poitype);
-                            $helper->setUser($user);
-                            $helper->setIsCheckedIn(false);
+                                $helper = new Helper();
+                                $helper->setRaid($raid);
+                                $helper->setFavoritePoiType($poitype);
+                                $helper->setUser($user);
+                                $helper->setIsCheckedIn(false);
+                                $helper->setAcceptConditions(new \DateTime("now"));
 
-                            $em->persist($helper);
-                            $em->flush();
+                                $em->persist($helper);
+                                $em->flush();
 
-                            return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                                return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                            }
                         }
+                    } else {
+                        $form->addError(
+                            new FormError('Un utilisateur avec cette adresse email est déjà enregistré')
+                        );
                     }
                 } else {
                     $form->addError(
-                        new FormError('Un utilisateur avec cette adresse email est déjà enregistré')
+                        new FormError(
+                            'Le numéro de téléphone d\'un bénévole doit être un mobile et ' .
+                            'commencer par 06 ou 07. Il comporte 10 numéros.'
+                        )
                     );
                 }
             } else {
                 $form->addError(
                     new FormError(
-                        'Le numéro de téléphone d\'un bénévole doit être un mobile et commencer par 06 ou 07. ' .
-                        'Il comporte 10 numéros.'
+                        'Vous devez accepter les conditions.'
                     )
                 );
             }
@@ -312,7 +333,18 @@ class HelperRegisterController extends Controller
                 [
                     'label' => 'Type de poste souhaité pour le bénévolat',
                     'choices' => $choices,
-                ]
+                ],
+            )
+            ->add(
+                'acceptConditions',
+                CheckboxType::class,
+                [
+                    'label' => 'Accepter les conditions',
+                    'attr' => [
+                        'data-help' =>
+                            'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
+                    ],
+                ],
             )
             ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
             ->getForm();
@@ -358,18 +390,27 @@ class HelperRegisterController extends Controller
                         if ($alreadyRegistered) {
                             return $this->redirectToRoute('helper');
                         } else {
-                            $poitype = $em->getRepository('AppBundle:PoiType')->find($formData['poitype']);
+                            if ($formData['acceptConditions']) {
+                                $poitype = $em->getRepository('AppBundle:PoiType')->find($formData['poitype']);
 
-                            $helper = new Helper();
-                            $helper->setRaid($raid);
-                            $helper->setFavoritePoiType($poitype);
-                            $helper->setUser($user);
-                            $helper->setIsCheckedIn(false);
+                                $helper = new Helper();
+                                $helper->setRaid($raid);
+                                $helper->setFavoritePoiType($poitype);
+                                $helper->setUser($user);
+                                $helper->setIsCheckedIn(false);
+                                $helper->setAcceptConditions(new \DateTime("now"));
 
-                            $em->persist($helper);
-                            $em->flush();
+                                $em->persist($helper);
+                                $em->flush();
 
-                            return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                                return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
+                            } else {
+                                $form->addError(
+                                    new FormError(
+                                        'Vous devez accepter les conditions.'
+                                    )
+                                );
+                            }
                         }
                     }
                 }
