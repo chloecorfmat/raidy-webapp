@@ -35,6 +35,12 @@ function helpersList() {
           }
       }
       xhr_object.send(JSON.stringify({poi : data}));
+
+      iziToast.success({
+          message: 'Les modifications ont bien été enregistrées.',
+          position: 'bottomRight',
+      });
+
       //location.reload(true);
     });
   };
