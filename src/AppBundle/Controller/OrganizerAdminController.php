@@ -11,6 +11,7 @@ use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class OrganizerAdminController extends Controller
@@ -240,7 +241,7 @@ class OrganizerAdminController extends Controller
     }
 
     /**
-     * @Route("/admin/organizer/delete/{id}", name="deleteOrganizer")
+     * @Route("/admin/organizer/delete/{id}", name="deleteOrganizer", methods={"DELETE"})
      *
      * @param Request $request request
      * @param mixed   $id      id
@@ -258,11 +259,53 @@ class OrganizerAdminController extends Controller
             $em->remove($raid);
         }
 
+        // We have to delete poi types about this user.
+        $poitypeManager = $em->getRepository('AppBundle:PoiType');
+        $poitypes = $poitypeManager->findBy(['user' => $id]);
+
+        foreach ($poitypes as $poitype) {
+            $em->remove($poitype);
+        }
+
+        // We have to delete helpers about this user.
+        $helperManager = $em->getRepository('AppBundle:Helper');
+        $helpers = $helperManager->findBy(['user' => $id]);
+
+        foreach ($helpers as $helper) {
+            $em->remove($helper);
+        }
+
         $userManager = $this->get('fos_user.user_manager');
         $user = $userManager->findUserBy(['id' => $id]);
         $userManager->deleteUser($user);
 
-        $this->addFlash('danger', 'L\'utilisateur a bien été supprimé.');
+        //$this->addFlash('danger', 'L\'utilisateur a bien été supprimé.');
+
+        return new Response();
+    }
+
+    /**
+     * @Route("/admin/organizer/state/{id}/{state}", name="setStateOrganizer")
+     *
+     * @param Request $request request
+     * @param mixed   $id      id
+     * @param boolean $state   state
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function setStatusOrganizer(Request $request, $id, $state)
+    {
+        $userManager = $this->get('fos_user.user_manager');
+        $user = $userManager->findUserBy(['id' => $id]);
+
+        $user->setEnabled($state);
+        $userManager->updateUser($user);
+
+        if ($state) {
+            $this->addFlash('success', 'L\'utilisateur a bien été activé.');
+        } else {
+            $this->addFlash('success', 'L\'utilisateur a bien été désactivé.');
+        }
 
         return $this->redirectToRoute('listOrganizer');
     }
@@ -276,15 +319,24 @@ class OrganizerAdminController extends Controller
     {
         $query = $this->getDoctrine()->getEntityManager()
             ->createQuery(
-                'SELECT u FROM AppBundle:User u WHERE u.roles LIKE :role'
+                'SELECT u FROM AppBundle:User u WHERE u.roles LIKE :role ORDER BY u.enabled DESC'
             )->setParameter('role', '%"ROLE_ORGANIZER"%');
 
         $users = $query->getResult();
+        $raidsCounter = [];
+
+        foreach ($users as $user) {
+            $em = $this->getDoctrine()->getManager();
+            $raidManager = $em->getRepository('AppBundle:Raid');
+            $raids = $raidManager->findBy(['user' => $user->getId()]);
+            $raidsCounter[$user->getId()] = sizeof($raids);
+        }
 
         return $this->render(
             'AppBundle:Admin:listOrganizer.html.twig',
             [
                 'users' => $users,
+                'raidsCounter' => $raidsCounter,
             ]
         );
     }
