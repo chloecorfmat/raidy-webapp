@@ -181,7 +181,7 @@ class HelperRegisterController extends Controller
                         'data-help' =>
                             'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
                     ],
-                ],
+                ]
             )
             ->add(
                 'submit',
@@ -333,7 +333,7 @@ class HelperRegisterController extends Controller
                 [
                     'label' => 'Type de poste souhaité pour le bénévolat',
                     'choices' => $choices,
-                ],
+                ]
             )
             ->add(
                 'acceptConditions',
@@ -344,7 +344,7 @@ class HelperRegisterController extends Controller
                         'data-help' =>
                             'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
                     ],
-                ],
+                ]
             )
             ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
             ->getForm();
