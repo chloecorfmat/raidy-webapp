@@ -49,7 +49,7 @@ class Helper
     protected $favoritePoiType;
 
     /**
-     * @ORM\Column(name="check_in_time", type="date", nullable=true)
+     * @ORM\Column(name="check_in_time", type="datetime", nullable=true)
      */
     protected $checkInTime;
 
