@@ -424,6 +424,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poiImageData = document.getElementById('addPoi_image').files[0];
     let reader = new FileReader();
     let poiImage = null;
+    let poiIsCheckpoint = document.getElementById('addPoi_isCheckpoint').checked;
 
     MicroModal.close('add-poi-popin');
 
@@ -431,10 +432,10 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       reader.readAsDataURL(poiImageData);
       reader.onloadend = function() {
         poiImage = reader.result;
-        mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, poiImage);
+        mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, poiImage, poiIsCheckpoint);
       };
     } else {
-      mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, null);
+      mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, null, poiIsCheckpoint);
     }
 
     document.getElementById('addPoi_name').value = '';
@@ -442,6 +443,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('addPoi_nbhelper').value = '';
     document.getElementById('addPoi_description').value = '';
     document.getElementById('addPoi_image').value = '';
+    document.getElementById('addPoi_isCheckpoint').checked = false;
   });
 
 // EDIT POI SUBMIT
@@ -451,6 +453,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poi = mapManager.poiMap.get(parseInt(poiId));
 
     poi.name = document.getElementById('editPoi_name').value;
+    poi.isCheckpoint = document.getElementById('editPoi_isCheckpoint').checked;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(document.querySelector('#editPoi_type').value));
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
     poi.description = document.getElementById('editPoi_description').value;
@@ -475,6 +478,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('editPoi_nbhelper').value = '';
     document.getElementById('editPoi_description').value = '';
     document.getElementById('editPoi_image').value = '';
+    document.getElementById('editPoi_isCheckpoint').checked = false;
   });
 
   //Import GPX
