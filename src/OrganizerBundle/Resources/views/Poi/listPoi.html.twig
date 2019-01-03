@@ -1,38 +1,133 @@
 {% extends 'default/organizer.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <style>
+        .map--container {
+            transition: none;
+        }
+
+        .map {
+            height: 50%;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 980px) {
+            .map {
+                height: 50vh;
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
-        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
-        <li class="breadcrumb--list-item">Liste des pois</li>
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raidId}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item">Liste des points d'intérêt</li>
     </ol>
 {% endblock %}
 
+{% block main_attributes %}
+    class="main-flex-column"
+{% endblock %}
+
 {% block body %}
-    <h1>Liste des pois</h1>
-    <table>
-        <caption>Liste des pois</caption>
-        <tr>
-            <th scope="col">Id</th>
-            <th scope="col">Nom</th>
-            <th scope="col">Coordonnées</th>
-            <th scope="col">Nombre de bénévoles</th>
-            <th scope="col">Type de bénévoles</th>
-            <th scope="col">Raid</th>
-            <td></td>
-            <td></td>
-            <td></td>
-        </tr>
-        {% for poi in pois %}
-            <tr>
-                <td>{{ poi.id }}</td>
-                <td>{{ poi.name }}</td>
-                <td>{{ poi.longitude}}, {{ poi.latitude}}</td>
-                <td>{{ poi.requiredHelpers }} </td>
-                <td>{{ poi.poiType.type }} </td>
-                <td>{{ poi.raid.id }} </td>
-                <td><a href="{{ path('displayPoi', {'id': poi.id, 'raidId': poi.raid.id}) }}">Voir</a></td>
-                <td><a href="{{ path('deletePoi', {'id': poi.id, 'raidId': poi.raid.id}) }}">Supprimer</a></td>
-            </tr>
-        {% endfor %}
-    </table>
+    <h1>Liste des points d'intérêt</h1>
+    <div class="content">
+        <div class="content--half" id="pois">
+            <div class="table-search">
+                <i class="fas fa-search"></i>
+                <input class="search" placeholder="Rechercher" />
+            </div>
+            <div class="table--container">
+                <table class="table">
+                    <caption class="sr-only">Liste des points d'intérêt</caption>
+                    <thead class="table--headers">
+                    <tr>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="name">
+                                <span>Nom</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="coordinates">
+                                <span>Coordonnées</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="picture">
+                                <span>Image</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="poi-type">
+                                <span>Type de point d'intérêt</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="description">
+                                <span>Description</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="helpers">
+                                <span>Bénévoles</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                    </tr>
+                    </thead>
+                    <tbody class="list">
+                    {% for poi in pois %}
+                        <tr class="table--line">
+                            <td class="name">{{ poi.name }}</td>
+                            <td class="coordinates">{{ poi.latitude }} ; {{ poi.longitude }}</td>
+                            <td class="picture">
+                                {% if poi.image %}
+                                    <img src="{{ poi.image }}" alt="" width="100">
+                                {% else %}
+                                    <span class="poi-image--text sr-only">Aucune image</span>
+                                {% endif %}
+                            </td>
+                            <td class="poi-type">{{ poi.poiType.type }}</td>
+                            <td class="description">{{ poi.description }}</td>
+                            <td class="helpers">
+                                {{ poi.requiredHelpers }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="map--container content--half">
+            <div id="map" class="map"></div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <!-- Make sure you put this AFTER Leaflet's CSS -->
+    <script>
+        var mapManager;
+        var raidID;
+        document.addEventListener("DOMContentLoaded", function () {
+            mapManager = new MapManager();
+            {# raidID = parseInt({{ raidId }}); #}
+            raidID = "{{ raidId }}";
+            mapManager.initialize();
+        });
+    </script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
+    <script>
+    </script>
 {% endblock %}

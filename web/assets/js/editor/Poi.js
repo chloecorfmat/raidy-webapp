@@ -13,6 +13,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.isCheckpoint = false;
     this.requiredHelpers = 0;
     this.color = '#0f5e54';
+    this.description = '';
+    this.image = '';
     this.buildUI();
 
     this.marker.unbindPopup();
@@ -27,6 +29,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         longitude: this.marker.getLatLng().lng,
         requiredHelpers: this.requiredHelpers,
         poiType: this.poiType.id,
+        description: this.description,
+        image: this.image
         isCheckpoint: this.isCheckpoint
       };
     let json = JSON.stringify(poi);
@@ -35,11 +39,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Poi.prototype.fromObj = function (poi) {
     let keepThis = this;
-
     this.id = poi.id;
     this.name = poi.name;
     this.poiType = mapManager.poiTypesMap.get(poi.poiType);
     this.requiredHelpers = poi.requiredHelpers;
+    this.description = poi.description;
+    this.image = poi.image;
     this.isCheckpoint = poi.isCheckpoint;
     this.marker = L.marker([poi.latitude, poi.longitude]);
 

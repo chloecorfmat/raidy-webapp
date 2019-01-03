@@ -99,6 +99,11 @@ class User extends BaseUser
     protected $tutorialTime;
 
     /**
+     * @ORM\Column(name="licence_number", type="string", length=9, nullable=true)
+     */
+    protected $licenceNumber;
+
+    /**
      * User constructor.
      */
     public function __construct()
@@ -200,5 +205,21 @@ class User extends BaseUser
     public function setTutorialTime($tutorialTime)
     {
         $this->tutorialTime = $tutorialTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLicenceNumber()
+    {
+        return $this->licenceNumber;
+    }
+
+    /**
+     * @param mixed $licenceNumber
+     */
+    public function setLicenceNumber($licenceNumber)
+    {
+        $this->licenceNumber = $licenceNumber;
     }
 }

@@ -318,11 +318,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       tr.setEditable(b);
     });
   };
-  MapManager.prototype.requestNewPoi = function (name, type, requiredHelpers, poiIsCheckpoint) {
+  MapManager.prototype.requestNewPoi = function (name, type, requiredHelpers, description, image, poiIsCheckpoint) {
     let poi = this.waitingPoi;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(type));
     poi.name = name != "" ? name : poi.poiType.type;
     poi.requiredHelpers = requiredHelpers != "" ? parseInt(requiredHelpers) : 0;
+    poi.description = description != '' ? description : '';
+    poi.image = image != '' ? image : '';
     poi.isCheckpoint = poiIsCheckpoint != "" ? poiIsCheckpoint : false;
 
     console.log(poiIsCheckpoint);

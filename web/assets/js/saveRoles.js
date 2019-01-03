@@ -43,7 +43,7 @@ function saveRoles() {
 
             iziToast.success({
                 message: 'Les modifications ont bien été enregistrées.',
-                position: 'topRight',
+                position: 'bottomRight',
 
             });
         });

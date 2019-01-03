@@ -39,7 +39,6 @@ class PoiService
         $poi->setLongitude($obj['longitude']);
         $poi->setLatitude($obj['latitude']);
         $poi->setRequiredHelpers($obj['requiredHelpers']);
-
         $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
         $poiType = $poiTypeRepository->find($obj['poiType']);
         $poi->setPoiType($poiType);
@@ -48,6 +47,8 @@ class PoiService
         $raid = $raidRepository->find($raidId);
         $poi->setRaid($raid);
 
+        $poi->setDescription($obj['description']);
+        $poi->setImage($obj['image']);
         $poi->setIsCheckpoint($obj['isCheckpoint']);
 
         return $poi;
@@ -76,6 +77,18 @@ class PoiService
             $obj['poiType'] = '';
         }
 
+        if (null != $poi->getDescription()) {
+            $obj['description'] = $poi->getDescription();
+        } else {
+            $obj['description'] = '';
+        }
+
+        if (null != $poi->getImage()) {
+            $obj['image'] = $poi->getImage();
+        } else {
+            $obj['image'] = '';
+        }
+
         return json_encode($obj);
     }
 
@@ -93,6 +106,8 @@ class PoiService
         $poi->setLongitude($obj['longitude']);
         $poi->setLatitude($obj['latitude']);
         $poi->setRequiredHelpers($obj['requiredHelpers']);
+        $poi->setImage($obj['image']);
+        $poi->setDescription($obj['description']);
 
         $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
         $poiType = $poiTypeRepository->find($obj['poiType']);
@@ -125,6 +140,8 @@ class PoiService
             $obj['latitude'] = htmlentities($poi->getLatitude());
             $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
             $obj['raid'] = $poi->getRaid()->getId();
+            $obj['image'] = htmlentities($poi->getImage());
+            $obj['description'] = htmlentities($poi->getDescription());
             $obj['isCheckpoint'] = htmlentities($poi->getisCheckpoint());
 
             if (null != $poi->getPoiType()) {
@@ -201,6 +218,8 @@ class PoiService
                 $p->setPoiType($poi->getPoiType());
                 $p->setRaid($raid);
                 $p->setIsCheckpoint($poi->getIsCheckpoint());
+                $p->setImage($poi->getImage());
+                $p->setDescription($poi->getDescription());
 
                 $this->em->persist($p);
                 $this->em->flush();

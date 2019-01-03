@@ -27,18 +27,41 @@
                     <th scope="col">Nom</th>
                     <th scope="col">Adresse e-mail</th>
                     <th scope="col">Téléphone</th>
+                    <th scope="col">Raids</th>
+                    <th scope="col">État</th>
                     <th scope="col">Actions</th>
                 </tr>
             </thead>
 
             {% for user in users %}
-                <tr class="table--line">
+                <tr class="table--line" id="organizer-{{ user.id }}">
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     <td>{{ user.phone|telephone }}</td>
                     <td>
+                        {{ raidsCounter[user.id] }}
+                    </td>
+                    <td>
+                        {% if user.enabled %}
+                            Activé
+                        {% else %}
+                            Désactivé
+                        {% endif %}
+                    </td>
+                    <td>
                         <a href="{{ path('editOrganizer', {'id': user.id}) }}" class="btn">Editer</a>
-                        <button data-organizer-id="{{ user.id }}" class="btn btn--danger btn--delete-organizer">Supprimer</button> {#data-micromodal-trigger="delete-organizer" #}
+                        {# A login user cannot disable or delete his/her account. #}
+                        {% if app.user.id != user.id %}
+                            {% if user.enabled %}
+                                <button data-organizer-id="{{ user.id }}" class="btn btn--disable-organizer">Désactiver</button> {#data-micromodal-trigger="enable-organizer" #}
+                            {% else %}
+                                <button data-organizer-id="{{ user.id }}" class="btn btn--enable-organizer">Activer</button> {#data-micromodal-trigger="enable-organizer" #}
+                            {% endif %}
+
+                            {% if not user.enabled or raidsCounter[user.id] == 0 %}
+                                <button data-organizer-id="{{ user.id }}" data-organizer-username="{{ user.username }}" class="btn btn--danger btn--delete-organizer">Supprimer</button> {#data-micromodal-trigger="delete-organizer" #}
+                            {% endif %}
+                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}
@@ -65,10 +88,16 @@
                         <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
                     </header>
                     <div id="delete-organizer-content" class="modal--content">
-                        <p>Êtes-vous certains de vouloir supprimer cet organisateur ?</p>
+                        <p>Êtes-vous certain de vouloir supprimer cet organisateur ?</p>
                         <p class="text--important">Cette action est irréversible.</p>
+
+                        <p>Pour supprimer l'organisateur, veuillez entrer son nom "<span class="text--medium" id="span--organizer-name"></span>" dans le champ ci-dessous : </p>
+
+                        <input class="form--input-text" type="text" id="organizer-name-delete"
+                               required="required" maxlength="100">
+
                         <div class="modal--actions">
-                            <a href="" id="btn--delete-organizer" class="btn btn--danger" data-base-url="/admin/organizer/delete/">Supprimer</a>
+                            <button id="btn--delete-organizer-validate" class="btn btn--danger" data-base-url="/admin/organizer/delete/" data-id="" disabled>Supprimer</button>
                             <button data-micromodal-close class="btn btn--cancel">Annuler</button>
                         </div>
                     </div>
@@ -77,7 +106,55 @@
         </div>
     </div>
 
-    <script>
+    <!-- [2] -->
+    <div id="enable-organizer" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="enable-organizer-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="enable-organizer-title">
+                            Activer un organisateur
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="enable-organizer-content" class="modal--content">
+                        <p>Êtes-vous certain de vouloir activer cet organisateur ?</p>
+                        <div class="modal--actions">
+                            <a href="" id="btn--enable-organizer-validate" class="btn btn--danger" data-base-url="/admin/organizer/state/">Activer</a>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    </script>
+    <!-- [3] -->
+    <div id="disable-organizer" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="disable-organizer-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="disable-organizer-title">
+                            Désactiver un organisateur
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="disable-organizer-content" class="modal--content">
+                        <p>Êtes-vous certain de vouloir désactiver cet organisateur ?</p>
+                        <div class="modal--actions">
+                            <a href="" id="btn--disable-organizer-validate" class="btn btn--danger" data-base-url="/admin/organizer/state/">Désactiver</a>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

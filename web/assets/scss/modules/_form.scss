@@ -39,6 +39,19 @@ form {
     }
   }
 
+  .form--input-checkbox {
+    margin-top: .75rem;
+
+    label {
+      bottom: 0;
+      display: inline-block;
+    }
+
+    .form--input-checkbox {
+      width: initial;
+    }
+  }
+
   label {
     bottom: -1.9rem;
     color: $tertiary-color-1;

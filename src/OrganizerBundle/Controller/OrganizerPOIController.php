@@ -166,13 +166,13 @@ class OrganizerPOIController extends AjaxAPIController
     }
 
     /**
-     * @Route("/editor/raid/{raidId}/poi", name="listPoi", methods={"GET"})
+     * @Route("/editor/raid/{raidId}/poi", name="listPoiAPI", methods={"GET"})
      *
      * @param mixed $raidId raid identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function listPois($raidId)
+    public function listPoisAPI($raidId)
     {
         // Get managers
         $em = $this->getDoctrine()->getManager();
@@ -209,5 +209,41 @@ class OrganizerPOIController extends AjaxAPIController
         $poiService = $this->container->get('PoiService');
 
         return new Response($poiService->poisArrayToJson($pois));
+    }
+
+    /**
+     * @Route("/organizer/raid/{raidId}/pois", name="listPois", methods={"GET"})
+     *
+     * @param mixed $raidId raid identifier
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function listPoi($raidId)
+    {
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $poiManager = $em->getRepository('AppBundle:Poi');
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
+
+        // Get the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if (null == $user->getId()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
+        }
+
+        $pois = $poiManager->findBy(array('raid' => $raid));
+
+        return $this->render(
+            'OrganizerBundle:Poi:listPoi.html.twig',
+            [
+                'raidId' => $raidId,
+                'pois' => $pois,
+                'user' => $user,
+                'raid' => $raid,
+            ]
+        );
     }
 }

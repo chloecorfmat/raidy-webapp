@@ -230,6 +230,18 @@
                                             {% endfor %}
                                         </select>
                                     </div>
+                                    <div class="form--item form--input-focused">
+                                        <label for="addPoi_description">
+                                            Description
+                                        </label>
+                                        <input class="form--input-text" type="text" id="addPoi_description">
+                                    </div>
+                                    <div class="form--item form--input-focused">
+                                        <label for="addPoi_image">
+                                            Photo
+                                        </label>
+                                        <input class="form--input-text" type="file" id="addPoi_image">
+                                    </div>
                                     <div class="form--item form--item-checkbox">
                                         <input type="checkbox" class="form--input-checkbox form--checkbox" id="addPoi_isCheckpoint">
                                         <label for="addPoi_isCheckpoint">
@@ -290,6 +302,18 @@
                                                 <option value="{{ poiType.id }}">{{ poiType.type }}</option>
                                             {% endfor %}
                                         </select>
+                                    </div>
+                                    <div class="form--item form--input-focused">
+                                        <label for="editPoi_description">
+                                            Description
+                                        </label>
+                                        <input class="form--input-text" type="text" id="editPoi_description">
+                                    </div>
+                                    <div class="form--item form--input-focused">
+                                        <label for="editPoi_image">
+                                            Photo
+                                        </label>
+                                        <input class="form--input-text" type="file" id="editPoi_image">
                                     </div>
                                     <div class="form--item form--item-checkbox">
                                         <input type="checkbox" class="form--input-checkbox form--checkbox" id="editPoi_isCheckpoint">
@@ -643,11 +667,6 @@
             </div>
         </div>
     </div>
-
-
-
-
-
 
     <!-- Import GPX -->
     <div id="import-gpx" aria-hidden="true" class="modal" data-micromodal-close>
