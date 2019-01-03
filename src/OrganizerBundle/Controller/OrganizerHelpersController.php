@@ -95,4 +95,56 @@ class OrganizerHelpersController extends AjaxAPIController
             ]
         );
     }
+
+    /**
+     * @Route("/organizer/raid/{raidId}/helper/{helperId}/checkin", name="patchHelperCheckin", methods={"PATCH"})
+     *
+     * @param Request $request
+     * @param int     $raidId   raid id
+     * @param int     $helperId helper id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function patchHelperCheckin(Request $request, $raidId, $helperId)
+    {
+        $t = null;
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $helperManager = $em->getRepository('AppBundle:Helper');
+        $helper = $helperManager->find($helperId);
+
+        if (null == $helper) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This helper does not exist');
+        }
+
+        $now = new \DateTime('now');
+
+        /**$diff = $raid->getDate()->diff($now);
+        if ($diff->days > 0 || (0 == $diff->invert && $diff->days > 0)) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You can not check in for this raid today');
+        }**/
+
+        $helper->setIsCheckedIn(1);
+        $helper->setCheckInTime($now);
+        $em->flush();
+
+        $ret = [];
+        $ret['checkInTime'] = $helper->getCheckInTime();
+        $ret['helperId'] = $helper->getId();
+        $ret['code'] = Response::HTTP_OK;
+
+        return new Response(json_encode($ret));
+    }
 }

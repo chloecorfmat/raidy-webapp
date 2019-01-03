@@ -50,7 +50,7 @@
                     <tr>
                         <th scope="col">
                             <button class="btn btn-sort sort" data-sort="name">
-                                <span>Nom Prénom</span>
+                                <span>Nom</span>
                                 <i class="fas fa-arrows-alt-v"></i>
                             </button>
                         </th>
@@ -62,13 +62,19 @@
                         </th>
                         <th scope="col">
                             <button class="btn btn-sort sort" data-sort="favorite-type">
-                                <span>Poste souhaité</span>
+                                <span>Souhait</span>
                                 <i class="fas fa-arrows-alt-v"></i>
                             </button>
                         </th>
                         <th scope="col">
                             <button class="btn btn-sort sort" data-sort="assigned-poi">
-                                <span>Poste affecté</span>
+                                <span>Affectation</span>
+                                <i class="fas fa-arrows-alt-v"></i>
+                            </button>
+                        </th>
+                        <th scope="col">
+                            <button class="btn btn-sort sort" data-sort="helper-validate">
+                                <span>Validation</span>
                                 <i class="fas fa-arrows-alt-v"></i>
                             </button>
                         </th>
@@ -126,6 +132,18 @@
                                             </option>
                                         {% endfor %}
                                     </select>
+                                </td>
+                                <td class="helper-validate">
+                                    {% if value is empty %}
+                                        <span class="helper-validate helper-validate--no-assign">-</span>
+                                        <span class="helper-validate--text sr-only">Aucun POI assigné</span>
+                                    {% elseif helper.isCheckedIn %}
+                                        <span class="helper-validate helper-validate--valid">
+                                            {{ helper.checkInTime|date('H:i:s') }}
+                                        </span>
+                                    {% else %}
+                                        <button class="btn btn-validate-helper" data-helperid="{{ helper.id }}" data-raidid="{{ raid_id }}">Valider</button>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

@@ -24,30 +24,34 @@ function displayModalToDeleteOrganizer () {
       }
   }
 
-  document.getElementById('organizer-name-delete').addEventListener('keyup', function() {
-      if (document.getElementById('organizer-name-delete').value !== username) {
-          document.getElementById('btn--delete-organizer-validate').disabled = true;
-      } else {
-          document.getElementById('btn--delete-organizer-validate').disabled = false;
-      }
-  });
-
-  document.getElementById('btn--delete-organizer-validate').addEventListener('click', function () {
-      let xhr_object = new XMLHttpRequest();
-      xhr_object.open('DELETE', '/admin/organizer/delete/' + id, true);
-      xhr_object.setRequestHeader('Content-Type', 'application/json');
-
-      xhr_object.send(null);
-
-      MicroModal.close('delete-organizer');
-      document.getElementById('organizer-' + id).remove();
-
-      iziToast.success({
-          message: 'L\'utilisateur ' + username + ' a bien été supprimé.',
-          position: 'bottomRight',
+  if (document.getElementById('organizer-name-delete') !== null) {
+      document.getElementById('organizer-name-delete').addEventListener('keyup', function() {
+          if (document.getElementById('organizer-name-delete').value !== username) {
+              document.getElementById('btn--delete-organizer-validate').disabled = true;
+          } else {
+              document.getElementById('btn--delete-organizer-validate').disabled = false;
+          }
       });
+  }
 
-  });
+
+  if (document.getElementById('btn--delete-organizer-validate') !== null) {
+      document.getElementById('btn--delete-organizer-validate').addEventListener('click', function () {
+          let xhr_object = new XMLHttpRequest();
+          xhr_object.open('DELETE', '/admin/organizer/delete/' + id, true);
+          xhr_object.setRequestHeader('Content-Type', 'application/json');
+
+          xhr_object.send(null);
+
+          MicroModal.close('delete-organizer');
+          document.getElementById('organizer-' + id).remove();
+
+          iziToast.success({
+              message: 'L\'utilisateur ' + username + ' a bien été supprimé.',
+              position: 'bottomRight',
+          });
+      });
+  }
 }
 
 function displayModalToEnableOrganizer () {

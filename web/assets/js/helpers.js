@@ -1,6 +1,7 @@
 window.addEventListener('load', helpersList);
 
 function helpersList() {
+  // Assign POI.
   var selects = document.getElementsByClassName('assign-poi');
 
   for (var select of selects) {
@@ -44,4 +45,40 @@ function helpersList() {
       //location.reload(true);
     });
   };
+
+  // Check in manually.
+
+  var validateBtns = document.getElementsByClassName('btn-validate-helper');
+
+  for (var btn of validateBtns) {
+    btn.addEventListener('click', validateHelper);
+  }
+}
+
+function validateHelper(e) {
+    let xhr_object = new XMLHttpRequest();
+
+    xhr_object.onreadystatechange = function() {
+        if (xhr_object.readyState === 4 && xhr_object.status === 200) {
+            var response = JSON.parse(xhr_object.response);
+            var date = new Date(response.checkInTime.date);
+            var button = document.querySelector('[data-helperid="' + response.helperId + '"]');
+            button.parentNode.parentNode.querySelector('.assigned-poi select').disabled = true;
+            button.parentNode.innerHTML = '<span>' + date.toLocaleTimeString('fr-FR') + '</span>';
+
+            iziToast.success({
+                message: 'Le statut a été enregistré.',
+                position: 'bottomRight',
+            });
+        } else if (xhr_object.readyState === 4) {
+            iziToast.error({
+                message: 'Un problème est survenu, veuillez réessayer plus tard.',
+                position: 'bottomRight',
+            });
+        }
+    }
+
+    xhr_object.open('PATCH', '/organizer/raid/' + this.dataset.raidid + '/helper/' + this.dataset.helperid + '/checkin', true);
+    xhr_object.setRequestHeader('Content-Type', 'application/json');
+    xhr_object.send();
 }
