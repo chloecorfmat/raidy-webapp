@@ -30,7 +30,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         requiredHelpers: this.requiredHelpers,
         poiType: this.poiType.id,
         description: this.description,
-        image: this.image
+        image: this.image,
         isCheckpoint: this.isCheckpoint
       };
     let json = JSON.stringify(poi);
