@@ -47,6 +47,9 @@
         </div>
         <div class="map--container">
             <div id="errorMessage" class="editor-error--message"></div>
+            <div class="elevation-tools">
+                <canvas id="canvas"></canvas>
+            </div>
             <div id="map" class="map"></div>
 
             <div class="fab">
@@ -716,6 +719,7 @@
             {# raidID = parseInt({{ id }}); #}
             raidID = "{{ id }}";
             mapManager.initialize();
+          //  console.log(mapManager);
 
             console.log(raidID);
         });

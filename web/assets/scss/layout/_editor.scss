@@ -162,17 +162,25 @@
 
     li {
       display: inline;
-      list-style-type: none;
       font-style: italic;
+      list-style-type: none;
       margin: 0;
       padding: 0;
     }
 
     i {
       color: $tertiary-color-1;
-      margin-left: 0.2rem;
-      margin-rigth: 0;
+      margin-left: .2rem;
+      margin-right: 0;
     }
+  }
+
+  .elevation-tools {
+    bottom: 0;
+    z-index: 5000;
+    position: absolute;
+    width: 50%;
+    background-color: $white07;
   }
 
   .editor--list {

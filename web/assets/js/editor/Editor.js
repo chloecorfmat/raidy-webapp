@@ -189,6 +189,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   }
   window.addEventListener('load', function () {
 
+
     checkoutForConflict();
     // LOAD EDITOR SPECIFIC CONTROLLER ON MAP
     L.POIEditControl = L.Control.extend({

@@ -291,6 +291,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           currentTrack.line.editor.continueForward();
           document.getElementById('map').style.cursor = 'crosshair';
         }
+        this.elevator.initChart(currentTrack);
         break;
       case EditorMode.READING :
         document.getElementById('map').style.cursor = 'grab';
