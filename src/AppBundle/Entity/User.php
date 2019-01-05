@@ -61,11 +61,34 @@ class User extends BaseUser
 
     /**
      * @Assert\NotBlank(groups={"changePassword"})
+     * @Assert\Regex(
+     *     pattern="/[A-Z]/",
+     *     message="Le mot de passe doit comporter au moins une lettre majuscule.",
+     *     groups={"editProfile", "Profile", "changePassword"}
+     * )
+     * @Assert\Regex(
+     *     pattern="/[0-9]/",
+     *     message="Le mot de passe doit comporter au moins un chiffre.",
+     *     groups={"editProfile", "Profile", "changePassword"}
+     * )
+     * @Assert\Regex(
+     *     pattern="/[a-z]/",
+     *     message="Le mot de passe doit comporter au moins une lettre minuscule.",
+     *     groups={"editProfile", "Profile", "changePassword"}
+     * )
+     * @Assert\Regex(
+     *     pattern="/[@;,&()!?:%*€$£+=#_\/\\.\[\]\{\}-]/",
+     *     message="Le mot de passe doit comporter au moins un caractère spécial parmi
+       la liste suivante : @ ; , & ( ) ! ? : % * € $ £ + = # _ \ / [ ] { } - .",
+     *     groups={"editProfile", "Profile", "changePassword"}
+     * )
+     *
      * @Assert\Length(
-     *      min = 1,
-     *      max = 255,
-     *      maxMessage = "Le mot de passe ne doit pas dépasser {{ limit }} caractères",
-     *      groups={"editProfile", "Profile"}
+     *      min = 8,
+     *      max = 50,
+     *      maxMessage = "Le mot de passe ne doit pas dépasser {{ limit }} caractères.",
+     *      minMessage = "Le mot de passe doit dépasser {{ limit }} caractères.",
+     *      groups={"editProfile", "Profile", "changePassword"}
      * )
      */
     protected $plainPassword;
@@ -74,6 +97,11 @@ class User extends BaseUser
      * @ORM\Column(type="datetime", nullable=true)
      */
     protected $tutorialTime;
+
+    /**
+     * @ORM\Column(name="licence_number", type="string", length=9, nullable=true)
+     */
+    protected $licenceNumber;
 
     /**
      * User constructor.
@@ -177,5 +205,21 @@ class User extends BaseUser
     public function setTutorialTime($tutorialTime)
     {
         $this->tutorialTime = $tutorialTime;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLicenceNumber()
+    {
+        return $this->licenceNumber;
+    }
+
+    /**
+     * @param mixed $licenceNumber
+     */
+    public function setLicenceNumber($licenceNumber)
+    {
+        $this->licenceNumber = $licenceNumber;
     }
 }

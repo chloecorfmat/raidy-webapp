@@ -60,6 +60,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       '             <div data-id = "' + poi.id + '" class="track--text">' +
       '                <span>' + poi.name + '</span>' +
       '            </div>' +
+      '            <span class="poi--isCheckpoint" title="Validation nécessaire à ce point d\'intérêt">' + (poi.isCheckpoint ? '<i class="fas fa-flag"></i></span>' : '' ) +
       '         <button id="moreButton" data-id = "' + poi.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
       '             <i class="fas fa-ellipsis-v"></i>' +
       '         </button>' +
@@ -92,7 +93,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       document.getElementById('editPoi_id').value = poi.id;
       document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);
       document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
+      document.getElementById('editPoi_isCheckpoint').checked = poi.isCheckpoint;
       (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
+      document.getElementById('editPoi_description').value = poi.description;
+
       MicroModal.show('edit-poi-popin');
     });
 
@@ -207,9 +211,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         let id = parseInt(btnSettings.dataset.id);
         let track = mapManager.tracksMap.get(id);
         document.querySelector('#editTrack_name')     .value = htmlentities.decode(track.name);
-          document.querySelector('#editTrack_color')    .value = track.color;
-          document.querySelector('#editTrack_id')       .value = track.id;
-          document.querySelector('#editTrack_sportType').value = track.sportType;
+        document.querySelector('#editTrack_color')    .value = track.color;
+        document.querySelector('#editTrack_id')       .value = track.id;
+        document.querySelector('#editTrack_sportType').value = track.sportType;
 
           MicroModal.show('edit-track-popin');
       });

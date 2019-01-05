@@ -1,5 +1,23 @@
 {% extends 'default/external.html.twig' %}
 
+{% block meta %}
+    <!-- Open Graph meta (Facebook) -->
+    <meta property="og:title" content="{{ meta['title'] }}" />
+    <meta property="og:url" content="{{ meta['url'] }}" />
+    <meta property="og:image" content="{{ asset(meta['image']) }}" />
+    <meta property="og:description" content="{{ meta['description'] }}" />
+    <meta property="og:site_name" content="Helper | Raidy" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card meta -->
+    <meta name="twitter:site" content="Helper | Raidy">
+    <meta name="twitter:title" content="{{ meta['title'] }}">
+    <meta name="twitter:description" content="{{ meta['description'] }}">
+    <meta name="twitter:url" content="{{ meta['url'] }}" />
+    <meta name="twitter:image:src" content="{{ meta['image'] }}">
+{% endblock %}
+
 {% block content %}
 <div class="centered--content">
     <h1>Mon super raid</h1>
@@ -17,11 +35,11 @@
             </li>
         </ul>
     </div>
-    <p class="important">Vous avez bien été enregistré en tant que bénévole pour ce raid !</p>
+    <p class="important login--text">Vous avez bien été enregistré en tant que bénévole pour ce raid !</p>
 
     <div class="actions">
         <div class="downloads">
-            <p>Téléchargez dès maintenant l'application Raidy</p>
+            <p class="login--text">Téléchargez dès maintenant l'application Raidy</p>
             <div class="downloads--links">
                 <a href="#">
                     <img src="{{ asset('assets/images/app-store-badge.png') }}" alt="">
@@ -30,7 +48,7 @@
                     <img src="{{ asset('assets/images/google-play-badge.png') }}" alt="">
                 </a>
             </div>
-            <p>ou</p>
+            <p class="login--text">ou</p>
             <a href="{{ path('helper') }}" class="btn">Accéder à mon compte</a>
         </div>
 

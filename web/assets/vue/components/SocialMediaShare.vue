@@ -18,16 +18,23 @@
 <script>
     export default {
         name: "SocialMediaShare",
-        props: ['url'],
+        props: ['url', 'raidname', 'via'],
         computed: {
             loadFbUrl: function () {
                 return "https://www.facebook.com/sharer/sharer.php?u=" + this.url;
             },
             loadTwitterUrl: function() {
                 let twitter = "https://twitter.com/intent/tweet";
-                twitter += '?text=Je suis le raid';
+
+                if (this.raidName !== undefined) {
+                    twitter += '?text=Comme moi, vous pouvez suivre le raid "' + this.raidname + '"';
+                } else {
+                    twitter += '?text='
+                }
+
                 twitter += '&url=' + this.url;
-                twitter += '&via=Raidy';
+                twitter += '&via=' + this.via;
+
                 return twitter;
             }
         }

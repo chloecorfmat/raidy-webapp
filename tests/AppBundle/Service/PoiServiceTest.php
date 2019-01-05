@@ -25,7 +25,7 @@ class PoiServiceTest extends TestCase
 
     public function __construct()
     {
-        parent::__construct(null,[],'');
+        parent::__construct(null, [], '');
         $kernel = new \AppKernel('dev', false);
         $kernel->boot();
         $this->container = $kernel->getContainer();
@@ -59,9 +59,12 @@ class PoiServiceTest extends TestCase
         $poi->setLongitude(0);
         $poi->setPoiType($poiType);
         $poi->setRequiredHelpers(0);
+        $poi->setDescription("Test description");
+        $poi->setImage(null);
+        $poi->setIsCheckpoint(true);
 
         $json = $this->poiService->poiToJson($poi);
-        $this->assertEquals('{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"poiType":1}', $json);
+        $this->assertEquals('{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"isCheckpoint":"1","poiType":1,"description":"Test description","image":""}', $json);
     }
 
     public function testPoiArrayToJSON()
@@ -91,12 +94,15 @@ class PoiServiceTest extends TestCase
         $poi->setLongitude(0);
         $poi->setPoiType($poiType);
         $poi->setRequiredHelpers(0);
+        $poi->setDescription("Test description");
+        $poi->setImage(null);
+        $poi->setIsCheckpoint(true);
 
         $pois = [];
         $pois[] = $poi;
 
         $json = $this->poiService->poisArrayToJson($pois);
-        $this->assertEquals('[{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"poiType":1}]', $json);
+        $this->assertEquals('[{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"image":"","description":"Test description","isCheckpoint":"1","poiType":1}]', $json);
     }
 
     public function testCheckDataArray()
@@ -107,6 +113,9 @@ class PoiServiceTest extends TestCase
         $obj['latitude'] = 2;
         $obj['requiredHelpers'] = 0;
         $obj['poiType'] = 5;
+        $obj['description'] = "Test description";
+        $obj['image'] = null;
+        $obj['isCheckpoint'] = true;
 
         $check = $this->poiService->checkDataArray($obj, true);
         $this->assertFalse($check);

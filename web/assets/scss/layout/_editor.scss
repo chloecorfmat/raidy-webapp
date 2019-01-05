@@ -1007,3 +1007,18 @@ div {
     }
   }
 }
+
+.modal--poi {
+  .form--item-checkbox {
+    margin-top: 1rem;
+
+    input {
+      width: auto;
+    }
+
+    label {
+      bottom: 0;
+      font-size: .9rem;
+    }
+  }
+}

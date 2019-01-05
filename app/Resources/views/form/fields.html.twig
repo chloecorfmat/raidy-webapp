@@ -3,11 +3,13 @@
         <div class="form--item form--input-focused">
     {% elseif form.vars.choices is defined %}
         <div class="form--item form--item-select">
+    {% elseif form.vars.checked is defined %}
+       <div class="form--item form--input-checkbox">
     {% else %}
         <div class="form--item">
     {% endif %}
-        {{- form_label(form) -}}
         {{- form_errors(form) -}}
+        {{- form_label(form) -}}
         {{- form_widget(form) -}}
     </div>
 {%- endblock form_row -%}
@@ -78,3 +80,18 @@
         <p class="input--help">{{ form.vars.attr['data-help'] }}</p>
     {% endif %}
 {%- endblock form_widget_simple -%}
+
+{%- block checkbox_widget -%}
+    {%- set class = attr.class|default('') -%}
+    <input
+        type="checkbox"
+        class="form--input-checkbox {{ class }}"
+        {{ block('widget_attributes') }}
+        {% if value is defined %} value="{{ value }}"{% endif %}
+        {% if checked %} checked="checked"{% endif %} /
+    >
+
+    {% if form.vars.attr['data-help'] is defined %}
+        <p class="input--help">{{ form.vars.attr['data-help'] }}</p>
+    {% endif %}
+{%- endblock checkbox_widget -%}

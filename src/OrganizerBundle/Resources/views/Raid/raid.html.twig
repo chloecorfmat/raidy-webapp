@@ -54,6 +54,13 @@
                 </a>
             </div>
             <div class="card">
+                <a href="{{ path('listPois', {'raidId': raid.uniqid}) }}">
+                    <i class="fas fa-map-marker-alt fa-2x"></i>
+                    <p>Points d'intérêt</p>
+                </a>
+            </div>
+
+            <div class="card">
                 <a href="{{ path('listHelpers', {'id': raid.uniqid}) }}">
                     <i class="fas fa-users fa-2x"></i>
                     <p>Bénévoles</p>
@@ -63,6 +70,13 @@
                 <a href="{{ path('listContacts', {'raidId': raid.uniqid}) }}">
                     <i class="fas fa-phone fa-2x"></i>
                     <p>Contacts</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{{ path('liveRaid', {'id': raid.uniqid}) }}">
+                    <i class="fas fa-microphone fa-2x"></i>
+                    <p>Live!</p>
                 </a>
             </div>
             {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}

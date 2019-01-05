@@ -23,6 +23,8 @@
 /web/assets/dist
 /web/uploads
 
+web/build/app.js
+
 .php_cs.cache
 
 .DS_STORE*

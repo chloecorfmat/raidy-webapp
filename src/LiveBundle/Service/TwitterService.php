@@ -20,6 +20,7 @@ class TwitterService
     private $consumerKey;
     private $consumerSecret;
     private $getfield;
+    private $postfields;
 
     /**
      * TwitterService constructor.
@@ -50,11 +51,41 @@ class TwitterService
     }
 
     /**
+     * Set postfields array, example: array('screen_name' => 'J7mbo')
+     *
+     * @param array $array Array of parameters to send to API
+     *
+     * @return TwitterService this.
+     */
+    public function setPostfields(array $array)
+    {
+        if (!is_null($this->getGetfield())) {
+            throw new Exception('You can only choose get OR post fields.');
+        }
+
+        if (isset($array['status']) && substr($array['status'], 0, 1) === '@') {
+            $array['status'] = sprintf("\0%s", $array['status']);
+        }
+
+        $this->postfields = $array;
+
+        return $this;
+    }
+
+    /**
      * @return mixed
      */
     public function getGetfield()
     {
         return $this->getfield;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getPostfields()
+    {
+        return $this->postfields;
     }
 
     /**
@@ -110,6 +141,7 @@ class TwitterService
         $header = array($this->buildAuthorizationHeader($this->oauth), 'Expect:');
 
         $getfield = $this->getGetfield();
+        $postfields = $this->getPostfields();
 
         $options = [
             CURLOPT_HTTPHEADER => $header,
@@ -119,8 +151,12 @@ class TwitterService
             CURLOPT_TIMEOUT => 10,
         ];
 
-        if ($getfield !== '') {
-            $options[CURLOPT_URL] .= $getfield;
+        if (!is_null($postfields)) {
+            $options[CURLOPT_POSTFIELDS] = $postfields;
+        } else {
+            if ($getfield !== '') {
+                $options[CURLOPT_URL] .= $getfield;
+            }
         }
 
         $feed = curl_init();

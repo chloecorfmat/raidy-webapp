@@ -16,11 +16,11 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('app');
 
-        // ... add node definitions to the root of the tree
         $rootNode
             ->children()
                 ->arrayNode('twitter')
                         ->children()
+                            ->scalarNode('account')->end()
                             ->scalarNode('oauth_access_token')->end()
                             ->scalarNode('oauth_access_token_secret')->end()
                             ->scalarNode('consumer_key')->end()
