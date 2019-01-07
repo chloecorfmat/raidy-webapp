@@ -52,6 +52,14 @@ form {
     }
   }
 
+  .form--input-quill {
+    padding-top: 1rem;
+
+    label {
+      bottom: 0;
+    }
+  }
+
   label {
     bottom: -1.9rem;
     color: $tertiary-color-1;
