@@ -138,7 +138,14 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '             </span>' +
         '             <div class="track--text">' +
         '                <span class="track-name">' + newTrack.name + '</span>' +
-        '                <span style="font-size : 0.75rem;"></br>(150,0 km)</span>' +
+        '                <ul class="track-info">' +
+        '                   <i class="fas fa-route"></i>' +
+        '                   <li class="track-distance">150,0 km</li>' +
+        '                   <i  class="fas fa-long-arrow-alt-up"></i>' +
+        '                   <li class="track-elev-gain">100,0 m</li>' +
+        '                   <i  class="fas fa-long-arrow-alt-down"></i>' +
+        '                   <li class="track-elev-lose">100,0 m</li>' +
+        '                </ul>' +
         '            </div>' +
         '            <span class="track--is-calibration" title="Parcours issu d\'une calibration">' + (newTrack.isCalibration ? '<i class="fas fa-mobile-alt"></i></span>' : '' ) +
         '         </label>' +
@@ -162,8 +169,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
      // console.log(newTrack);
       newTrack.calculDistance();
-      li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
-
+      newTrack.calculElevation();
+      li.querySelector('.track-distance').innerHTML = Math.round(10 * newTrack.distance / 1000) / 10 + 'Km ';
+      li.querySelector('.track-elev-gain').innerHTML = Math.round(newTrack.posElev)+'m';
+      li.querySelector('.track-elev-lose').innerHTML = Math.round(newTrack.negElev)+'m';
       // TRACK SELECTION LISTENER
       input.addEventListener('change', function () {
         mapManager.toggleTrackVisibility(newTrack);

@@ -1,3 +1,6 @@
+
+
+
 /* SCROLL MANAGEMENT */
 function preventDefault(e) {
     e = e || window.event;
@@ -211,6 +214,18 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         // Continue implementing the control here.
         controlElement.querySelector("input[type='checkbox']").addEventListener('change',function(){
           mapManager.setPoiEditable(this.checked);
+          if(this.checked){
+            document.querySelectorAll(".poi-marker").forEach(function(el) {
+              el.style.boxShadow = "0px 0px 1px 2px #0f5e54";
+            });
+          }else{
+            document.querySelectorAll(".poi-marker").forEach(function(el) {
+              el.style.boxShadow = "none";
+            });
+          }
+        });
+        controlElement.querySelector("input[type='checkbox']").addEventListener('dblclick click', function(e) {
+          e.stopPropagation()
         });
         return controlElement;
       }
