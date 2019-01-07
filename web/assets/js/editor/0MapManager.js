@@ -188,6 +188,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
     this.map.on('editable:drawing:start', function () {
       document.getElementById('map').style.cursor = 'crosshair';
+      keepThis.mapHistory.clearHistory()
     });
 
 
