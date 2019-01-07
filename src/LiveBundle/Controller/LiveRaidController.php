@@ -4,13 +4,12 @@ namespace LiveBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveRaidController extends Controller
 {
     /**
-     * @Route("/live/raid/{id}")
+     * @Route("/live/raid/{id}", name="live")
      *
      * @param Request $request request
      * @param int     $id      raid identifier
@@ -19,7 +18,7 @@ class LiveRaidController extends Controller
      */
     public function raidLive(Request $request, $id)
     {
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
         //$raid = $raidManager->find($id);
@@ -52,14 +51,14 @@ class LiveRaidController extends Controller
 
         $filters = array_merge($twitterAccounts, $twitterHashtags);
 
-        $data = "";
+        $data = '';
 
         foreach ($filters as $key => $filter) {
-            if ($filter !== '@' && $filter !== '') {
+            if ('@' !== $filter && '' !== $filter) {
                 $data .= $filter;
 
                 if (next($filters)) {
-                    $data .= "%20OR%20";
+                    $data .= '%20OR%20';
                 }
             }
         }

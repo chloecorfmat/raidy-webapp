@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 19/12/18
- * Time: 08:36
+ * Time: 08:36.
  */
 
 namespace AppBundle\Entity;

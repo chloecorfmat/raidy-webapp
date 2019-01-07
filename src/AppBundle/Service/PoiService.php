@@ -190,7 +190,7 @@ class PoiService
             return false;
         }
 
-        if (!isset($obj['isCheckpoint']) || "boolean" != gettype($obj['isCheckpoint'])) {
+        if (!isset($obj['isCheckpoint']) || 'boolean' != gettype($obj['isCheckpoint'])) {
             return false;
         }
 

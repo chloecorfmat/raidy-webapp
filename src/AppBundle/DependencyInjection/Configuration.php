@@ -9,6 +9,7 @@ class Configuration implements ConfigurationInterface
 {
     /**
      * Define config for AppBundle.
+     *
      * @return TreeBuilder
      */
     public function getConfigTreeBuilder()

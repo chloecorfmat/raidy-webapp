@@ -178,8 +178,8 @@ class HelperRegisterController extends Controller
                 [
                     'label' => 'Accepter les conditions',
                     'attr' => [
-                        'data-help' =>
-                            'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
+                        'data-help' => 'Cette information n\'est utile que si ' .
+                            'vous participez à un raid en tant que bénévole.',
                     ],
                 ]
             )
@@ -243,7 +243,7 @@ class HelperRegisterController extends Controller
                                 $helper->setFavoritePoiType($poitype);
                                 $helper->setUser($user);
                                 $helper->setIsCheckedIn(false);
-                                $helper->setAcceptConditions(new \DateTime("now"));
+                                $helper->setAcceptConditions(new \DateTime('now'));
 
                                 $em->persist($helper);
                                 $em->flush();
@@ -259,7 +259,8 @@ class HelperRegisterController extends Controller
                 } else {
                     $form->addError(
                         new FormError(
-                            'Le numéro de téléphone d\'un bénévole doit être un mobile et ' .
+                            'Le numéro de téléphone d\'un bénévole doit ' .
+                            'être un mobile et ' .
                             'commencer par 06 ou 07. Il comporte 10 numéros.'
                         )
                     );
@@ -341,8 +342,8 @@ class HelperRegisterController extends Controller
                 [
                     'label' => 'Accepter les conditions',
                     'attr' => [
-                        'data-help' =>
-                            'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
+                        'data-help' => 'Cette information n\'est utile que si ' .
+                            'vous participez à un raid en tant que bénévole.',
                     ],
                 ]
             )
@@ -398,7 +399,7 @@ class HelperRegisterController extends Controller
                                 $helper->setFavoritePoiType($poitype);
                                 $helper->setUser($user);
                                 $helper->setIsCheckedIn(false);
-                                $helper->setAcceptConditions(new \DateTime("now"));
+                                $helper->setAcceptConditions(new \DateTime('now'));
 
                                 $em->persist($helper);
                                 $em->flush();

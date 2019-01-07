@@ -289,7 +289,7 @@ class OrganizerAdminController extends Controller
      *
      * @param Request $request request
      * @param mixed   $id      id
-     * @param boolean $state   state
+     * @param bool    $state   state
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */

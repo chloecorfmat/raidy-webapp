@@ -55,26 +55,6 @@
     min-width: 100%;
   }
 
-  .poi-marker {
-    border: .1rem solid $poi-shadow-color;
-    $poi-size: 1.5rem;
-    border-radius: 3rem 3rem 0;
-    display: block;
-    height: $poi-size;
-    position: relative;
-    transform:  translateX(-$poi-size/2) translateY(-$poi-size) rotate(45deg);
-    width: $poi-size;
-  }
-
-  .track-marker {
-    border-radius: 3rem;
-    display: block;
-    height: 1rem;
-    position: relative;
-    transform: translateX(-.5rem) translateY(-.5rem);
-    width: 1rem;
-  }
-
   // ACCORDION
   // Style the buttons that are used to open and close the accordion panel.
   .accordion {
@@ -493,32 +473,6 @@
       &:not(:first-child) {
         margin-left: .5rem;
       }
-    }
-  }
-
-  // LEAF LET POP-UP.
-  .leaflet-popup-content-wrapper {
-    border-radius: 12px;
-    padding: 0;
-    text-align: center;
-
-    header {
-      display: block;
-      font-size: .75rem;
-    }
-
-    h4 {
-      margin-block-end: 0;
-      margin-block-start: 0;
-    }
-  }
-
-  .leaflet-popup-content {
-    margin: 0;
-    padding-bottom: 1rem;
-
-    p {
-      margin: 0;
     }
   }
 
@@ -1020,5 +974,51 @@ div {
       bottom: 0;
       font-size: .9rem;
     }
+  }
+}
+
+.poi-marker {
+  border: .1rem solid $poi-shadow-color;
+  $poi-size: 1.5rem;
+  border-radius: 3rem 3rem 0;
+  display: block;
+  height: $poi-size;
+  position: relative;
+  transform:  translateX(-$poi-size/2) translateY(-$poi-size) rotate(45deg);
+  width: $poi-size;
+}
+
+.track-marker {
+  border-radius: 3rem;
+  display: block;
+  height: 1rem;
+  position: relative;
+  transform: translateX(-.5rem) translateY(-.5rem);
+  width: 1rem;
+}
+
+// LEAF LET POP-UP.
+.leaflet-popup-content-wrapper {
+  border-radius: 12px;
+  padding: 0;
+  text-align: center;
+
+  header {
+    display: block;
+    font-size: .75rem;
+  }
+
+  h4 {
+    margin-block-end: 0;
+    margin-block-start: 0;
+  }
+}
+
+.leaflet-popup-content {
+  margin: 0;
+  padding-bottom: 1rem;
+
+  p {
+    margin: 0;
   }
 }
