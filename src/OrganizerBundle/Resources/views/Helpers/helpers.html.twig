@@ -172,11 +172,12 @@
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
     <script>
         window.addEventListener('load', function() {
-            var options = {
-                valueNames: ['name', 'status', 'favorite-type', 'assigned-poi', 'helper-validate']
-            };
+            // @TODO : Why this create problem on js functions about validation and affectation.
+            //var options = {
+            //    valueNames: ['name', 'status', 'favorite-type', 'assigned-poi', 'helper-validate']
+            //};
 
-            var helpersList = new List('helpers', options);
+            var helpersList = new List('helpers', []);
         });
     </script>
 {% endblock %}
