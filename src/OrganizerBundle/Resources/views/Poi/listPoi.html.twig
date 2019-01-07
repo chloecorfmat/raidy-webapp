@@ -37,7 +37,7 @@
 
 {% block body %}
     <h1>Liste des points d'intérêt</h1>
-    <div class="content">
+    <div class="content" id="pois">
         <div class="content--half" id="pois">
             <div class="table-search">
                 <i class="fas fa-search"></i>
@@ -129,5 +129,12 @@
     </script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
     <script>
+        window.addEventListener('load', function() {
+            var options = {
+                valueNames: ['name', 'coordinates', 'picture', 'poi-type', 'description', 'helpers']
+            };
+
+            var helpersList = new List('pois', options);
+        });
     </script>
 {% endblock %}
