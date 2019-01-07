@@ -5,6 +5,7 @@ window.addEventListener('load', displayModalToDeletePoiType);
 window.addEventListener('load', displayModalToDeleteSportType);
 window.addEventListener('load', displayModalToDeleteCollaborator);
 window.addEventListener('load', displayModalToDeleteContact);
+window.addEventListener('load', displayModalToDeleteMessage);
 
 function displayModalToDeleteOrganizer () {
   var btns = document.querySelectorAll('.btn--delete-organizer');
@@ -149,4 +150,20 @@ function displayModalToDeleteContact () {
           });
       }
   }
+}
+
+function displayModalToDeleteMessage () {
+    var btns = document.querySelectorAll('.btn--delete-message');
+    console.log(btns);
+    if (btns.length !== 0) {
+        MicroModal.init();
+        for (var btn of btns) {
+            btn.addEventListener('click', function () {
+                var id = this.dataset.messageId;
+                var url = document.getElementById('btn--delete-message').dataset.baseUrl + id;
+                document.getElementById('btn--delete-message').href = url;
+                MicroModal.show('delete-message'); // eslint-disable-line no-undef
+            });
+        }
+    }
 }
