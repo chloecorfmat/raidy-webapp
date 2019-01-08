@@ -173,11 +173,11 @@
     <script>
         window.addEventListener('load', function() {
             // @TODO : Why this create problem on js functions about validation and affectation.
-            //var options = {
-            //    valueNames: ['name', 'status', 'favorite-type', 'assigned-poi', 'helper-validate']
-            //};
+            var options = {
+                valueNames: ['name']
+            };
 
-            var helpersList = new List('helpers', []);
+            var helpersList = new List('helpers', options);
         });
     </script>
 {% endblock %}
