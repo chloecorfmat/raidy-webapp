@@ -1,475 +1,992 @@
-.main-editor {
-  margin: 0;
+.editor {
+  .main-editor {
+    margin: 0;
 
-  .breadcrumb {
-    align-items: center;
-    display: flex;
-    height: 2rem;
-    justify-content: space-between;
-    padding: .5rem 3rem;
+    .breadcrumb {
+      align-items: center;
+      display: flex;
+      height: 2rem;
+      justify-content: space-between;
+      padding: .5rem 3rem;
 
-    .btn-ico {
-      i {
-        display: inline;
-        margin-left: 1rem;
+      .btn-ico { // sass-lint:disable-line nesting-depth
+
+        i { // sass-lint:disable-line nesting-depth
+          display: inline;
+          margin-left: 1rem;
+        }
       }
-    }
 
-    li:first-child {
-      display: none;
-    }
-
-    @media screen and (min-width: $breakpoint-medium) {
-      height: initial;
-      padding: 0 3rem;
-
-      li:first-child {
-        display: inline-block;
+      li { // sass-lint:disable-line nesting-depth
+        &:first-child { // sass-lint:disable-line nesting-depth
+          display: none;
+        }
       }
-    }
-  }
-}
 
-.map--container {
-  position: relative;
-  width: 80%;
-}
+      @media screen and (min-width: $breakpoint-medium) {
+        height: initial;
+        padding: 0 3rem;
 
-.btn-leave-track-edit {
-  background-color: $live-color;
-  border-radius: 3rem;
-  font-family: Fontastique;
-  margin: 0 !important;
-  margin-left: .5rem !important;
-  padding: .5rem !important;
-}
-
-.map {
-  min-height: 100%;
-  min-width: 100%;
-}
-
-.map-tooltip {
-  background: #666;
-  border: 1px dashed #999;
-  color: $white;
-  display: none;
-  font-family: sans-serif;
-  font-size: 12px;
-  height: 20px;
-  line-height: 20px;
-  opacity: .5;
-  padding: 10px;
-  position: absolute;
-  z-index: 1000;
-}
-
-.poi-marker {
-  border: 1px solid black;
-  border-radius: 3rem 3rem 0;
-  display: block;
-  height: 2rem;
-  position: relative;
-  transform: translateX(-1rem) translateY(-2rem) rotate(45deg);
-  width: 2rem;
-}
-
-.track-marker {
-  border-radius: 3rem 3rem;
-  display: block;
-  height: 1rem;
-  position: relative;
-  transform: translateX(-.5rem) translateY(-.5rem);
-  width: 1rem;
-}
-
-// ACCORDION
-// Style the buttons that are used to open and close the accordion panel.
-.accordion {
-  background-color: $tertiary-color-1;
-  color: $white;
-  cursor: pointer;
-  outline: none;
-  padding: 20px;
-  text-align: left;
-  transition: .4s;
-  width: 100%;
-}
-
-// Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover).
-.active,
-.accordion:hover {
-  background-color: $tertiary-color-1;
-}
-
-// Style the accordion panel. Note: hidden by default.
-.panel {
-  background-color: $white;
-  max-height: 0;
-  overflow-x: hidden;
-  overflow-y: hidden;
-  transition: max-height .2s ease-out;
-}
-
-.accordion {
-  &:after {
-    color: #fff;
-    content: '\f107';
-    float: right;
-    font-family: 'Font Awesome 5 Free';
-    font-size: 1rem;
-    font-weight: 900;
-    margin-left: 5px;
-  }
-}
-
-button.active:after {
-  content: '\f106'; // Unicode character for 'minus' sign (-).
-}
-
-// LEFT TAB BAR.
-// Style the tab content.
-.tabcontent {
-  .btn--action {
-    display: block;
-    margin: 1rem auto;
-  }
-}
-
-.track--text {
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  width: 90%;
-}
-
-.track--isCalibration {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  margin-left: .3rem;
-}
-
-.checkbox-item--label > div > span:nth-child(1) {
-  display: inline-block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.editor--list {
-  list-style-type: none;
-  padding: 0;
-  padding-right: 20px;
-
-  li {
-    align-items: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 8px 16px;
-    width: 100%;
-
-    &:last-child {
-      border-bottom: 0;
-    }
-  }
-}
-
-.editor--container {
-  display: flex;
-  height: calc(100vh - 6rem);
-  // 4rem is the height of the header.
-  justify-content: space-between;
-  width: 100%;
-
-  .map--container {
-    transition: width 1s linear;
-  }
-
-  ::-webkit-scrollbar {
-    width: .75rem;
-  }
-
-  // Track.
-  ::-webkit-scrollbar-track {
-    background: #eeeeee;
-  }
-
-  // Handle.
-  ::-webkit-scrollbar-thumb {
-    background: #CCCCCC;
-  }
-
-  // Handle on hover.
-  ::-webkit-scrollbar-thumb:hover {
-    background: #DDDDDD;
-  }
-
-  .map--container {
-    transition: width 1s linear;
-  }
-}
-
-.tab-bar {
-  flex-grow: 1;
-  overflow-x: visible;
-  overflow-y: scroll;
-}
-
-.tablinks {
-  font-weight: 500;
-  position: relative;
-
-  &.active {
-    font-weight: 700;
-
-    &::after {
-      background: $white;
-      bottom: 0;
-      content: '';
-      height: 1rem;
-      left: 50%;
-      position: absolute;
-      transform: translateY(50%) translateX(-50%) rotate(45deg);
-      width: 1rem;
-    }
-  }
-}
-
-.bar {
-  display: flex;
-  flex-direction: column;
-  left: 0;
-  position: relative;
-  transition: width 1s ease;
-  width: 20%;
-  z-index: 1000;
-
-  .fa-caret-right {
-    display: block;
-  }
-
-  .fa-times {
-    display: none;
-  }
-
-  &::after {
-    background-color: $tertiary-color-1;
-    content: '';
-    display: block;
-    height: 1rem;
-    position: absolute;
-    right: 100%;
-    vertical-align: middle;
-    width: 1rem;
-    z-index: 1000000;
-  }
-}
-
-.btn--laterale-bar {
-  background-color: $tertiary-color-1;
-  border-radius: 0 10rem 10rem 0;
-  font-family: 'Fontastique', Sans-Serif;
-  font-size: 2rem;
-  height: 3rem;
-  margin: auto;
-  position: absolute;
-  right: 0;
-  top: 50vh;
-  transform: translateY(-50%) translateX(100%);
-  width: 1.5rem;
-  z-index: 1000;
-
-  div:not(.tab-bar--actions) {
-    i {
-      position: absolute;
-      right: 15%;
-      top: 20%;
-      transform: translateX(-75%);
-    }
-  }
-}
-
-.tab-bar--actions {
-  margin: auto;
-}
-
-.list--pois {
-  font-size: .9rem;
-  padding-right: 25px;
-
-  .list--pois-items {
-    &::before {
-      border-radius: 50%;
-      content: ' ';
-      display: inline-block;
-      height: calc(.5rem + 4px);
-      margin-right: .5rem;
-      padding: .2rem;
-      vertical-align: middle;
-      width: calc(.5rem + 4px);
-    }
-
-    .btn--track--more {
-
-      i {
-        vertical-align: top;
-      }
-    }
-  }
-}
-
-.btn--return {
-  display: block;
-}
-
-.bar--invisible {
-  position: relative;
-  transition: width 1s ease;
-  width: 0;
-
-  & + .map--container {
-    transition: width .5s linear;
-    width: 100%;
-  }
-}
-
-.btn--editor-ico {
-  vertical-align: middle;
-}
-
-.checkbox-item {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  input {
-    display: none;
-
-    &:checked {
-      + .checkmark { // sass-lint:disable-line nesting-depth
-        background-color: $tertiary-color-1; // Set color by js.
-
-        .fa-check { // sass-lint:disable-line nesting-depth
-          opacity: 1;
+        li {
+          &:first-child {
+            display: inline-block;
+          }
         }
       }
     }
   }
 
-  .checkmark {
-    border: 2px solid $tertiary-color-1; // Set color by js.
-    border-radius: 50%;
-    display: inline-block;
-    height: .5rem;
-    margin-right: .5rem;
-    padding: .2rem;
-    vertical-align: middle;
-    width: .5rem;
+  .map--container {
+    position: relative;
+    width: 80%;
   }
 
-  .fa-check {
+  .btn-leave-track-edit {
+    background-color: $live-color;
+    border-radius: 3rem;
+    font-family: Fontastique;
+    margin: 0;
+    margin-left: .5rem;
+    padding: .5rem;
+  }
+
+  .map {
+    min-height: 100%;
+    min-width: 100%;
+  }
+
+  // ACCORDION
+  // Style the buttons that are used to open and close the accordion panel.
+  .accordion {
+    background-color: $tertiary-color-1;
     color: $white;
-    display: block;
-    font-size: .5rem;
-    opacity: 0;
+    cursor: pointer;
+    outline: none;
+    padding: 20px;
+    text-align: left;
+    transition: .4s;
+    width: 100%;
+
+    &::after {
+      color: $white;
+      content: '\f107';
+      float: right;
+      font-family: 'Font Awesome 5 Free';
+      font-size: 1rem;
+      font-weight: 900;
+      margin-left: 5px;
+    }
+
+    &:hover {
+      background-color: $tertiary-color-1;
+    }
   }
 
-  .checkbox-item--label {
+  // Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover).
+  .active {
+    background-color: $tertiary-color-1;
+  }
+
+  // Style the accordion panel. Note: hidden by default.
+  .panel {
+    background-color: $white;
+    max-height: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    transition: max-height .2s ease-out;
+  }
+
+  button {
+    &.active {
+      &::after {
+        content: '\f106'; // Unicode character for 'minus' sign (-).
+      }
+    }
+  }
+
+  // LEFT TAB BAR.
+  // Style the tab content.
+  .tabcontent {
+    .btn--action {
+      display: block;
+      margin: 1rem auto;
+    }
+  }
+
+  .track--text {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .track--is-calibration {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: .3rem;
+  }
+
+  .track-name {
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .track-info {
+    display: inline;
+    font-size: .75rem;
+    margin: 0;
+    padding: 0;
+
+    li {
+      display: inline;
+      font-style: italic;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    i {
+      color: $tertiary-color-1;
+      margin-left: .2rem;
+      margin-right: 0;
+    }
+  }
+
+  .editor--list {
+    list-style-type: none;
+    padding: 0;
+    padding-right: 20px;
+
+    &>li {
+      align-items: center;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 8px 16px;
+      width: 100%;
+
+      &:last-child {
+        border-bottom: 0;
+      }
+    }
+  }
+
+  .editor--container {
+    display: flex;
+    height: calc(100vh - 6rem);
+    // 4rem is the height of the header.
+    justify-content: space-between;
+    width: 100%;
+
+    .map--container {
+      transition: width 1s linear;
+    }
+
+    ::-webkit-scrollbar { // sass-lint:disable-line no-vendor-prefixes
+      width: .75rem;
+    }
+
+    // Track.
+    ::-webkit-scrollbar-track { // sass-lint:disable-line no-vendor-prefixes
+      background: $grey-e;
+    }
+
+    // Handle.
+    ::-webkit-scrollbar-thumb { // sass-lint:disable-line no-vendor-prefixes
+      background: $grey-c;
+
+      // Handle on hover.
+      &:hover {
+        background: $grey-d;
+      }
+    }
+
+  }
+
+  .tab-bar {
+    flex-grow: 1;
+    overflow-x: visible;
+    overflow-y: scroll;
+  }
+
+  .tablinks {
+    font-weight: 500;
+    position: relative;
+
+    &.active {
+      font-weight: 700;
+
+      &::after {
+        background: $white;
+        bottom: 0;
+        content: '';
+        height: 1rem;
+        left: 50%;
+        position: absolute;
+        transform: translateY(50%) translateX(-50%) rotate(45deg);
+        width: 1rem;
+      }
+    }
+  }
+
+  .bar {
+    display: flex;
+    flex-direction: column;
+    left: 0;
+    position: relative;
+    transition: width 1s ease;
+    width: 20%;
+    z-index: 1000;
+
+    .fa-caret-right {
+      display: block;
+    }
+
+    .fa-times {
+      display: none;
+    }
+
+    &::after {
+      background-color: $tertiary-color-1;
+      content: '';
+      display: block;
+      height: 1rem;
+      position: absolute;
+      right: 100%;
+      vertical-align: middle;
+      width: 1rem;
+      z-index: 1000000;
+    }
+  }
+
+  .btn--laterale-bar {
+    background-color: $tertiary-color-1;
+    border-radius: 0 10rem 10rem 0;
+    font-family: 'Fontastique', Sans-Serif;
+    font-size: 2rem;
+    height: 3rem;
+    margin: auto;
+    position: absolute;
+    right: 0;
+    top: 50vh;
+    transform: translateY(-50%) translateX(100%);
+    width: 1.5rem;
+    z-index: 1000;
+
+    div {
+      :not(.tab-bar--actions) {
+        i { // sass-lint:disable-line nesting-depth
+          position: absolute;
+          right: 15%;
+          top: 20%;
+          transform: translateX(-75%);
+        }
+      }
+    }
+  }
+
+  .tab-bar--actions {
+    margin: auto;
+  }
+
+  .list--pois {
+    font-size: .9rem;
+    padding-right: 25px;
+
+    .list--pois-items {
+      &::before {
+        border-radius: 50%;
+        content: ' ';
+        display: inline-block;
+        height: calc(.5rem + 4px);
+        margin-right: .5rem;
+        padding: .2rem;
+        vertical-align: middle;
+        width: calc(.5rem + 4px);
+      }
+
+      .btn--track--more {
+
+        i {
+          vertical-align: top;
+        }
+      }
+    }
+  }
+
+  .btn--return {
+    display: block;
+  }
+
+  .bar--invisible {
+    position: relative;
+    transition: width 1s ease;
+    width: 0;
+
+    & + .map--container {
+      transition: width .5s linear;
+      width: 100%;
+    }
+  }
+
+  .btn--editor-ico {
+    vertical-align: middle;
+  }
+
+  .checkbox-item {
     display: flex;
     flex-direction: row;
-    width: 87%;
+    width: 100%;
+
+    input {
+      display: none;
+
+      &:checked {
+
+        + .checkmark { // sass-lint:disable-line nesting-depth
+          background-color: $tertiary-color-1; // Set color by js.
+
+          .fa-check { // sass-lint:disable-line nesting-depth
+            opacity: 1;
+          }
+        }
+      }
+    }
+
+    .checkmark {
+      border: 2px solid $tertiary-color-1; // Set color by js.
+      border-radius: 50%;
+      display: inline-block;
+      height: .5rem;
+      margin-right: .5rem;
+      padding: .2rem;
+      vertical-align: middle;
+      width: .5rem;
+    }
+
+    .fa-check {
+      color: $white;
+      display: block;
+      font-size: .5rem;
+      opacity: 0;
+    }
+
+    .checkbox-item--label {
+      display: flex;
+      flex-direction: row;
+      width: 87%;
+
+      &:hover {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .track--edit {
+    background: $grey-light;
+  }
+
+  // Dropdown Button.
+  .dropbtn {
+    border: 0;
+    color: $white;
+    cursor: pointer;
+    font-size: 16px;
+    padding: 16px;
+  }
+
+  // The container <div> - needed to position the dropdown content.
+  .dropdown {
+    display: inline-block;
+    position: absolute;
+  }
+
+  // Dropdown Content (Hidden by Default).
+  .dropdown-content {
+    background-color: $white;
+    box-shadow: 0 8px 16px 0 $semi-transparent-dark;
+    cursor: pointer;
+    display: none;
+    left: 100%;
+    min-width: 12rem ;
+    position: absolute;
+    z-index: 99999999999;
+
+    a {
+      display: block;
+      padding: 1.2rem 1.5rem;
+      text-decoration: none;
+
+      &:hover {
+        background-color: $grey-light;
+      }
+    }
+  }
+
+  // Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button).
+  .show {
+    display: block;
+  }
+
+  .btn--track--more {
+    background: none;
+    color: $tertiary-color-1;
+    display: inline-block;
+    font-size: 1rem;
+    justify-self: flex-end;
+    margin-left: .25rem;
+
     &:hover {
+      opacity: .5;
+    }
+  }
+
+  .btn--poi--settings {
+    background: none;
+    color: $tertiary-color-1;
+    display: inline-block;
+    font-size: .95rem;
+
+    &:hover {
+      opacity: .5;
+    }
+  }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      flex-grow: 1;
+
+      &:not(:first-child) {
+        margin-left: .5rem;
+      }
+    }
+  }
+
+  // TOGGLE.
+
+  // The switch - the box around the slider.
+  .switch {
+    display: inline-block;
+    height: 1.4rem;
+    margin-left: .5rem;
+    position: relative;
+    width: 2.4rem;
+
+    input {
+      height: 0;
+      opacity: 0;
+      width: 0;
+    }
+  }
+
+  // The slider.
+  .slider {
+    background-color: $grey-light;
+    bottom: 0;
+    cursor: pointer;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transition: .4s;
+
+    &::before {
+      background-color: $white;
+      bottom: .16rem;
+      content: '';
+      height: 1rem;
+      left: .16rem;
+      position: absolute;
+      transition: .4s;
+      width: 1rem;
+    }
+
+    &.round {
+      border-radius: 1.4rem;
+
+      &::before {
+        border-radius: 50%;
+      }
+    }
+  }
+
+  a {
+    &.leaflet-control-zoom-in,
+    &.leaflet-control-zoom-out {
+      color: $tertiary-color-1;
+    }
+  }
+
+  input {
+    &:checked {
+      +.slider {
+        background-color: $tertiary-color-1;
+
+        &::before { // sass-lint:disable-line nesting-depth
+          transform: translateX(1rem);
+        }
+      }
+    }
+
+    &:focus {
+      + .slider {
+        box-shadow: 0 0 .08rem $tertiary-color-1;
+      }
+    }
+  }
+
+  .switch-label {
+    color: $tertiary-color-1;
+    display: inline;
+    font-family: 'Proxima Nova', Sans-Serif;
+    font-size: .75rem;
+    font-weight: bold;
+    padding: 0;
+    text-align: center;
+  }
+
+  .map-controller-container {
+    background-clip: padding-box;
+    background-color: $white;
+    border: 2px solid $semi-transparent-dark;
+    border-radius: 4px;
+    padding: .4rem;
+  }
+
+  .leaflet-control-custom {
+    box-sizing: border-box;
+    color: $tertiary-color-1;
+    font-size: .6rem;
+    padding-top: .2rem;
+    text-align: center;
+  }
+
+  .leaflet-marker-draggable {
+    border-radius: 50%;
+  }
+
+  .switch-alternative {
+    display: inline-block;
+    height: 1.4rem;
+    position: relative;
+    width: 1.4rem;
+
+    // Hide default HTML checkbox.
+    input {
+      height: 0;
+      opacity: 0;
+      width: 0;
+    }
+  }
+
+
+  @media screen and (min-width: $breakpoint-mediumlarge) and (max-width: $breakpoint-large) {
+    .bar {
+      width: 30%;
+    }
+
+    .bar--invisible {
+      position: relative;
+      transition: width 1s ease;
+      width: 0;
+
+      & + .map--container {
+        transition: width .5s linear;
+        width: 100%;
+      }
+    }
+
+    .map--container {
+      width: 70%;
+    }
+  }
+
+  @media screen and (max-width: $breakpoint-mediumlarge) {
+    .bar {
+      width: 100%;
+
+      + .map--container {
+        .fab {
+          display: none;
+        }
+      }
+
+      .fa-caret-right {
+        display: none;
+      }
+
+      .fa-times {
+        display: block;
+        margin: auto;
+        vertical-align: middle;
+      }
+
+      &:not(.bar--invisible) {
+        .btn--laterale-bar {
+          background: $secondary-color-2;
+          border-radius: 50%;
+          bottom: 2rem;
+          display: flex;
+          font-size: 2rem;
+          height: 4rem;
+          line-height: 2rem;
+          position: fixed;
+          right: 2rem;
+          top: initial;
+          transform: initial;
+          width: 4rem;
+        }
+      }
+    }
+
+
+
+
+    .bar--invisible {
+      position: relative;
+      transition: width 1s ease;
+      width: 0;
+
+      + .map--container {
+        transition: width .5s linear;
+        width: 100%;
+
+        .fab {
+          display: initial;
+        }
+      }
+
+      .fa-caret-right {
+        display: block;
+      }
+
+      .fa-times {
+        display: none;
+      }
+    }
+
+    .map--container {
+      width: 0;
+    }
+
+    .dropdown-content {
+      left: initial;
+      right: 10%;
+
+      i {
+        margin-right: .5rem;
+      }
+    }
+  }
+
+  //fab
+
+
+  .btn--add-poi {
+    background-clip: padding-box;
+    background-color: $tertiary-color-1;
+
+    border: 2px solid $semi-transparent-dark;
+    border-radius: 50%;
+
+    bottom: 0;
+    font-size: 3rem;
+    height: 5rem;
+    margin: 2.5rem;
+    overflow: hidden;
+    padding: 0;
+    position: fixed;
+
+    right: 0;
+
+    text-align: center;
+    transition-duration: .5s;
+    transition-property: background-color;
+    transition-timing-function: ease;
+
+    vertical-align: middle;
+    width: 5rem;
+    z-index: 999;
+
+    svg {
+      fill: $tertiary-color-1;
+      transform: translateY(.5rem);
+      transition-duration: .5s;
+      transition-property: fill, transform;
+      transition-timing-function: ease;
+      width: 40%;
+
+    }
+
+    &.add--poi {
+
+      background-color: $secondary-color-2;
+
+      &:hover {
+        + .fab-buttons {
+          opacity: 0;
+          visibility: hidden;
+        }
+      }
+
+      .btn--editor {
+        svg {
+          fill: $secondary-color-2;
+          transform: translateY(.5rem) rotate(50deg);
+        }
+      }
+    }
+  }
+
+  .btn--editor {
+    background-image: url('../../images/map-marker-main-white.svg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 3rem;
+    bottom: 0;
+    height: 5rem;
+    margin: 2.5rem;
+    padding: 0;
+    position: fixed;
+    right: 0;
+    width: 5rem;
+  }
+
+  .fab {
+    bottom: 0;
+    height: 5rem;
+    margin: 2.5rem;
+    padding: 0;
+    position: fixed;
+    right: 0;
+    width: 5rem;
+    z-index: 500;
+
+    &:hover {
+      .fab-buttons {
+        opacity: 1;
+        visibility: visible;
+      }
+
+      .fab-buttons-link {
+        transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0);
+      }
+    }
+  }
+
+  .fab-action-button {
+    :hover  {
+      + .fab-buttons {
+        .fab-buttons-link { // sass-lint:disable-line nesting-depth
+          &::before { // sass-lint:disable-line nesting-depth
+            opacity: 1;
+            transform: scale(1);
+            transform-origin: right center 0;
+            transition-delay: .3s;
+            visibility: visible;
+          }
+        }
+      }
+    }
+  }
+
+
+  .fab-buttons {
+    bottom: 4rem;
+    left: 0;
+    list-style: none;
+    margin: 0;
+    opacity: 0;
+    padding: 0;
+    position: absolute;
+    right: 0;
+    transition: .2s;
+    visibility: hidden;
+  }
+
+  .fab-action-button-icon {
+    background: url('data:image/svg+xml;utf8,<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 895.05 895"><defs><style>.cls-1{fill:#fffffsf;}</style></defs><title>plus</title><text x="-52.48" y="-52.5"/><path class="cls-1" d="M947.52,402.52q0,88.65-49.17,141.81t-139.6,53.15H597.48v350q-88.65,0-141.81-49.15T402.52,758.72V597.48h-350q0-88.62,49.14-141.78t139.66-53.18H402.52V52.5q88.62,0,141.78,49.17t53.18,139.61V402.52Z" transform="translate(-52.48 -52.5)"/></svg>') center no-repeat;
+    display: block;
+    height: 3rem;
+    width: 3rem;
+  }
+
+  .fab-buttons-item {
+    display: block;
+    margin: 1.2rem;
+    text-align: center;
+  }
+
+  .fab-buttons-link {
+    background-color: $white;
+    border-radius: 50%;
+    box-shadow: 0 2px 2px 0 $box-shadow-color, 0 1px 5px 0 $box-shadow-color, 0 3px 1px -2px $semi-transparent-dark;
+    display: inline-block;
+    height: 3rem;
+    text-decoration: none;
+    transform: scaleY(.5) scaleX(.5) translateY(0) translateX(0);
+    transition: .3s;
+    width: 3rem;
+  }
+
+  [data-tooltip] {
+    &::before {
+      background: $tertiary-color-1;
+      border-radius: 2px;
+      color: $white;
+      content: attr(data-tooltip);
+      font-size: 1rem;
+      font-weight: 600;
+      margin-right: 1.2rem;
+      margin-top: -1.1rem;
+      opacity: 0;
+      padding: .4rem .7rem;
+      position: absolute;
+      right: 100%;
+      text-decoration: none;
+      top: 50%;
+      transform: scale(0);
+      transform-origin: top right;
+      transition: transform .3s cubic-bezier(.25, .8, .25, 1);
+      visibility: hidden;
+      white-space: nowrap;
+    }
+
+    &:hover {
+
+      &::before {
+        opacity: 1;
+        transform: scale(1);
+        transform-origin: right center 0;
+        visibility: visible;
+      }
+    }
+  }
+
+
+  .fab-icon {
+    display: inline-block;
+    height: 3rem;
+    width: 3rem;
+  }
+
+  .icon-tutorial {
+    background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" fill="#0F5E54"><path d="M96.06 454.35c.01 6.29 1.87 12.45 5.36 17.69l17.09 25.69a31.99 31.99 0 0 0 26.64 14.28h61.71a31.99 31.99 0 0 0 26.64-14.28l17.09-25.69a31.989 31.989 0 0 0 5.36-17.69l.04-38.35H96.01l.05 38.35zM0 176c0 44.37 16.45 84.85 43.56 115.78 16.52 18.85 42.36 58.23 52.21 91.45.04.26.07.52.11.78h160.24c.04-.26.07-.51.11-.78 9.85-33.22 35.69-72.6 52.21-91.45C335.55 260.85 352 220.37 352 176 352 78.61 272.91-.3 175.45 0 73.44.31 0 82.97 0 176zm176-80c-44.11 0-80 35.89-80 80 0 8.84-7.16 16-16 16s-16-7.16-16-16c0-61.76 50.24-112 112-112 8.84 0 16 7.16 16 16s-7.16 16-16 16z"/></svg>
+  ') center no-repeat;
+  }
+
+  // GPX import
+  .gpx-import--form {
+    h3 {
+      margin-bottom: .3rem;
+    }
+
+    & > .import-gpx--category {
+      display: none;
+
+      & > .import-gpx--checkboxes > div {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin-bottom: .6rem;
+      }
+
+    }
+
+    label {
+      position: static;
+    }
+
+    input {
+      width: auto;
+    }
+  }
+
+  .modal--delete-track {
+    .form--input-text {
+      border: 1px solid $secondary-color-2;
+      border-radius: 5px;
+      font-size: 1rem;
+      line-height: 1.5;
+      margin-bottom: 1rem;
+
+      &:focus {
+        outline-color: $secondary-color-2;
+      }
+    }
+  }
+
+  .editor-error--message {
+    align-items: center;
+    background-color: $secondary-color-2;
+    color: $white;
+    display: flex;
+    font-family: 'Proxima Nova', Sans-Serif;
+    justify-content: space-between;
+    padding-left: 1rem;
+
+    button {
+      background-color: inherit;
       cursor: pointer;
     }
   }
-}
 
-.checkbox-list {
-  //margin-top: 1rem;
-}
-
-.track--edit {
-  background: $grey-light;
-}
-
-// Dropdown Button.
-.dropbtn {
-  border: 0;
-  color: $white;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 16px;
-}
-
-// The container <div> - needed to position the dropdown content.
-.dropdown {
-  display: inline-block;
-  position: absolute;
-}
-
-// Dropdown Content (Hidden by Default).
-.dropdown-content {
-  background-color: #FFFFFF;
-  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
-  cursor: pointer;
-  display: none;
-  left: 100%;
-  min-width: 12rem ;
-  position: absolute;
-  z-index: 99999999999;
-
-  a {
-    display: block;
-    padding: 1.2rem 1.5rem;
-    text-decoration: none;
-
-    &:hover {
-      background-color: $grey-light;
+  .leaflet-control-container {
+    .leaflet-top {
+      z-index: 500;
     }
   }
 }
 
-// Show the dropdown menu (use JS to add this class to the .dropdown-content container when the user clicks on the dropdown button).
-.show {
+div {
+  .leaflet-control-layers-base > label {
+    bottom: 0;
+
+    input {
+      width: auto;
+    }
+  }
+}
+
+.modal--poi {
+  .form--item-checkbox {
+    margin-top: 1rem;
+
+    input {
+      width: auto;
+    }
+
+    label {
+      bottom: 0;
+      font-size: .9rem;
+    }
+  }
+}
+
+.poi-marker {
+  border: .1rem solid $poi-shadow-color;
+  $poi-size: 1.5rem;
+  border-radius: 3rem 3rem 0;
   display: block;
+  height: $poi-size;
+  position: relative;
+  transform:  translateX(-$poi-size/2) translateY(-$poi-size) rotate(45deg);
+  width: $poi-size;
 }
 
-.btn--track--more {
-  background: none;
-  color: $tertiary-color-1;
-  display: inline-block;
-  font-size: 1rem;
-  justify-self: flex-end;
-  margin-left: .25rem;
-
-  &:hover {
-    opacity: .5;
-  }
-}
-
-.btn--poi--settings {
-  background: none;
-  color: $tertiary-color-1;
-  display: inline-block;
-  font-size: .95rem;
-
-  &:hover {
-    opacity: .5;
-  }
-}
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-
-  button {
-    flex-grow: 1;
-
-    &:not(:first-child) {
-      margin-left: .5rem;
-    }
-  }
+.track-marker {
+  border-radius: 3rem;
+  display: block;
+  height: 1rem;
+  position: relative;
+  transform: translateX(-.5rem) translateY(-.5rem);
+  width: 1rem;
 }
 
 // LEAF LET POP-UP.
@@ -495,502 +1012,5 @@ button.active:after {
 
   p {
     margin: 0;
-  }
-}
-
-.leaflet-marker-icon.leaflet-interactive, .leaflet-image-layer.leaflet-interactive, .leaflet-pane > svg path.leaflet-interactive {
-  border-radius: 50%;
-}
-
-// TOGGLE.
-
-// The switch - the box around the slider.
-.switch {
-  display: inline-block;
-  height: 1.4rem;
-  margin-left: .5rem;
-  position: relative;
-  width: 2.4rem;
-}
-
-// Hide default HTML checkbox.
-.switch {
-  input {
-    height: 0;
-    opacity: 0;
-    width: 0;
-  }
-}
-
-// The slider.
-.slider {
-  background-color: #ccc;
-  bottom: 0;
-  cursor: pointer;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transition: .4s;
-}
-
-.slider {
-  &:before {
-    background-color: $white;
-    bottom: .16rem;
-    content: '';
-    height: 1rem;
-    left: .16rem;
-    position: absolute;
-    transition: .4s;
-    width: 1rem;
-  }
-}
-
-#map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-in,
-#map > div.leaflet-control-container > div.leaflet-top.leaflet-left > div > a.leaflet-control-zoom-out {
-  color: $tertiary-color-1;
-}
-
-input:checked + .slider {
-  background-color: $tertiary-color-1;
-}
-
-input:focus + .slider {
-  box-shadow: 0 0 .08rem $tertiary-color-1;
-}
-
-input:checked + .slider::before {
-  transform: translateX(1rem);
-}
-
-.switch-label {
-  color: $tertiary-color-1;
-  display: inline;
-  font-family: 'Proxima Nova', Sans-Serif;
-  font-size: .75rem;
-  font-weight: bold;
-  padding: 0;
-  text-align: center;
-}
-
-.map-controller-container {
-  background-clip: padding-box;
-  background-color: $white;
-  border: 2px solid rgba(0, 0, 0, .2);
-  border-radius: 4px;
-  padding: .4rem;
-}
-
-.leaflet-control-custom {
-  text-align: center;
-  padding-top: .2rem;
-  font-size: .6rem;
-  box-sizing: border-box;
-  color : $tertiary-color-1;
-}
-
-// Rounded sliders.
-.slider.round {
-  border-radius: 1.4rem;
-}
-
-.slider.round:before {
-  border-radius: 50%;
-}
-
-// Alternative.
-.slider-alternative {
-  background-color: #ccc;
-  bottom: 0;
-  cursor: pointer;
-  left: 0;
-  position: absolute;
-  right: 0;
-  top: 0;
-  transition: .4s;
-
-  &.round {
-    border-radius: 1.4rem;
-
-    &::before {
-      border-radius: 50%;
-    }
-  }
-}
-
-.slider-alternative::before {
-  content: 'X';
-  font-family: Fontastique;
-  height: .5rem;
-  position: absolute;
-  right: .25rem;
-  top: .25rem;
-  transition: .4s;
-  width: .5rem;
-}
-
-input:checked + .slider-alternative {
-  background-color: $tertiary-color-1;
-}
-
-input:focus {
-  + .slider-alternative {
-    box-shadow: 0 0 .08rem $tertiary-color-1;
-  }
-}
-
-.switch-alternative {
-  display: inline-block;
-  height: 1.4rem;
-  position: relative;
-  width: 1.4rem;
-
-  // Hide default HTML checkbox.
-  input {
-    height: 0;
-    opacity: 0;
-    width: 0;
-  }
-}
-
-
-@media screen and (min-width: $breakpoint-mediumlarge) and (max-width: $breakpoint-large) {
-  .bar {
-    width: 30%;
-  }
-
-  .bar--invisible {
-    position: relative;
-    transition: width 1s ease;
-    width: 0;
-
-    & + .map--container {
-      transition: width .5s linear;
-      width: 100%;
-    }
-  }
-
-  .map--container {
-    width: 70%;
-  }
-}
-
-@media screen and (max-width: $breakpoint-mediumlarge) {
-  .bar {
-    width: 100%;
-
-    + .map--container {
-      .fab {
-        display: none;
-      }
-    }
-
-    .fa-caret-right {
-      display: none;
-    }
-
-    .fa-times {
-      display: block;
-      margin: auto;
-      vertical-align: middle;
-    }
-
-    &:not(.bar--invisible) {
-      .btn--laterale-bar {
-        background: $secondary-color-2;
-        border-radius: 50%;
-        bottom: 2rem;
-        display: flex;
-        font-size: 2rem;
-        height: 4rem;
-        line-height: 2rem;
-        position: fixed;
-        right: 2rem;
-        top: initial;
-        transform: initial;
-        width: 4rem;
-      }
-    }
-  }
-
-
-
-
-  .bar--invisible {
-    position: relative;
-    transition: width 1s ease;
-    width: 0;
-
-    + .map--container {
-      transition: width .5s linear;
-      width: 100%;
-
-      .fab {
-        display: initial;
-      }
-    }
-
-    .fa-caret-right {
-      display: block;
-    }
-
-    .fa-times {
-      display: none;
-    }
-  }
-
-  .map--container {
-    width: 0;
-  }
-
-  .dropdown-content {
-    left: initial;
-    right: 10%;
-
-    i {
-      margin-right: .5rem;
-    }
-  }
-}
-
-//fab
-
-
-.btn--add-poi {
-  background-clip: padding-box;
-  background-color: $tertiary-color-1;
-
-  border: 2px solid rgba(0, 0, 0, .2);
-  border-radius: 50%;
-
-  bottom: 0;
-  font-size: 3rem;
-  height: 5rem;
-  margin: 2.5rem;
-  overflow: hidden;
-  padding: 0;
-  position: fixed;
-
-  right: 0;
-
-  text-align: center;
-  transition-duration: .5s;
-  transition-property: background-color;
-  transition-timing-function: ease;
-
-  vertical-align: middle;
-  width: 5rem;
-  z-index: 999;
-
-  svg {
-    fill: $tertiary-color-1;
-    transform: translateY(.5rem);
-    transition-duration: .5s;
-    transition-property: fill, transform;
-    transition-timing-function: ease;
-    width: 40%;
-
-  }
-
-  &.add--poi {
-
-    background-color: $secondary-color-2;
-
-    &:hover {
-      + .fab-buttons {
-        opacity: 0;
-        visibility: hidden;
-      }
-    }
-    .btn--editor {
-      svg {
-        fill: $secondary-color-2;
-        transform: translateY(.5rem) rotate(50deg);
-      }
-    }
-  }
-}
-
-.btn--editor {
-  background-image: url('../../images/map-marker-main-white.svg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: 3rem;
-  bottom: 0;
-  height: 5rem;
-  margin: 2.5rem;
-  padding: 0;
-  position: fixed;
-  right: 0;
-  width: 5rem;
-}
-
-.fab {
-  bottom: 0;
-  height: 5rem;
-  margin: 2.5rem;
-  padding: 0;
-  position: fixed;
-  right: 0;
-  width: 5rem;
-  z-index: 500;
-}
-
-.fab:hover .fab-buttons {
-  opacity: 1;
-  visibility: visible;
-}
-
-.fab:hover .fab-buttons__link {
-  transform: scaleY(1) scaleX(1) translateY(-16px) translateX(0);
-}
-
-.fab-action-button:hover + .fab-buttons .fab-buttons__link:before {
-  opacity: 1;
-  transform: scale(1);
-  transform-origin: right center 0;
-  transition-delay: .3s;
-  visibility: visible;
-
-}
-
-.fab-buttons {
-  bottom: 4rem;
-  left: 0;
-  list-style: none;
-  margin: 0;
-  opacity: 0;
-  padding: 0;
-  position: absolute;
-  right: 0;
-  transition: .2s;
-  visibility: hidden;
-}
-
-.fab-action-button__icon {
-  background: url('data:image/svg+xml;utf8,<svg id="Calque_1" data-name="Calque 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 895.05 895"><defs><style>.cls-1{fill:#fff;}</style></defs><title>plus</title><text x="-52.48" y="-52.5"/><path class="cls-1" d="M947.52,402.52q0,88.65-49.17,141.81t-139.6,53.15H597.48v350q-88.65,0-141.81-49.15T402.52,758.72V597.48h-350q0-88.62,49.14-141.78t139.66-53.18H402.52V52.5q88.62,0,141.78,49.17t53.18,139.61V402.52Z" transform="translate(-52.48 -52.5)"/></svg>') center no-repeat;
-  display: block;
-  height: 3rem;
-  width: 3rem;
-}
-
-.fab-buttons__item {
-  display: block;
-  margin: 1.2rem;
-  text-align: center;
-}
-
-.fab-buttons__link {
-  background-color: #ffffff;
-  border-radius: 50%;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, .14), 0 1px 5px 0 rgba(0, 0, 0, .12), 0 3px 1px -2px rgba(0, 0, 0, .2);
-  display: inline-block;
-  height: 3rem;
-  text-decoration: none;
-  transform: scaleY(.5) scaleX(.5) translateY(0) translateX(0);
-  transition: .3s;
-  width: 3rem;
-}
-
-[data-tooltip]:before {
-  background: $tertiary-color-1;
-  border-radius: 2px;
-  color: #fff;
-  content: attr(data-tooltip);
-  font-size: 1rem;
-  font-weight: 600;
-  margin-right: 1.2rem;
-  margin-top: -1.1rem;
-  opacity: 0;
-  padding: .4rem .7rem;
-  position: absolute;
-  right: 100%;
-  text-decoration: none;
-  top: 50%;
-  transform: scale(0);
-  transform-origin: top right;
-  transition: all .3s cubic-bezier(.25, .8, .25, 1);
-  visibility: hidden;
-  white-space: nowrap;
-}
-
-[data-tooltip]:hover:before {
-  opacity: 1;
-  transform: scale(1);
-  transform-origin: right center 0;
-  visibility: visible;
-}
-
-.fab-icon {
-  display: inline-block;
-  height: 3rem;
-  width: 3rem;
-}
-
-.icon-tutorial {
-  background: url('data:image/svg+xml; utf8, <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 352 512" fill="#0F5E54"><path d="M96.06 454.35c.01 6.29 1.87 12.45 5.36 17.69l17.09 25.69a31.99 31.99 0 0 0 26.64 14.28h61.71a31.99 31.99 0 0 0 26.64-14.28l17.09-25.69a31.989 31.989 0 0 0 5.36-17.69l.04-38.35H96.01l.05 38.35zM0 176c0 44.37 16.45 84.85 43.56 115.78 16.52 18.85 42.36 58.23 52.21 91.45.04.26.07.52.11.78h160.24c.04-.26.07-.51.11-.78 9.85-33.22 35.69-72.6 52.21-91.45C335.55 260.85 352 220.37 352 176 352 78.61 272.91-.3 175.45 0 73.44.31 0 82.97 0 176zm176-80c-44.11 0-80 35.89-80 80 0 8.84-7.16 16-16 16s-16-7.16-16-16c0-61.76 50.24-112 112-112 8.84 0 16 7.16 16 16s-7.16 16-16 16z"/></svg>
-  ') center no-repeat;
-}
-
-/* GPX import */
-.gpx-import--form {
-  h3 {
-    margin-bottom: .3rem;
-  }
-
-  & > .import-gpx--category {
-    display: none;
-
-    & > .import-gpx--checkboxes > div {
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      margin-bottom: .6rem;
-    }
-
-  }
-
-  label {
-    position: static;
-  }
-
-  input {
-    width: auto;
-  }
-}
-
-.modal--delete-track {
-  .form--input-text {
-    border-radius: 5px;
-    border: 1px solid $secondary-color-2;
-    font-size: 1rem;
-    line-height: 1.5;
-    margin-bottom: 1rem;
-
-    &:focus {
-      outline-color: $secondary-color-2;
-    }
-  }
-}
-
-#errorMessage {
-  align-items: center;
-  background-color: $secondary-color-2;
-  color: white;
-  display: flex;
-  font-family: 'Proxima Nova', Sans-Serif;
-  justify-content: space-between;
-  padding-left: 1rem;
-
-  button {
-    background-color: inherit;
-    cursor: pointer;
-  }
-}
-
-.leaflet-control-container {
-  .leaflet-top {
-    z-index: 500;
   }
 }

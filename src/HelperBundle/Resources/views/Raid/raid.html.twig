@@ -125,7 +125,8 @@
         var raidID;
         document.addEventListener("DOMContentLoaded", function () {
             mapManager = new MapManager();
-            raidID = parseInt({{ raid.id }});
+            {# raidID = parseInt({{ raid.id }}); #}
+            raidID = "{{ raid.uniqid }}"
             mapManager.initialize();
         });
     </script>

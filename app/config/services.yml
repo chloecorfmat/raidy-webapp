@@ -89,3 +89,8 @@ services:
       class: AppBundle\Security\AccessDeniedService
       autowire: true
       public: true
+
+    TwitterService:
+        class: LiveBundle\Service\TwitterService
+        autowire: true
+        public: true

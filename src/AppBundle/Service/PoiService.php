@@ -39,7 +39,6 @@ class PoiService
         $poi->setLongitude($obj['longitude']);
         $poi->setLatitude($obj['latitude']);
         $poi->setRequiredHelpers($obj['requiredHelpers']);
-
         $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
         $poiType = $poiTypeRepository->find($obj['poiType']);
         $poi->setPoiType($poiType);
@@ -47,6 +46,10 @@ class PoiService
         $raidRepository = $this->em->getRepository('AppBundle:Raid');
         $raid = $raidRepository->find($raidId);
         $poi->setRaid($raid);
+
+        $poi->setDescription($obj['description']);
+        $poi->setImage($obj['image']);
+        $poi->setIsCheckpoint($obj['isCheckpoint']);
 
         return $poi;
     }
@@ -66,11 +69,24 @@ class PoiService
         $obj['latitude'] = htmlentities($poi->getLatitude());
         $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
         $obj['raid'] = $poi->getRaid()->getId();
+        $obj['isCheckpoint'] = htmlentities($poi->getisCheckpoint());
 
         if (null != $poi->getPoiType()) {
             $obj['poiType'] = $poi->getPoiType()->getId();
         } else {
             $obj['poiType'] = '';
+        }
+
+        if (null != $poi->getDescription()) {
+            $obj['description'] = $poi->getDescription();
+        } else {
+            $obj['description'] = '';
+        }
+
+        if (null != $poi->getImage()) {
+            $obj['image'] = $poi->getImage();
+        } else {
+            $obj['image'] = '';
         }
 
         return json_encode($obj);
@@ -90,6 +106,8 @@ class PoiService
         $poi->setLongitude($obj['longitude']);
         $poi->setLatitude($obj['latitude']);
         $poi->setRequiredHelpers($obj['requiredHelpers']);
+        $poi->setImage($obj['image']);
+        $poi->setDescription($obj['description']);
 
         $poiTypeRepository = $this->em->getRepository('AppBundle:PoiType');
         $poiType = $poiTypeRepository->find($obj['poiType']);
@@ -98,6 +116,8 @@ class PoiService
         $raidRepository = $this->em->getRepository('AppBundle:Raid');
         $raid = $raidRepository->find($raidId);
         $poi->setRaid($raid);
+
+        $poi->setIsCheckpoint($obj['isCheckpoint']);
 
         return $poi;
     }
@@ -120,6 +140,9 @@ class PoiService
             $obj['latitude'] = htmlentities($poi->getLatitude());
             $obj['requiredHelpers'] = htmlentities($poi->getRequiredHelpers());
             $obj['raid'] = $poi->getRaid()->getId();
+            $obj['image'] = htmlentities($poi->getImage());
+            $obj['description'] = htmlentities($poi->getDescription());
+            $obj['isCheckpoint'] = htmlentities($poi->getisCheckpoint());
 
             if (null != $poi->getPoiType()) {
                 $obj['poiType'] = $poi->getPoiType()->getId();
@@ -141,7 +164,6 @@ class PoiService
      */
     public function checkDataArray($obj, $checkId)
     {
-
         if ($checkId) {
             if (!isset($obj['id']) || '' == $obj['id']) {
                 return false;
@@ -168,6 +190,10 @@ class PoiService
             return false;
         }
 
+        if (!isset($obj['isCheckpoint']) || "boolean" != gettype($obj['isCheckpoint'])) {
+            return false;
+        }
+
         return true;
     }
 
@@ -191,6 +217,9 @@ class PoiService
                 $p->setRequiredHelpers($poi->getRequiredHelpers());
                 $p->setPoiType($poi->getPoiType());
                 $p->setRaid($raid);
+                $p->setIsCheckpoint($poi->getIsCheckpoint());
+                $p->setImage($poi->getImage());
+                $p->setDescription($poi->getDescription());
 
                 $this->em->persist($p);
                 $this->em->flush();

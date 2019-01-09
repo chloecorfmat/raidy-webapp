@@ -3,7 +3,6 @@
 namespace AppBundle\Service;
 
 use AppBundle\Entity\User;
-use Doctrine\ORM\EntityManagerInterface;
 
 class ProfileService
 {

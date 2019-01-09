@@ -8,13 +8,30 @@
 
 {% block body %}
     <h1>Administration</h1>
-    <ul>
-        <li>
-            <a href="{{ path('listOrganizer') }}">Liste des organisateurs</a>
+    <ul class="content--quarter admin-menu">
+        <li class="card">
+            <a href="{{ path('listUsers') }}">
+                <i class="fas fa-users fa-2x"></i>
+                <p>Liste des utilisateurs</p>
+            </a>
         </li>
-        <li>
-            <a href="{{ path('listSportType') }}">Gérer les sports</a>
+        <li class="card">
+            <a href="{{ path('listOrganizer') }}">
+                <i class="fas fa-calendar-day fa-2x"></i>
+                <p>Liste des organisateurs</p>
+            </a>
+        </li>
+        <li class="card">
+            <a href="{{ path('listSportType') }}">
+                <i class="fas fa-swimmer fa-2x"></i>
+                <p>Gérer les sports</p>
+            </a>
+        </li>
+        <li class="card">
+            <a href="{{ path('adminConfig') }}">
+                <i class="fas fa-cogs fa-2x"></i>
+                <p>Détails de la configuration</p>
+            </a>
         </li>
     </ul>
-
 {% endblock %}

@@ -3,14 +3,12 @@
  * Created by PhpStorm.
  * User: anais
  * Date: 25/10/2018
- * Time: 22:42
+ * Time: 22:42.
  */
 
 namespace AppBundle\Service;
 
-use AppBundle\Entity\Poi;
 use AppBundle\Entity\Raid;
-use AppBundle\Entity\Track;
 use Doctrine\ORM\EntityManagerInterface;
 
 class RaidService
@@ -54,6 +52,7 @@ class RaidService
             $obj['city'] = $raid->getCity();
             $obj['editionNumber'] = $raid->getEditionNumber();
             $obj['picture'] = $raid->getPicture();
+            $obj['uniqid'] = $raid->getUniqid();
 
             $raidsObj[] = $obj;
         }
@@ -85,14 +84,15 @@ class RaidService
         $obj['city'] = $raid->getCity();
         $obj['editionNumber'] = $raid->getEditionNumber();
         $obj['picture'] = $raid->getPicture();
+        $obj['uniqid'] = $raid->getUniqid();
 
         return json_encode($obj);
     }
 
     /**
      * @param Raid   $obj
-     * @param String $directory
-     * @param String $oldPicture
+     * @param string $directory
+     * @param string $oldPicture
      *
      * @return Raid
      */
@@ -120,6 +120,8 @@ class RaidService
         } else {
             $raid->setPicture($oldPicture);
         }
+
+        $raid->setUniqid(uniqid());
 
         $userRepository = $this->em->getRepository('AppBundle:User');
         $user = $userRepository->find($obj->getUser());

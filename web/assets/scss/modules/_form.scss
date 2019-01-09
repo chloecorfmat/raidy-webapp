@@ -39,6 +39,27 @@ form {
     }
   }
 
+  .form--input-checkbox {
+    margin-top: .75rem;
+
+    label {
+      bottom: 0;
+      display: inline-block;
+    }
+
+    .form--input-checkbox {
+      width: initial;
+    }
+  }
+
+  .form--input-quill {
+    padding-top: 1rem;
+
+    label {
+      bottom: 0;
+    }
+  }
+
   label {
     bottom: -1.9rem;
     color: $tertiary-color-1;
@@ -111,6 +132,7 @@ form {
   border-radius: 5px;
   color: $secondary-color-2;
   font-size: .8rem;
+  margin-top: 1rem;
   padding: 1rem;
 
   li {
@@ -121,4 +143,10 @@ form {
 .input--required {
   color: $secondary-color-2;
   font-weight: 700;
+}
+
+.input--help {
+  color: $text-color;
+  font-size: .8rem;
+  margin-top: .5rem;
 }

@@ -1,3 +1,6 @@
+
+
+
 /* SCROLL MANAGEMENT */
 function preventDefault(e) {
     e = e || window.event;
@@ -137,6 +140,53 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     tab.classList.toggle('bar--invisible');
   });
 
+
+  function checkoutForConflict(){
+    var keepThis = this;
+    var xhr_object = new XMLHttpRequest();
+    xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
+    xhr_object.send(null);
+    xhr_object.onreadystatechange = function () {
+      if (this.readyState === XMLHttpRequest.DONE) {
+        if (xhr_object.status === 200) {
+          var lastEdition = JSON.parse(xhr_object.responseText);
+          //console.log(lastEdition);
+          if(lastEdition.lastEditor != false){
+            var getDuration = function(d1, d2) {
+              d3 = new Date(d2 - d1);
+              d0 = new Date(0);
+              return {
+                getHours: function(){
+                  return d3.getHours() - d0.getHours();
+                },
+                getMinutes: function(){
+                  return d3.getMinutes() - d0.getMinutes();
+                },
+                getSeconds: function() {
+                  return d3.getSeconds() - d0.getSeconds();
+                },
+                toString: function(){
+                  return (this.getHours() != 0 ?  this.getHours()+ "h "  :"") +
+                    (this.getMinutes() != 0 ?  this.getMinutes()+ "min "  :"") +
+                    this.getSeconds()+"s ";
+                },
+              };
+            }
+
+            var date = new Date(Date.parse(lastEdition.lastEdition.date));
+            console.log(new Date(date));
+            console.log(new Date())
+            document.getElementById("errorMessage").innerHTML = "Attention "+lastEdition.lastEditor+" a modifié ce raid il y a "+getDuration(date, new Date()).toString()+"  !  <button>X</button>";
+
+            document.getElementById('errorMessage').querySelector('button').addEventListener('click', function(e){
+              document.getElementById('errorMessage').style.display = "none";
+            });
+          }
+        }
+      }
+    }
+
+  }
   window.addEventListener('load', function () {
 
     checkoutForConflict();
@@ -164,6 +214,18 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         // Continue implementing the control here.
         controlElement.querySelector("input[type='checkbox']").addEventListener('change',function(){
           mapManager.setPoiEditable(this.checked);
+          if(this.checked){
+            document.querySelectorAll(".poi-marker").forEach(function(el) {
+              el.style.boxShadow = "0px 0px 1px 2px #0f5e54";
+            });
+          }else{
+            document.querySelectorAll(".poi-marker").forEach(function(el) {
+              el.style.boxShadow = "none";
+            });
+          }
+        });
+        controlElement.querySelector("input[type='checkbox']").addEventListener('dblclick click', function(e) {
+          e.stopPropagation()
         });
         return controlElement;
       }
@@ -246,6 +308,20 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       },
     });
 
+
+    let ignTileUrl = "http://wxs.ign.fr/" + IGNAPIKEY
+        + "/geoportail/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&"
+        + "LAYER=GEOGRAPHICALGRIDSYSTEMS.MAPS&STYLE=normal&TILEMATRIXSET=PM&"
+        + "TILEMATRIX={z}&TILEROW={y}&TILECOL={x}&FORMAT=image%2Fjpeg";
+
+    let ignTiles = L.tileLayer(
+        ignTileUrl,
+        {attribution: '&copy; <a href="http://www.ign.fr/">IGN</a>'}
+    );
+
+    ignTiles.addTo(mapManager.map);
+    L.control.layers({"IGN":ignTiles, "OpenStreetMap":mapManager.OSMTiles}).addTo(mapManager.map);
+
     mapManager.map.addControl(new ImportGPXCtrl());
     mapManager.map.addControl(new ExportGPXCtrl());
 
@@ -290,16 +366,12 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
   document.getElementById('addPoiButton').addEventListener('click', function () {
     let fabActionButton = document.getElementById("fabActionButton");
-    fabActionButton.classList.toggle('add--poi');
-    if (fabActionButton.classList.contains('add--poi')) {
+   // fabActionButton.classList.toggle('add--poi');
+//    if (fabActionButton.classList.contains('add--poi')) {
       mapManager.switchMode(EditorMode.ADD_POI);
-    } else {
-      if (mapManager.waitingPoi !=null ){
-        mapManager.map.removeEventListener("mousemove");
-        mapManager.map.removeLayer(mapManager.waitingPoi.marker);
-      }
-      mapManager.switchMode(mapManager.lastMode);
-    }
+    //} else {
+   //   mapManager.switchMode(mapManager.lastMode);
+   // }
   });
 
   document.getElementById('addTrackButton').addEventListener('click', function () {
@@ -363,13 +435,30 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poiName = document.getElementById('addPoi_name').value;
     let poiType = document.getElementById('addPoi_type').value;
     let poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
+    let poiDescription = document.getElementById('addPoi_description').value;
+    let poiImageData = document.getElementById('addPoi_image').files[0];
+    let reader = new FileReader();
+    let poiImage = null;
+    let poiIsCheckpoint = document.getElementById('addPoi_isCheckpoint').checked;
 
     MicroModal.close('add-poi-popin');
-    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount);
+
+    if (poiImageData) {
+      reader.readAsDataURL(poiImageData);
+      reader.onloadend = function() {
+        poiImage = reader.result;
+        mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, poiImage, poiIsCheckpoint);
+      };
+    } else {
+      mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, null, poiIsCheckpoint);
+    }
 
     document.getElementById('addPoi_name').value = '';
     document.getElementById('addPoi_type').value = '';
     document.getElementById('addPoi_nbhelper').value = '';
+    document.getElementById('addPoi_description').value = '';
+    document.getElementById('addPoi_image').value = '';
+    document.getElementById('addPoi_isCheckpoint').checked = false;
   });
 
 // EDIT POI SUBMIT
@@ -379,15 +468,32 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poi = mapManager.poiMap.get(parseInt(poiId));
 
     poi.name = document.getElementById('editPoi_name').value;
+    poi.isCheckpoint = document.getElementById('editPoi_isCheckpoint').checked;
     poi.poiType = mapManager.poiTypesMap.get(parseInt(document.querySelector('#editPoi_type').value));
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
-    poi.push();
+    poi.description = document.getElementById('editPoi_description').value;
+    let poiImageData = document.getElementById('editPoi_image').files[0];
+    let reader = new FileReader();
+
+    if (poiImageData) {
+      reader.readAsDataURL(poiImageData);
+      reader.onloadend = function() {
+        let dataUrl = reader.result;
+        poi.image = dataUrl.split(',')[1];
+        poi.push();
+      };
+    } else {
+      poi.push();
+    }
 
     MicroModal.close('edit-poi-popin');
 
     document.getElementById('editPoi_name').value = '';
     document.getElementById('editPoi_type').value = '';
     document.getElementById('editPoi_nbhelper').value = '';
+    document.getElementById('editPoi_description').value = '';
+    document.getElementById('editPoi_image').value = '';
+    document.getElementById('editPoi_isCheckpoint').checked = false;
   });
 
   //Import GPX

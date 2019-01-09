@@ -1,0 +1,36 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.uniqid}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item">Live !</li>
+    </ol>
+{% endblock %}
+
+
+{% block body %}
+    <h1>Live !</h1>
+    <div class="content">
+        <div class="content--half">
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
+
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+        </div>
+        <div class="content--half">
+            <div class="useful-links">
+                <h2>Lien utile</h2>
+                <p>
+                    <i class="fas fa-microphone"></i> Affichage du live :
+                    <a href="{{ path('live', {'id': raid.uniqid}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('live', {'id': raid.uniqid}) }}</a>
+                </p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

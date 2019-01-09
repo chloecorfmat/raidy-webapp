@@ -60,6 +60,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       '             <div data-id = "' + poi.id + '" class="track--text">' +
       '                <span>' + poi.name + '</span>' +
       '            </div>' +
+      '            <span class="poi--isCheckpoint" title="Validation nécessaire à ce point d\'intérêt">' + (poi.isCheckpoint ? '<i class="fas fa-flag"></i></span>' : '' ) +
       '         <button id="moreButton" data-id = "' + poi.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
       '             <i class="fas fa-ellipsis-v"></i>' +
       '         </button>' +
@@ -92,7 +93,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       document.getElementById('editPoi_id').value = poi.id;
       document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);
       document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
+      document.getElementById('editPoi_isCheckpoint').checked = poi.isCheckpoint;
       (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
+      document.getElementById('editPoi_description').value = poi.description;
+
       MicroModal.show('edit-poi-popin');
     });
 
@@ -133,10 +137,17 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '                  <i class="fas fa-check"></i>' +
         '             </span>' +
         '             <div class="track--text">' +
-        '                <span>' + newTrack.name + '</span>' +
-        '                <span style="font-size : 0.75rem;"></br>(150,0 km)</span>' +
+        '                <span class="track-name">' + newTrack.name + '</span>' +
+        '                <ul class="track-info">' +
+        '                   <i class="fas fa-route"></i>' +
+        '                   <li class="track-distance">150,0 km</li>' +
+        '                   <i  class="fas fa-long-arrow-alt-up"></i>' +
+        '                   <li class="track-elev-gain">100,0 m</li>' +
+        '                   <i  class="fas fa-long-arrow-alt-down"></i>' +
+        '                   <li class="track-elev-lose">100,0 m</li>' +
+        '                </ul>' +
         '            </div>' +
-        '            <span class="track--isCalibration" title="Parcours issu d\'une calibration">' + (newTrack.isCalibration ? '<i class="fas fa-mobile-alt"></i></span>' : '' ) +
+        '            <span class="track--is-calibration" title="Parcours issu d\'une calibration">' + (newTrack.isCalibration ? '<i class="fas fa-mobile-alt"></i></span>' : '' ) +
         '         </label>' +
         '         <button id="moreButton" data-id = "' + newTrack.id + '" class="dropbtn btn--track--more btn--editor-ico">' +
         '             <i class="fas fa-ellipsis-v"></i>' +
@@ -158,8 +169,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
      // console.log(newTrack);
       newTrack.calculDistance();
-      li.querySelector('label > div >span:nth-child(2)').innerHTML = '(' + Math.round(10 * newTrack.distance / 1000) / 10 + ' Km)';
-
+      newTrack.calculElevation();
+      li.querySelector('.track-distance').innerHTML = Math.round(10 * newTrack.distance / 1000) / 10 + 'Km ';
+      li.querySelector('.track-elev-gain').innerHTML = Math.round(newTrack.posElev)+'m';
+      li.querySelector('.track-elev-lose').innerHTML = Math.round(newTrack.negElev)+'m';
       // TRACK SELECTION LISTENER
       input.addEventListener('change', function () {
         mapManager.toggleTrackVisibility(newTrack);
@@ -198,9 +211,9 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         let id = parseInt(btnSettings.dataset.id);
         let track = mapManager.tracksMap.get(id);
         document.querySelector('#editTrack_name')     .value = htmlentities.decode(track.name);
-          document.querySelector('#editTrack_color')    .value = track.color;
-          document.querySelector('#editTrack_id')       .value = track.id;
-          document.querySelector('#editTrack_sportType').value = track.sportType;
+        document.querySelector('#editTrack_color')    .value = track.color;
+        document.querySelector('#editTrack_id')       .value = track.id;
+        document.querySelector('#editTrack_sportType').value = track.sportType;
 
           MicroModal.show('edit-track-popin');
       });

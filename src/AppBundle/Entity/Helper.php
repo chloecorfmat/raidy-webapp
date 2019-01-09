@@ -13,7 +13,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
@@ -50,7 +49,7 @@ class Helper
     protected $favoritePoiType;
 
     /**
-     * @ORM\Column(name="check_in_time", type="date", nullable=true)
+     * @ORM\Column(name="check_in_time", type="datetime", nullable=true)
      */
     protected $checkInTime;
 
@@ -59,6 +58,11 @@ class Helper
      * @ORM\JoinColumn(onDelete="cascade")
      */
     protected $raid;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    protected $acceptConditions;
 
     /**
      * Helper constructor.
@@ -177,5 +181,21 @@ class Helper
     public function setRaid($raid)
     {
         $this->raid = $raid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getAcceptConditions()
+    {
+        return $this->acceptConditions;
+    }
+
+    /**
+     * @param mixed $acceptConditions
+     */
+    public function setAcceptConditions($acceptConditions)
+    {
+        $this->acceptConditions = $acceptConditions;
     }
 }

@@ -2,14 +2,46 @@
 
 {% block title %}Être bénévole au raid "{{ raid.name }}"{% endblock %}
 
+{% block meta %}
+    <!-- Open Graph meta (Facebook) -->
+    <meta property="og:title" content="{{ meta['title'] }}" />
+    <meta property="og:url" content="{{ meta['url'] }}" />
+    <meta property="og:image" content="{{ asset(meta['image']) }}" />
+    <meta property="og:description" content="{{ meta['description'] }}" />
+    <meta property="og:site_name" content="Helper | Raidy" />
+    <meta property="og:locale" content="fr_FR" />
+    <meta property="og:type" content="website" />
+
+    <!-- Twitter Card meta -->
+    <meta name="twitter:site" content="Helper | Raidy">
+    <meta name="twitter:title" content="{{ meta['title'] }}">
+    <meta name="twitter:description" content="{{ meta['description'] }}">
+    <meta name="twitter:url" content="{{ meta['url'] }}" />
+    <meta name="twitter:image:src" content="{{ meta['image'] }}">
+{% endblock %}
+
 {% block content %}
     <div class="centered--content">
         <h1>{{ raid.name }}</h1>
-        <p class="important">Enregistrez-vous en tant que bénévole pour le raid "{{ raid.name }}" !</p>
+        <div class="social-media-share">
+            <ul>
+                <li>
+                    <a href="https://www.facebook.com/sharer/sharer.php?u={{ meta['url'] }}" class="share-facebook" target="_blank">
+                        <i class="fab fa-facebook-square fa-2x"></i>
+                    </a>
+                </li>
+                <li>
+                    <a href="https://twitter.com/intent/tweet?text=Rejoins le raid {{ raid.name }}&url={{ meta['url'] }}&via={{ via }}" class="share-twitter" target="_blank">
+                        <i class="fab fa-twitter-square fa-2x"></i>
+                    </a>
+                </li>
+            </ul>
+        </div>
+        <p class="important login--text">Enregistrez-vous en tant que bénévole pour le raid "{{ raid.name }}" !</p>
 
         <div class="actions">
-            <a href="{{ path('joinHelper', {'id': raid.id }) }}" class="btn">Se connecter</a>
-            <a href="{{ path('registerHelper', {'id': raid.id }) }}" class="btn">Se créer un compte</a>
+            <a href="{{ path('joinHelper', {'id': raid.uniqid }) }}" class="btn">Se connecter</a>
+            <a href="{{ path('registerHelper', {'id': raid.uniqid }) }}" class="btn">Se créer un compte</a>
         </div>
     </div>
 {% endblock %}

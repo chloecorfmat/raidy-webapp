@@ -62,9 +62,12 @@ class OrganizerPoiTypeController extends AjaxAPIController
             $form->addError(new FormError('Ce type de point d\'intérêt existe déjà.'));
         }
 
-        return $this->render('OrganizerBundle:PoiType:addPoiType.html.twig', [
+        return $this->render(
+            'OrganizerBundle:PoiType:addPoiType.html.twig',
+            [
             'form' => $form->createView(),
-        ]);
+            ]
+        );
     }
 
     /**
@@ -128,10 +131,13 @@ class OrganizerPoiTypeController extends AjaxAPIController
             }
         }
 
-        return $this->render('OrganizerBundle:PoiType:poiType.html.twig', [
+        return $this->render(
+            'OrganizerBundle:PoiType:poiType.html.twig',
+            [
             'form' => $form->createView(),
             'poiType' => $poiType,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -160,8 +166,8 @@ class OrganizerPoiTypeController extends AjaxAPIController
             throw $this->createNotFoundException('Ce type de point d\'intérêt n\'existe pas');
         }
 
-            $em->remove($poiType);
-            $em->flush();
+        $em->remove($poiType);
+        $em->flush();
 
         $this->addFlash('success', 'Le type de point d\'intérêt a bien été supprimé.');
 
@@ -217,9 +223,11 @@ class OrganizerPoiTypeController extends AjaxAPIController
             }
         }
 
-        $poiTypes = $poiTypeManager->findBy([
+        $poiTypes = $poiTypeManager->findBy(
+            [
             'user' => $user,
-        ]);
+            ]
+        );
 
         return $this->render(
             'OrganizerBundle:PoiType:listPoiType.html.twig',
@@ -259,6 +267,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
      * @Route("/editor/raid/{raidId}/poitype", name="listPoiTypeByRaidAPI", methods={"GET"})
      *
      * @param int $raidId
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listPoiTypeByRaidAPI($raidId)
@@ -267,7 +276,9 @@ class OrganizerPoiTypeController extends AjaxAPIController
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
-        $raid = $raidManager->find($raidId);
+        //$raid = $raidManager->find($raidId);
+
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid) && !$authChecker->isGranted(RaidVoter::HELPER, $raid)) {
@@ -280,7 +291,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
         }
 
         $poiTypeManager = $em->getRepository('AppBundle:PoiType');
-        $poiTypes = $poiTypeManager->findBy(["user" => $user]);
+        $poiTypes = $poiTypeManager->findBy(['user' => $user]);
         $poiTypesService = $this->container->get('PoiTypeService');
 
         return new Response($poiTypesService->poiTypesArrayToJson($poiTypes));

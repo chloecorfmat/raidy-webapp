@@ -10,6 +10,10 @@
     {% set user_edit_page = '' %}
 {% endif %}
 
+{% if logo_url is not defined %}
+    {% set logo_url = '/' %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="fr">
     <head>
@@ -17,7 +21,7 @@
         <meta name="viewport" content="width=device-width,initial-scale=1.0">
         <title>{% block title %}Welcome!{% endblock %} | Raidy</title>
         {% block stylesheets %}{% endblock %}
-        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css" integrity="sha384-mzrmE5qonljUremFsqc01SB46JvROS7bZs3IO2EmfFsd15uHvIt+Y8vEf7N7fWAU" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
         <link href="https://unpkg.com/vanilla-datatables@latest/dist/vanilla-dataTables.min.css" rel="stylesheet" type="text/css">
         <link rel="stylesheet" href="{{ asset('assets/dist/css/styles.min.css') }}" />
 
@@ -29,25 +33,37 @@
             <meta name="msapplication-TileColor" content="#0f5e54">
             <meta name="theme-color" content="#ffffff">
         {% endblock %}
+
+        {% block meta %}{% endblock %}
     </head>
     <body class="{{ base_class }} {% block body_class %}{% endblock %}">
         <header>
             <div class="header--raidy">
-            <a href="/" class="logo">
+            <a href="{{ logo_url }}" class="logo">
                 <img src="{{ asset('assets/images/logo-white.svg') }}" alt="Logo Raidy">
             </a>
 
             {% if app.user is defined and app.user is not null %}
                 {% if "ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles or "ROLE_HELPER" in app.user.roles %}
                 <nav class="roles--menu">
+                    {% if "ROLE_SUPER_ADMIN" in app.user.roles %}
+                        <a href="{{ path('admin') }}" class="roles--menu--item {% if (base_class=='default') %} item--active{% endif %}">Administration</a>
+                    {% endif %}
+
+                    {% if "ROLE_SUPER_ADMIN" in app.user.roles and ("ROLE_HELPER" in app.user.roles or "ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles) %}
+                        <span>|</span>
+                    {% endif %}
+
                     {% if "ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles %}
-                    <a href="{{ path('listRaid') }}" class="roles--menu--item {% if (base_class=='organizer') %} item--active{% endif %}">Organizer</a>
+                        <a href="{{ path('listRaid') }}" class="roles--menu--item {% if (base_class=='organizer') %} item--active{% endif %}">Organizer</a>
                     {% endif %}
+
                     {% if ("ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles) and "ROLE_HELPER" in app.user.roles %}
-                    <span>|</span>
+                        <span>|</span>
                     {% endif %}
+
                     {% if "ROLE_HELPER" in app.user.roles %}
-                    <a href="{{ path('helper') }}" class="roles--menu--item {% if (base_class=='helper') %} item--active{% endif %}">Helper</a>
+                        <a href="{{ path('helper') }}" class="roles--menu--item {% if (base_class=='helper') %} item--active{% endif %}">Helper</a>
                     {% endif %}
                 </nav>
                 {% endif %}
@@ -83,7 +99,21 @@
             </div>
             {% block body %}{% endblock %}
         </main>
-        {% block footer %}{% endblock %}
+        {% block footer %}
+            <footer>
+                <ul>
+                    <li>
+                        <a href="{{ path('legalNotice') }}">Mentions légales</a>
+                    </li>
+                    <li>
+                        <a href="{{ path('privacyPolicy') }}">Politique de confidentialité</a>
+                    </li>
+                </ul>
+                <a href="http://www.enssat.fr/" class="logo logo--enssat">
+                    <img src="{{ asset('assets/images/Enssat_UR1_blanc.png') }}" alt="Logo Enssat">
+                </a>
+            </footer>
+        {% endblock %}
         <!--script src="https://cdn.klokantech.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></--script-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js" type="text/javascript"></script>

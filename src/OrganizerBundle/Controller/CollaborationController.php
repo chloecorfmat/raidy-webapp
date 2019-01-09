@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 05/11/18
- * Time: 11:58
+ * Time: 11:58.
  */
 
 namespace OrganizerBundle\Controller;
@@ -12,16 +12,12 @@ use AppBundle\Entity\Collaboration;
 use AppBundle\Entity\Raid;
 use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\FileType;
-use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TelType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Security\Core\Authentication\Token\AnonymousToken;
@@ -30,7 +26,6 @@ use Symfony\Component\Security\Http\Event\InteractiveLoginEvent;
 
 class CollaborationController extends Controller
 {
-
     /*
      *
      *  /organizer/raid/{raidId}/collaborator
@@ -46,8 +41,10 @@ class CollaborationController extends Controller
 
     /**
      * @Route("/organizer/raid/{raidId}/collaborator", name="listCollaborators")
+     *
      * @param Request $request
      * @param int     $raidId
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function listCollaborators(Request $request, $raidId)
@@ -56,7 +53,8 @@ class CollaborationController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->find($raidId);
+        //$raid = $raidManager->find($raidId);
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
@@ -85,7 +83,7 @@ class CollaborationController extends Controller
                 $form->addError(new FormError('Vous ne pouvez pas vous ajouter en tant que collaborateur.'));
             } else {
                 $collab = $collaborationManager->findOneBy(['email' => $emailVerif, 'raid' => $raidVerif]);
-                if ($collab != null) {
+                if (null != $collab) {
                     $form->addError(new FormError('Une invitation pour cet utilisateur existe déjà'));
                 } else {
                     $em = $this->getDoctrine()->getManager();
@@ -93,7 +91,7 @@ class CollaborationController extends Controller
                     do {
                         $uid = uniqid();
                         $collabExist = $collaborationManager->find($uid);
-                    } while ($collabExist != null);
+                    } while (null != $collabExist);
 
                     $formCollab->setInvitationId($uid);
                     $formCollab->setRaid($raid);
@@ -103,20 +101,25 @@ class CollaborationController extends Controller
             }
         }
 
-        $collaborations = $collaborationManager->findBy(["raid" => $raid]);
+        $collaborations = $collaborationManager->findBy(['raid' => $raid]);
 
-        return $this->render('OrganizerBundle:Collaborator:listCollaborator.html.twig', [
-                "collaborations" => $collaborations,
-                "form" => $form->createView(),
-                "raid" => $raid,
-        ]);
+        return $this->render(
+            'OrganizerBundle:Collaborator:listCollaborator.html.twig',
+            [
+                'collaborations' => $collaborations,
+                'form' => $form->createView(),
+                'raid' => $raid,
+            ]
+        );
     }
 
     /**
      * @Route("/editor/raid/{raidId}/collaborator/{invitationId}/delete", name="deleteCollaborator")
+     *
      * @param Request $request
      * @param int     $raidId
      * @param int     $invitationId
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteCollaborator(Request $request, $raidId, $invitationId)
@@ -125,7 +128,8 @@ class CollaborationController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->find($raidId);
+        //$raid = $raidManager->find($raidId);
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
@@ -136,21 +140,23 @@ class CollaborationController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Collaboration');
 
-        $collaboration = $collaborationManager->findOneBy(["invitationId" => $invitationId]);
+        $collaboration = $collaborationManager->findOneBy(['invitationId' => $invitationId]);
 
-        if ($collaboration != null) {
+        if (null != $collaboration) {
             $em = $this->getDoctrine()->getManager();
             $em->remove($collaboration);
             $em->flush();
         }
 
-        return $this->redirectToRoute('listCollaborators', ["raidId" => $raidId]);
+        return $this->redirectToRoute('listCollaborators', ['raidId' => $raidId]);
     }
 
     /**
      * @Route("/collaborator/invite/{invitationId}", name="inviteCollaborator")
+     *
      * @param Request $request
      * @param int     $invitationId
+     *
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function inviteCollaborator(Request $request, $invitationId)
@@ -165,7 +171,7 @@ class CollaborationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $collaborationManager = $em->getRepository('AppBundle:Collaboration');
-        $collaboration = $collaborationManager->findOneBy(["invitationId" => $invitationId]);
+        $collaboration = $collaborationManager->findOneBy(['invitationId' => $invitationId]);
 
         if (null === $collaboration) {
             throw $this->createNotFoundException('Cette invitation n\'existe pas');
@@ -175,10 +181,13 @@ class CollaborationController extends Controller
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
-        return $this->render('OrganizerBundle:Collaborator:inviteCollaborator.html.twig', [
+        return $this->render(
+            'OrganizerBundle:Collaborator:inviteCollaborator.html.twig',
+            [
             'raid' => $collaboration->getRaid(),
             'collaboration' => $collaboration,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -200,7 +209,7 @@ class CollaborationController extends Controller
 
         $em = $this->getDoctrine()->getManager();
         $collaborationManager = $em->getRepository('AppBundle:Collaboration');
-        $collaboration = $collaborationManager->findOneBy(["invitationId" => $invitationId]);
+        $collaboration = $collaborationManager->findOneBy(['invitationId' => $invitationId]);
 
         if (null === $collaboration) {
             throw $this->createNotFoundException('Cette invitation n\'existe pas');
@@ -212,9 +221,12 @@ class CollaborationController extends Controller
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
-        return $this->render('OrganizerBundle:Collaborator:registerSuccessCollaborator.html.twig', [
-            'raid' => $raid,
-        ]);
+        return $this->render(
+            'OrganizerBundle:Collaborator:registerSuccessCollaborator.html.twig',
+            [
+                'raid' => $raid,
+            ]
+        );
     }
 
     /**
@@ -229,7 +241,7 @@ class CollaborationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $collaborationManager = $em->getRepository('AppBundle:Collaboration');
-        $collaboration = $collaborationManager->findOneBy(["invitationId" => $invitationId]);
+        $collaboration = $collaborationManager->findOneBy(['invitationId' => $invitationId]);
 
         if (null === $collaboration) {
             throw $this->createNotFoundException('Cette invitation n\'existe pas');
@@ -249,10 +261,14 @@ class CollaborationController extends Controller
             ->add('email', EmailType::class, ['label' => 'Adresse e-mail'])
             ->add('plainPassword', PasswordType::class, ['label' => 'Mot de passe'])
             ->add('repeatPassword', PasswordType::class, ['label' => 'Répéter le mot de passe'])
-            ->add('submit', SubmitType::class, [
-                'label' => 'S\'inscrire',
-                'attr' => array('class' => 'btn'),
-            ])
+            ->add(
+                'submit',
+                SubmitType::class,
+                [
+                    'label' => 'S\'inscrire',
+                    'attr' => array('class' => 'btn'),
+                ]
+            )
             ->getForm();
 
         $form->handleRequest($request);
@@ -285,12 +301,14 @@ class CollaborationController extends Controller
                         $alreadyRegistered = $helperManager->findBy(['raid' => $raid, 'user' => $user]);
 
                         $collaboration = null;
-                        $collaboration = $collaborationManager->findOneBy([
+                        $collaboration = $collaborationManager->findOneBy(
+                            [
                             'email' => $user->getEmail(),
                             'invitationId' => $invitationId,
-                        ]);
+                            ]
+                        );
 
-                        if ($collaboration == null) {
+                        if (null == $collaboration) {
                             $form->addError(
                                 new FormError(
                                     "Vous n'êtes pas invité à rejoindre ce raid avec ce lien d'invitation"
@@ -309,9 +327,12 @@ class CollaborationController extends Controller
                             $collaboration->setUser($user);
                             $em->flush();
 
-                            return $this->redirectToRoute('registerSuccessCollaborator', [
-                                'invitationId' => $invitationId,
-                            ]);
+                            return $this->redirectToRoute(
+                                'registerSuccessCollaborator',
+                                [
+                                    'invitationId' => $invitationId,
+                                ]
+                            );
                         }
                     } else {
                         $form->addError(
@@ -332,9 +353,12 @@ class CollaborationController extends Controller
             }
         }
 
-        return $this->render('OrganizerBundle:Collaborator:registerCollaborator.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'OrganizerBundle:Collaborator:registerCollaborator.html.twig',
+            [
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**
@@ -349,7 +373,7 @@ class CollaborationController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $collaborationManager = $em->getRepository('AppBundle:Collaboration');
-        $collaboration = $collaborationManager->findOneBy(["invitationId" => $invitationId]);
+        $collaboration = $collaborationManager->findOneBy(['invitationId' => $invitationId]);
 
         if (null === $collaboration) {
             throw $this->createNotFoundException('Cette invitation n\'existe pas');
@@ -394,12 +418,14 @@ class CollaborationController extends Controller
                         }
 
                         $collaboration = null;
-                        $collaboration = $collaborationManager->findOneBy([
+                        $collaboration = $collaborationManager->findOneBy(
+                            [
                             'email' => $user->getEmail(),
                             'invitationId' => $invitationId,
-                        ]);
+                            ]
+                        );
 
-                        if ($collaboration == null) {
+                        if (null == $collaboration) {
                             $form->addError(
                                 new FormError(
                                     "Vous n'êtes pas invité à rejoindre ce raid avec ce lien d'invitation"
@@ -418,9 +444,12 @@ class CollaborationController extends Controller
                             $collaboration->setUser($user);
                             $em->flush();
 
-                            return $this->redirectToRoute('registerSuccessCollaborator', [
-                                'invitationId' => $invitationId,
-                            ]);
+                            return $this->redirectToRoute(
+                                'registerSuccessCollaborator',
+                                [
+                                    'invitationId' => $invitationId,
+                                ]
+                            );
                         }
                     }
                 }
@@ -429,10 +458,13 @@ class CollaborationController extends Controller
             }
         }
 
-        return $this->render('OrganizerBundle:Collaborator:joinCollaborator.html.twig', [
-            'raid' => $raid,
-            'form' => $form->createView(),
-        ]);
+        return $this->render(
+            'OrganizerBundle:Collaborator:joinCollaborator.html.twig',
+            [
+                'raid' => $raid,
+                'form' => $form->createView(),
+            ]
+        );
     }
 
     /**

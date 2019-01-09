@@ -10,7 +10,6 @@ namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -79,20 +78,21 @@ class RaidController extends AjaxAPIController
      */
     public function getRaidHelper(Request $request, $raidId)
     {
-
         $em = $this->getDoctrine()->getManager();
         $user = $this->getUser();
 
         $helperManager = $em->getRepository('AppBundle:Helper');
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $helper = $helperManager->findOneBy(array('user' => $user, 'raid' => $raidId));
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
+
+        $helper = $helperManager->findOneBy(array('user' => $user, 'raid' => $raid->getId()));
 
         if (null == $helper) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Accès refusé.');
         }
 
-        $raid = $raidManager->findOneBy(array('id' => $helper->getRaid()->getId()));
+        //$raid = $raidManager->findOneBy(array('id' => $helper->getRaid()->getId()));
         $raidService = $this->container->get('RaidService');
 
         return new Response($raidService->raidToJson($raid));

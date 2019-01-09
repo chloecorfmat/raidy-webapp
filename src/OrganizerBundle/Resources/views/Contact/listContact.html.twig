@@ -3,7 +3,7 @@
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
-        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.id}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.uniqid}) }}">{{ raid.name }}</a></li>
         <li class="breadcrumb--list-item">Liste des contacts</li>
     </ol>
 {% endblock %}
@@ -52,7 +52,7 @@
                                     Pas de bénévole associé.
                                 {% endif %}
                             </td>
-                            <td><a href="{{ path('editContact', {'contactId': contact.id, 'raidId': contact.raid.id }) }}" class="btn">Editer</a>
+                            <td><a href="{{ path('editContact', {'contactId': contact.id, 'raidId': contact.raid.uniqid }) }}" class="btn">Editer</a>
                                 <button data-contact-id="{{ contact.id }}" class="btn btn--danger btn--delete-contact">
                                     Supprimer
                                 </button> {#data-micromodal-trigger="delete-contact" #}
@@ -89,7 +89,7 @@
                         <p>Êtes-vous certains de vouloir supprimer ce contact ?</p>
                         <p class="text--important">Cette action est irréversible.</p>
                         <div class="modal--actions">
-                            <a href="" id="btn--delete-contact" class="btn btn--danger" data-base-url="/organizer/raid/{{ raid.id }}/contact/delete/">Supprimer</a>
+                            <a href="" id="btn--delete-contact" class="btn btn--danger" data-base-url="/organizer/raid/{{ raid.uniqid }}/contact/delete/">Supprimer</a>
                             <button data-micromodal-close class="btn btn--cancel">Annuler</button>
                         </div>
                     </div>

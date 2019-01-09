@@ -10,7 +10,6 @@ namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use OrganizerBundle\Security\RaidVoter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -32,7 +31,8 @@ class ContactController extends AjaxAPIController
         $contactManager = $em->getRepository('AppBundle:Contact');
         $raidManager = $em->getRepository('AppBundle:Raid');
 
-        $raid = $raidManager->findOneBy(array('id' => $raidId));
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
@@ -40,7 +40,7 @@ class ContactController extends AjaxAPIController
 
         $user = $this->get('security.token_storage')->getToken()->getUser();
 
-        $contacts = $contactManager->findBy(array('raid' => $raidId));
+        $contacts = $contactManager->findBy(array('raid' => $raid->getId()));
         $contactService = $this->container->get('ContactService');
 
         return new Response($contactService->contactsArrayToJson($contacts));

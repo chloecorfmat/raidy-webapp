@@ -6,7 +6,7 @@
     .content {
       flex-grow: 1;
 
-      .content--quarter {
+      .content--quarter { // sass-lint:disable-line nesting-depth
         display: flex;
         flex-direction: column;
       }

@@ -7,7 +7,7 @@
           crossorigin=""/>
     <style>
         .map {
-            height: 50%;
+            height: 100%;
             width: 100%;
         }
 
@@ -48,33 +48,54 @@
 
         <div class="content--quarter">
             <div class="card">
-                <a href="{{ path('editor', {'id': raid.id}) }}">
+                <a href="{{ path('editor', {'id': raid.uniqid}) }}">
                     <i class="fas fa-map-marked-alt fa-2x"></i>
                     <p>Tracé</p>
                 </a>
             </div>
             <div class="card">
-                <a href="{{ path('listHelpers', {'id': raid.id}) }}">
+                <a href="{{ path('listPois', {'raidId': raid.uniqid}) }}">
+                    <i class="fas fa-map-marker-alt fa-2x"></i>
+                    <p>Points d'intérêt</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{{ path('listHelpers', {'id': raid.uniqid}) }}">
                     <i class="fas fa-users fa-2x"></i>
                     <p>Bénévoles</p>
                 </a>
             </div>
             <div class="card">
-                <a href="{{ path('listContacts', {'raidId': raid.id}) }}">
+                <a href="{{ path('listContacts', {'raidId': raid.uniqid}) }}">
                     <i class="fas fa-phone fa-2x"></i>
                     <p>Contacts</p>
                 </a>
             </div>
+
+            <div class="card">
+                <a href="{{ path('liveRaid', {'id': raid.uniqid}) }}">
+                    <i class="fas fa-microphone fa-2x"></i>
+                    <p>Live !</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{{ path('listMessages', {'raidId': raid.uniqid}) }}">
+                    <i class="fas fa-info fa-2x"></i>
+                    <p>Fil d'informations</p>
+                </a>
+            </div>
             {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
                 <div class="card">
-                    <a href="{{ path('listCollaborators', {'raidId': raid.id}) }}">
+                    <a href="{{ path('listCollaborators', {'raidId': raid.uniqid}) }}">
                         <i class="fas fa-hands-helping fa-2x"></i>
                         <p>Collaborateurs</p>
                     </a>
                 </div>
 
                 <div class="card">
-                    <a href="{{ path('cloneRaid', {'raidId': raid.id}) }}">
+                    <a href="{{ path('cloneRaid', {'raidId': raid.uniqid}) }}">
                         <i class="far fa-clone fa-2x"></i>
                         <p>Cloner le raid</p>
                     </a>
@@ -85,7 +106,7 @@
                 <h2>Liens utiles</h2>
                 <p>
                     <i class="far fa-envelope-open"></i> Lien d'invitation des bénévoles :
-                    <a href="{{ path('inviteHelper', {'id': raid.id}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.id}) }}</a>
+                    <a href="{{ path('inviteHelper', {'id': raid.uniqid}) }}">{{ app.request.getSchemeAndHttpHost() ~ path('inviteHelper', {'id': raid.uniqid}) }}</a>
                 </p>
             </div>
         </div>
@@ -100,7 +121,8 @@
       var raidID;
       document.addEventListener("DOMContentLoaded", function () {
         mapManager = new MapManager();
-        raidID = parseInt({{ raid.id }});
+        {# raidID = parseInt({{ raid.id }}); #}
+        raidID = "{{ raid.uniqid }}";
         mapManager.initialize();
       });
     </script>

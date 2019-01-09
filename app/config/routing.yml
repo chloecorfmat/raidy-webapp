@@ -1,3 +1,8 @@
+live:
+    resource: "@LiveBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 api:
     resource: "@APIBundle/Controller/"
     type:     annotation
