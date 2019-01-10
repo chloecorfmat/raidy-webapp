@@ -429,43 +429,63 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     MicroModal.close('delete-poi');
   });
 
-// ADD POI SUBMIT
+  // ADD POI SUBMIT
+  document.getElementById('addPoi_image').addEventListener('change', function (e) {
+    let poiImageData = document.getElementById('addPoi_image').files[0];
+    let preview = document.getElementById('addPoi_preview');
+    let reader = new FileReader();
+    if (poiImageData) {
+      if (poiImageData.type.indexOf('image') === 0) {
+        reader.onload = function (event) {
+          let image = new Image();
+          image.src = event.target.result;
+          image.onload = function () {
+            let maxWidth = 500, maxHeight = 500, imageWidth = image.width, imageHeight = image.height;
+
+            if (imageWidth > imageHeight) {
+              if (imageWidth > maxWidth) {
+                imageHeight *= maxWidth / imageWidth;
+                imageWidth = maxWidth;
+              }
+            } else {
+              if (imageHeight > maxHeight) {
+                imageWidth *= maxHeight / imageHeight;
+                imageHeight = maxHeight;
+              }
+            }
+
+            let canvas = document.createElement('canvas');
+            canvas.width = imageWidth;
+            canvas.height = imageHeight;
+            image.width = imageWidth;
+            image.height = imageHeight;
+
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
+
+            preview.src = canvas.toDataURL(poiImageData.type);
+            preview.className = 'form--item-file-preview';
+          }
+        }
+      }
+      reader.readAsDataURL(poiImageData);
+    } else {
+      preview.className = 'form--item-file-hide-preview';
+    }
+  });
+
   document.getElementById('addPoi_form').addEventListener('submit', function (e) {
     e.preventDefault();
     let poiName = document.getElementById('addPoi_name').value;
     let poiType = document.getElementById('addPoi_type').value;
     let poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
     let poiDescription = document.getElementById('addPoi_description').value;
-    let poiImageData = document.getElementById('addPoi_image').files[0];
-    let reader = new FileReader();
-    let poiImage = null;
-    let sourceImage = null;
+    let preview = document.getElementById('addPoi_preview');
     let poiIsCheckpoint = document.getElementById('addPoi_isCheckpoint').checked;
 
     MicroModal.close('add-poi-popin');
 
-    if (poiImageData) {
-      reader.readAsDataURL(poiImageData);
-      reader.onloadend = function() {
-        //sourceImage =
-        poiImage = new Image();
-        poiImage.src = reader.result;
-        let elem = document.createElement('canvas');
-        let width = 600;
-        let scaleFactor = width / poiImage.width;
-        elem.width = poiImage.width * scaleFactor;
-        elem.height = poiImage.height;
-        let ctx = elem.getContext('2d');
-        ctx.drawImage(poiImage, 0, 0, width, poiImage.height * scaleFactor);
-        //ctx.toDataURL(poiImage.type);
-
-        console.log(ctx);
-        console.log(ctx.get(0).toDataURL());
-        mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, poiImage, poiIsCheckpoint);
-      };
-    } else {
-      mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, null, poiIsCheckpoint);
-    }
+    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, preview.src, poiIsCheckpoint);
 
     document.getElementById('addPoi_name').value = '';
     document.getElementById('addPoi_type').value = '';
@@ -473,8 +493,53 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('addPoi_description').value = '';
     document.getElementById('addPoi_image').value = '';
     document.getElementById('addPoi_isCheckpoint').checked = false;
+    document.getElementById('addPoi_preview').src = '';
   });
 
+  // EDIT POI IMAGE
+  document.getElementById('editPoi_image').addEventListener('change', function (e) {
+    let poiImageData = document.getElementById('editPoi_image').files[0];
+    let preview = document.getElementById('editPoi_preview');
+    let reader = new FileReader();
+    if (poiImageData) {
+      if (poiImageData.type.indexOf('image') === 0) {
+        reader.onload = function (event) {
+          let image = new Image();
+          image.src = event.target.result;
+          image.onload = function () {
+            let maxWidth = 500, maxHeight = 500, imageWidth = image.width, imageHeight = image.height;
+
+            if (imageWidth > imageHeight) {
+              if (imageWidth > maxWidth) {
+                imageHeight *= maxWidth / imageWidth;
+                imageWidth = maxWidth;
+              }
+            } else {
+              if (imageHeight > maxHeight) {
+                imageWidth *= maxHeight / imageHeight;
+                imageHeight = maxHeight;
+              }
+            }
+
+            let canvas = document.createElement('canvas');
+            canvas.width = imageWidth;
+            canvas.height = imageHeight;
+            image.width = imageWidth;
+            image.height = imageHeight;
+
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
+
+            preview.src = canvas.toDataURL(poiImageData.type);
+            preview.className = 'form--item-file-preview';
+          }
+        }
+      }
+      reader.readAsDataURL(poiImageData);
+    } else {
+      preview.className = 'form--item-file-hide-preview';
+    }
+  });
 // EDIT POI SUBMIT
   document.getElementById('editPoi_form').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -486,19 +551,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     poi.poiType = mapManager.poiTypesMap.get(parseInt(document.querySelector('#editPoi_type').value));
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
     poi.description = document.getElementById('editPoi_description').value;
-    let poiImageData = document.getElementById('editPoi_image').files[0];
-    let reader = new FileReader();
+    poi.image = document.getElementById('editPoi_preview').src;
 
-    if (poiImageData) {
-      reader.readAsDataURL(poiImageData);
-      reader.onloadend = function() {
-        let dataUrl = reader.result;
-        poi.image = dataUrl.split(',')[1];
-        poi.push();
-      };
-    } else {
-      poi.push();
-    }
+    poi.push();
 
     MicroModal.close('edit-poi-popin');
 
@@ -508,6 +563,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('editPoi_description').value = '';
     document.getElementById('editPoi_image').value = '';
     document.getElementById('editPoi_isCheckpoint').checked = false;
+    document.getElementById('editPoi_preview').src = '';
   });
 
   //Import GPX
