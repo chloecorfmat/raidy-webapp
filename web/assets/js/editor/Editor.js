@@ -424,6 +424,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poiImageData = document.getElementById('addPoi_image').files[0];
     let reader = new FileReader();
     let poiImage = null;
+    let sourceImage = null;
     let poiIsCheckpoint = document.getElementById('addPoi_isCheckpoint').checked;
 
     MicroModal.close('add-poi-popin');
@@ -431,7 +432,20 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     if (poiImageData) {
       reader.readAsDataURL(poiImageData);
       reader.onloadend = function() {
-        poiImage = reader.result;
+        //sourceImage =
+        poiImage = new Image();
+        poiImage.src = reader.result;
+        let elem = document.createElement('canvas');
+        let width = 600;
+        let scaleFactor = width / poiImage.width;
+        elem.width = poiImage.width * scaleFactor;
+        elem.height = poiImage.height;
+        let ctx = elem.getContext('2d');
+        ctx.drawImage(poiImage, 0, 0, width, poiImage.height * scaleFactor);
+        //ctx.toDataURL(poiImage.type);
+
+        console.log(ctx);
+        console.log(ctx.get(0).toDataURL());
         mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, poiImage, poiIsCheckpoint);
       };
     } else {
