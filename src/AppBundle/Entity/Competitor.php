@@ -55,7 +55,7 @@ class Competitor
     private $numberSign;
 
     /**
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(type="string", length=45, nullable=true)
      * @Assert\Length(
      *      min = 1,
      *      max = 45,
@@ -65,7 +65,7 @@ class Competitor
     private $category;
 
     /**
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(type="string", length=45, nullable=true)
      * @Assert\Length(
      *      min = 1,
      *      max = 45,
@@ -75,7 +75,7 @@ class Competitor
     private $sex;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $birthYear;
 
