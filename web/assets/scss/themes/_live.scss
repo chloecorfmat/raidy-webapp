@@ -17,6 +17,10 @@ $theme-color-secondary: $live-color;
   footer,
   header {
     background: $theme-color;
+
+    a {
+      color: $white;
+    }
   }
 
   .btn {

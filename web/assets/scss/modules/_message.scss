@@ -1,0 +1,53 @@
+.message {
+  border: 1px solid;
+  border-radius: 5px;
+  font-size: 1rem;
+  margin-bottom: 1rem;
+  padding: .5rem 1rem;
+  position: relative;
+
+  .message-datetime {
+    font-weight: 700;
+  }
+}
+
+.btn--delete-message {
+  background: none;
+  border-radius: 50%;
+  position: absolute;
+  right: .5rem;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.message--danger {
+  background: $secondary-color-2-light;
+  border-color: $secondary-color-2;
+  color: $secondary-color-2;
+
+  .message-icon {
+    background: $secondary-color-2;
+  }
+}
+
+.message--success {
+  background: $tertiary-color-1-light;
+  border-color: $tertiary-color-1;
+  color: $tertiary-color-1;
+
+  .message-icon {
+    background: $tertiary-color-1;
+  }
+}
+
+.message--info {
+  background: $secondary-color-1-light;
+  border-color: $secondary-color-1;
+  color: $secondary-color-1;
+
+  .message-icon {
+    color: $secondary-color-1;
+  }
+}

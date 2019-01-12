@@ -5,6 +5,8 @@
         <div class="form--item form--item-select">
     {% elseif form.vars.checked is defined %}
        <div class="form--item form--input-checkbox">
+    {% elseif form.vars.type is defined and form.vars.type == 'quill' %}
+        <div class="form--item form--input-quill">
     {% else %}
         <div class="form--item">
     {% endif %}
@@ -95,3 +97,35 @@
         <p class="input--help">{{ form.vars.attr['data-help'] }}</p>
     {% endif %}
 {%- endblock checkbox_widget -%}
+
+{% block quill_widget %}
+    <div class="quill" id="{{ form.vars.name }}">
+    </div>
+    <input type="hidden" name="{{ form.vars.name }}">
+
+    <!-- Initialize Quill editor -->
+    <script>
+        window.addEventListener('load', function() {
+            var quill = new Quill('#{{ form.vars.name }}', {
+                theme: 'snow'
+            });
+
+            var forms = document.getElementsByTagName('form');
+
+            for (var form of forms) {
+                form.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    var richtextfields = document.getElementsByClassName('quill');
+
+                    for (var richtextfield of richtextfields) {
+                        var field = document.querySelector('input[name="' + richtextfield.id + '"]');
+
+                        field.value = quill.root.innerHTML;
+                    }
+
+                    this.submit();
+                });
+            }
+        });
+    </script>
+{% endblock %}

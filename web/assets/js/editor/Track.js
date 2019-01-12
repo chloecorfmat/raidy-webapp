@@ -8,9 +8,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   Track = function (map) {
       this.map = map;
 
-   // console.log(patternParameters.symbol.options.pathOptions);
-    this.line = [];
-
     this.startMarker = L.marker([0, 0]);
     this.endMarker = L.marker([0, 0]);
 
@@ -61,7 +58,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         pathOptions: {fillOpacity: 1, color: this.color,  weight: 1}
       })
     };
-    console.log(this.color);
 
     this.decorator = L.polylineDecorator(this.line, {
       patterns: [patternParameters]
@@ -106,6 +102,42 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       }
     }
   };
+
+
+  Track.prototype.calculElevation = function () {
+    let points = this.line.getLatLngs();
+    var dp = 0,
+      dm = 0,
+      ret = {};
+
+    for (var i = 0; i < points.length - 1; i++) {
+      var diff = parseFloat(points[i + 1].ele) - parseFloat(points[i].ele);
+
+      if (diff < 0) {
+        dm += diff;
+      } else if (diff > 0) {
+        dp += diff;
+      }
+    }
+
+    var elevation = [];
+    var sum = 0;
+
+    for (var i = 0, len = points.length; i < len; i++) {
+      var ele = parseFloat(points[i].ele);
+      elevation.push(ele);
+      sum += ele;
+    }
+
+    this.maxElev = Math.max.apply(null, elevation);
+    this.minElev = Math.min.apply(null, elevation);
+    this.posElev = Math.abs(dp);
+    this.negElev = Math.abs(dm);
+    this.avgElev = sum / elevation.length;
+
+    return ret;
+  };
+
   Track.prototype.calculDistance = function () {
     let points = this.line.getLatLngs();
     this.distance = 0;
@@ -154,8 +186,10 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Track.prototype.toJSON = function () {
     let latlong = [];
+    let i =0;
     for (let obj of this.line.getLatLngs()) {
-      latlong.push({lat: obj.lat, lng: obj.lng});
+      latlong.push({lat: obj.lat, lng: obj.lng, ele : obj.ele});
+      i++;
     }
     let track =
       {
@@ -182,6 +216,15 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     let waypoints = JSON.parse(track.trackpoints);
 
     this.line = L.polyline(waypoints, {weight: 3, color: this.color});
+
+    let i = 0;
+    for (let obj of this.line.getLatLngs()) {
+      //console.log(waypoints[i].ele)
+      obj.ele = waypoints[i].ele;
+      //if(waypoints[i].ele === undefined) mapManager.elevator.getElevationAt(obj, function() {});
+      i++;
+    }
+
     this.line.addTo(mapManager.group);
 
     this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0],
@@ -219,6 +262,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
 
   Track.prototype.push = function () {
+    console.log(this.line.getLatLngs());
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
@@ -229,7 +273,10 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     let li = document.getElementById('track-li-' + this.id);
     this.calculDistance();
-    li.querySelector('label > div > span:nth-child(2)').innerHTML = '(' + Math.round(10 * this.distance / 1000) / 10 + ' Km)';
+    this.calculElevation();
+    li.querySelector('.track-distance').innerHTML = Math.round(10 * this.distance / 1000) / 10 + 'Km ';
+    li.querySelector('.track-elev-gain').innerHTML = Math.round(this.posElev)+'m';
+    li.querySelector('.track-elev-lose').innerHTML = Math.round(this.negElev)+'m';
     mapManager.editorUI.updateTrack(this);
     this.decorator.removeFrom(this.map);
 

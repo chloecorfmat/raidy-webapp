@@ -52,6 +52,14 @@ form {
     }
   }
 
+  .form--input-quill {
+    padding-top: 1rem;
+
+    label {
+      bottom: 0;
+    }
+  }
+
   label {
     bottom: -1.9rem;
     color: $tertiary-color-1;
@@ -101,6 +109,17 @@ form {
   @media screen and (min-width: $breakpoint-medium) and (max-width: $breakpoint-large) {
     display: inline-block;
     width: 45%;
+   }
+ }
+
+.form--item-file-hide-preview {
+
+  @media screen and (min-width: $breakpoint-large) {
+    display: none;
+  }
+
+  @media screen and (min-width: $breakpoint-medium) and (max-width: $breakpoint-large) {
+    display: none;
   }
 }
 

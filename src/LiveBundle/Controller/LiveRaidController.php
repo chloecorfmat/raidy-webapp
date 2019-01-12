@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
 class LiveRaidController extends Controller
 {
     /**
-     * @Route("/live/raid/{id}")
+     * @Route("/live/raid/{id}", name="live")
      *
      * @param Request $request request
      * @param int     $id      raid identifier

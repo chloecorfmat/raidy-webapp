@@ -82,7 +82,14 @@
             <div class="card">
                 <a href="{{ path('liveRaid', {'id': raid.uniqid}) }}">
                     <i class="fas fa-microphone fa-2x"></i>
-                    <p>Live!</p>
+                    <p>Live !</p>
+                </a>
+            </div>
+
+            <div class="card">
+                <a href="{{ path('listMessages', {'raidId': raid.uniqid}) }}">
+                    <i class="fas fa-info fa-2x"></i>
+                    <p>Fil d'informations</p>
                 </a>
             </div>
             {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
