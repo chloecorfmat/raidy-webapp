@@ -60,21 +60,30 @@ class CompetitorController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $competitorManager = $em->getRepository('AppBundle:Competitor');
-            $competitorExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raidId]
+            $competitorNameExist = $competitorManager->findBy(
+                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raid->getId()]
             );
-            if (!$competitorExist) {
-                $competitorService = $this->container->get('CompetitorService');
-                $competitor = $competitorService->competitorFromForm(
-                    $formCompetitor,
-                    $raid->getId()
-                );
 
-                $em->persist($competitor);
-                $em->flush();
-                $this->addFlash('success', 'Le participant a bien été ajouté.');
+            $competitorSignExist = $competitorManager->findBy(
+                ['numberSign' => $formCompetitor->getNumberSign(), 'raid' => $raid->getId()]
+            );
 
-                return $this->redirectToRoute('listCompetitor',  ['raidId' => $raidId]);
+            if (!$competitorNameExist) {
+                if (!$competitorSignExist) {
+                    $competitorService = $this->container->get('CompetitorService');
+                    $competitor = $competitorService->competitorFromForm(
+                        $formCompetitor,
+                        $raid->getId()
+                    );
+
+                    $em->persist($competitor);
+                    $em->flush();
+                    $this->addFlash('success', 'Le participant a bien été ajouté.');
+
+                    return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
+                } else {
+                    $form->addError(new FormError('Ce dossard existe déjà.'));
+                }
             } else {
                 $form->addError(new FormError('Ce participant existe déjà.'));
             }
@@ -144,26 +153,35 @@ class CompetitorController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
 
             $competitorExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raidId]
+                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raid->getId()]
+            );
+            $competitorSignExist = $competitorManager->findBy(
+                ['numberSign' => $formCompetitor->getNumberSign(), 'raid' => $raid->getId()]
             );
 
             if (!$competitorExist || $competitorExist->getId() === $formCompetitor->getId()) {
-                $formCompetitor = $form->getData();
+                if (!$competitorSignExist || $competitorSignExist->getId() === $formCompetitor->getId()) {
+                    $formCompetitor = $form->getData();
 
-                $competitor = $competitorManager->findOneBy(['id' => $formCompetitor->getId()]);
-                $competitor->setFirstname($formCompetitor->getFirstname());
-                $competitor->setLastname($formCompetitor->getLastname());
-                $competitor->setNumberSign($formCompetitor->getNumberSign());
-                $competitor->setCategory($formCompetitor->getCategory());
-                $competitor->setSex($formCompetitor->getSex());
-                $competitor->setBirthYear($formCompetitor->getBirthYear());
+                    $competitor = $competitorManager->findOneBy(['id' => $formCompetitor->getId()]);
+                    $competitor->setFirstname($formCompetitor->getFirstname());
+                    $competitor->setLastname($formCompetitor->getLastname());
+                    $competitor->setNumberSign($formCompetitor->getNumberSign());
+                    $competitor->setCategory($formCompetitor->getCategory());
+                    $competitor->setSex($formCompetitor->getSex());
+                    $competitor->setBirthYear($formCompetitor->getBirthYear());
 
-                $em->persist($competitor);
-                $em->flush();
+                    $em->persist($competitor);
+                    $em->flush();
 
-                $this->addFlash('success', 'Le participant a bien été mis à jour.');
+                    $this->addFlash('success', 'Le participant a bien été mis à jour.');
 
-                return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
+                    return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
+                } else {
+                    $form->addError(new FormError('Ce dossard existe déjà.'));
+                }
+            } else {
+                $form->addError(new FormError('Ce participant existe déjà.'));
             }
         }
 
