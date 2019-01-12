@@ -217,11 +217,7 @@ class CompetitorController extends Controller
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
-
-        $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            throw $this->createNotFoundException('Accès refusé.');
-        }
+        
 
         $competitorManager = $em->getRepository('AppBundle:Competitor');
         $competitor = $competitorManager->find($competitorId);
