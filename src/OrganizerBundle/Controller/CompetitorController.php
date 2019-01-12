@@ -61,7 +61,7 @@ class CompetitorController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $competitorManager = $em->getRepository('AppBundle:Competitor');
             $competitorExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname()]
+                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raidId]
             );
             if (!$competitorExist) {
                 $competitorService = $this->container->get('CompetitorService');
@@ -89,6 +89,133 @@ class CompetitorController extends Controller
                 'form' => $form->createView(),
             ]
         );
+    }
+
+    /**
+     * @Route("/organizer/raid/{raidId}/competitor/{competitorId}", name="editCompetitor")
+     *
+     * @param Request $request   request
+     * @param int     $raidId    raid identifier
+     * @param int     $competitorId competitor identifier
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function editCompetitor(Request $request, $raidId, $competitorId)
+    {
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
+        if (null == $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        // Find the user
+        $user = $this->get('security.token_storage')->getToken()->getUser();
+        if (null == $user->getId()) {
+            throw $this->createNotFoundException('Accès refusé.');
+        }
+
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+
+        $formCompetitor = $competitorManager->findOneBy(['id' => $competitorId]);
+
+        $competitor = $formCompetitor;
+
+        if (null === $formCompetitor) {
+            throw $this->createNotFoundException('Ce participant n\'existe pas');
+        }
+
+        $form = $this->createFormBuilder($formCompetitor)
+            ->add('lastname', TextType::class, ['label' => 'Nom'])
+            ->add('firstname', TextType::class, ['label' => 'Prénom'])
+            ->add('number_sign', TextType::class, ['label' => 'N° de dossard'])
+            ->add('category', TextType::class, ['label' => 'Catégorie','required' => false])
+            ->add('sex', TextType::class, ['label' => 'Sexe','required' => false])
+            ->add('birth_year', TextType::class, ['label' => 'Année de naissance','required' => false])
+
+            ->add('submit', SubmitType::class, ['label' => 'Editer le participant'])
+            ->getForm();
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+
+            $competitorExist = $competitorManager->findBy(
+                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raidId]
+            );
+
+            if (!$competitorExist || $competitorExist->getId() === $formCompetitor->getId()) {
+                $formCompetitor = $form->getData();
+
+                $competitor = $competitorManager->findOneBy(['id' => $formCompetitor->getId()]);
+                $competitor->setFirstname($formCompetitor->getFirstname());
+                $competitor->setLastname($formCompetitor->getLastname());
+                $competitor->setNumberSign($formCompetitor->getNumberSign());
+                $competitor->setCategory($formCompetitor->getCategory());
+                $competitor->setSex($formCompetitor->getSex());
+                $competitor->setBirthYear($formCompetitor->getBirthYear());
+
+                $em->persist($competitor);
+                $em->flush();
+
+                $this->addFlash('success', 'Le participant a bien été mis à jour.');
+
+                return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
+            }
+        }
+
+        return $this->render(
+            'OrganizerBundle:Competitor:competitor.html.twig',
+            [
+                'form' => $form->createView(),
+                'raid' => $raid,
+                'raidId' => $raid->getUniqId(),
+                'competitor' => $competitor,
+            ]
+        );
+    }
+
+    /**
+     * @Route("/organizer/raid/{raidId}/competitor/delete/{competitorId}", name="deleteCompetitor")
+     *
+     * @param Request $request   request
+     * @param int     $raidId    raid identifier
+     * @param int     $competitorId competitor identifier
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteCompetitor(Request $request, $raidId, $competitorId)
+    {
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        //$raid = $raidManager->findOneBy(array('id' => $raidId));
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
+        if (null == $raid) {
+            throw $this->createNotFoundException('Ce raid n\'existe pas');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createNotFoundException('Accès refusé.');
+        }
+
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+        $competitor = $competitorManager->find($competitorId);
+
+        if (null != $competitor) {
+            $em->remove($competitor);
+            $em->flush();
+        } else {
+            throw $this->createNotFoundException('Ce participant n\'existe pas');
+        }
+
+        return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
     }
 
 }
