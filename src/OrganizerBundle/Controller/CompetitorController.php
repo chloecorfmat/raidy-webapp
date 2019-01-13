@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
 
@@ -44,6 +45,8 @@ class CompetitorController extends Controller
         );
 
         $formCompetitor = new Competitor();
+        $raceManager = $em->getRepository('AppBundle:Race');
+        $races = $raceManager->findBy(array('raid' => $raid));
 
         $form = $this->createFormBuilder($formCompetitor)
             ->add('lastname', TextType::class, ['label' => 'Nom'])
@@ -52,6 +55,14 @@ class CompetitorController extends Controller
             ->add('category', TextType::class, ['label' => 'Catégorie','required' => false])
             ->add('sex', TextType::class, ['label' => 'Sexe','required' => false])
             ->add('birth_year', TextType::class, ['label' => 'Année de naissance','required' => false])
+            ->add('race', ChoiceType::class,
+                ['label' => 'Épreuve', 'required' => false, 'choices' => $races, 'choice_label' => function ($race) {
+                    /**
+                     * @var Race $race
+                     */
+                    return $race->getName();
+                }]
+            )
 
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un participant'])
             ->getForm();
@@ -132,6 +143,8 @@ class CompetitorController extends Controller
         $formCompetitor = $competitorManager->findOneBy(['id' => $competitorId]);
 
         $competitor = $formCompetitor;
+        $raceManager = $em->getRepository('AppBundle:Race');
+        $races = $raceManager->findBy(array('raid' => $raid));
 
         if (null === $formCompetitor) {
             throw $this->createNotFoundException('Ce participant n\'existe pas');
@@ -144,7 +157,14 @@ class CompetitorController extends Controller
             ->add('category', TextType::class, ['label' => 'Catégorie','required' => false])
             ->add('sex', TextType::class, ['label' => 'Sexe','required' => false])
             ->add('birth_year', TextType::class, ['label' => 'Année de naissance','required' => false])
-
+            ->add('race', ChoiceType::class,
+                ['label' => 'Épreuve', 'required' => false, 'choices' => $races, 'choice_label' => function ($race) {
+                    /**
+                     * @var Race $race
+                     */
+                    return $race->getName();
+                }]
+            )
             ->add('submit', SubmitType::class, ['label' => 'Editer le participant'])
             ->getForm();
 
@@ -158,9 +178,8 @@ class CompetitorController extends Controller
             $competitorSignExist = $competitorManager->findBy(
                 ['numberSign' => $formCompetitor->getNumberSign(), 'raid' => $raid->getId()]
             );
-
-            if (!$competitorExist || $competitorExist->getId() === $formCompetitor->getId()) {
-                if (!$competitorSignExist || $competitorSignExist->getId() === $formCompetitor->getId()) {
+            if (!$competitorExist || $competitorExist[0]->getId() === $formCompetitor->getId()) {
+                if (!$competitorSignExist || $competitorSignExist[0]->getId() === $formCompetitor->getId()) {
                     $formCompetitor = $form->getData();
 
                     $competitor = $competitorManager->findOneBy(['id' => $formCompetitor->getId()]);
@@ -170,6 +189,7 @@ class CompetitorController extends Controller
                     $competitor->setCategory($formCompetitor->getCategory());
                     $competitor->setSex($formCompetitor->getSex());
                     $competitor->setBirthYear($formCompetitor->getBirthYear());
+                    $competitor->setRace($formCompetitor->getRace());
 
                     $em->persist($competitor);
                     $em->flush();

@@ -28,8 +28,13 @@ class CompetitorService
         $obj = [];
 
         $obj['id'] = $competitor->getId();
-        $obj['user'] = $competitor->getUser()->getId();
-
+        $obj['firstname'] = $competitor->getFirstname();
+        $obj['lastname'] = $competitor->getLastname();
+        $obj['number_sign'] = $competitor->getNumberSign();
+        $obj['category'] = $competitor->getCategory();
+        $obj['sex'] = $competitor->getSex();
+        $obj['birthyear'] = $competitor->getBirthYear();
+        $obj['race'] = $competitor->getRace()->getId();
 
         $obj['raid'] = $competitor->getRaid()->getId();
 
@@ -52,6 +57,7 @@ class CompetitorService
         $competitor->setCategory($obj->getCategory());
         $competitor->setSex($obj->getSex());
         $competitor->setBirthYear($obj->getBirthYear());
+        $competitor->setRace($obj->getRace());
 
         $raidRepository = $this->em->getRepository('AppBundle:Raid');
         $raid = $raidRepository->find($raidId);

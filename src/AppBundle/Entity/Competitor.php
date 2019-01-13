@@ -86,6 +86,12 @@ class Competitor
     private $raid;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Race")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $race;
+
+    /**
      * @ORM\Column(name="uniqid", type="string", unique=true)
      */
     private $uniqid;
@@ -216,6 +222,22 @@ class Competitor
     public function setRaid($raid)
     {
         $this->raid = $raid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRace()
+    {
+        return $this->race;
+    }
+
+    /**
+     * @param mixed $race
+     */
+    public function setRace($race)
+    {
+        $this->race = $race;
     }
 
     /**
