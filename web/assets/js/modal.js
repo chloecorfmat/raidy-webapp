@@ -7,6 +7,7 @@ window.addEventListener('load', displayModalToDeleteCollaborator);
 window.addEventListener('load', displayModalToDeleteContact);
 window.addEventListener('load', displayModalToDeleteCompetitor);
 window.addEventListener('load', displayModalToDeleteMessage);
+window.addEventListener('load', displayModalToEditMessage);
 
 function displayModalToDeleteOrganizer () {
   var btns = document.querySelectorAll('.btn--delete-organizer');
@@ -179,6 +180,18 @@ function displayModalToDeleteMessage () {
                 var url = document.getElementById('btn--delete-message').dataset.baseUrl + id;
                 document.getElementById('btn--delete-message').href = url;
                 MicroModal.show('delete-message'); // eslint-disable-line no-undef
+            });
+        }
+    }
+}
+
+function displayModalToEditMessage () {
+    var btns = document.querySelectorAll('.btn--edit-message');
+    if (btns.length !== 0) {
+        MicroModal.init();
+        for (var btn of btns) {
+            btn.addEventListener('click', function () {
+                MicroModal.show('edit-message');
             });
         }
     }

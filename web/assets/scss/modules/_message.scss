@@ -9,13 +9,22 @@
   .message-datetime {
     font-weight: 700;
   }
+
+  .message-helpers {
+    border-top: 1px solid;
+    font-size: .9rem;
+    margin-top: 1.5rem;
+  }
 }
 
-.btn--delete-message {
-  background: none;
-  border-radius: 50%;
+.btns-message {
   position: absolute;
   right: .5rem;
+}
+
+.btn--delete-message,
+.btn--edit-message {
+  background: none;
 
   &:hover {
     cursor: pointer;
@@ -28,7 +37,11 @@
   color: $secondary-color-2;
 
   .message-icon {
-    background: $secondary-color-2;
+    color: $secondary-color-2;
+  }
+
+  .message-helpers {
+    border-color: $secondary-color-2;
   }
 }
 
@@ -38,7 +51,11 @@
   color: $tertiary-color-1;
 
   .message-icon {
-    background: $tertiary-color-1;
+    color: $tertiary-color-1;
+  }
+
+  .message-helpers {
+    border-color: $tertiary-color-1;
   }
 }
 
@@ -49,5 +66,9 @@
 
   .message-icon {
     color: $secondary-color-1;
+  }
+
+  .message-helpers {
+    border-color: $secondary-color-1;
   }
 }
