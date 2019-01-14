@@ -64,6 +64,8 @@ function validateHelper(e) {
             var date = new Date(response.checkInTime.date);
             var button = document.querySelector('[data-helperid="' + response.helperId + '"]');
             button.parentNode.parentNode.querySelector('.assigned-poi select').disabled = true;
+            button.parentNode.parentNode.querySelector('.status').innerHTML = "<span class=\"helper-check helper-check--in\"></span>\n" +
+                "<span class=\"helper-check--text sr-only\">Validé</span>";
             button.parentNode.innerHTML = '<span>' + date.toLocaleTimeString('fr-FR') + '</span>';
 
             iziToast.success({

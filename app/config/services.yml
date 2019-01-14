@@ -94,3 +94,8 @@ services:
         class: LiveBundle\Service\TwitterService
         autowire: true
         public: true
+
+    CompetitorService:
+        class: AppBundle\Service\CompetitorService
+        autowire: true
+        public: true
