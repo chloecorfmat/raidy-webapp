@@ -107,7 +107,6 @@ class OrganizerHelpersController extends AjaxAPIController
      */
     public function patchHelperCheckin(Request $request, $raidId, $helperId)
     {
-        $t = null;
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -131,10 +130,10 @@ class OrganizerHelpersController extends AjaxAPIController
 
         $now = new \DateTime('now');
 
-        /**$diff = $raid->getDate()->diff($now);
+        $diff = $raid->getDate()->diff($now);
         if ($diff->days > 0 || (0 == $diff->invert && $diff->days > 0)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You can not check in for this raid today');
-        }**/
+        }
 
         $helper->setIsCheckedIn(1);
         $helper->setCheckInTime($now);

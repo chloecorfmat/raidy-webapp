@@ -99,10 +99,9 @@
 {%- endblock checkbox_widget -%}
 
 {% block quill_widget %}
-    <div class="quill" id="{{ form.vars.name }}">
+    <div class="quill quill-input" id="{{ form.vars.name }}">
     </div>
     <input type="hidden" name="{{ form.vars.name }}">
-
     <!-- Initialize Quill editor -->
     <script>
         window.addEventListener('load', function() {
@@ -110,22 +109,21 @@
                 theme: 'snow'
             });
 
-            var forms = document.getElementsByTagName('form');
+            var form = document.getElementById('{{ form.vars.name }}').parentNode.parentNode.parentNode;
 
-            for (var form of forms) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    var richtextfields = document.getElementsByClassName('quill');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var richtextfields = document.getElementsByClassName('quill-input');
 
-                    for (var richtextfield of richtextfields) {
-                        var field = document.querySelector('input[name="' + richtextfield.id + '"]');
+                for (var richtextfield of richtextfields) {
+                    console.log(richtextfield);
+                    var field = document.querySelector('input[name="' + richtextfield.id + '"]');
 
-                        field.value = quill.root.innerHTML;
-                    }
+                    field.value = quill.root.innerHTML;
+                }
 
-                    this.submit();
-                });
-            }
+                this.submit();
+            });
         });
     </script>
 {% endblock %}

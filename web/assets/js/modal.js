@@ -171,7 +171,6 @@ function displayModalToDeleteCompetitor () {
 
 function displayModalToDeleteMessage () {
     var btns = document.querySelectorAll('.btn--delete-message');
-    console.log(btns);
     if (btns.length !== 0) {
         MicroModal.init();
         for (var btn of btns) {
