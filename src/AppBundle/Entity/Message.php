@@ -50,6 +50,13 @@ class Message
     private $text;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="text", nullable=false)
+     */
+    private $type;
+
+    /**
      * Get id
      *
      * @return int
@@ -137,5 +144,21 @@ class Message
     public function setTargetPoitypes($targetPoitypes)
     {
         $this->targetPoitypes = $targetPoitypes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }
