@@ -1,0 +1,27 @@
+{% extends 'default/mail_helper.html.twig' %}
+
+{% block body %}
+    <h1>Bonjour, {{ helper.firstname }} {{ helper.lastname }} !</h1>
+
+    <p>Vous avez été affecté au poste de <strong>{{ poi }}</strong> pour le raid <strong>{{ raid.name }}</strong>.</p>
+    <p>Ce raid a lieu le <strong>{{ raid.date|date('d/m/Y', 'Europe/Paris') }}</strong>.</p>
+    <br>
+    <p>Pour vous connecter, cliquez ici : <a href="{{ url('fos_user_security_login') }}">se connecter</a>.</p>
+    <p>Si le lien ne s'affiche pas correctement, merci de copier-coller ce lien dans votre navigateur : <a href="{{ url('fos_user_security_login') }}">{{ url('fos_user_security_login') }}</a></p>
+    <br>
+    <div class="actions">
+        <div class="downloads">
+            <h2 class="login--text">Téléchargez l'application Raidy, pour avoir les dernières actualités sur le raid</h2>
+            <div class="downloads--links">
+                <a href="#">
+                    <img src="{{ absolute_url(asset('assets/images/app-store-badge.png')) }}" alt="apple store logo" class="downloads--images">
+                </a>
+                <a href="#">
+                    <img src="{{ absolute_url(asset('assets/images/google-play-badge.png')) }}" alt="android store logo" class="downloads--images">
+                </a>
+            </div>
+        </div>
+    </div>
+    <p>Sportivement,<br>
+    <p>Raidy</p>
+{% endblock %}

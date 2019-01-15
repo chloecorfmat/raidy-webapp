@@ -126,11 +126,9 @@ class OrganizerAdminController extends Controller
                         ->setBody(
                             $this->renderView(
                                 'AppBundle:Emails:registration.html.twig',
-                                array('user' => $user,
-                                    'password' => $formUser->getPlainPassword())
+                                array('user' => $user, 'password' => $formUser->getPlainPassword())
                             ),
                             'text/html'
-
                         );
 
                         $mailer->send($message);
