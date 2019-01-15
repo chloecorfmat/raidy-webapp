@@ -1,0 +1,151 @@
+{% if base_class is not defined %}
+    {% set base_class = 'organizer' %}
+{% endif %}
+
+{% if logo_url is not defined %}
+    {% set logo_url = '/' %}
+{% endif %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+
+        table {
+            max-width: 780px;
+        }
+
+        .helper,
+        h1 {
+            color: #a88f73;
+            font-family: Helvetica, serif;
+        }
+
+        .logo--enssat {
+            float: right;
+            right: 5rem;
+        }
+
+        .footer--mail {
+            align-items: center;
+            background-color: #77aeaf;
+            display: block;
+            font-size: .9rem;
+            justify-content: space-around;
+            padding: 1.5rem 3.5rem;
+        }
+
+        .footer--mail > li {
+            display: inline-block;
+            list-style-type: none;
+            margin-right: 2rem;
+        }
+
+        .footer--mail > a {
+            color: #FFFFFF;
+            text-decoration: none;
+        }
+
+        .footer--mail > a:hover {
+            font-weight: 700;
+            opacity: .7;
+        }
+
+        .footer--mail-div {
+            text-align: right;
+            padding-bottom: 1.5rem;
+        }
+
+        .header--raidy {
+            align-items: center;
+            background-color: #77aeaf;
+            display: block;
+            justify-content: space-between;
+            padding: .5rem 3rem;
+        }
+
+        body > .header--raidy {
+            height: 3rem;
+        }
+
+        .logo {
+            text-decoration: none;
+        }
+
+        .logo > img {
+            width: 6rem;
+        }
+
+        .logo > img:hover {
+            opacity: .7;
+        }
+
+        p {
+            -ms-text-size-adjust: 100%;
+            -webkit-text-size-adjust: 100%;
+            color: #202020;
+            font-family: Helvetica, serif;
+            font-size: 16px;
+            line-height: 150%;
+            margin: 10px 0;
+            mso-line-height-rule: exactly;
+            padding: 0;
+            text-align: justify;
+        }
+
+        .main--raidy {
+            padding: 2rem 3rem;
+        }
+
+        .downloads {
+            max-width: 100%;
+            text-align: center;
+        }
+
+        .login--text {
+            color: #a88f73;
+            font-family: Helvetica, serif;
+            font-size: 1rem;
+        }
+
+        .downloads--images {
+            max-width: 7rem;
+        }
+    </style>
+
+
+    {% block meta %}{% endblock %}
+</head>
+<center>
+    <body class="helper">
+    <table>
+        <tr>
+            <td class="header--raidy">
+                <a href="{{ absolute_url(logo_url)}}" class="logo">
+                    <img src="{{ absolute_url(asset('assets/images/logo-white.png')) }}" alt="Logo Raidy">
+                </a>
+            </td>
+        </tr>
+        <tr>
+            <td class="main--raidy">
+                {% block body %}{% endblock %}
+            </td>
+        </tr>
+        <tr>
+            <td class="footer--mail">
+                <div class="footer--mail-div">
+                    <a href="http://www.enssat.fr/" class="logo logo--enssat">
+                        <img src="{{ absolute_url(asset('assets/images/Enssat_UR1_blanc.png')) }}" alt="Logo Enssat">
+                    </a>
+                </div>
+            </td>
+        </tr>
+    </table>
+    </body>
+</center>
+</html>
