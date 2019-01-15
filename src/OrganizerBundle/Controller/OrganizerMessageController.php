@@ -2,6 +2,7 @@
 
 namespace OrganizerBundle\Controller;
 
+use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Message;
 use AppBundle\Entity\Poi;
 use AppBundle\Form\Type\QuillType;
@@ -14,8 +15,9 @@ use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 
-class OrganizerMessageController extends Controller
+class OrganizerMessageController extends AjaxAPIController
 {
     /**
      * @Route("/organizer/raid/{raidId}/message", name="listMessages")
@@ -63,6 +65,19 @@ class OrganizerMessageController extends Controller
 
         $form = $this->createFormBuilder($formMessage)
             ->add(
+                'type',
+                ChoiceType::class,
+                [
+                    'choices' => [
+                        'Danger / Important / Erreur' => 'danger',
+                        'Information' => 'info',
+                        'Succès' => 'success',
+                    ],
+                    'multiple' => false,
+                    'label' => 'Type de message',
+                ]
+            )
+            ->add(
                 'targetPoiTypes',
                 ChoiceType::class,
                 array(
@@ -82,6 +97,7 @@ class OrganizerMessageController extends Controller
             if (null != $data['text']) {
                 $message = new Message();
                 $message->setText(addslashes($data['text']));
+                $message->setType($data['form']['type']);
                 $message->setRaid($raid);
 
                 foreach ($data['form']['targetPoiTypes'] as $poitype) {
@@ -153,5 +169,50 @@ class OrganizerMessageController extends Controller
         $this->addFlash('success', 'Le message a bien été supprimé.');
 
         return $this->redirectToRoute('listMessages', array('raidId' => $raid->getUniqId()));
+    }
+
+    /**
+     * @Route("/organizer/raid/{raidId}/message/{messageId}/edit", name="patchMessageEdit", methods={"PATCH"})
+     *
+     * @param Request $request
+     * @param int     $raidId    raid id
+     * @param int     $messageId message id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function patchMessageEdit(Request $request, $raidId, $messageId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            throw $this->createAccessDeniedException();
+        }
+
+        $messageManager = $em->getRepository('AppBundle:Message');
+        $message = $messageManager->find($messageId);
+
+        if (null == $message) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This message does not exist');
+        }
+
+        $data = $request->request->all();
+        $message->setText(addslashes($data['content']));
+
+        $em->flush();
+
+        $ret = [];
+        $ret['message'] = $message->getId();
+        $ret['content'] = $message->getText();
+        $ret['code'] = Response::HTTP_OK;
+
+        return new Response(json_encode($ret));
     }
 }

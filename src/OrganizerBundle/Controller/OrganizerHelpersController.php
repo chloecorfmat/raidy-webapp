@@ -50,6 +50,22 @@ class OrganizerHelpersController extends AjaxAPIController
 
         if (null != $helper) {
             $helper = $helperService->updateHelperToPoiFromArray($helper, $raid->getId(), $data);
+
+            /* Send email to helper */
+            $message = \Swift_Message::newInstance()
+                ->setSubject('Nouvelle affectation pour le raid ' . $raid->getName())
+                ->setFrom('raidy@enssat.fr')
+                ->setTo($helper->getUser()->getEmail())
+                ->setBody(
+                    $this->renderView(
+                        'OrganizerBundle:Emails:affectation.html.twig',
+                        array('helper' => $helper->getUser(), 'raid' => $raid, 'poi' => $helper->getPoi()->getName())
+                    ),
+                    'text/html'
+                );
+
+            $this->get('mailer')->send($message);
+
             $em->flush();
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This helper does not exist');
@@ -107,7 +123,6 @@ class OrganizerHelpersController extends AjaxAPIController
      */
     public function patchHelperCheckin(Request $request, $raidId, $helperId)
     {
-        $t = null;
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
@@ -131,10 +146,10 @@ class OrganizerHelpersController extends AjaxAPIController
 
         $now = new \DateTime('now');
 
-        /**$diff = $raid->getDate()->diff($now);
+        $diff = $raid->getDate()->diff($now);
         if ($diff->days > 0 || (0 == $diff->invert && $diff->days > 0)) {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You can not check in for this raid today');
-        }**/
+        }
 
         $helper->setIsCheckedIn(1);
         $helper->setCheckInTime($now);

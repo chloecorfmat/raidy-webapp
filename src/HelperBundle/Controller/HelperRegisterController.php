@@ -108,6 +108,8 @@ class HelperRegisterController extends Controller
      * @param int     $id
      *
      * @return \Symfony\Component\HttpFoundation\Response|template
+     *
+     * @throws \Exception
      */
     public function registerHelper(Request $request, $id)
     {
@@ -248,6 +250,36 @@ class HelperRegisterController extends Controller
                                 $em->persist($helper);
                                 $em->flush();
 
+                                /* Send email to helper */
+                                $message = \Swift_Message::newInstance()
+                                    ->setSubject('Création d\'un compte bénévole')
+                                    ->setFrom('raidy@enssat.fr')
+                                    ->setTo($user->getEmail())
+                                    ->setBody(
+                                        $this->renderView(
+                                            'HelperBundle:Emails:registration.html.twig',
+                                            array('user' => $user)
+                                        ),
+                                        'text/html'
+                                    );
+
+                                $this->get('mailer')->send($message);
+
+                                /* Send email to organizer */
+                                $message = \Swift_Message::newInstance()
+                                    ->setSubject('Enregistrement d\'un bénévole pour ' . $raid->getName())
+                                    ->setFrom('raidy@enssat.fr')
+                                    ->setTo($raid->getUser()->getEmail())
+                                    ->setBody(
+                                        $this->renderView(
+                                            'HelperBundle:Emails:newHelper.html.twig',
+                                            array('helper' => $user, 'organizer' => $raid->getUser(), 'raid' => $raid)
+                                        ),
+                                        'text/html'
+                                    );
+
+                                $this->get('mailer')->send($message);
+
                                 return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
                             }
                         }
@@ -288,6 +320,8 @@ class HelperRegisterController extends Controller
      * @param int     $id
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception
      */
     public function joinHelper(Request $request, $id)
     {
