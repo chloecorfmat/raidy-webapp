@@ -22,6 +22,7 @@
 /web/assets/css
 /web/assets/dist
 /web/uploads
+/web/build
 
 web/build/app.js
 
