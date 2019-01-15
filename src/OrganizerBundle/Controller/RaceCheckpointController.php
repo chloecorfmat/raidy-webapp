@@ -8,7 +8,6 @@
 
 namespace OrganizerBundle\Controller;
 
-
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\RaceCheckpoint;
 use AppBundle\Entity\RaceTrack;
@@ -25,12 +24,14 @@ class RaceCheckpointController extends AjaxAPIController
 {
 
     /**
-     * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{raceTrackId}/raceCheckpoint", name="putRaceCheckpoint", methods={"PUT"})
+     * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{raceTrackId}/raceCheckpoint",
+     *      name="putRaceCheckpoint", methods={"PUT"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
+     * @param int     $raceId
+     * @param int     $raceTrackId
      *
-     * @param $raidId
-     * @param $raceId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function putRaceCheckpoint(Request $request, $raidId, $raceId, $raceTrackId)
@@ -56,7 +57,10 @@ class RaceCheckpointController extends AjaxAPIController
 
         $authChecker = $this->get('security.authorization_checker');
         if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+            return parent::buildJSONStatus(
+                Response::HTTP_BAD_REQUEST,
+                'You are not allowed to access this raid'
+            );
         }
 
         $data = $request->request->all();
@@ -77,14 +81,14 @@ class RaceCheckpointController extends AjaxAPIController
         return new Response(json_encode($raceCheckpointService->raceCheckpointToObj($raceCheckpoint)));
     }
 
-
     /**
-     * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{racetrackId}/raceCheckpoint/{raceCheckpointId}", name="patchRaceCheckpoint", methods={"PATCH"})
+     * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{racetrackId}/raceCheckpoint/{raceCheckpointId}",
+     *     name="patchRaceCheckpoint", methods={"PATCH"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
+     * @param int     $raceCheckpointId
      *
-     * @param $raidId
-     * @param $raceCheckpointId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function patchRaceCheckpoint(Request $request, $raidId, $raceCheckpointId)
@@ -124,12 +128,12 @@ class RaceCheckpointController extends AjaxAPIController
     /**
      * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{racetrackId}/racecheckpoint/{raceCheckpointId}", name="deleteRaceCheckpoint", methods={"DELETE"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
+     * @param int     $racetrackId
+     * @param int     $raceId
+     * @param int     $raceCheckpointId
      *
-     * @param $raidId
-     * @param $racetrackId
-     * @param $raceId
-     * @param $raceCheckpointId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteRaceCheckpoint(Request $request, $raidId, $racetrackId, $raceId, $raceCheckpointId)
@@ -152,19 +156,18 @@ class RaceCheckpointController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
-        $raceCheckpoints = $raceCheckpointManager->findBy(["raceTrack" => $racetrackId], ["order"=>"ASC"]);
+        $raceCheckpoints = $raceCheckpointManager->findBy(["raceTrack" => $racetrackId], ["order" => "ASC"]);
 
         $afterDeleted = false;
 
         /** @var RaceCheckpoint $checkpoint */
-        foreach($raceCheckpoints as $checkpoint) {
-
-            if($afterDeleted){
+        foreach ($raceCheckpoints as $checkpoint) {
+            if ($afterDeleted) {
                 $oldOrder = $checkpoint->getOrder();
                 $checkpoint->setOrder($oldOrder-1);
             }
 
-            if($raceCheckpointId== $checkpoint->getId()){
+            if ($raceCheckpointId == $checkpoint->getId()) {
                 $em->remove($checkpoint);
                 $afterDeleted = true;
             }
@@ -174,5 +177,4 @@ class RaceCheckpointController extends AjaxAPIController
 
         return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
     }
-
 }

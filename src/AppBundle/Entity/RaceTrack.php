@@ -126,7 +126,7 @@ class RaceTrack
     }
 
     /**
-     * @param mixed $tracks
+     * @param RaceCheckpoint $checkpoint
      */
     public function addCheckpoint($checkpoint)
     {

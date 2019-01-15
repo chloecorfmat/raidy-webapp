@@ -8,7 +8,6 @@
 
 namespace OrganizerBundle\Controller;
 
-
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Service\RaceService;
 use OrganizerBundle\Security\RaidVoter;
@@ -22,7 +21,8 @@ class RaceController extends AjaxAPIController
     /**
      * @Route("/organizer/raid/{raidId}/race", name="listRace")
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -45,11 +45,11 @@ class RaceController extends AjaxAPIController
         ]);
     }
 
-
     /**
      * @Route("/race/raid/{raidId}/race", name="putRace", methods={"PUT"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -91,7 +91,8 @@ class RaceController extends AjaxAPIController
     /**
      * @Route("/race/raid/{raidId}/race", name="getRaces", methods={"GET"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -118,16 +119,17 @@ class RaceController extends AjaxAPIController
         $races = $raceManager->findBy(array('raid' => $raid));
 
         $raceService = $this->container->get('RaceService');
+
         return new Response($raceService->racesArrayToJson($races));
     }
 
     /**
      * @Route("/race/raid/{raidId}/race/{raceId}", name="deleteRace", methods={"DELETE"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
+     * @param int     $raceId
      *
-     * @param $raidId
-     * @param $raceId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteRace(Request $request, $raidId, $raceId)

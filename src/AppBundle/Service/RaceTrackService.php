@@ -8,15 +8,20 @@
 
 namespace AppBundle\Service;
 
-
+use AppBundle\Entity\Race;
 use AppBundle\Entity\RaceCheckpoint;
 use AppBundle\Entity\RaceTrack;
+use AppBundle\Entity\Track;
 
 class RaceTrackService
 {
 
     private $raceCheckpointService;
 
+    /**
+     * RaceTrackService constructor.
+     * @param RaceCheckpointService $raceCheckpointService
+     */
     public function __construct(RaceCheckpointService $raceCheckpointService)
     {
         $this->raceCheckpointService = $raceCheckpointService;
@@ -38,14 +43,22 @@ class RaceTrackService
         $racesTrackObj['checkpoints'] = [];
 
         /** @var RaceCheckpoint $checkpoint */
-        foreach ($raceTrack->getCheckpoints() as $checkpoint){
-            $racesTrackObj['checkpoints'][$checkpoint->getOrder()] = $this->raceCheckpointService->raceCheckpointToObj($checkpoint);
+        foreach ($raceTrack->getCheckpoints() as $checkpoint) {
+            $racesTrackObj['checkpoints'][$checkpoint->getOrder()] =
+                $this->raceCheckpointService->raceCheckpointToObj($checkpoint);
         }
 
         return $racesTrackObj;
     }
 
-    public function raceTrackFromArray($arr, $race, $track){
+    /**
+     * @param mixed $arr
+     * @param Race  $race
+     * @param Track $track
+     * @return RaceTrack
+     */
+    public function raceTrackFromArray($arr, $race, $track)
+    {
         $raceTrack = new RaceTrack();
 
         $raceTrack->setId($arr['id']);
@@ -54,18 +67,25 @@ class RaceTrackService
         $raceTrack->setTrack($track);
 
         $checkpoints = $arr['checkpoints'];
-        $CheckpointsArr = [];
+        $checkpointsArr = [];
 
         /** @var RaceCheckpoint $checkpoint */
         foreach ($checkpoints as $checkpoint) {
-            $CheckpointsArr[] = $this->raceCheckpointService->raceCheckpointFromArray($checkpoint);
+            $checkpointsArr[] = $this->raceCheckpointService->raceCheckpointFromArray($checkpoint);
         }
-        $raceTrack->setCheckpoints($CheckpointsArr);
+        $raceTrack->setCheckpoints($checkpointsArr);
 
         return $raceTrack;
     }
 
-    public function emptyRaceTrackFromArray($arr, $race, $track){
+    /**
+     * @param mixed $arr
+     * @param Race  $race
+     * @param Track $track
+     * @return RaceTrack
+     */
+    public function emptyRaceTrackFromArray($arr, $race, $track)
+    {
         $raceTrack = new RaceTrack();
 
         $raceTrack->setId($arr['id']);
@@ -73,17 +93,19 @@ class RaceTrackService
         $raceTrack->setRace($race);
         $raceTrack->setTrack($track);
 
-        $CheckpointsArr = [];
-        $raceTrack->setCheckpoints($CheckpointsArr);
+        $checkpointsArr = [];
+        $raceTrack->setCheckpoints($checkpointsArr);
 
         return $raceTrack;
     }
 
     /**
-     * @param $arr
+     * @param mixed $arr
+     * @param int   $checkId
      * @return bool
      */
-    public function checkDataArray($arr, $checkId){
+    public function checkDataArray($arr, $checkId)
+    {
         return true;
     }
 }

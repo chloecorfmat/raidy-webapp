@@ -131,12 +131,11 @@ class Race
     }
 
     /**
-     * @param mixed $tracks
+     * @param Track $track
      */
     public function addTrack($track)
     {
         $this->tracks[] = $track;
         $track->setRace($this);
     }
-
 }

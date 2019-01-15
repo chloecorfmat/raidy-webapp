@@ -10,6 +10,7 @@ namespace AppBundle\Service;
 
 use AppBundle\Entity\Race;
 use AppBundle\Entity\RaceTrack;
+use AppBundle\Entity\Raid;
 use Doctrine\ORM\PersistentCollection;
 
 class RaceService
@@ -17,14 +18,17 @@ class RaceService
 
     private $raceTrackService;
 
+    /**
+     * RaceService constructor.
+     * @param RaceTrackService $raceTrackService
+     */
     public function __construct(RaceTrackService $raceTrackService)
     {
         $this->raceTrackService = $raceTrackService;
     }
 
     /**
-     * @param array $races
-     *
+     * @param Race $race
      * @return false|string
      */
     public function raceToJson($race)
@@ -39,7 +43,7 @@ class RaceService
         $obj['tracks']    = [];
 
         /** @var RaceTrack $track */
-        foreach($tracks as $track) {
+        foreach ($tracks as $track) {
             $obj['tracks'][] = $this->raceTrackService->raceTrackToObj($track);
         }
 
@@ -68,7 +72,7 @@ class RaceService
             $obj['tracks']    = [];
 
             /** @var RaceTrack $track */
-            foreach($tracks as $track) {
+            foreach ($tracks as $track) {
                 $obj['tracks'][$track->getOrder()] = $this->raceTrackService->raceTrackToObj($track);
             }
 
@@ -79,11 +83,12 @@ class RaceService
     }
 
     /**
-     * @param $raceArr
-     * @param $raid
+     * @param mixed $raceArr
+     * @param Raid  $raid
      * @return Race
      */
-    public function raceFromArray($raceArr, $raid){
+    public function raceFromArray($raceArr, $raid)
+    {
         $race = new Race();
 
         $race->setId($raceArr['id']);
@@ -103,11 +108,12 @@ class RaceService
     }
 
     /**
-     * @param $raceArr
-     * @param $raid
+     * @param mixed $raceArr
+     * @param Raid  $raid
      * @return Race
      */
-    public function emptyRaceFromArray($raceArr, $raid){
+    public function emptyRaceFromArray($raceArr, $raid)
+    {
         $race = new Race();
 
         $race->setId($raceArr['id']);
@@ -122,10 +128,12 @@ class RaceService
     }
 
     /**
-     * @param $arr
+     * @param mixed $arr
+     * @param int   $checkId
      * @return bool
      */
-    public function checkDataArray($arr, $checkId){
+    public function checkDataArray($arr, $checkId)
+    {
         return true;
     }
 }

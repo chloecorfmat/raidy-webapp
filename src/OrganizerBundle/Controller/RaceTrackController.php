@@ -23,10 +23,10 @@ class RaceTrackController extends AjaxAPIController
     /**
      * @Route("/race/raid/{raidId}/race/{raceId}/racetrack", name="putRaceTrack", methods={"PUT"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
+     * @param int     $raceId
      *
-     * @param $raidId
-     * @param $raceId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function putRaceTrack(Request $request, $raidId, $raceId)
@@ -76,10 +76,10 @@ class RaceTrackController extends AjaxAPIController
     /**
      * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{racetrackId}", name="patchRaceTrack", methods={"PATCH"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
+     * @param int     $racetrackId
      *
-     * @param $raidId
-     * @param $racetrackId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function patchRaceTrack(Request $request, $raidId, $racetrackId)
@@ -119,10 +119,11 @@ class RaceTrackController extends AjaxAPIController
     /**
      * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{racetrackId}", name="deleteRaceTrack", methods={"DELETE"})
      *
-     * @param Request $request request
+     * @param Request $request
+     * @param int     $raidId
+     * @param int     $racetrackId
+     * @param int     $raceId
      *
-     * @param $raidId
-     * @param $racetrackId
      * @return \Symfony\Component\HttpFoundation\Response
      */
     public function deleteRaceTrack(Request $request, $raidId, $racetrackId, $raceId)
@@ -145,20 +146,18 @@ class RaceTrackController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         }
 
-        $raceTracks = $raceTrackManager->findBy(["race" => $raceId], ["order"=>"ASC"]);
-
+        $raceTracks = $raceTrackManager->findBy(["race" => $raceId], ["order" => "ASC"]);
 
         $afterDeleted = false;
 
         /** @var RaceTrack $track */
-        foreach($raceTracks as $track) {
-
-            if($afterDeleted){
+        foreach ($raceTracks as $track) {
+            if ($afterDeleted) {
                 $oldOrder = $track->getOrder();
                 $track->setOrder($oldOrder-1);
             }
 
-            if($racetrackId == $track->getId()){
+            if ($racetrackId == $track->getId()) {
                 $em->remove($track);
                 $afterDeleted = true;
             }

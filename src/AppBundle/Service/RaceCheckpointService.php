@@ -8,8 +8,9 @@
 
 namespace AppBundle\Service;
 
-
+use AppBundle\Entity\Poi;
 use AppBundle\Entity\RaceCheckpoint;
+use AppBundle\Entity\RaceTrack;
 
 class RaceCheckpointService
 {
@@ -20,21 +21,28 @@ class RaceCheckpointService
      */
     public function raceCheckpointToObj($raceCheckpoint)
     {
-        $raceCheckpointObj              = [];
-        $raceCheckpointObj['id']        = $raceCheckpoint->getId();
-        $raceCheckpointObj['order']     = $raceCheckpoint->getOrder();
+        $raceCheckpointObj                = [];
+        $raceCheckpointObj['id']          = $raceCheckpoint->getId();
+        $raceCheckpointObj['order']       = $raceCheckpoint->getOrder();
 
-        $raceCheckpointObj['poi']       = [];
-        $raceCheckpointObj['poi']['id'] = $raceCheckpoint->getPoi()->getId();
+        $raceCheckpointObj['poi']         = [];
+        $raceCheckpointObj['poi']['id']   = $raceCheckpoint->getPoi()->getId();
         $raceCheckpointObj['poi']['name'] = $raceCheckpoint->getPoi()->getName();
 
-        $raceCheckpointObj['name']       = [];$raceCheckpoint->getPoi()->getName();
-        $raceCheckpointObj['raceTrack'] = $raceCheckpoint->getRaceTrack()->getId();
+        $raceCheckpointObj['raceTrack']   = $raceCheckpoint->getRaceTrack()->getId();
 
         return $raceCheckpointObj;
     }
 
-    public function raceCheckpointFromArray($arr, $raceTrack, $poi){
+    /**
+     * @param mixed     $arr
+     * @param RaceTrack $raceTrack
+     * @param Poi       $poi
+     *
+     * @return RaceCheckpoint
+     */
+    public function raceCheckpointFromArray($arr, $raceTrack, $poi)
+    {
         $raceCheckpoint = new RaceCheckpoint();
 
         $raceCheckpoint->setId($arr['id']);
@@ -46,11 +54,12 @@ class RaceCheckpointService
     }
 
     /**
-     * @param $arr
-     * @param $checkId
+     * @param mixed $arr
+     * @param int   $checkId
      * @return bool
      */
-    public function checkDataArray($arr, $checkId){
+    public function checkDataArray($arr, $checkId)
+    {
         return true;
     }
 }
