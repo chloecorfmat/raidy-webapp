@@ -99,3 +99,8 @@ services:
         class: AppBundle\Service\CompetitorService
         autowire: true
         public: true
+
+    MessageService:
+        class: AppBundle\Service\MessageService
+        autowire: true
+        public: true
