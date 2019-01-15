@@ -18,7 +18,7 @@ class MessageService
         foreach ($messages as $message) {
             $m = [];
             $m['id'] = $message->getId();
-            $m['text'] = $message->getText();
+            $m['text'] = stripslashes($message->getText());
             $m['type'] = $message->getType();
             $m['datetime'] = $message->getDatetime();
 
