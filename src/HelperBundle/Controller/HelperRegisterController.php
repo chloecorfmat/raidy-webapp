@@ -104,8 +104,8 @@ class HelperRegisterController extends Controller
     /**
      * @Route("/helper/register/{id}", name="registerHelper")
      *
-     * @param Request       $request
-     * @param int           $id
+     * @param Request $request
+     * @param int     $id
      *
      * @return \Symfony\Component\HttpFoundation\Response|template
      *
@@ -267,7 +267,7 @@ class HelperRegisterController extends Controller
 
                                 /* Send email to organizer */
                                 $message = \Swift_Message::newInstance()
-                                    ->setSubject('Enregistrement d\'un bénévole pour '.$raid->getName())
+                                    ->setSubject('Enregistrement d\'un bénévole pour ' . $raid->getName())
                                     ->setFrom('raidy@enssat.fr')
                                     ->setTo($raid->getUser()->getEmail())
                                     ->setBody(
@@ -317,7 +317,7 @@ class HelperRegisterController extends Controller
      * @Route("/helper/join/{id}", name="joinHelper")
      *
      * @param Request $request
-     * @param int $id
+     * @param int     $id
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      *
