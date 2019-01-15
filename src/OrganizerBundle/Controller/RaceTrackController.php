@@ -2,63 +2,93 @@
 /**
  * Created by PhpStorm.
  * User: lucas
- * Date: 15/12/18
- * Time: 11:25
+ * Date: 31/12/18
+ * Time: 12:51
  */
 
 namespace OrganizerBundle\Controller;
 
-
 use AppBundle\Controller\AjaxAPIController;
+use AppBundle\Entity\RaceTrack;
 use AppBundle\Service\RaceService;
+use AppBundle\Service\RaceTrackService;
 use OrganizerBundle\Security\RaidVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
-class RaceController extends AjaxAPIController
+class RaceTrackController extends AjaxAPIController
 {
     /**
-     * @Route("/organizer/raid/{raidId}/race", name="listRace")
+     * @Route("/race/raid/{raidId}/race/{raceId}/racetrack", name="putRaceTrack", methods={"PUT"})
      *
      * @param Request $request request
      *
+     * @param $raidId
+     * @param $raceId
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editOrganizerProfile(Request $request, $raidId)
-    {
-        $raidManager = $this->getDoctrine()
-            ->getManager()
-            ->getRepository('AppBundle:Raid');
-
-        //$raid = $raidManager->find($raidId);
-        $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
-
-        $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
-            throw $this->createAccessDeniedException();
-        }
-
-        return $this->render('OrganizerBundle:Race:listRace.html.twig', [
-            "raid" => $raid,
-        ]);
-    }
-
-
-    /**
-     * @Route("/race/raid/{raidId}/race", name="putRace", methods={"PUT"})
-     *
-     * @param Request $request request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function putRace(Request $request, $raidId)
+    public function putRaceTrack(Request $request, $raidId, $raceId)
     {
         // Set up managers
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
+        $raceManager = $em->getRepository('AppBundle:Race');
+        $trackManager = $em->getRepository('AppBundle:Track');
+
+        // Find the user
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+        $race = $raceManager->find($raceId);
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
+        }
+
+        if (null == $race) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This race does not exist');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        }
+
+        $data = $request->request->all();
+
+        $track = $trackManager->find($data['track']);
+
+        /** @var RaceTrackService $raceService */
+        $raceTrackService = $this->container->get('RaceTrackService');
+
+        if (!$raceTrackService->checkDataArray($data, false)) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled');
+        }
+
+        $raceTrack = $raceTrackService->emptyRaceTrackFromArray($data, $race, $track);
+        $em->persist($raceTrack);
+        $em->flush();
+
+        return new Response(json_encode($raceTrackService->raceTrackToObj($raceTrack)));
+    }
+
+    /**
+     * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{racetrackId}", name="patchRaceTrack", methods={"PATCH"})
+     *
+     * @param Request $request request
+     *
+     * @param $raidId
+     * @param $racetrackId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function patchRaceTrack(Request $request, $raidId, $racetrackId)
+    {
+        // Set up managers
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raceTrackManager = $em->getRepository('AppBundle:RaceTrack');
 
         // Find the user
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
@@ -73,91 +103,68 @@ class RaceController extends AjaxAPIController
         }
 
         $data = $request->request->all();
+        $raceTrack = $raceTrackManager->find($racetrackId);
 
-        /** @var RaceService $raceService */
-        $raceService = $this->container->get('RaceService');
+        $raceTrack->setOrder($data['order']);
 
-        if (!$raceService->checkDataArray($data, false)) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled');
-        }
-
-        $race = $raceService->emptyRaceFromArray($data, $raid);
-        $em->persist($race);
-        $em->flush();
-
-        return new Response($raceService->raceToJson($race));
-    }
-
-    /**
-     * @Route("/race/raid/{raidId}/race", name="getRaces", methods={"GET"})
-     *
-     * @param Request $request request
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function getRaces(Request $request, $raidId)
-    {
-        // Set up managers
-        $em = $this->getDoctrine()->getManager();
-
-        $raidManager = $em->getRepository('AppBundle:Raid');
-        $raceManager = $em->getRepository('AppBundle:Race');
-
-        // Find the user
-        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
-
-        if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
-        }
-
-        $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
-        }
-
-        $races = $raceManager->findBy(array('raid' => $raid));
-
-        $raceService = $this->container->get('RaceService');
-        return new Response($raceService->racesArrayToJson($races));
-    }
-
-    /**
-     * @Route("/race/raid/{raidId}/race/{raceId}", name="deleteRace", methods={"DELETE"})
-     *
-     * @param Request $request request
-     *
-     * @param $raidId
-     * @param $raceId
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function deleteRace(Request $request, $raidId, $raceId)
-    {
-        // Set up managers
-        $em = $this->getDoctrine()->getManager();
-
-        $raidManager = $em->getRepository('AppBundle:Raid');
-        $raceManager = $em->getRepository('AppBundle:Race');
-
-        // Find the user
-        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
-
-        if (null == $raid) {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
-        }
-
-        $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
-            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
-        }
-
-        $race = $raceManager->find($raceId);
-
-        if (null != $race) {
-            $em->remove($race);
+        if (null != $raceTrack) {
             $em->flush();
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
+
+        return parent::buildJSONStatus(Response::HTTP_OK, 'Updated');
+    }
+
+    /**
+     * @Route("/race/raid/{raidId}/race/{raceId}/racetrack/{racetrackId}", name="deleteRaceTrack", methods={"DELETE"})
+     *
+     * @param Request $request request
+     *
+     * @param $raidId
+     * @param $racetrackId
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function deleteRaceTrack(Request $request, $raidId, $racetrackId, $raceId)
+    {
+        // Set up managers
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raceTrackManager = $em->getRepository('AppBundle:RaceTrack');
+
+        // Find the user
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'This raid does not exist');
+        }
+
+        $authChecker = $this->get('security.authorization_checker');
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
+        }
+
+        $raceTracks = $raceTrackManager->findBy(["race" => $raceId], ["order"=>"ASC"]);
+
+
+        $afterDeleted = false;
+
+        /** @var RaceTrack $track */
+        foreach($raceTracks as $track) {
+
+            if($afterDeleted){
+                $oldOrder = $track->getOrder();
+                $track->setOrder($oldOrder-1);
+            }
+
+            if($racetrackId == $track->getId()){
+                $em->remove($track);
+                $afterDeleted = true;
+            }
+        }
+
+        $em->flush();
 
         return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
     }

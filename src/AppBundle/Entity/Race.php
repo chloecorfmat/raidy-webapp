@@ -32,18 +32,23 @@ class Race
      *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères",
      * )
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
-    private $startTime;
+    protected $startTime;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $raid;
+    protected $raid;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\RaceTrack", cascade={"persist", "remove"}, mappedBy="race")
+     */
+    protected $tracks;
 
     /**
      * @return mixed
@@ -108,4 +113,30 @@ class Race
     {
         $this->raid = $raid;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getTracks()
+    {
+        return $this->tracks;
+    }
+
+    /**
+     * @param mixed $tracks
+     */
+    public function setTracks($tracks)
+    {
+        $this->tracks = $tracks;
+    }
+
+    /**
+     * @param mixed $tracks
+     */
+    public function addTrack($track)
+    {
+        $this->tracks[] = $track;
+        $track->setRace($this);
+    }
+
 }
