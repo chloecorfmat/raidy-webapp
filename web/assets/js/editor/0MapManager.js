@@ -80,10 +80,10 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       }
     });
 
-
     this.map.on('editable:enable', function () {
       keepThis.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
     });
+
     /* Save track when middle marker is mouved */
     this.map.on('editable:middlemarker:mousedown', function () {
       let track = keepThis.tracksMap.get(keepThis.currentEditID)
@@ -182,6 +182,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           lng : latLngArray[element].lng
         });
       }
+      keepThis.elevator.initChart(keepThis.currentTrack);
+
     });
     this.map.on('editable:drawing:end', function () {
       document.getElementById('map').style.cursor = 'grab';

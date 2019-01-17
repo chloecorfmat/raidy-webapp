@@ -309,6 +309,30 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       },
     });
 
+    let ShowElevationGraphCtrl = L.Control.extend({
+      options: {
+        position: 'topright'
+      },
+      onAdd: function(map) {
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.style.backgroundColor = 'white';
+        container.style.width = '30px';
+        container.style.height = '30px';
+        container.innerHTML = "<i class=\"fas fa-chart-line fa-2x\"></i>";
+        container.setAttribute("title", "Montrer le graph d'altimétrie");
+        container.onclick = function(e) {
+          e.preventDefault();
+
+          if(document.querySelector(".elevation-tools").style.display == "none"){
+            document.querySelector(".elevation-tools").style.display = "block";
+          }else{
+            document.querySelector(".elevation-tools").style.display = "none";
+          }
+        };
+        return container;
+      },
+    });
+
 
     let ignTileUrl = "http://wxs.ign.fr/" + IGNAPIKEY
         + "/geoportail/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&"
@@ -321,16 +345,18 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     );
 
     ignTiles.addTo(mapManager.map);
+    mapManager.map.addControl(new L.POIEditControl());
+
     L.control.layers({"IGN":ignTiles, "OpenStreetMap":mapManager.OSMTiles}).addTo(mapManager.map);
 
     mapManager.map.addControl(new ImportGPXCtrl());
     mapManager.map.addControl(new ExportGPXCtrl());
+    mapManager.map.addControl(new ShowElevationGraphCtrl());
 
     mapManager.trackControl = new L.TrackEditControl();
     MapManager.prototype.displayTrackButton = function (b) {
       b ? mapManager.map.addControl(mapManager.trackControl) :  mapManager.map.removeControl(mapManager.trackControl);
     }
-    mapManager.map.addControl(new L.POIEditControl());
 
     let acc = document.getElementsByClassName("accordion");
 
@@ -554,6 +580,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     poi.description = document.getElementById('editPoi_description').value;
     poi.image = document.getElementById('editPoi_preview').src;
 
+    mapManager.editorUI.updatePoi(poi);
+    poi.buildUI();
     poi.push();
 
     MicroModal.close('edit-poi-popin');

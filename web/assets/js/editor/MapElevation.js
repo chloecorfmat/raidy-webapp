@@ -3,10 +3,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   MapElevation = function () {
     //this.API_KEY = 'j2z0s6csrgwdg2f5gl7gp2my';
 
-    this.chart = new Chart(ctx, config);
     let ctx = document.getElementById('canvas').getContext('2d');
-
-
     var config = {
       type: 'line',
       data: {
@@ -14,7 +11,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         datasets: [{
           label: 'Cubic interpolation (monotone)',
           data: [],
-          borderColor: track.color,
+          borderColor: '#333',
           backgroundColor: 'rgba(0, 0, 0, 0.2)',
           fill: true,
           cubicInterpolationMode: 'monotone'
@@ -61,6 +58,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         }
       }
     };
+
+
+    this.chart = new Chart(ctx, config);
 
     window.myLine = this.chart;
   }
@@ -116,17 +116,17 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     if(track != undefined){
       for (let obj of track.line.getLatLngs()) {
         datapoints.push(obj.ele);
-        datapoints.push(obj.ele);
+        //datapoints.push(obj.ele);
         labels.push(i);
         i++;
       }
     }
-
+    console.log(datapoints);
     let data = {
-      labels: [],
+      labels: labels,
         datasets: [{
         label: 'Cubic interpolation (monotone)',
-        data: [],
+        data: datapoints,
         borderColor: track.color,
         backgroundColor: 'rgba(0, 0, 0, 0.2)',
         fill: true,

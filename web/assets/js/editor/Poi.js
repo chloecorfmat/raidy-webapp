@@ -80,21 +80,14 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   Poi.prototype.buildUI = function () {
     let keepThis = this;
     this.poiType != null && (this.color = this.poiType.color );
-
+    let shortDesc = this.description;
+    if(this.description.length >= 200){
+      shortDesc = this.description.substring(0, 200)+'...';
+    }
     let checkpointIcon = this.isCheckpoint ? ' <i class="fas fa-flag"></i>' : '';
-    this.marker.bindPopup('' +
-      '<header style="' +
-          'background: ' + this.color + ' ;' +
-          'color: #ffffff ;' +
-          'padding: 0rem 3rem;">' +
-        '<h3>' + this.name + checkpointIcon +'</h3>' +
-      '</header>' +
-      '<div> ' +
-        '<h4>Bénévoles</h4>' +
-        '<p>' + this.requiredHelpers + ' Requis </p>' +
-      '</div>');
-
     let checkpointClass = this.isCheckpoint ? ' poi-checkpoint' : '';
+
+
     let icon = L.divIcon({
       className: 'my-custom-pin',
       iconAnchor: [0, 5],
@@ -102,8 +95,51 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       popupAnchor: [0, -35],
       html: '<span class="poi-marker"' + checkpointClass + ' style="background-color:' + this.color + ';" />'
     });
+    this.marker.bindPopup('' +
+      '<header style="' +
+      'background: ' + this.color + ' ;' +
+      'color: #ffffff ;' +
+      'padding: 0rem 3rem;">' +
+      '<h3>' + this.name + checkpointIcon +'</h3>' +
+      '</header>' +
+      '<div> ' +
+      '<p style="padding: 0.5rem; text-align: left;">'+shortDesc+'</p>'+
+      '<h4>' + this.requiredHelpers + ' bénévoles requis.</h4>'+
+      '<button style="background-color: #77aeaf; border-radius : 2rem; width: 2rem; height: 2rem; " id="poi-edit-button-'+keepThis.id+'"> <i class="fas fa-pen"></i> </button>' +
+      '<button style="background-color: #77aeaf; border-radius : 2rem; width: 2rem; height: 2rem; " id="poi-info-button-'+keepThis.id+'"> <i class="fas fa-plus"> </button>' +
+      '</div>'
+    );
 
     this.marker.setIcon(icon);
+
+    let buttonInfo = document.getElementById("poi-info-button-"+keepThis.id);
+    let buttonEdit = document.getElementById("poi-edit-button-"+keepThis.id);
+
+    if(buttonInfo != null) {
+      buttonInfo.addEventListener("click", function () {
+        MicroModal.show('poi-info');
+      });
+    }
+    if(buttonEdit != null){
+      buttonEdit.addEventListener("click", function() { keepThis.fillEditionPopin(); });
+    }
+
+  //  this.marker.openPopup();
+    this.marker.on('popupopen', function () {
+      let buttonInfo = document.getElementById("poi-info-button-"+keepThis.id);
+      let buttonEdit = document.getElementById("poi-edit-button-"+keepThis.id);
+
+      if(buttonInfo != null) {
+        buttonInfo.addEventListener("click", function () {
+          MicroModal.show('poi-info');
+        });
+      }
+      if(buttonEdit != null){
+        buttonEdit.addEventListener("click", function() { keepThis.fillEditionPopin(); });
+      }
+    });
+
+   // this.marker.closePopup();
   };
 
   Poi.prototype.remove = function () {
@@ -118,5 +154,21 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     mapManager.poiMap.delete(this.id);
   };
 
+
+  Poi.prototype.fillEditionPopin = function () {
+    let preview = document.getElementById('editPoi_preview');
+    document.getElementById('editPoi_id').value = this.id;
+    document.getElementById('editPoi_name').value = htmlentities.decode(this.name);
+    document.getElementById('editPoi_nbhelper').value = this.requiredHelpers;
+    document.getElementById('editPoi_isCheckpoint').checked = this.isCheckpoint;
+    preview.src = this.image;
+    if (this.image !== '') {
+      preview.className = 'form--item-file-preview';
+    }
+    (this.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + this.poiType.id + "']").selected = 'selected');
+    document.getElementById('editPoi_description').value = this.description;
+
+    MicroModal.show('edit-poi-popin');
+  }
   console.log("Track POI loaded");
 }
