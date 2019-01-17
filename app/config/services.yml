@@ -3,6 +3,7 @@
 parameters:
     #parameter_name: value
     raids_img_directory: '%kernel.project_dir%/web/uploads/raids'
+    competitors_csv_directory: '%kernel.project_dir%/web/uploads/competitors/'
 
 services:
     # default configuration for services in *this* file

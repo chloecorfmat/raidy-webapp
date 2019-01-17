@@ -15,6 +15,7 @@ parameters:
     sporttypes_img_directory: '%kernel.project_dir%/web/uploads/sporttypes'
     raids_img_directory: '%kernel.project_dir%/web/uploads/raids'
     tracks_gpx_directory: '%kernel.project_dir%/web/uploads/tracks/gpx'
+    competitors_csv_directory: '%kernel.project_dir%/web/uploads/competitors/'
 
 framework:
     #esi: ~

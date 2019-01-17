@@ -15,11 +15,23 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormError;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class CompetitorController extends Controller
 {
+
+    /**
+     * @Assert\File(
+     *     maxSize = "1024k",
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Please upload a valid PDF"
+     * )
+     */
+    private $csvFile;
+
     /**
      * @Route("/organizer/raid/{raidId}/competitor", name="listCompetitor")
      *
@@ -43,12 +55,17 @@ class CompetitorController extends Controller
                 'raid' => $raid->getId(),
             ]
         );
+        $formFactory = $this->get('form.factory');
 
         $formCompetitor = new Competitor();
         $raceManager = $em->getRepository('AppBundle:Race');
         $races = $raceManager->findBy(array('raid' => $raid));
 
-        $form = $this->createFormBuilder($formCompetitor)
+        $form = $formFactory->createNamedBuilder(
+            'addCompetitor',
+            'Symfony\Component\Form\Extension\Core\Type\FormType',
+            $formCompetitor
+        )
             ->add('lastname', TextType::class, ['label' => 'Nom'])
             ->add('firstname', TextType::class, ['label' => 'Prénom'])
             ->add('number_sign', TextType::class, ['label' => 'N° de dossard'])
@@ -67,7 +84,23 @@ class CompetitorController extends Controller
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un participant'])
             ->getForm();
 
+        $file = [];
+        $formImport = $formFactory->createNamedBuilder(
+            'importCsv',
+            'Symfony\Component\Form\Extension\Core\Type\FormType',
+            $file
+        )
+            ->add('file', FileType::class, [
+                'label' => 'Fichier',
+                'attr' => [
+                    'data-help' => 'Le format attendu est Nom; Prénom; Dossard; Catégorie; Sexe; Année de naissance; Epreuve'
+                ]
+            ])
+            ->add('submit', SubmitType::class, ['label' => 'Importer le fichier'])
+            ->getForm();
+
         $form->handleRequest($request);
+        $formImport->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $competitorManager = $em->getRepository('AppBundle:Competitor');
@@ -100,6 +133,78 @@ class CompetitorController extends Controller
             }
         }
 
+        if ($formImport->isSubmitted() && $formImport->isValid()) {
+            $file = $formImport->getData();
+            $dir = $this->getParameter('competitors_csv_directory');
+            $uploadedFileService = $this->container->get('UploadedFileService');
+            $fileName = $uploadedFileService->saveFile(
+                $file['file'],
+                $dir
+            );
+
+            $row = 1;
+            $errors = array();
+            $correctLines = array();
+            if (($handle = fopen($dir.$fileName, "r")) !== FALSE) {
+                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+                    // format : lastname; firstname; numbersign; cat; sex; birthyear; race
+                    if ($data[0] == "" || $data[1] == "" || $data[2] == "") {
+                        array_push($errors, array("line"=>$row, "msg"=>"Un champ requis est manquant"));
+                        $row++;
+                    }
+
+                    $competitorManager = $em->getRepository('AppBundle:Competitor');
+                    $competitorNameExist = $competitorManager->findBy(
+                        ['firstname' => $data[1], 'lastname' => $data[0], 'raid' => $raid->getId()]
+                    );
+
+                    $competitorSignExist = $competitorManager->findBy(
+                        ['numberSign' => $data[2], 'raid' => $raid->getId()]
+                    );
+
+                    $raceManager = $em->getRepository('AppBundle:Race');
+                    $raceExist = $raceManager->findBy(
+                        ['name' => $data[6], 'raid' => $raid->getId()]
+                    );
+
+                    if (!$competitorNameExist) {
+                        if (!$competitorSignExist) {
+                            if ($raceExist!=false || $data[6]=="") {
+                                $data[6]=$raceExist[0];
+                                array_push($correctLines, $data);
+                            } else {
+                                array_push($errors, array("line"=>$row, "msg"=>'L\'épreuve "'.$data[6].'" n\'existe pas'));
+                            }
+                        } else {
+                            array_push($errors, array("line"=>$row, "msg"=>"Le dossard ".$data[2]." existe déjà"));
+                        }
+                    } else {
+                        array_push($errors, array("line"=>$row, "msg"=>'Le participant "'.$data[0]." ".$data[1].'" existe déjà'));
+                    }
+                    $row++;
+
+                }
+                fclose($handle);
+            }
+            foreach($errors as $e) {
+                $formImport->addError(new FormError("Ligne ".$e["line"]." : ".$e["msg"]));
+            }
+            if (empty($errors)) {
+                $competitorService = $this->container->get('CompetitorService');
+                foreach ($correctLines as $data) {
+                    $competitor = $competitorService->competitorFromCsv(
+                        $data,
+                        $raid->getId()
+                    );
+                    $em->persist($competitor);
+                    $em->flush();
+                }
+                $this->addFlash('success', count($correctLines).' participants ont bien été ajoutés.');
+                return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
+            }
+
+        }
+
         return $this->render(
             'OrganizerBundle:Competitor:listCompetitor.html.twig',
             [
@@ -107,6 +212,7 @@ class CompetitorController extends Controller
                 'raidName' => $raid->getName(),
                 'competitors' => $competitors,
                 'form' => $form->createView(),
+                'formImport' => $formImport->createView(),
             ]
         );
     }
@@ -251,5 +357,4 @@ class CompetitorController extends Controller
 
         return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
     }
-
 }
