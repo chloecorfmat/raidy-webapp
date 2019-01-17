@@ -76,7 +76,7 @@ class LiveRaidController extends Controller
         return $this->render('LiveBundle:Raid:raid.html.twig', [
             'raid' => $raid,
             'meta' => $meta,
-            'tweets' => $tweets->statuses,
+            'tweets' => $tweets->statuses ?? '',
             'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }
