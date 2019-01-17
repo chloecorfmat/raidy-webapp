@@ -96,7 +96,7 @@ class OrganizerMessageController extends AjaxAPIController
         if ($form->isSubmitted() && $form->isValid()) {
             if (null != $data['text']) {
                 $message = new Message();
-                $message->setText(addslashes($data['text']));
+                $message->setText($data['text']);
                 $message->setType($data['form']['type']);
                 $message->setRaid($raid);
 
@@ -204,7 +204,7 @@ class OrganizerMessageController extends AjaxAPIController
         }
 
         $data = $request->request->all();
-        $message->setText(addslashes($data['content']));
+        $message->setText($data['content']);
 
         $em->flush();
 

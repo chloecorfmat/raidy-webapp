@@ -1,0 +1,74 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <style>
+        .map--container {
+            transition: none;
+        }
+
+        .map {
+            height: 50%;
+            width: 100%;
+        }
+
+        @media screen and (max-width: 980px) {
+            .map {
+                height: 50vh;
+                width: 100%;
+            }
+        }
+    </style>
+{% endblock %}
+
+{% block main_attributes %}
+    class="main-flex-column"
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('listRaid') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id':raid.uniqid}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item">Edition des épreuves</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="content raceEditor">
+
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert--success">
+                <p>{{ flash_message }}</p>
+            </div>
+        {% endfor %}
+
+
+        <section class="content--half">
+            <h1>Edition des épreuves</h1>
+            <section class="race" id="race">
+                <race-editor></race-editor>
+            </section>
+        </section>
+
+        <section class="map--container content--half">
+            <div id="map" class="map"></div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        var mapManager;
+        var raidID;
+        document.addEventListener("DOMContentLoaded", function () {
+            mapManager = new MapManager();
+            raidID = "{{ raid.uniqid }}";
+            mapManager.initialize();
+        });
+    </script>
+
+    {{ encore_entry_script_tags('race') }}
+
+{% endblock %}

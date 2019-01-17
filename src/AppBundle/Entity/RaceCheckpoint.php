@@ -25,7 +25,7 @@ class RaceCheckpoint
     protected $id;
 
     /**
-     * @ORM\Column(name="order", type="integer")
+     * @ORM\Column(name="orderIdx", type="integer")
      */
     protected $order;
 
@@ -34,6 +34,11 @@ class RaceCheckpoint
      * @ORM\JoinColumn(nullable=false)
      */
     protected $poi;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=RaceTrack::class, inversedBy="checkpoints")
+     */
+    protected $raceTrack;
 
     /**
      * @return mixed
@@ -70,16 +75,32 @@ class RaceCheckpoint
     /**
      * @return mixed
      */
-    public function getTrack()
+    public function getPoi()
     {
-        return $this->track;
+        return $this->poi;
     }
 
     /**
-     * @param mixed $track
+     * @param mixed $poi
      */
-    public function setTrack($track)
+    public function setPoi($poi)
     {
-        $this->track = $track;
+        $this->poi = $poi;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRaceTrack()
+    {
+        return $this->raceTrack;
+    }
+
+    /**
+     * @param mixed $raceTrack
+     */
+    public function setRaceTrack($raceTrack)
+    {
+        $this->raceTrack = $raceTrack;
     }
 }

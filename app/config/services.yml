@@ -60,6 +60,21 @@ services:
         autowire: true
         public: true
 
+    RaceService:
+        class: AppBundle\Service\RaceService
+        autowire: true
+        public: true
+
+    RaceTrackService:
+        class: AppBundle\Service\RaceTrackService
+        autowire: true
+        public: true
+
+    RaceCheckpointService:
+        class: AppBundle\Service\RaceCheckpointService
+        autowire: true
+        public: true
+
     PoiTypeService:
         class: AppBundle\Service\PoiTypeService
         autowire: true
@@ -97,5 +112,10 @@ services:
 
     CompetitorService:
         class: AppBundle\Service\CompetitorService
+        autowire: true
+        public: true
+
+    MessageService:
+        class: AppBundle\Service\MessageService
         autowire: true
         public: true

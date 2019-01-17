@@ -10,4 +10,22 @@ namespace AppBundle\Repository;
  */
 class MessageRepository extends \Doctrine\ORM\EntityRepository
 {
+    /**
+     * @param  int $raid    raid id
+     * @param  int $poitype poitype id
+     * @return array        result of the query
+     */
+    public function findByPoitype($raid, $poitype)
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb->join('m.targetPoitypes', 'p')
+            ->where($qb->expr()->andX(
+                $qb->expr()->eq('p.id', $poitype),
+                $qb->expr()->eq('m.raid', $raid)
+            ))
+            ->orderBy('m.datetime', 'DESC');
+        ;
+
+        return $qb->getQuery()->getResult();
+    }
 }

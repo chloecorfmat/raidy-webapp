@@ -48,7 +48,7 @@ gulp.task('styles', function() {
 });
 
 gulp.task('scripts', function() {
-    var core = gulp.src(['./js/*.js', './js/editor/*.js'])
+    var core = gulp.src(['./js/*.js', './js/editor/*.js', './js/race/*.js'])
         .pipe(concat('../dist/js/scripts.js'))
         .pipe(babel({
             presets: ['es2015']
