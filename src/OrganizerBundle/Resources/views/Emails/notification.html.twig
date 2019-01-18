@@ -1,0 +1,52 @@
+{% extends 'default/mail_helper.html.twig' %}
+
+{% block body %}
+    <h1>Bonjour, {{ helper.firstname }} {{ helper.lastname }} !</h1>
+
+    <p>Un nouveau message <strong>
+            {% if message.type == "success" %}
+                de type succès
+            {% elseif message.type == "danger" %}
+                important
+            {% else %}
+                de type informatif
+            {% endif %}
+        </strong> a été posté pour le raid <strong>{{ raid.name }}</strong> :</p>
+    <div class="message message--{{ message.type }}">
+        <div class="message-datetime">
+            <p class="message-helpers-{{ message.type }}">Le {{ message.datetime|date('d/m/Y à H:i:s') }}</p>
+        </div>
+        <div class="message-content">
+            {{ message.text|raw }}
+        </div>
+        <div class="message-helpers">
+            <p class="message-helpers-{{ message.type }} text--medium text--introducing">
+                Points d'intérêt concernés :
+            </p>
+            <ul>
+                {% for poitype in message.targetPoitypes %}
+                    <li>{{ poitype.type }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <br>
+    <p>Pour vous connecter et consulter les différents messages, cliquez ici : <a href="{{ url('fos_user_security_login') }}">se connecter</a>.</p>
+    <p>Si le lien ne s'affiche pas correctement, merci de copier-coller ce lien dans votre navigateur : <a href="{{ url('fos_user_security_login') }}">{{ url('fos_user_security_login') }}</a></p>
+    <br>
+    <div class="actions">
+        <div class="downloads">
+            <h2 class="login--text">Téléchargez l'application Raidy, pour avoir les dernières actualités sur le raid</h2>
+            <div class="downloads--links">
+                <a href="#">
+                    <img src="{{ absolute_url(asset('assets/images/app-store-badge.png')) }}" alt="apple store logo" class="downloads--images">
+                </a>
+                <a href="#">
+                    <img src="{{ absolute_url(asset('assets/images/google-play-badge.png')) }}" alt="android store logo" class="downloads--images">
+                </a>
+            </div>
+        </div>
+    </div>
+    <p>Sportivement,<br>
+    <p>L'équipe Raidy</p>
+{% endblock %}
