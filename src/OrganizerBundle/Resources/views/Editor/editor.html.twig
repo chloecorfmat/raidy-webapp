@@ -47,7 +47,7 @@
         </div>
         <div class="map--container">
             <div id="errorMessage" class="editor-error--message"></div>
-            <div class="elevation-tools">
+            <div style="display : none;" class="elevation-tools">
                 <canvas id="canvas"></canvas>
             </div>
             <div id="map" class="map"></div>
@@ -84,17 +84,19 @@
             <!-- [3] -->
             <div role="dialog" aria-modal="true" aria-labelledby="add-track-title" data-micromodal-close>
                 <div class="modal-container">
-                    <header class="modal--header ">
-                        <h2 id="add-track-title">
+                    <header id="poi-info-header" class="modal--header ">
+                        <h2 id="poi-info-title">
                            Mon POI
                         </h2>
                         <!-- [4] -->
-                        <button aria-label="Fermer la fenêtre" data-micromodal-close><i
+                        <button id="poi-info-close-btn" aria-label="Fermer la fenêtre" data-micromodal-close><i
                                     data-micromodal-close class="fas fa-times"></i></button>
                     </header>
-                    <div id="add-track-content" class="modal--content">
-
-                        <button type="button" class="btn" >Éditer</button>
+                    <div id="poi-info-content" class="modal--content">
+                        <h4 id="poi-info-helpers" ></h4>
+                        <img id="poi-info-img" src="" alt="" width="100%">
+                        <p id="poi-info-description"></p>
+                        <button id="poi-info-edit-btn" type="button" class="btn" >Éditer</button>
                         <button type="button" class="btn btn--danger" data-micromodal-close>Fermer</button>
                     </div>
                 </div>

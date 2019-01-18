@@ -116,9 +116,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     let buttonEdit = document.getElementById("poi-edit-button-"+keepThis.id);
 
     if(buttonInfo != null) {
-      buttonInfo.addEventListener("click", function () {
-        MicroModal.show('poi-info');
-      });
+      buttonInfo.addEventListener("click", function() { keepThis.fillInfoPopin(); });
     }
     if(buttonEdit != null){
       buttonEdit.addEventListener("click", function() { keepThis.fillEditionPopin(); });
@@ -130,9 +128,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       let buttonEdit = document.getElementById("poi-edit-button-"+keepThis.id);
 
       if(buttonInfo != null) {
-        buttonInfo.addEventListener("click", function () {
-          MicroModal.show('poi-info');
-        });
+        buttonInfo.addEventListener("click", function() { keepThis.fillInfoPopin(); });
       }
       if(buttonEdit != null){
         buttonEdit.addEventListener("click", function() { keepThis.fillEditionPopin(); });
@@ -170,5 +166,29 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     MicroModal.show('edit-poi-popin');
   }
+
+
+  Poi.prototype.fillInfoPopin = function () {
+    let preview = document.getElementById('editPoi_preview');
+    document.getElementById('poi-info-close-btn').style.backgroundColor = this.color;
+    document.getElementById('poi-info-header').style.backgroundColor = this.color;
+    document.getElementById('poi-info-content').style.borderColor = this.color;
+    document.getElementById('poi-info-title').innerText = htmlentities.decode(this.name);
+    document.getElementById('poi-info-description').innerText= this.description;
+    document.getElementById('poi-info-helpers').innerText= this.requiredHelpers+" bénévoles requis";
+
+    var old_element = document.getElementById('poi-info-edit-btn');
+    var new_element = old_element.cloneNode(true);
+    old_element.parentNode.replaceChild(new_element, old_element);
+    let keepThis = this;
+    document.getElementById('poi-info-edit-btn').addEventListener("click", function(){
+      MicroModal.close('poi-info');
+      keepThis.fillEditionPopin();
+    });
+    //document.getElementById('editPoi_isCheckpoint').checked = this.isCheckpoint;
+    document.getElementById('poi-info-img').src = this.image;
+    MicroModal.show('poi-info');
+  }
+
   console.log("Track POI loaded");
 }
