@@ -89,21 +89,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
     li.pseudoStyle('before', 'background-color', poi.color);
     li.pseudoStyle('before', 'border-color', poi.color);
 
-    li.querySelector('.btn--poi--settings').addEventListener('click', function () {
-      let preview = document.getElementById('editPoi_preview');
-      document.getElementById('editPoi_id').value = poi.id;
-      document.getElementById('editPoi_name').value = htmlentities.decode(poi.name);
-      document.getElementById('editPoi_nbhelper').value = poi.requiredHelpers;
-      document.getElementById('editPoi_isCheckpoint').checked = poi.isCheckpoint;
-      preview.src = poi.image;
-      if (poi.image !== '') {
-        preview.className = 'form--item-file-preview';
-      }
-      (poi.poiType!= null ) && (document.querySelector("#editPoi_type option[value='" + poi.poiType.id + "']").selected = 'selected');
-      document.getElementById('editPoi_description').value = poi.description;
-
-      MicroModal.show('edit-poi-popin');
-    });
+    li.querySelector('.btn--poi--settings').addEventListener('click', function() { poi.fillEditionPopin(); });
 
     let panel = document.getElementById("pois-pan");
     if (panel.style.maxHeight) {

@@ -6,9 +6,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
-
 use OrganizerBundle\Security\RaidVoter;
 
 class OrganizerRaidController extends Controller
@@ -23,7 +21,7 @@ class OrganizerRaidController extends Controller
      */
     public function raidLiveAdmin(Request $request, $id)
     {
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
         //$raid = $raidManager->find($id);
@@ -84,7 +82,7 @@ class OrganizerRaidController extends Controller
             $em->persist($raid);
             $em->flush();
 
-            $this->addFlash('success', "Les données ont bien été mises à jour.");
+            $this->addFlash('success', 'Les données ont bien été mises à jour.');
         }
 
         return $this->render('LiveBundle:Organizer:live.html.twig', [
