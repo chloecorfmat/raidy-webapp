@@ -4,16 +4,12 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Message;
-use AppBundle\Entity\Poi;
 use AppBundle\Form\Type\QuillType;
-use Doctrine\ORM\EntityRepository;
 use OrganizerBundle\Security\RaidVoter;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
-use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -45,7 +41,7 @@ class OrganizerMessageController extends AjaxAPIController
         }
 
         // Get used poitypes in this raid.
-        $poiQueryBuilder = $em->getRepository("AppBundle:Poi")->createQueryBuilder("p");
+        $poiQueryBuilder = $em->getRepository('AppBundle:Poi')->createQueryBuilder('p');
         $poitypesQuery = $poiQueryBuilder->select('IDENTITY(p.poiType)')
             ->andWhere('p.raid = :raid')
             ->setParameter('raid', $raid)
@@ -54,7 +50,7 @@ class OrganizerMessageController extends AjaxAPIController
             ->getResult();
 
         $poitypes = [];
-        $poitypeManager = $em->getRepository("AppBundle:PoiType");
+        $poitypeManager = $em->getRepository('AppBundle:PoiType');
         foreach ($poitypesQuery as $poitype) {
             $p = $poitypeManager->find(current($poitype));
             $poitypes[$p->getType()] = current($poitype);
@@ -81,7 +77,7 @@ class OrganizerMessageController extends AjaxAPIController
                 'targetPoiTypes',
                 ChoiceType::class,
                 array(
-                    'choices'  => $poitypes,
+                    'choices' => $poitypes,
                     'multiple' => true,
                     'label' => 'Type de point d\'intérêt des bénévoles',
                 )
@@ -117,7 +113,7 @@ class OrganizerMessageController extends AjaxAPIController
         }
 
         // Get all messages.
-        $messageRepository = $em->getRepository("AppBundle:Message");
+        $messageRepository = $em->getRepository('AppBundle:Message');
         $messages = $messageRepository->findBy(['raid' => $raid], ['datetime' => 'DESC']);
 
         return $this->render(
@@ -136,6 +132,7 @@ class OrganizerMessageController extends AjaxAPIController
      * @param Request $request   request
      * @param string  $raidId    raid identifier
      * @param int     $messageId message identifier
+     *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */
     public function deleteMessage(Request $request, $raidId, $messageId)

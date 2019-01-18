@@ -55,8 +55,8 @@ class DefaultController extends Controller
                 'required' => false,
                 'attr' => [
                     'maxlength' => 12,
-                    'data-help' =>
-                        'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
+                    'data-help' => 'Cette information n\'est utile que si vous ' .
+                        'participez à un raid en tant que bénévole.',
                 ],
             ])
             ->add('submit', SubmitType::class, ['label' => 'Modifier le profil'])

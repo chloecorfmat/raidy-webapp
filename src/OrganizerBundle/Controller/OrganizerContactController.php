@@ -200,8 +200,8 @@ class OrganizerContactController extends Controller
                 'choices' => $helpers,
                 'choice_label' => function ($helper) {
                     /**
-                    * @var Helper $helper
-                    */
+                     * @var Helper
+                     */
                     $helperName = $helper->getUser()->getFirstName() . ' ' . $helper->getUser()->getLastName();
 
                     return $helperName;

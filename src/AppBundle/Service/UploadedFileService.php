@@ -22,7 +22,7 @@ class UploadedFileService
     {
         // $file stores the uploaded file
         /**
-         * @var Symfony\Component\HttpFoundation\File\UploadedFile $file
+         * @var Symfony\Component\HttpFoundation\File\UploadedFile
          */
         $fileName = $this->generateUniqueFileName() . '.' . $file->getClientOriginalExtension();
 

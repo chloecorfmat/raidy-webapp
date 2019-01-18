@@ -5,7 +5,7 @@ namespace LiveBundle;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * Class LiveBundle
+ * Class LiveBundle.
  */
 class LiveBundle extends Bundle
 {
