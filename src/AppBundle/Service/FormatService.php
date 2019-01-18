@@ -44,16 +44,17 @@ class FormatService
     }
 
     /**
-     * @param string $password Password to verify.
-     * @param Form   $form     Form to add errors if needed.
-     * @return bool If password contains errors.
+     * @param string $password password to verify
+     * @param Form   $form     form to add errors if needed
+     *
+     * @return bool if password contains errors
      */
     public function checkPassword($password, &$form = null)
     {
         $noErrors = true;
 
         // Check length.
-        if (!preg_match("(^.{8,50}$)", $password)) {
+        if (!preg_match('(^.{8,50}$)', $password)) {
             $noErrors = false;
             if ($form) {
                 $form->addError(new FormError('Le mot de passe doit comporter entre 8 et 50 caractères.'));
@@ -61,7 +62,7 @@ class FormatService
         }
 
         // Check uppercase.
-        if (!preg_match("([A-Z]+)", $password)) {
+        if (!preg_match('([A-Z]+)', $password)) {
             $noErrors = false;
             if ($form) {
                 $form->addError(new FormError('Le mot de passe doit comporter au moins une lettre majuscule.'));
@@ -69,7 +70,7 @@ class FormatService
         }
 
         // Check lowercase.
-        if (!preg_match("([a-z]+)", $password)) {
+        if (!preg_match('([a-z]+)', $password)) {
             $noErrors = false;
             if ($form) {
                 $form->addError(new FormError('Le mot de passe doit comporter au moins une lettre minuscule.'));
@@ -90,7 +91,8 @@ class FormatService
             if ($form) {
                 $form->addError(
                     new FormError(
-                        'Le mot de passe doit comporter au moins un caractère spécial parmi la liste suivante : ' .
+                        'Le mot de passe doit comporter au moins un caractère' .
+                        ' spécial parmi la liste suivante : ' .
                         '@ ; , & ( ) ! ? : % * € $ £ + = # _ \ / [ ] { } - .'
                     )
                 );

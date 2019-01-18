@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Message
+ * Message.
  *
  * @ORM\Table(name="message")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MessageRepository")
@@ -67,7 +67,7 @@ class Message
     }
 
     /**
-     * Set datetime
+     * Set datetime.
      *
      * @param \DateTime $datetime
      *
@@ -81,7 +81,7 @@ class Message
     }
 
     /**
-     * Get datetime
+     * Get datetime.
      *
      * @return \DateTime
      */
@@ -91,7 +91,7 @@ class Message
     }
 
     /**
-     * Set text
+     * Set text.
      *
      * @param string $text
      *
@@ -105,7 +105,7 @@ class Message
     }
 
     /**
-     * Get text
+     * Get text.
      *
      * @return string
      */
