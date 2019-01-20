@@ -21,6 +21,7 @@ form {
 
   .form--input-date,
   .form--input-color,
+  .form--input-colorpicker,
   .form--input-email,
   .form--input-password,
   .form--input-number,
@@ -37,6 +38,10 @@ form {
     &:focus {
       outline: none;
     }
+  }
+
+  .form--input-colorpicker {
+    border-bottom: none;
   }
 
   .form--input-checkbox {

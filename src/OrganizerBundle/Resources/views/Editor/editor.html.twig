@@ -25,7 +25,6 @@
             <div class="tab-bar">
                 <button class="active accordion">Parcours</button>
                 <div class="active panel tabcontent" id="tracks-pan">
-                    <!--button class="btn--action" id="addTrackButton">Ajouter un parcours</button--->
                     <ul id="editor--list" class="editor--list checkbox-list">
                         <!-- FILLED IN JS-->
                     </ul>
@@ -38,7 +37,6 @@
                 </div>
             </div>
             <div class="tab-bar--actions">
-                <!--a href="{{ path('displayRaid', {'id': id}) }}" class="btn btn--action btn--return">Retour</a-->
                 <button aria-label="Fermer la barre latérale" class="btn--laterale-bar" id="btn--laterale-bar">
                     <i class="fas fa-caret-right"></i>
                     <i class="fas fa-times"></i>
@@ -145,6 +143,29 @@
                                     <div class="form--item">
                                         <label for="addTrack_color" class="required">Couleur <span class="input--required">*</span></label>
                                         <input class="form--input-text" type="color" id="addTrack_color">
+                                        <div class="colors">
+                                            <button class="btn-color" type="button" title="#f74a45" data-color="#f74a45"></button>
+                                            <button class="btn-color" type="button" title="#0f5e54" data-color="#0f5e54"></button>
+                                            <button class="btn-color" type="button" title="#333333" data-color="#333333"></button>
+                                            <button class="btn-color" type="button" title="#e731ab" data-color="#e731ab"></button>
+                                            <button class="btn-color" type="button" title="#2040ae" data-color="#2040ae"></button>
+                                            <button class="btn-color" type="button" title="#0080ff" data-color="#0080ff"></button>
+                                            <button class="btn-color" type="button" title="#e26e2a" data-color="#e26e2a"></button>
+                                            <button class="btn-color" type="button" title="#24e0c6" data-color="#24e0c6"></button>
+                                        </div>
+                                        <script>
+                                            window.addEventListener('load', function() {
+                                                if (document.getElementById('addTrack_color') !== null) {
+                                                    var colorBtns = document.getElementById('addTrack_color').nextElementSibling.getElementsByClassName('btn-color');
+
+                                                    for (var btn of colorBtns) {
+                                                        btn.addEventListener('click', function() {
+                                                            document.getElementById('addTrack_color').value = this.dataset.color;
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        </script>
                                     </div>
                                     <div class="actions">
                                         <button type="submit" id="addTrack_submit" class="btn">Ajouter un parcours</button>
@@ -199,6 +220,29 @@
                                         <label for="editTrack_color" class="required">
                                             Couleur <span class="input--required">*</span></label>
                                         <input class="form--input-text" type="color" id="editTrack_color">
+                                        <div class="colors">
+                                            <button class="btn-color" type="button" title="#f74a45" data-color="#f74a45"></button>
+                                            <button class="btn-color" type="button" title="#0f5e54" data-color="#0f5e54"></button>
+                                            <button class="btn-color" type="button" title="#333333" data-color="#333333"></button>
+                                            <button class="btn-color" type="button" title="#e731ab" data-color="#e731ab"></button>
+                                            <button class="btn-color" type="button" title="#2040ae" data-color="#2040ae"></button>
+                                            <button class="btn-color" type="button" title="#0080ff" data-color="#0080ff"></button>
+                                            <button class="btn-color" type="button" title="#e26e2a" data-color="#e26e2a"></button>
+                                            <button class="btn-color" type="button" title="#24e0c6" data-color="#24e0c6"></button>
+                                        </div>
+                                        <script>
+                                            window.addEventListener('load', function() {
+                                                if (document.getElementById('editTrack_color') !== null) {
+                                                    var colorBtns = document.getElementById('editTrack_color').nextElementSibling.getElementsByClassName('btn-color');
+
+                                                    for (var btn of colorBtns) {
+                                                        btn.addEventListener('click', function() {
+                                                            document.getElementById('editTrack_color').value = this.dataset.color;
+                                                        });
+                                                    }
+                                                }
+                                            });
+                                        </script>
                                     </div>
                                     <input class="form--input-text" type="hidden" id="editTrack_id" >
                                     <div class="actions">
@@ -773,18 +817,13 @@
 
 {% block javascripts %}
     <!-- Make sure you put this AFTER Leaflet's CSS -->
-
     <script>
         let mapManager;
         let raidID;
         document.addEventListener("DOMContentLoaded", function () {
             mapManager = new MapManager();
-            {# raidID = parseInt({{ id }}); #}
             raidID = "{{ id }}";
             mapManager.initialize();
-          //  console.log(mapManager);
-
-            console.log(raidID);
         });
     </script>
 
