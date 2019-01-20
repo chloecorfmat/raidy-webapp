@@ -4,7 +4,7 @@ let quill;
 
 function message(e) {
 
-    if (document.getElementById('#editmessage') !== null) {
+    if (document.getElementsByClassName('container-messages').length !== 0) {
         quill = new Quill('#editmessage', {
             theme: 'snow'
         });
