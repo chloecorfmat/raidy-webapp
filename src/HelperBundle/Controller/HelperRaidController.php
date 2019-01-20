@@ -95,6 +95,8 @@ class HelperRaidController extends Controller
 
             $em->persist($helper);
             $em->flush();
+
+            $this->addFlash('success', 'Le type de poste souhaité a bien été mis à jour.');
         }
 
         $contactManager = $em->getRepository('AppBundle:Contact');
