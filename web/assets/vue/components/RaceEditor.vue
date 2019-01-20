@@ -353,6 +353,7 @@
             },
             displayRemoveRacePopin(race){
                 this.toRemoveRace = race;
+                this.toRemoveRaceCheck = '';
                 MicroModal.show("remove-race");
             },
             removeRace() {
@@ -371,6 +372,11 @@
                         if (this.status === 200) {
                             keepThis.races.splice(idx,1);
                             MicroModal.close("remove-race");
+
+                            iziToast.success({
+                                message: 'L\'épreuve a bien été supprimée',
+                                position: 'bottomRight',
+                            });
                         }
                     };
                     req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id, true);
@@ -394,6 +400,11 @@
                 req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id, true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(null);
+
+                iziToast.success({
+                    message: 'Le parcours a bien été supprimé',
+                    position: 'bottomRight',
+                });
             },
             removeRaceCheckpoint (raceIdx, race, raceTrackIdx, raceTrack, raceCheckpoint) {
                 let keepThis = this;
@@ -411,6 +422,11 @@
                 req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id+'/racecheckpoint/'+raceCheckpoint.id, true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(null);
+
+                iziToast.success({
+                    message: 'Le checkpoint a bien été supprimé',
+                    position: 'bottomRight',
+                });
             },
             move (array, oldIndex, newIndex) {
                 if (newIndex >= array.length || newIndex < 0) {
@@ -465,6 +481,10 @@
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newRace.toJSON());
 
+                iziToast.success({
+                    message: 'L\'épreuve a bien été créée.',
+                    position: 'bottomRight',
+                });
             },
             addTrack(e,raceIdx){
                 e.preventDefault();
@@ -493,6 +513,11 @@
                 req.open('PUT', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newRaceTrack.toJSON());
+
+                iziToast.success({
+                    message: 'Le parcours a bien été ajouté à l\'épreuve.',
+                    position: 'bottomRight',
+                });
             },
             addCheckpoint(e, raceIdx, trackIdx){
                 e.preventDefault();
@@ -523,6 +548,10 @@
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newCheckpoint.toJSON());
 
+                iziToast.success({
+                    message: 'Le checkpoint a bien été ajouté à l\'épreuve.',
+                    position: 'bottomRight',
+                });
             },
             htmlDecode(str){
                 return htmlentities.decode(str);
