@@ -51,20 +51,22 @@ class OrganizerHelpersController extends AjaxAPIController
         if (null != $helper) {
             $helper = $helperService->updateHelperToPoiFromArray($helper, $raid->getId(), $data);
 
-            /* Send email to helper */
-            $message = \Swift_Message::newInstance()
-                ->setSubject('Nouvelle affectation pour le raid ' . $raid->getName())
-                ->setFrom('raidy@enssat.fr')
-                ->setTo($helper->getUser()->getEmail())
-                ->setBody(
-                    $this->renderView(
-                        'OrganizerBundle:Emails:affectation.html.twig',
-                        array('helper' => $helper->getUser(), 'raid' => $raid, 'poi' => $helper->getPoi()->getName())
-                    ),
-                    'text/html'
-                );
+            if (null != $helper->getPoi()) {
+                /* Send email to helper */
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('Nouvelle affectation pour le raid ' . $raid->getName())
+                    ->setFrom('raidy@enssat.fr')
+                    ->setTo($helper->getUser()->getEmail())
+                    ->setBody(
+                        $this->renderView(
+                            'OrganizerBundle:Emails:affectation.html.twig',
+                            ['helper' => $helper->getUser(), 'raid' => $raid, 'poi' => $helper->getPoi()->getName()]
+                        ),
+                        'text/html'
+                    );
 
-            $this->get('mailer')->send($message);
+                $this->get('mailer')->send($message);
+            }
 
             $em->flush();
         } else {
