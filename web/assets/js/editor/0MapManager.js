@@ -334,8 +334,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     poi.image = image != '' ? image : '';
     poi.isCheckpoint = poiIsCheckpoint != "" ? poiIsCheckpoint : false;
 
-    console.log(poiIsCheckpoint);
-    console.log(poi);
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/editor/raid/' + raidID + '/poi', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
@@ -482,8 +480,5 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       };
     //L.DomEvent.addListener(document, 'keydown', onKeyDown, keepThis.map);
     document.getElementById("map").addEventListener("keydown", onKeyDown);
-
   }
 }
-
-

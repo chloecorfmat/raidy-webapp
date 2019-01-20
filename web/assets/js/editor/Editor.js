@@ -1,6 +1,3 @@
-
-
-
 /* SCROLL MANAGEMENT */
 function preventDefault(e) {
     e = e || window.event;
@@ -186,9 +183,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     }
 
   }
+
   window.addEventListener('load', function () {
-
-
     checkoutForConflict();
     // LOAD EDITOR SPECIFIC CONTROLLER ON MAP
     L.POIEditControl = L.Control.extend({
@@ -229,7 +225,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         });
         return controlElement;
       }
-
     });
 
 
@@ -262,6 +257,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
             track.line.editor.pop();
           }
           mapManager.switchMode(EditorMode.READING);
+
           this.checked = true;
           mapManager.displayTrackButton(false);
         });
@@ -413,6 +409,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     mapManager.requestNewTrack(trName, trColor, trSport);
     MicroModal.close('add-track-popin');
 
+    iziToast.success({
+        message: 'Le parcours a bien été créé.',
+        position: 'bottomRight',
+    });
+
     document.getElementById('addTrack_name').value = '';
     document.getElementById('addTrack_color').value = '#000000'
   });
@@ -432,6 +433,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
     track.push();
     MicroModal.close('edit-track-popin');
+
+    iziToast.success({
+        message: 'Le parcours a bien été sauvegardé.',
+        position: 'bottomRight',
+    });
   });
 
   document.getElementById('editTrack_delete').addEventListener('click', function () {
@@ -445,15 +451,27 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     track.remove();
     MicroModal.close('delete-track');
 
+    iziToast.success({
+        message: 'Le parcours a bien été supprimé.',
+        position: 'bottomRight',
+    });
+
     document.getElementById('track-name-delete').value = '';
     document.getElementById('track-name-delete').dataset.name = '';
   });
 
+
+  // DELETE POI.
   document.getElementById('btn--delete-poi').addEventListener('click', function () {
     let poiId = this.dataset.id;
     let poi = mapManager.poiMap.get(parseInt(poiId));
     poi.remove();
     MicroModal.close('delete-poi');
+
+    iziToast.success({
+        message: 'Le point d\'intérêt a bien été supprimé.',
+        position: 'bottomRight',
+    });
   });
 
   // ADD POI SUBMIT
@@ -511,6 +529,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poiIsCheckpoint = document.getElementById('addPoi_isCheckpoint').checked;
 
     MicroModal.close('add-poi-popin');
+
+    iziToast.success({
+        message: 'Le point d\'intérêt a bien été ajouté sur la carte.',
+        position: 'bottomRight',
+    });
 
     mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, preview.src, poiIsCheckpoint);
 
@@ -586,6 +609,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
     MicroModal.close('edit-poi-popin');
 
+    iziToast.success({
+        message: 'Le point d\'intérêt a bien été mis à jour.',
+        position: 'bottomRight',
+    });
+
     document.getElementById('editPoi_name').value = '';
     document.getElementById('editPoi_type').value = '';
     document.getElementById('editPoi_nbhelper').value = '';
@@ -629,18 +657,32 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     }
 
     MicroModal.close('import-gpx');
+    iziToast.success({
+        message: 'Le fichier a bien été importé.',
+        position: 'bottomRight',
+    });
   });
 
   //Export GPX
   document.getElementById('export-gpx--track').addEventListener('click', function () {
     mapManager.GPXExporter.exportAsTracks();
     MicroModal.close('export-gpx');
+
+    iziToast.success({
+        message: 'Le fichier a bien été exporté.',
+        position: 'bottomRight',
+    });
   });
 
   //Export GPX
   document.getElementById('export-gpx--route').addEventListener('click', function () {
     mapManager.GPXExporter.exportAsRoutes();
     MicroModal.close('export-gpx');
+
+    iziToast.success({
+        message: 'Le fichier a bien été exporté.',
+        position: 'bottomRight',
+    });
   });
 
   console.log("Editor JS loaded");
