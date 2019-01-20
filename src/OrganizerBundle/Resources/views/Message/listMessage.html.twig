@@ -18,7 +18,7 @@
 
 {% block body %}
 <h1>Fil d'informations</h1>
-<div class="content">
+<div class="content container-messages">
     <div class="content--half">
         {% for flash_message in app.session.flashBag.get('success') %}
             <div class="alert alert--success">
@@ -128,7 +128,7 @@
                                 <div class="quill" id="editmessage"></div>
                             </div>
                             <div class="actions">
-                                <button type="submit" class="btn" id="btn--edit-message">Mettre à jour</button>
+                                <button type="button" class="btn" id="btn--edit-message">Mettre à jour</button>
                                 <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
                             </div>
                         </form>

@@ -10,6 +10,13 @@
     <div class="content-raids">
         <div class="raids--list">
             <h1>Mes raids</h1>
+
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
+
             <div class="raids--list-items">
                 {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
                     <div class="raid raid--add">
