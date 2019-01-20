@@ -158,7 +158,6 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
       }
       /* When the user clicks on the button, toggle between hiding and showing the dropdown content */
       li.querySelector("#moreButton").addEventListener("click", moreButtonBehaviour);
-     // console.log(newTrack);
       newTrack.calculDistance();
       newTrack.calculElevation();
       li.querySelector('.track-distance').innerHTML = Math.round(10 * newTrack.distance / 1000) / 10 + 'Km ';
@@ -193,6 +192,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
           mapManager.switchMode(EditorMode.TRACK_EDIT);
         } else {
           mapManager.switchMode(EditorMode.READING);
+          iziToast.success({
+              message: 'Le parcours a bien été sauvegardé.',
+              position: 'bottomRight',
+          });
         }
       });
 

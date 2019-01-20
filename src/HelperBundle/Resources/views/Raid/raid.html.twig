@@ -81,6 +81,11 @@
     <div class="content--quarter">
         <div>
             <h2>Affectation</h2>
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
             <div>
                 {{ form_start(form) }}
                 {{ form_widget(form) }}

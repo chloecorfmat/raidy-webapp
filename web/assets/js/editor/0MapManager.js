@@ -46,7 +46,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   }
 
   MapManager.prototype.initialize = function () {
-    this.elevator = new MapElevation();
 
     /* MAP LISTENERS */
     let keepThis = this;
@@ -175,7 +174,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       });
       let latLngArray =  keepThis.currentTrack.line.getLatLngs();
       keepThis.lastPostition  = [];
-      
+
       for (let element in latLngArray){
         keepThis.lastPostition.push({
           lat : latLngArray[element].lat,
@@ -255,8 +254,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.lastMode = this.mode;
     let keepThis = this;
     this.mode = mode;
-    //console.log(this.lastMode);
-   // console.log(this.mode);
     switch (mode) { //entering mode
       case EditorMode.ADD_POI :
         console.log("ADD POI");
@@ -337,8 +334,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     poi.image = image != '' ? image : '';
     poi.isCheckpoint = poiIsCheckpoint != "" ? poiIsCheckpoint : false;
 
-    console.log(poiIsCheckpoint);
-    console.log(poi);
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PUT', '/editor/raid/' + raidID + '/poi', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
@@ -485,8 +480,5 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       };
     //L.DomEvent.addListener(document, 'keydown', onKeyDown, keepThis.map);
     document.getElementById("map").addEventListener("keydown", onKeyDown);
-
   }
 }
-
-

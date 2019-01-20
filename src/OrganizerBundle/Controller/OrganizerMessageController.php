@@ -22,6 +22,8 @@ class OrganizerMessageController extends AjaxAPIController
      * @param int     $raidId  raid identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception
      */
     public function listMessages(Request $request, $raidId)
     {
@@ -107,6 +109,36 @@ class OrganizerMessageController extends AjaxAPIController
                 $em->flush();
 
                 $this->addFlash('success', 'Le message a bien été créé.');
+
+                /* Send email to all helpers */
+
+                $poiManager = $em->getRepository('AppBundle:Poi');
+
+                $pois[] = null;
+                foreach ($tp as $poitype) {
+                    $pois = $poiManager->findBy(array('poiType' => $poitype, 'raid' => $raid->getId()));
+                }
+
+                if (null != $pois) {
+                    $helperManager = $em->getRepository('AppBundle:Helper');
+                    $helpers = $helperManager->findBy(array('poi' => $pois));
+
+                    foreach ($helpers as $helper) {
+                        $mail = \Swift_Message::newInstance()
+                            ->setSubject('Nouvelle notification pour le raid ' . $raid->getName())
+                            ->setFrom('raidy@enssat.fr')
+                            ->setTo($helper->getUser()->getEmail())
+                            ->setBody(
+                                $this->renderView(
+                                    'OrganizerBundle:Emails:notification.html.twig',
+                                    array('helper' => $helper->getUser(), 'raid' => $raid, 'message' => $message)
+                                ),
+                                'text/html'
+                            );
+
+                        $this->get('mailer')->send($mail);
+                    }
+                }
 
                 return $this->redirectToRoute('listMessages', array('raidId' => $raidId));
             }

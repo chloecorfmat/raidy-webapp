@@ -2,6 +2,10 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
+
+  .alert {
+    width: 90%;
+  }
 }
 
 .raids--list {

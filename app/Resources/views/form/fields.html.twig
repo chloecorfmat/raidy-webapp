@@ -7,6 +7,8 @@
        <div class="form--item form--input-checkbox">
     {% elseif form.vars.type is defined and form.vars.type == 'quill' %}
         <div class="form--item form--input-quill">
+    {% elseif form.vars.type is defined and form.vars.type == 'colorpicker' %}
+        <div class="form--item form--input-colorpicker">
     {% else %}
         <div class="form--item">
     {% endif %}
@@ -127,3 +129,31 @@
         });
     </script>
 {% endblock %}
+
+{%- block colorpicker_widget -%}
+    {%- set type = 'color' -%}
+    {{ block('form_widget_simple') }}
+    <div class="colors">
+        <button class="btn-color" type="button" title="#f74a45" data-color="#f74a45"></button>
+        <button class="btn-color" type="button" title="#0f5e54" data-color="#0f5e54"></button>
+        <button class="btn-color" type="button" title="#333333" data-color="#333333"></button>
+        <button class="btn-color" type="button" title="#e731ab" data-color="#e731ab"></button>
+        <button class="btn-color" type="button" title="#2040ae" data-color="#2040ae"></button>
+        <button class="btn-color" type="button" title="#0080ff" data-color="#0080ff"></button>
+        <button class="btn-color" type="button" title="#e26e2a" data-color="#e26e2a"></button>
+        <button class="btn-color" type="button" title="#24e0c6" data-color="#24e0c6"></button>
+    </div>
+    <script>
+        window.addEventListener('load', function() {
+            if (document.getElementById('{{ id }}') !== null) {
+                var colorBtns = document.getElementById('{{ id }}').nextElementSibling.getElementsByClassName('btn-color');
+
+                for (var btn of colorBtns) {
+                    btn.addEventListener('click', function() {
+                        document.getElementById('{{ id }}').value = this.dataset.color;
+                    });
+                }
+            }
+        });
+    </script>
+{%- endblock colorpicker_widget -%}

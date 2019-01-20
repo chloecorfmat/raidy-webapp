@@ -33,7 +33,7 @@ GPXImporter.prototype.importGPXTrack = function(id, sportType, gpxTrack){
         latLngs.push([point.lat, point.lon]);
     }
 
-    let track = new Track();
+    let track = new Track(this.mapManager.map);
     track.setName(name);
     track.setSportType(parseInt(sportType));
     track.setColor("#000000");

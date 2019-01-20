@@ -391,6 +391,8 @@ class CompetitorController extends Controller
             throw $this->createNotFoundException('Ce participant n\'existe pas');
         }
 
+        $this->addFlash('success', 'Le participant a bien été supprimé.');
+
         return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
     }
 }
