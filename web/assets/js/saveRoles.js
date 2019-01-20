@@ -32,7 +32,6 @@ function saveRoles() {
 
                     if (list.innerHTML.includes('<li>ROLE_ORGANIZER</li>')) {
                         let html = list.innerHTML.replace('<li>ROLE_ORGANIZER</li>', '');
-                        console.log(html);
                         list.innerHTML = html;
                     }
                 }

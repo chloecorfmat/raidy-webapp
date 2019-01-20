@@ -47,7 +47,6 @@ function helpersList() {
   };
 
   // Check in manually.
-
   var validateBtns = document.getElementsByClassName('btn-validate-helper');
 
   for (var btn of validateBtns) {

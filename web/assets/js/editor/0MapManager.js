@@ -175,7 +175,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       });
       let latLngArray =  keepThis.currentTrack.line.getLatLngs();
       keepThis.lastPostition  = [];
-      
+
       for (let element in latLngArray){
         keepThis.lastPostition.push({
           lat : latLngArray[element].lat,
@@ -255,8 +255,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.lastMode = this.mode;
     let keepThis = this;
     this.mode = mode;
-    //console.log(this.lastMode);
-   // console.log(this.mode);
     switch (mode) { //entering mode
       case EditorMode.ADD_POI :
         console.log("ADD POI");

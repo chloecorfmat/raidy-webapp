@@ -150,7 +150,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
           var lastEdition = JSON.parse(xhr_object.responseText);
-          //console.log(lastEdition);
           if(lastEdition.lastEditor != false){
             var getDuration = function(d1, d2) {
               d3 = new Date(d2 - d1);

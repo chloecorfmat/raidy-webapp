@@ -4,14 +4,16 @@ let quill;
 
 function message(e) {
 
-    quill = new Quill('#editmessage', {
-        theme: 'snow'
-    });
+    if (document.getElementById('#editmessage') !== null) {
+        quill = new Quill('#editmessage', {
+            theme: 'snow'
+        });
 
-    let btns = document.getElementsByClassName('btn--edit-message');
+        let btns = document.getElementsByClassName('btn--edit-message');
 
-    for (let btn of btns) {
-        btn.addEventListener('click', editMessage);
+        for (let btn of btns) {
+            btn.addEventListener('click', editMessage);
+        }
     }
 }
 

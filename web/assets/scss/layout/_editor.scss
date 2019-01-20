@@ -156,11 +156,11 @@
   }
 
   .elevation-tools {
+    background-color: $white07;
     bottom: 0;
-    z-index: 1000;
     position: absolute;
     width: 50%;
-    background-color: $white07;
+    z-index: 1000;
   }
 
   .editor--list {
