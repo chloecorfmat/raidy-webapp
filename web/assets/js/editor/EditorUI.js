@@ -192,6 +192,10 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
           mapManager.switchMode(EditorMode.TRACK_EDIT);
         } else {
           mapManager.switchMode(EditorMode.READING);
+          iziToast.success({
+              message: 'Le parcours a bien été sauvegardé.',
+              position: 'bottomRight',
+          });
         }
       });
 

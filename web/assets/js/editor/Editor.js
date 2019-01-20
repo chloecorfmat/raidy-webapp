@@ -257,6 +257,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
             track.line.editor.pop();
           }
           mapManager.switchMode(EditorMode.READING);
+
           this.checked = true;
           mapManager.displayTrackButton(false);
         });
@@ -406,6 +407,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let trSport = document.getElementById('addTrack_sportType').value;
     mapManager.requestNewTrack(trName, trColor, trSport);
     MicroModal.close('add-track-popin');
+
+    iziToast.success({
+        message: 'Le parcours a bien été créé.',
+        position: 'bottomRight',
+    });
 
     document.getElementById('addTrack_name').value = '';
     document.getElementById('addTrack_color').value = '#000000'
