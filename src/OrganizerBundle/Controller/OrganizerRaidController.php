@@ -116,6 +116,8 @@ class OrganizerRaidController extends Controller
                 );
 
                 if (0 !== count($poiTypes)) {
+                    $this->addFlash('success', 'Le raid a bien été créé.');
+
                     return $this->redirectToRoute('listRaid');
                 } else {
                     $this->addFlash(
