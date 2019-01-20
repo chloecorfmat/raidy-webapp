@@ -36,7 +36,7 @@ class CompetitorController extends Controller
      * @Route("/organizer/raid/{raidId}/competitor", name="listCompetitor")
      *
      * @param Request $request request
-     * @param mixed   $raidId      raidId
+     * @param mixed   $raidId  raidId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -69,16 +69,22 @@ class CompetitorController extends Controller
             ->add('lastname', TextType::class, ['label' => 'Nom'])
             ->add('firstname', TextType::class, ['label' => 'Prénom'])
             ->add('number_sign', TextType::class, ['label' => 'N° de dossard'])
-            ->add('category', TextType::class, ['label' => 'Catégorie','required' => false])
-            ->add('sex', TextType::class, ['label' => 'Sexe','required' => false])
-            ->add('birth_year', TextType::class, ['label' => 'Année de naissance','required' => false])
-            ->add('race', ChoiceType::class,
-                ['label' => 'Épreuve', 'required' => false, 'choices' => $races, 'choice_label' => function ($race) {
-                    /**
-                     * @var Race $race
-                     */
-                    return $race->getName();
-                }]
+            ->add('category', TextType::class, ['label' => 'Catégorie', 'required' => false])
+            ->add('sex', TextType::class, ['label' => 'Sexe', 'required' => false])
+            ->add('birth_year', TextType::class, ['label' => 'Année de naissance', 'required' => false])
+            ->add(
+                'race',
+                ChoiceType::class,
+                ['label' => 'Épreuve',
+                    'required' => false,
+                    'choices' => $races,
+                    'choice_label' => function ($race) {
+                        /**
+                         * @var Race $race
+                         */
+                        return $race->getName();
+                    },
+                ]
             )
 
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un participant'])
@@ -92,9 +98,11 @@ class CompetitorController extends Controller
         )
             ->add('file', FileType::class, [
                 'label' => 'Fichier',
+                'label_attr' => ['class' => 'form--fixed-label'],
                 'attr' => [
-                    'data-help' => 'Le format attendu est Nom; Prénom; Dossard; Catégorie; Sexe; Année de naissance; Epreuve'
-                ]
+                    'accept' => '.csv',
+                    'class' => 'form--input-file',
+                ],
             ])
             ->add('submit', SubmitType::class, ['label' => 'Importer le fichier'])
             ->getForm();
@@ -105,7 +113,10 @@ class CompetitorController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $competitorManager = $em->getRepository('AppBundle:Competitor');
             $competitorNameExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raid->getId()]
+                ['firstname' => $formCompetitor->getFirstname(),
+                    'lastname' => $formCompetitor->getLastname(),
+                    'raid' => $raid->getId(),
+                ]
             );
 
             $competitorSignExist = $competitorManager->findBy(
@@ -145,13 +156,9 @@ class CompetitorController extends Controller
             $row = 1;
             $errors = array();
             $correctLines = array();
-            if (($handle = fopen($dir.$fileName, "r")) !== FALSE) {
-                while (($data = fgetcsv($handle, 1000, ";")) !== FALSE) {
+            if (($handle = fopen($dir . $fileName, "r")) !== false) {
+                while (($data = fgetcsv($handle, 1000, ";")) !== false) {
                     // format : lastname; firstname; numbersign; cat; sex; birthyear; race
-                    if ($data[0] == "" || $data[1] == "" || $data[2] == "") {
-                        array_push($errors, array("line"=>$row, "msg"=>"Un champ requis est manquant"));
-                        $row++;
-                    }
 
                     $competitorManager = $em->getRepository('AppBundle:Competitor');
                     $competitorNameExist = $competitorManager->findBy(
@@ -162,33 +169,59 @@ class CompetitorController extends Controller
                         ['numberSign' => $data[2], 'raid' => $raid->getId()]
                     );
 
-                    $raceManager = $em->getRepository('AppBundle:Race');
-                    $raceExist = $raceManager->findBy(
-                        ['name' => $data[6], 'raid' => $raid->getId()]
-                    );
-
-                    if (!$competitorNameExist) {
-                        if (!$competitorSignExist) {
-                            if ($raceExist!=false || $data[6]=="") {
-                                $data[6]=$raceExist[0];
-                                array_push($correctLines, $data);
-                            } else {
-                                array_push($errors, array("line"=>$row, "msg"=>'L\'épreuve "'.$data[6].'" n\'existe pas'));
-                            }
-                        } else {
-                            array_push($errors, array("line"=>$row, "msg"=>"Le dossard ".$data[2]." existe déjà"));
-                        }
-                    } else {
-                        array_push($errors, array("line"=>$row, "msg"=>'Le participant "'.$data[0]." ".$data[1].'" existe déjà'));
+                    $hasError = false;
+                    if ($data[0] == "" || $data[1] == "" || $data[2] == "") {
+                        array_push($errors, array("line" => $row,
+                            "msg" => "Un champ requis est manquant",
+                        ));
+                        $hasError = true;
                     }
-                    $row++;
 
+                    if ($competitorNameExist != false) {
+                        array_push($errors, array("line" => $row,
+                            "msg" => 'Le participant "' . $data[0] . " " . $data[1] . '" existe déjà',
+                        ));
+                        $hasError = true;
+                    }
+                    if ($competitorSignExist != false) {
+                        array_push($errors, array("line" => $row,
+                            "msg" => "Le dossard " . $data[2] . " existe déjà",
+                        ));
+                        $hasError = true;
+                    }
+                    if ($data[5] != "" && !is_numeric($data[5])) {
+                        array_push($errors, array("line" => $row,
+                            "msg" => 'L\'année de naissance "' . $data[5] . '" n\'est pas valide',
+                        ));
+                        $hasError = true;
+                    }
+                    if ($data[6] != "") {
+                        $raceManager = $em->getRepository('AppBundle:Race');
+                        $raceExist = $raceManager->findOneBy(
+                            ['name' => $data[6], 'raid' => $raid->getId()]
+                        );
+                        if ($raceExist == null) {
+                            array_push($errors, array("line" => $row,
+                                "msg" => 'L\'épreuve "' . $data[6] . '" n\'existe pas',
+                            ));
+                            $hasError = true;
+                        }
+                    }
+
+                    if (!$hasError) {
+                        $data[6] = $data[6] == "" ? null : $raceExist;
+                        array_push($correctLines, $data);
+                    }
+
+                    $row++;
                 }
                 fclose($handle);
             }
-            foreach($errors as $e) {
-                $formImport->addError(new FormError("Ligne ".$e["line"]." : ".$e["msg"]));
+
+            foreach ($errors as $e) {
+                $formImport->addError(new FormError("Ligne " . $e["line"] . " : " . $e["msg"]));
             }
+
             if (empty($errors)) {
                 $competitorService = $this->container->get('CompetitorService');
                 foreach ($correctLines as $data) {
@@ -199,10 +232,10 @@ class CompetitorController extends Controller
                     $em->persist($competitor);
                     $em->flush();
                 }
-                $this->addFlash('success', count($correctLines).' participants ont bien été ajoutés.');
+                $this->addFlash('success', count($correctLines) . ' participants ont bien été ajoutés.');
+
                 return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
             }
-
         }
 
         return $this->render(
@@ -220,8 +253,8 @@ class CompetitorController extends Controller
     /**
      * @Route("/organizer/raid/{raidId}/competitor/{competitorId}", name="editCompetitor")
      *
-     * @param Request $request   request
-     * @param int     $raidId    raid identifier
+     * @param Request $request      request
+     * @param int     $raidId       raid identifier
      * @param int     $competitorId competitor identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -260,26 +293,30 @@ class CompetitorController extends Controller
             ->add('lastname', TextType::class, ['label' => 'Nom'])
             ->add('firstname', TextType::class, ['label' => 'Prénom'])
             ->add('number_sign', TextType::class, ['label' => 'N° de dossard'])
-            ->add('category', TextType::class, ['label' => 'Catégorie','required' => false])
-            ->add('sex', TextType::class, ['label' => 'Sexe','required' => false])
-            ->add('birth_year', TextType::class, ['label' => 'Année de naissance','required' => false])
-            ->add('race', ChoiceType::class,
-                ['label' => 'Épreuve', 'required' => false, 'choices' => $races, 'choice_label' => function ($race) {
-                    /**
-                     * @var Race $race
-                     */
-                    return $race->getName();
-                }]
-            )
+            ->add('category', TextType::class, ['label' => 'Catégorie', 'required' => false])
+            ->add('sex', TextType::class, ['label' => 'Sexe', 'required' => false])
+            ->add('birth_year', TextType::class, ['label' => 'Année de naissance', 'required' => false])
+            ->add('race', ChoiceType::class, [
+                    'label' => 'Épreuve',
+                    'required' => false,
+                    'choices' => $races,
+                    'choice_label' => function ($race) {
+                        /**
+                         * @var Race $race
+                         */
+                        return $race->getName();
+                    },
+            ])
             ->add('submit', SubmitType::class, ['label' => 'Editer le participant'])
             ->getForm();
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             $competitorExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raid->getId()]
+                ['firstname' => $formCompetitor->getFirstname(),
+                    'lastname' => $formCompetitor->getLastname(),
+                    'raid' => $raid->getId(), ]
             );
             $competitorSignExist = $competitorManager->findBy(
                 ['numberSign' => $formCompetitor->getNumberSign(), 'raid' => $raid->getId()]
@@ -325,8 +362,8 @@ class CompetitorController extends Controller
     /**
      * @Route("/organizer/raid/{raidId}/competitor/delete/{competitorId}", name="deleteCompetitor")
      *
-     * @param Request $request   request
-     * @param int     $raidId    raid identifier
+     * @param Request $request      request
+     * @param int     $raidId       raid identifier
      * @param int     $competitorId competitor identifier
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -343,7 +380,6 @@ class CompetitorController extends Controller
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
-        
 
         $competitorManager = $em->getRepository('AppBundle:Competitor');
         $competitor = $competitorManager->find($competitorId);
