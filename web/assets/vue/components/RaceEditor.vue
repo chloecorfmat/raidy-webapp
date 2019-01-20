@@ -181,9 +181,6 @@
                 };
                 req.open('GET', '/race/raid/'+raidID+'/race', true);
                 req.send(null);
-
-                this.tracksMap = Array.from(mapManager.tracksMap.values());
-                this.checkpointsMap = Array.from(mapManager.poiMap.values());
             },
             toJson () {
                 let json = JSON.stringify(this.races);
@@ -434,7 +431,15 @@
             openNewCheckpointPopin(track) {
                 this.currentRaceTrack = track;
                 this.currentRace = null;
-                this.checkpointsMap = Array.from(mapManager.poiMap.values());
+
+                let cp = [];
+                for (let poi of Array.from(mapManager.poiMap.values())){
+                    if(poi.isCheckpoint){
+                        cp.push(poi);
+                    }
+                }
+
+                this.checkpointsMap = cp;
             },
             addRace(e){
                 e.preventDefault();
