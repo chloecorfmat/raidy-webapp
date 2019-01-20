@@ -46,7 +46,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   }
 
   MapManager.prototype.initialize = function () {
-    this.elevator = new MapElevation();
 
     /* MAP LISTENERS */
     let keepThis = this;

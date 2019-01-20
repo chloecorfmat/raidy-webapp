@@ -308,7 +308,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       },
     });
 
-    let ShowElevationGraphCtrl = L.Control.extend({
+      mapManager.elevator = new MapElevation();
+      let ShowElevationGraphCtrl = L.Control.extend({
       options: {
         position: 'topright'
       },
