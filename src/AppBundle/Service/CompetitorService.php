@@ -43,7 +43,7 @@ class CompetitorService
 
     /**
      * @param mixed $obj
-     * @param mixed $directory
+     * @param mixed $raidId
      *
      * @return Competitor
      */
@@ -67,5 +67,33 @@ class CompetitorService
 
 
         return $competitor;
+    }
+
+    /**
+     * @param array $array
+     * @param mixed $raidId
+     *
+     * @return Competitor
+     */
+    public function competitorFromCsv($array, $raidId) {
+        $competitor = new Competitor();
+
+        $competitor->setFirstname($array[0]);
+        $competitor->setLastname($array[1]);
+        $competitor->setNumberSign($array[2]);
+        $competitor->setCategory($array[3]);
+        $competitor->setSex($array[4]);
+        $competitor->setBirthYear($array[5]);
+        $competitor->setRace($array[6]);
+
+        $raidRepository = $this->em->getRepository('AppBundle:Raid');
+        $raid = $raidRepository->find($raidId);
+        $competitor->setRaid($raid);
+
+        $competitor->setUniqid(uniqid());
+
+
+        return $competitor;
+
     }
 }
