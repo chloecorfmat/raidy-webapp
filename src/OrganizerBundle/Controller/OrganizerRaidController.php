@@ -500,6 +500,8 @@ class OrganizerRaidController extends Controller
                 $contactService = $this->container->get('ContactService');
                 $contactService->cloneContacts($cloneRaid, $raid);
 
+                $this->addFlash('success', 'Le raid a bien été cloné.');
+
                 return $this->redirectToRoute('listRaid');
             }
             $form->addError(
