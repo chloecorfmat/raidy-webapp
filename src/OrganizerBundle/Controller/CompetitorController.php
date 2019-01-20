@@ -23,7 +23,7 @@ class CompetitorController extends Controller
      * @Route("/organizer/raid/{raidId}/competitor", name="listCompetitor")
      *
      * @param Request $request request
-     * @param mixed   $raidId      raidId
+     * @param mixed   $raidId  raidId
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
@@ -49,9 +49,9 @@ class CompetitorController extends Controller
             ->add('lastname', TextType::class, ['label' => 'Nom'])
             ->add('firstname', TextType::class, ['label' => 'Prénom'])
             ->add('number_sign', TextType::class, ['label' => 'N° de dossard'])
-            ->add('category', TextType::class, ['label' => 'Catégorie','required' => false])
-            ->add('sex', TextType::class, ['label' => 'Sexe','required' => false])
-            ->add('birth_year', TextType::class, ['label' => 'Année de naissance','required' => false])
+            ->add('category', TextType::class, ['label' => 'Catégorie', 'required' => false])
+            ->add('sex', TextType::class, ['label' => 'Sexe', 'required' => false])
+            ->add('birth_year', TextType::class, ['label' => 'Année de naissance', 'required' => false])
 
             ->add('submit', SubmitType::class, ['label' => 'Ajouter un participant'])
             ->getForm();
@@ -61,7 +61,11 @@ class CompetitorController extends Controller
         if ($form->isSubmitted() && $form->isValid()) {
             $competitorManager = $em->getRepository('AppBundle:Competitor');
             $competitorNameExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raid->getId()]
+                [
+                    'firstname' => $formCompetitor->getFirstname(),
+                    'lastname' => $formCompetitor->getLastname(),
+                    'raid' => $raid->getId(),
+                ]
             );
 
             $competitorSignExist = $competitorManager->findBy(
@@ -103,8 +107,8 @@ class CompetitorController extends Controller
     /**
      * @Route("/organizer/raid/{raidId}/competitor/{competitorId}", name="editCompetitor")
      *
-     * @param Request $request   request
-     * @param int     $raidId    raid identifier
+     * @param Request $request      request
+     * @param int     $raidId       raid identifier
      * @param int     $competitorId competitor identifier
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -141,9 +145,9 @@ class CompetitorController extends Controller
             ->add('lastname', TextType::class, ['label' => 'Nom'])
             ->add('firstname', TextType::class, ['label' => 'Prénom'])
             ->add('number_sign', TextType::class, ['label' => 'N° de dossard'])
-            ->add('category', TextType::class, ['label' => 'Catégorie','required' => false])
-            ->add('sex', TextType::class, ['label' => 'Sexe','required' => false])
-            ->add('birth_year', TextType::class, ['label' => 'Année de naissance','required' => false])
+            ->add('category', TextType::class, ['label' => 'Catégorie', 'required' => false])
+            ->add('sex', TextType::class, ['label' => 'Sexe', 'required' => false])
+            ->add('birth_year', TextType::class, ['label' => 'Année de naissance', 'required' => false])
 
             ->add('submit', SubmitType::class, ['label' => 'Editer le participant'])
             ->getForm();
@@ -151,11 +155,15 @@ class CompetitorController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
-            $competitorExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(), 'lastname' => $formCompetitor->getLastname(), 'raid' => $raid->getId()]
+            $competitorExist = $competitorManager->findOneBy(
+                [
+                    'firstname' => $formCompetitor->getFirstname(),
+                    'lastname' => $formCompetitor->getLastname(),
+                    'raid' => $raid->getId(),
+                ]
             );
-            $competitorSignExist = $competitorManager->findBy(
+
+            $competitorSignExist = $competitorManager->findOneBy(
                 ['numberSign' => $formCompetitor->getNumberSign(), 'raid' => $raid->getId()]
             );
 
@@ -199,8 +207,8 @@ class CompetitorController extends Controller
     /**
      * @Route("/organizer/raid/{raidId}/competitor/delete/{competitorId}", name="deleteCompetitor")
      *
-     * @param Request $request   request
-     * @param int     $raidId    raid identifier
+     * @param Request $request      request
+     * @param int     $raidId       raid identifier
      * @param int     $competitorId competitor identifier
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
@@ -217,7 +225,6 @@ class CompetitorController extends Controller
         if (null == $raid) {
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
-        
 
         $competitorManager = $em->getRepository('AppBundle:Competitor');
         $competitor = $competitorManager->find($competitorId);
@@ -229,7 +236,8 @@ class CompetitorController extends Controller
             throw $this->createNotFoundException('Ce participant n\'existe pas');
         }
 
+        $this->addFlash('success', 'Le participant a bien été supprimé.');
+
         return $this->redirectToRoute('listCompetitor', ['raidId' => $raidId]);
     }
-
 }
