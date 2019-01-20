@@ -62,7 +62,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.decorator = L.polylineDecorator(this.line, {
       patterns: [patternParameters]
     });
-
+    
     this.decorator.addTo(this.map);
   }
   Track.prototype.setSportType = function (sportType) {
