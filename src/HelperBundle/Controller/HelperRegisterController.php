@@ -179,10 +179,6 @@ class HelperRegisterController extends Controller
                 CheckboxType::class,
                 [
                     'label' => 'Accepter les conditions',
-                    'attr' => [
-                        'data-help' => 'Cette information n\'est utile que si ' .
-                            'vous participez à un raid en tant que bénévole.',
-                    ],
                 ]
             )
             ->add(
@@ -375,10 +371,6 @@ class HelperRegisterController extends Controller
                 CheckboxType::class,
                 [
                     'label' => 'Accepter les conditions',
-                    'attr' => [
-                        'data-help' => 'Cette information n\'est utile que si ' .
-                            'vous participez à un raid en tant que bénévole.',
-                    ],
                 ]
             )
             ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
