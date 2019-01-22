@@ -70,12 +70,13 @@ class LiveRaidController extends Controller
             ->buildOauth($url, $requestMethod)
             ->performRequest();
 
-        $tweets = json_decode($jsonResults);
+        // This is passed to vuejs component.
+        $tweets = json_encode(json_decode($jsonResults)->statuses);
 
         return $this->render('LiveBundle:Raid:raid.html.twig', [
             'raid' => $raid,
             'meta' => $meta,
-            'tweets' => $tweets->statuses ?? '',
+            'tweets' => $tweets ?? '',
             'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }
