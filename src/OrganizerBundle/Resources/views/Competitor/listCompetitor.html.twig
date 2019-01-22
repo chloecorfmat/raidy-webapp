@@ -1,0 +1,100 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id':raid_id}) }}">{{ raidName }}</a></li>
+        <li class="breadcrumb--list-item">Liste des participants</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <div class="content">
+        <div class="content--half">
+            <h1>Liste des participants</h1>
+
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
+            {% for flash_message in app.session.flashBag.get('danger') %}
+                <div class="alert alert--danger">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
+            <div class="table--container">
+                <table class="table" id="helpersList">
+                    <caption class="sr-only">Liste des participants</caption>
+                    <thead class="table--headers">
+                    <tr>
+                        <th scope="col">Nom</th>
+                        <th scope="col">Prénom</th>
+                        <th scope="col">N° de dossard</th>
+                        <th scope="col">Catégorie</th>
+                        <th scope="col">Sexe</th>
+                        <th scope="col">Année</th>
+                        <th scope="col">Épreuve</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+
+                    {% for competitor in competitors %}
+                        <tr class="table--line">
+                            <td>{{ competitor.lastname }}</td>
+                            <td>{{ competitor.firstname }}</td>
+                            <td>{{ competitor.numberSign }}</td>
+                            <td>{{ competitor.category }}</td>
+                            <td>{{ competitor.sex }}</td>
+                            <td>{{ competitor.birthYear }}</td>
+                            <td>{% if competitor.race is not null %}{{ competitor.race.name }}{% else %}Aucune épreuve{% endif %}</td>
+
+                            <td>
+                                <a href="{{ path('editCompetitor', {'competitorId': competitor.id, 'raidId': competitor.raid.uniqid }) }}" class="btn">Editer</a>
+                                <button class="btn btn--danger btn--delete-competitor" data-competitor-id="{{ competitor.id }}" >Supprimer</button></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        </div>
+        <div class="content--half">
+            <h1>Ajouter un participant</h1>
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+            <h1>Importer des participants</h1>
+            <p>Le format attendu est Nom; Prénom; Dossard; Catégorie; Sexe; Année de naissance; Epreuve</p>
+            {{ form_start(formImport) }}
+            {{ form_widget(formImport) }}
+            {{ form_end(formImport) }}
+        </div>
+    </div>
+
+
+    <!-- [1] -->
+    <div id="delete-competitor" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="delete-competitor-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="delete-competitor-title">
+                            Supprimer un participant
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="delete-collaborator-content" class="modal--content">
+                        <p>Êtes-vous certain de vouloir supprimer ce participant ?</p>
+                        <p class="text--important">Cette action est irréversible.</p>
+                        <div class="modal--actions">
+                            <a href="" id="btn--delete-competitor" class="btn btn--danger" data-base-url="/organizer/raid/{{ raid_id }}/competitor/delete/">Supprimer</a>
+                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

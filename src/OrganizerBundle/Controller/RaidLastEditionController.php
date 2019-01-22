@@ -41,7 +41,8 @@ class RaidLastEditionController extends AjaxAPIController
 
         $obj = [];
         if (null != $lastEditor && $user->getId() != $lastEditor->getId()) {
-            $obj['lastEditor'] = $lastEditor->getFirstName() . ' ' . $lastEditor->getLastName();
+            $obj['lastEditor'] = $lastEditor->getFirstName() . ' ' .
+                $lastEditor->getLastName();
         } else {
             $obj['lastEditor'] = false;
         }

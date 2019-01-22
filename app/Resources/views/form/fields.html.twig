@@ -7,6 +7,8 @@
        <div class="form--item form--input-checkbox">
     {% elseif form.vars.type is defined and form.vars.type == 'quill' %}
         <div class="form--item form--input-quill">
+    {% elseif form.vars.type is defined and form.vars.type == 'colorpicker' %}
+        <div class="form--item form--input-colorpicker">
     {% else %}
         <div class="form--item">
     {% endif %}
@@ -99,10 +101,9 @@
 {%- endblock checkbox_widget -%}
 
 {% block quill_widget %}
-    <div class="quill" id="{{ form.vars.name }}">
+    <div class="quill quill-input" id="{{ form.vars.name }}">
     </div>
     <input type="hidden" name="{{ form.vars.name }}">
-
     <!-- Initialize Quill editor -->
     <script>
         window.addEventListener('load', function() {
@@ -110,22 +111,49 @@
                 theme: 'snow'
             });
 
-            var forms = document.getElementsByTagName('form');
+            var form = document.getElementById('{{ form.vars.name }}').parentNode.parentNode.parentNode;
 
-            for (var form of forms) {
-                form.addEventListener('submit', function(e) {
-                    e.preventDefault();
-                    var richtextfields = document.getElementsByClassName('quill');
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                var richtextfields = document.getElementsByClassName('quill-input');
 
-                    for (var richtextfield of richtextfields) {
-                        var field = document.querySelector('input[name="' + richtextfield.id + '"]');
+                for (var richtextfield of richtextfields) {
+                    console.log(richtextfield);
+                    var field = document.querySelector('input[name="' + richtextfield.id + '"]');
 
-                        field.value = quill.root.innerHTML;
-                    }
+                    field.value = quill.root.innerHTML;
+                }
 
-                    this.submit();
-                });
-            }
+                this.submit();
+            });
         });
     </script>
 {% endblock %}
+
+{%- block colorpicker_widget -%}
+    {%- set type = 'color' -%}
+    {{ block('form_widget_simple') }}
+    <div class="colors">
+        <button class="btn-color" type="button" title="#f74a45" data-color="#f74a45"></button>
+        <button class="btn-color" type="button" title="#0f5e54" data-color="#0f5e54"></button>
+        <button class="btn-color" type="button" title="#333333" data-color="#333333"></button>
+        <button class="btn-color" type="button" title="#e731ab" data-color="#e731ab"></button>
+        <button class="btn-color" type="button" title="#2040ae" data-color="#2040ae"></button>
+        <button class="btn-color" type="button" title="#0080ff" data-color="#0080ff"></button>
+        <button class="btn-color" type="button" title="#e26e2a" data-color="#e26e2a"></button>
+        <button class="btn-color" type="button" title="#24e0c6" data-color="#24e0c6"></button>
+    </div>
+    <script>
+        window.addEventListener('load', function() {
+            if (document.getElementById('{{ id }}') !== null) {
+                var colorBtns = document.getElementById('{{ id }}').nextElementSibling.getElementsByClassName('btn-color');
+
+                for (var btn of colorBtns) {
+                    btn.addEventListener('click', function() {
+                        document.getElementById('{{ id }}').value = this.dataset.color;
+                    });
+                }
+            }
+        });
+    </script>
+{%- endblock colorpicker_widget -%}

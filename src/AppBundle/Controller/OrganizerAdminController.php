@@ -29,11 +29,12 @@ class OrganizerAdminController extends Controller
     /**
      * @Route("/admin/organizer/add", name="addOrganizer")
      *
-     * @param Request $request request
+     * @param Request       $request request
+     * @param \Swift_Mailer $mailer
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function addOrganizer(Request $request)
+    public function addOrganizer(Request $request, \Swift_Mailer $mailer)
     {
         $formUser = new User();
 
@@ -118,6 +119,19 @@ class OrganizerAdminController extends Controller
                         $userManager->updateUser($user);
 
                         $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
+
+                        $message = (new \Swift_Message('Création d\'un compte organisateur'))
+                        ->setFrom('raidy@enssat.fr')
+                        ->setTo($user->getEmail())
+                        ->setBody(
+                            $this->renderView(
+                                'AppBundle:Emails:registration.html.twig',
+                                array('user' => $user, 'password' => $formUser->getPlainPassword())
+                            ),
+                            'text/html'
+                        );
+
+                        $mailer->send($message);
 
                         return $this->redirectToRoute('listOrganizer');
                     } else {
@@ -289,7 +303,7 @@ class OrganizerAdminController extends Controller
      *
      * @param Request $request request
      * @param mixed   $id      id
-     * @param boolean $state   state
+     * @param bool    $state   state
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse
      */

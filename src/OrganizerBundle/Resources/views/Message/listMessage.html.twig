@@ -7,7 +7,7 @@
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
-        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.id}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.uniqid}) }}">{{ raid.name }}</a></li>
         <li class="breadcrumb--list-item">Fil d'informations</li>
     </ol>
 {% endblock %}
@@ -18,7 +18,7 @@
 
 {% block body %}
 <h1>Fil d'informations</h1>
-<div class="content">
+<div class="content container-messages">
     <div class="content--half">
         {% for flash_message in app.session.flashBag.get('success') %}
             <div class="alert alert--success">
@@ -32,20 +32,41 @@
         {% endfor %}
         <div class="list-message">
             {% for message in messages %}
-                <div class="message message--info">
-                    <button
-                            class="btn--delete-message"
-                            aria-label="Supprimer le message"
-                            title="Supprimer le message"
-                            data-message-id="{{ message.id }}"
-                    >
-                        <i class="fas fa-trash fa-lg message-icon"></i>
-                    </button>
+                <div class="message message--{{ message.type }}" data-id="{{ message.id }}">
+                    <div class="btns-message">
+                        <button
+                                class="btn--edit-message"
+                                aria-label="Modifier le message"
+                                title="Modifier le message"
+                                data-message-id="{{ message.id }}"
+                                data-raidid="{{ raid.uniqid }}"
+                        >
+                            <i class="fas fa-pen fa-lg message-icon"></i>
+                        </button>
+                        <button
+                                class="btn--delete-message"
+                                aria-label="Supprimer le message"
+                                title="Supprimer le message"
+                                data-message-id="{{ message.id }}"
+                        >
+                            <i class="fas fa-trash fa-lg message-icon"></i>
+                        </button>
+                    </div>
                     <div class="message-datetime">
                         <p>Le {{ message.datetime|date('d/m/Y à H:i:s') }}</p>
                     </div>
                     <div class="message-content">
                         {{ message.text|raw }}
+                    </div>
+                    <div class="message-helpers">
+                        <p class="text--medium text--introducing">
+                            Points d'intérêt concernés :
+                        </p>
+                        <ul>
+                            {% for poitype in message.targetPoitypes %}
+                                <li>{{ poitype.type }}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             {% endfor %}
@@ -81,6 +102,36 @@
                             <a href="" id="btn--delete-message" class="btn btn--danger" data-base-url="/organizer/raid/{{ raid.uniqid }}/message/delete/">Supprimer</a>
                             <button data-micromodal-close class="btn btn--cancel">Annuler</button>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-message" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+        <!-- [2] -->
+        <div tabindex="-1" data-micromodal-close>
+            <!-- [3] -->
+            <div role="dialog" aria-modal="true" aria-labelledby="edit-message-title" >
+                <div class="modal-container">
+                    <header class="modal--header modal--header--danger">
+                        <h2 id="edit-message-title">
+                            Modifier le message
+                        </h2>
+                        <!-- [4] -->
+                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                    </header>
+                    <div id="edit-message-content" class="modal--content">
+                        <form name="form" id="edit-message">
+                            <div class="form--item form--input-quill">
+                                <label class="required">Message<span class="input--required">*</span></label>
+                                <div class="quill" id="editmessage"></div>
+                            </div>
+                            <div class="actions">
+                                <button type="button" class="btn" id="btn--edit-message">Mettre à jour</button>
+                                <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,3 @@
-
-
-
 /* SCROLL MANAGEMENT */
 function preventDefault(e) {
     e = e || window.event;
@@ -150,7 +147,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
           var lastEdition = JSON.parse(xhr_object.responseText);
-          //console.log(lastEdition);
           if(lastEdition.lastEditor != false){
             var getDuration = function(d1, d2) {
               d3 = new Date(d2 - d1);
@@ -187,8 +183,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     }
 
   }
-  window.addEventListener('load', function () {
 
+  window.addEventListener('load', function () {
     checkoutForConflict();
     // LOAD EDITOR SPECIFIC CONTROLLER ON MAP
     L.POIEditControl = L.Control.extend({
@@ -229,7 +225,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         });
         return controlElement;
       }
-
     });
 
 
@@ -262,6 +257,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
             track.line.editor.pop();
           }
           mapManager.switchMode(EditorMode.READING);
+
           this.checked = true;
           mapManager.displayTrackButton(false);
         });
@@ -308,6 +304,31 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       },
     });
 
+      mapManager.elevator = new MapElevation();
+      let ShowElevationGraphCtrl = L.Control.extend({
+      options: {
+        position: 'topright'
+      },
+      onAdd: function(map) {
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.style.backgroundColor = 'white';
+        container.style.width = '30px';
+        container.style.height = '30px';
+        container.innerHTML = "<i class=\"fas fa-chart-line fa-2x\"></i>";
+        container.setAttribute("title", "Montrer le graph d'altimétrie");
+        container.onclick = function(e) {
+          e.preventDefault();
+
+          if(document.querySelector(".elevation-tools").style.display == "none"){
+            document.querySelector(".elevation-tools").style.display = "block";
+          }else{
+            document.querySelector(".elevation-tools").style.display = "none";
+          }
+        };
+        return container;
+      },
+    });
+
 
     let ignTileUrl = "http://wxs.ign.fr/" + IGNAPIKEY
         + "/geoportail/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&"
@@ -320,16 +341,18 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     );
 
     ignTiles.addTo(mapManager.map);
+    mapManager.map.addControl(new L.POIEditControl());
+
     L.control.layers({"IGN":ignTiles, "OpenStreetMap":mapManager.OSMTiles}).addTo(mapManager.map);
 
     mapManager.map.addControl(new ImportGPXCtrl());
     mapManager.map.addControl(new ExportGPXCtrl());
+    mapManager.map.addControl(new ShowElevationGraphCtrl());
 
     mapManager.trackControl = new L.TrackEditControl();
     MapManager.prototype.displayTrackButton = function (b) {
       b ? mapManager.map.addControl(mapManager.trackControl) :  mapManager.map.removeControl(mapManager.trackControl);
     }
-    mapManager.map.addControl(new L.POIEditControl());
 
     let acc = document.getElementsByClassName("accordion");
 
@@ -386,6 +409,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     mapManager.requestNewTrack(trName, trColor, trSport);
     MicroModal.close('add-track-popin');
 
+    iziToast.success({
+        message: 'Le parcours a bien été créé.',
+        position: 'bottomRight',
+    });
+
     document.getElementById('addTrack_name').value = '';
     document.getElementById('addTrack_color').value = '#000000'
   });
@@ -405,6 +433,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
     track.push();
     MicroModal.close('edit-track-popin');
+
+    iziToast.success({
+        message: 'Le parcours a bien été sauvegardé.',
+        position: 'bottomRight',
+    });
   });
 
   document.getElementById('editTrack_delete').addEventListener('click', function () {
@@ -418,40 +451,91 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     track.remove();
     MicroModal.close('delete-track');
 
+    iziToast.success({
+        message: 'Le parcours a bien été supprimé.',
+        position: 'bottomRight',
+    });
+
     document.getElementById('track-name-delete').value = '';
     document.getElementById('track-name-delete').dataset.name = '';
   });
 
+
+  // DELETE POI.
   document.getElementById('btn--delete-poi').addEventListener('click', function () {
     let poiId = this.dataset.id;
     let poi = mapManager.poiMap.get(parseInt(poiId));
     poi.remove();
     MicroModal.close('delete-poi');
+
+    iziToast.success({
+        message: 'Le point d\'intérêt a bien été supprimé.',
+        position: 'bottomRight',
+    });
   });
 
-// ADD POI SUBMIT
+  // ADD POI SUBMIT
+  document.getElementById('addPoi_image').addEventListener('change', function (e) {
+    let poiImageData = document.getElementById('addPoi_image').files[0];
+    let preview = document.getElementById('addPoi_preview');
+    let reader = new FileReader();
+    if (poiImageData) {
+      if (poiImageData.type.indexOf('image') === 0) {
+        reader.onload = function (event) {
+          let image = new Image();
+          image.src = event.target.result;
+          image.onload = function () {
+            let maxWidth = 500, maxHeight = 500, imageWidth = image.width, imageHeight = image.height;
+
+            if (imageWidth > imageHeight) {
+              if (imageWidth > maxWidth) {
+                imageHeight *= maxWidth / imageWidth;
+                imageWidth = maxWidth;
+              }
+            } else {
+              if (imageHeight > maxHeight) {
+                imageWidth *= maxHeight / imageHeight;
+                imageHeight = maxHeight;
+              }
+            }
+
+            let canvas = document.createElement('canvas');
+            canvas.width = imageWidth;
+            canvas.height = imageHeight;
+            image.width = imageWidth;
+            image.height = imageHeight;
+
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
+
+            preview.src = canvas.toDataURL(poiImageData.type);
+            preview.className = 'form--item-file-preview';
+          }
+        }
+      }
+      reader.readAsDataURL(poiImageData);
+    } else {
+      preview.className = 'form--item-file-hide-preview';
+    }
+  });
+
   document.getElementById('addPoi_form').addEventListener('submit', function (e) {
     e.preventDefault();
     let poiName = document.getElementById('addPoi_name').value;
     let poiType = document.getElementById('addPoi_type').value;
     let poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
     let poiDescription = document.getElementById('addPoi_description').value;
-    let poiImageData = document.getElementById('addPoi_image').files[0];
-    let reader = new FileReader();
-    let poiImage = null;
+    let preview = document.getElementById('addPoi_preview');
     let poiIsCheckpoint = document.getElementById('addPoi_isCheckpoint').checked;
 
     MicroModal.close('add-poi-popin');
 
-    if (poiImageData) {
-      reader.readAsDataURL(poiImageData);
-      reader.onloadend = function() {
-        poiImage = reader.result;
-        mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, poiImage, poiIsCheckpoint);
-      };
-    } else {
-      mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, null, poiIsCheckpoint);
-    }
+    iziToast.success({
+        message: 'Le point d\'intérêt a bien été ajouté sur la carte.',
+        position: 'bottomRight',
+    });
+
+    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, preview.src, poiIsCheckpoint);
 
     document.getElementById('addPoi_name').value = '';
     document.getElementById('addPoi_type').value = '';
@@ -459,8 +543,53 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('addPoi_description').value = '';
     document.getElementById('addPoi_image').value = '';
     document.getElementById('addPoi_isCheckpoint').checked = false;
+    document.getElementById('addPoi_preview').src = '';
   });
 
+  // EDIT POI IMAGE
+  document.getElementById('editPoi_image').addEventListener('change', function (e) {
+    let poiImageData = document.getElementById('editPoi_image').files[0];
+    let preview = document.getElementById('editPoi_preview');
+    let reader = new FileReader();
+    if (poiImageData) {
+      if (poiImageData.type.indexOf('image') === 0) {
+        reader.onload = function (event) {
+          let image = new Image();
+          image.src = event.target.result;
+          image.onload = function () {
+            let maxWidth = 500, maxHeight = 500, imageWidth = image.width, imageHeight = image.height;
+
+            if (imageWidth > imageHeight) {
+              if (imageWidth > maxWidth) {
+                imageHeight *= maxWidth / imageWidth;
+                imageWidth = maxWidth;
+              }
+            } else {
+              if (imageHeight > maxHeight) {
+                imageWidth *= maxHeight / imageHeight;
+                imageHeight = maxHeight;
+              }
+            }
+
+            let canvas = document.createElement('canvas');
+            canvas.width = imageWidth;
+            canvas.height = imageHeight;
+            image.width = imageWidth;
+            image.height = imageHeight;
+
+            let ctx = canvas.getContext('2d');
+            ctx.drawImage(this, 0, 0, imageWidth, imageHeight);
+
+            preview.src = canvas.toDataURL(poiImageData.type);
+            preview.className = 'form--item-file-preview';
+          }
+        }
+      }
+      reader.readAsDataURL(poiImageData);
+    } else {
+      preview.className = 'form--item-file-hide-preview';
+    }
+  });
 // EDIT POI SUBMIT
   document.getElementById('editPoi_form').addEventListener('submit', function (e) {
     e.preventDefault();
@@ -472,21 +601,18 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     poi.poiType = mapManager.poiTypesMap.get(parseInt(document.querySelector('#editPoi_type').value));
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
     poi.description = document.getElementById('editPoi_description').value;
-    let poiImageData = document.getElementById('editPoi_image').files[0];
-    let reader = new FileReader();
+    poi.image = document.getElementById('editPoi_preview').src;
 
-    if (poiImageData) {
-      reader.readAsDataURL(poiImageData);
-      reader.onloadend = function() {
-        let dataUrl = reader.result;
-        poi.image = dataUrl.split(',')[1];
-        poi.push();
-      };
-    } else {
-      poi.push();
-    }
+    mapManager.editorUI.updatePoi(poi);
+    poi.buildUI();
+    poi.push();
 
     MicroModal.close('edit-poi-popin');
+
+    iziToast.success({
+        message: 'Le point d\'intérêt a bien été mis à jour.',
+        position: 'bottomRight',
+    });
 
     document.getElementById('editPoi_name').value = '';
     document.getElementById('editPoi_type').value = '';
@@ -494,6 +620,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('editPoi_description').value = '';
     document.getElementById('editPoi_image').value = '';
     document.getElementById('editPoi_isCheckpoint').checked = false;
+    document.getElementById('editPoi_preview').src = '';
   });
 
   //Import GPX
@@ -530,18 +657,32 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     }
 
     MicroModal.close('import-gpx');
+    iziToast.success({
+        message: 'Le fichier a bien été importé.',
+        position: 'bottomRight',
+    });
   });
 
   //Export GPX
   document.getElementById('export-gpx--track').addEventListener('click', function () {
     mapManager.GPXExporter.exportAsTracks();
     MicroModal.close('export-gpx');
+
+    iziToast.success({
+        message: 'Le fichier a bien été exporté.',
+        position: 'bottomRight',
+    });
   });
 
   //Export GPX
   document.getElementById('export-gpx--route').addEventListener('click', function () {
     mapManager.GPXExporter.exportAsRoutes();
     MicroModal.close('export-gpx');
+
+    iziToast.success({
+        message: 'Le fichier a bien été exporté.',
+        position: 'bottomRight',
+    });
   });
 
   console.log("Editor JS loaded");

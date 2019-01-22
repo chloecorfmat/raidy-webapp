@@ -115,7 +115,9 @@ class OrganizerRaidController extends Controller
                     ['user' => $user]
                 );
 
-                if (count($poiTypes) !== 0) {
+                if (0 !== count($poiTypes)) {
+                    $this->addFlash('success', 'Le raid a bien été créé.');
+
                     return $this->redirectToRoute('listRaid');
                 } else {
                     $this->addFlash(
@@ -465,8 +467,7 @@ class OrganizerRaidController extends Controller
                     'data' => $cloneRaid->getPicture(),
                     'required' => false,
                     'data_class' => null,
-                    'attr' =>
-                        [
+                    'attr' => [
                             'data_url' => '/uploads/raids/',
                             'class' => 'form-input--image',
                         ],
@@ -498,6 +499,8 @@ class OrganizerRaidController extends Controller
 
                 $contactService = $this->container->get('ContactService');
                 $contactService->cloneContacts($cloneRaid, $raid);
+
+                $this->addFlash('success', 'Le raid a bien été cloné.');
 
                 return $this->redirectToRoute('listRaid');
             }

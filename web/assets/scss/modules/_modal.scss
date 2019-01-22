@@ -73,6 +73,19 @@
       }
     }
   }
+
+  .actions {
+    display: flex;
+    justify-content: space-between;
+
+    button {
+      flex-grow: 1;
+
+      &:not(:first-child) {
+        margin-left: .5rem;
+      }
+    }
+  }
 }
 
 

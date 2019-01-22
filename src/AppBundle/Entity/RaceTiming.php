@@ -3,13 +3,12 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 19/12/18
- * Time: 08:58
+ * Time: 08:58.
  */
 
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity

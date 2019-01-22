@@ -14,25 +14,19 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     switch (action.type) {
       case "MOVE_TRACK_MARKER" :
         let line = action.track.line;
-        //console.log("------------------");
-//        action.track.setEditable(false);
-        //console.log(line.getLatLngs());
-        //console.log(action.lastPosition);
 
         line.setLatLngs(action.lastPosition);
-       // console.log(line.getLatLngs());
 
         if(line.editor != undefined){
-         // console.log("editable");
           if(line.editor.drawing()) {
-          //  console.log("drawing");
+            console.log(line.editor._drawing);
             line.editor.endDrawing();
-            if (line.editor._drawing === L.Editable.FORWARD) {
-            //  console.log("forward");
+            if (line.editor._drawing == 1) {
+             console.log("forward");
               line.editor.endDrawing();
               line.editor.continueForward();
             } else {
-           //   console.log("backward");
+             console.log("backward");
               line.editor.endDrawing();
               line.editor.continueBackward();
             }
@@ -104,8 +98,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
 
   MapHistory.prototype.logModification = function (obj) {
-    //console.log(obj);
     this.undoBuffer.push(obj);
+    this.redoBuffer = [];
+  };
+
+  MapHistory.prototype.clearHistory = function () {
+    this.undoBuffer = [];
     this.redoBuffer = [];
   };
 }

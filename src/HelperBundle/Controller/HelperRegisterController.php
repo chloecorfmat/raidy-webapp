@@ -108,6 +108,8 @@ class HelperRegisterController extends Controller
      * @param int     $id
      *
      * @return \Symfony\Component\HttpFoundation\Response|template
+     *
+     * @throws \Exception
      */
     public function registerHelper(Request $request, $id)
     {
@@ -177,10 +179,6 @@ class HelperRegisterController extends Controller
                 CheckboxType::class,
                 [
                     'label' => 'Accepter les conditions',
-                    'attr' => [
-                        'data-help' =>
-                            'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
-                    ],
                 ]
             )
             ->add(
@@ -243,10 +241,40 @@ class HelperRegisterController extends Controller
                                 $helper->setFavoritePoiType($poitype);
                                 $helper->setUser($user);
                                 $helper->setIsCheckedIn(false);
-                                $helper->setAcceptConditions(new \DateTime("now"));
+                                $helper->setAcceptConditions(new \DateTime('now'));
 
                                 $em->persist($helper);
                                 $em->flush();
+
+                                /* Send email to helper */
+                                $message = \Swift_Message::newInstance()
+                                    ->setSubject('Création d\'un compte bénévole')
+                                    ->setFrom('raidy@enssat.fr')
+                                    ->setTo($user->getEmail())
+                                    ->setBody(
+                                        $this->renderView(
+                                            'HelperBundle:Emails:registration.html.twig',
+                                            array('user' => $user)
+                                        ),
+                                        'text/html'
+                                    );
+
+                                $this->get('mailer')->send($message);
+
+                                /* Send email to organizer */
+                                $message = \Swift_Message::newInstance()
+                                    ->setSubject('Enregistrement d\'un bénévole pour ' . $raid->getName())
+                                    ->setFrom('raidy@enssat.fr')
+                                    ->setTo($raid->getUser()->getEmail())
+                                    ->setBody(
+                                        $this->renderView(
+                                            'HelperBundle:Emails:newHelper.html.twig',
+                                            array('helper' => $user, 'organizer' => $raid->getUser(), 'raid' => $raid)
+                                        ),
+                                        'text/html'
+                                    );
+
+                                $this->get('mailer')->send($message);
 
                                 return $this->redirectToRoute('registerSuccessHelper', ['id' => $id]);
                             }
@@ -259,7 +287,8 @@ class HelperRegisterController extends Controller
                 } else {
                     $form->addError(
                         new FormError(
-                            'Le numéro de téléphone d\'un bénévole doit être un mobile et ' .
+                            'Le numéro de téléphone d\'un bénévole doit ' .
+                            'être un mobile et ' .
                             'commencer par 06 ou 07. Il comporte 10 numéros.'
                         )
                     );
@@ -288,6 +317,8 @@ class HelperRegisterController extends Controller
      * @param int     $id
      *
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     *
+     * @throws \Exception
      */
     public function joinHelper(Request $request, $id)
     {
@@ -340,10 +371,6 @@ class HelperRegisterController extends Controller
                 CheckboxType::class,
                 [
                     'label' => 'Accepter les conditions',
-                    'attr' => [
-                        'data-help' =>
-                            'Cette information n\'est utile que si vous participez à un raid en tant que bénévole.',
-                    ],
                 ]
             )
             ->add('submit', SubmitType::class, ['label' => 'Se connecter', 'attr' => array('class' => 'btn')])
@@ -398,7 +425,7 @@ class HelperRegisterController extends Controller
                                 $helper->setFavoritePoiType($poitype);
                                 $helper->setUser($user);
                                 $helper->setIsCheckedIn(false);
-                                $helper->setAcceptConditions(new \DateTime("now"));
+                                $helper->setAcceptConditions(new \DateTime('now'));
 
                                 $em->persist($helper);
                                 $em->flush();

@@ -1,0 +1,25 @@
+{% extends 'default/organizer.html.twig' %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb--list">
+        <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.uniqid}) }}">{{ raid.name }}</a></li>
+        <li class="breadcrumb--list-item"><a href="{{ path('listCompetitor', {'raidId': raid.uniqid}) }}">Liste des participants</a></li>
+        <li class="breadcrumb--list-item">{{ competitor.firstname~" "~competitor.lastname }}</li>
+    </ol>
+{% endblock %}
+
+{% block body %}
+    <h1>{{ competitor.firstname~" "~competitor.lastname }}</h1>
+
+    <div class="content">
+        <div class="content--part">
+            {{ form_start(form) }}
+            {{ form_widget(form) }}
+            {{ form_end(form) }}
+
+            <a href="{{ path('deleteCompetitor', {'competitorId': competitor.id, 'raidId': competitor.raid.uniqid}) }}" class="btn btn--full-width btn--danger">Supprimer</a>
+        </div>
+    </div>
+
+{% endblock %}

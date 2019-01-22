@@ -67,6 +67,18 @@
                 </a>
             </div>
             <div class="card">
+                <a href="{{ path('listRace', {'raidId': raid.uniqid}) }}">
+                    <i class="fas fa-trophy fa-2x"></i>
+                    <p>Épreuves</p>
+                </a>
+            </div>
+            <div class="card">
+                <a href="{{ path('listCompetitor', {'raidId': raid.uniqid}) }}">
+                    <i class="fas fa-running fa-2x"></i>
+                    <p>Participants</p>
+                </a>
+            </div>
+            <div class="card">
                 <a href="{{ path('listContacts', {'raidId': raid.uniqid}) }}">
                     <i class="fas fa-phone fa-2x"></i>
                     <p>Contacts</p>

@@ -97,6 +97,11 @@ class CollaborationController extends Controller
                     $formCollab->setRaid($raid);
                     $em->persist($formCollab);
                     $em->flush();
+
+                    $this->addFlash(
+                        'success',
+                        'Le collaborateur a bien été ajouté. Vous pouvez lui transmettre son lien d\'invitation.'
+                    );
                 }
             }
         }
@@ -147,6 +152,8 @@ class CollaborationController extends Controller
             $em->remove($collaboration);
             $em->flush();
         }
+
+        $this->addFlash('success', 'Le collaborateur a bien été supprimé.');
 
         return $this->redirectToRoute('listCollaborators', ['raidId' => $raidId]);
     }

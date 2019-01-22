@@ -62,7 +62,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.decorator = L.polylineDecorator(this.line, {
       patterns: [patternParameters]
     });
-
+    
     this.decorator.addTo(this.map);
   }
   Track.prototype.setSportType = function (sportType) {
@@ -219,7 +219,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     let i = 0;
     for (let obj of this.line.getLatLngs()) {
-      //console.log(waypoints[i].ele)
       obj.ele = waypoints[i].ele;
       //if(waypoints[i].ele === undefined) mapManager.elevator.getElevationAt(obj, function() {});
       i++;

@@ -4,7 +4,6 @@ namespace LiveBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 
 class LiveRaidController extends Controller
@@ -19,7 +18,7 @@ class LiveRaidController extends Controller
      */
     public function raidLive(Request $request, $id)
     {
-        $em =  $this->getDoctrine()->getManager();
+        $em = $this->getDoctrine()->getManager();
         $raidManager = $em->getRepository('AppBundle:Raid');
 
         //$raid = $raidManager->find($id);
@@ -52,14 +51,14 @@ class LiveRaidController extends Controller
 
         $filters = array_merge($twitterAccounts, $twitterHashtags);
 
-        $data = "";
+        $data = '';
 
         foreach ($filters as $key => $filter) {
-            if ($filter !== '@' && $filter !== '') {
+            if ('@' !== $filter && '' !== $filter) {
                 $data .= $filter;
 
                 if (next($filters)) {
-                    $data .= "%20OR%20";
+                    $data .= '%20OR%20';
                 }
             }
         }
@@ -71,12 +70,13 @@ class LiveRaidController extends Controller
             ->buildOauth($url, $requestMethod)
             ->performRequest();
 
-        $tweets = json_decode($jsonResults);
+        // This is passed to vuejs component.
+        $tweets = json_encode(json_decode($jsonResults)->statuses);
 
         return $this->render('LiveBundle:Raid:raid.html.twig', [
             'raid' => $raid,
             'meta' => $meta,
-            'tweets' => $tweets->statuses,
+            'tweets' => $tweets ?? '',
             'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }

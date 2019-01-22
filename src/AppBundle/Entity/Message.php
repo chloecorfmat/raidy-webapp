@@ -5,7 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * Message
+ * Message.
  *
  * @ORM\Table(name="message")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\MessageRepository")
@@ -50,6 +50,13 @@ class Message
     private $text;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="type", type="text", nullable=false)
+     */
+    private $type;
+
+    /**
      * Get id
      *
      * @return int
@@ -60,7 +67,7 @@ class Message
     }
 
     /**
-     * Set datetime
+     * Set datetime.
      *
      * @param \DateTime $datetime
      *
@@ -74,7 +81,7 @@ class Message
     }
 
     /**
-     * Get datetime
+     * Get datetime.
      *
      * @return \DateTime
      */
@@ -84,7 +91,7 @@ class Message
     }
 
     /**
-     * Set text
+     * Set text.
      *
      * @param string $text
      *
@@ -98,7 +105,7 @@ class Message
     }
 
     /**
-     * Get text
+     * Get text.
      *
      * @return string
      */
@@ -137,5 +144,21 @@ class Message
     public function setTargetPoitypes($targetPoitypes)
     {
         $this->targetPoitypes = $targetPoitypes;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param string $type
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 }

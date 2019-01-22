@@ -5,7 +5,9 @@ window.addEventListener('load', displayModalToDeletePoiType);
 window.addEventListener('load', displayModalToDeleteSportType);
 window.addEventListener('load', displayModalToDeleteCollaborator);
 window.addEventListener('load', displayModalToDeleteContact);
+window.addEventListener('load', displayModalToDeleteCompetitor);
 window.addEventListener('load', displayModalToDeleteMessage);
+window.addEventListener('load', displayModalToEditMessage);
 
 function displayModalToDeleteOrganizer () {
   var btns = document.querySelectorAll('.btn--delete-organizer');
@@ -152,9 +154,24 @@ function displayModalToDeleteContact () {
   }
 }
 
+function displayModalToDeleteCompetitor () {
+    var btns = document.querySelectorAll('.btn--delete-competitor');
+
+    if (btns.length !== 0) {
+        MicroModal.init();
+        for (var btn of btns) {
+            btn.addEventListener('click', function () {
+                var id = this.dataset.competitorId;
+                var url = document.getElementById('btn--delete-competitor').dataset.baseUrl + id;
+                document.getElementById('btn--delete-competitor').href = url;
+                MicroModal.show('delete-competitor'); // eslint-disable-line no-undef
+            });
+        }
+    }
+}
+
 function displayModalToDeleteMessage () {
     var btns = document.querySelectorAll('.btn--delete-message');
-    console.log(btns);
     if (btns.length !== 0) {
         MicroModal.init();
         for (var btn of btns) {
@@ -163,6 +180,18 @@ function displayModalToDeleteMessage () {
                 var url = document.getElementById('btn--delete-message').dataset.baseUrl + id;
                 document.getElementById('btn--delete-message').href = url;
                 MicroModal.show('delete-message'); // eslint-disable-line no-undef
+            });
+        }
+    }
+}
+
+function displayModalToEditMessage () {
+    var btns = document.querySelectorAll('.btn--edit-message');
+    if (btns.length !== 0) {
+        MicroModal.init();
+        for (var btn of btns) {
+            btn.addEventListener('click', function () {
+                MicroModal.show('edit-message');
             });
         }
     }

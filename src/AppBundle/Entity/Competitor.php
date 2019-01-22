@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 19/12/18
- * Time: 08:53
+ * Time: 08:53.
  */
 
 namespace AppBundle\Entity;
@@ -55,7 +55,7 @@ class Competitor
     private $numberSign;
 
     /**
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(type="string", length=45, nullable=true)
      * @Assert\Length(
      *      min = 1,
      *      max = 45,
@@ -65,7 +65,7 @@ class Competitor
     private $category;
 
     /**
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(type="string", length=45, nullable=true)
      * @Assert\Length(
      *      min = 1,
      *      max = 45,
@@ -75,7 +75,7 @@ class Competitor
     private $sex;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private $birthYear;
 
@@ -84,6 +84,12 @@ class Competitor
      * @ORM\JoinColumn(nullable=false)
      */
     private $raid;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Race")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $race;
 
     /**
      * @ORM\Column(name="uniqid", type="string", unique=true)
@@ -216,6 +222,22 @@ class Competitor
     public function setRaid($raid)
     {
         $this->raid = $raid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRace()
+    {
+        return $this->race;
+    }
+
+    /**
+     * @param mixed $race
+     */
+    public function setRace($race)
+    {
+        $this->race = $race;
     }
 
     /**

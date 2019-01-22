@@ -19,6 +19,7 @@ function helpersList() {
       var helper = document.getElementById('status-' + this.id);
       var status = helper.querySelector('.helper-check');
       var text = helper.querySelector('.helper-check--text');
+      var helperValidate = null;
 
       if (this.value === 'null') {
         data = 'null';
@@ -26,6 +27,22 @@ function helpersList() {
           status.classList.remove('helper-check--not');
           status.classList.add('helper-check--no-assign');
           text.innerHTML = 'Aucun POI assigné';
+
+          helperValidate = helper.parentNode.querySelector('.helper-validate');
+          helperValidate.innerHTML = '';
+
+          var spanContent = document.createElement('span');
+          spanContent.classList.add('helper-validate');
+          spanContent.classList.add('helper-validate--no-assign');
+          spanContent.innerText = '-';
+
+          var spanSrOnly = document.createElement('span');
+          spanSrOnly.classList.add('helper-validate--text');
+          spanSrOnly.classList.add('sr-only');
+          spanSrOnly.innerText = "Aucun POI assigné";
+
+          helperValidate.appendChild(spanContent);
+          helperValidate.appendChild(spanSrOnly);
         }
       } else {
         data = parseInt(this.value);
@@ -34,6 +51,24 @@ function helpersList() {
               status.classList.add('helper-check--not');
               text.innerHTML = 'Non validé';
           }
+
+          helperValidate = helper.parentNode.querySelector('.helper-validate');
+          helperValidate.innerHTML = '';
+
+          var btnValidate = document.createElement('button');
+          btnValidate.classList.add('btn');
+          btnValidate.classList.add('btn-validate-helper');
+          btnValidate.dataset.helperid = this.id;
+          btnValidate.dataset.raidid = raidID;
+
+          btnValidate.innerText = "Valider";
+
+          helperValidate.appendChild(btnValidate);
+
+          btnValidate.addEventListener('click', validateHelper);
+
+
+          // <button class="btn btn-validate-helper" data-helperid="{{ helper.id }}" data-raidid="{{ raid_id }}">Valider</button>
       }
       xhr_object.send(JSON.stringify({poi : data}));
 
@@ -47,7 +82,6 @@ function helpersList() {
   };
 
   // Check in manually.
-
   var validateBtns = document.getElementsByClassName('btn-validate-helper');
 
   for (var btn of validateBtns) {

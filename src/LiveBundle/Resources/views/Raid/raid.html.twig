@@ -3,12 +3,8 @@
 {% block body %}
     <div id="app">
         <social-media-share url="{{ meta['url'] }}" raidname="{{ raid.name }}" via="{{ via }}"></social-media-share>
+        <tweets-list tweets="{{ tweets }}"></tweets-list>
     </div>
-    <ol>
-        {% for tweet in tweets %}
-            <li>{{ tweet.text }}</li>
-        {% endfor %}
-    </ol>
 {% endblock %}
 
 

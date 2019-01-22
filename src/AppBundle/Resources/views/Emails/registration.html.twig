@@ -1,0 +1,16 @@
+{% extends 'default/mail_organizer.html.twig' %}
+
+{% block body %}
+<h1>Bonjour, {{ user.firstname }} {{ user.lastname }} !</h1>
+
+    <p>Votre compte organisateur a bien été créé sur Raidy, avec l'identifiant suivant : <strong>{{ user.email }}</strong>.</p>
+    <br>
+    <p>Votre mot de passe est : <strong>{{ password }}</strong> </p>
+    <p>Nous vous invitons à le changer lors de votre première connexion. </p>
+    <br>
+    <p>Pour vous connecter et créer votre premier raid, cliquez ici : <a href="{{ url('fos_user_security_login') }}">se connecter</a>.</p>
+    <p>Si le lien ne s'affiche pas correctement, merci de copier-coller ce lien dans votre navigateur : <a href="{{ url('fos_user_security_login') }}">{{ url('fos_user_security_login') }}</a></p>
+    <br>
+    <p>Sportivement,<br>
+    <p>L'équipe Raidy</p>
+{% endblock %}

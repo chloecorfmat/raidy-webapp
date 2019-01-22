@@ -4,9 +4,9 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\PoiType;
+use AppBundle\Form\Type\ColorpickerType;
 use OrganizerBundle\Security\RaidVoter;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
-use Symfony\Component\Form\Extension\Core\Type\ColorType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
@@ -37,7 +37,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
 
         $form = $this->createFormBuilder($formPoiType)
             ->add('type', TextType::class, ['label' => 'Type de point d\'intérêt', 'data' => ''])
-            ->add('color', ColorType::class, ['label' => 'Couleur'])
+            ->add('color', ColorpickerType::class, ['label' => 'Couleur'])
             ->add('submit', SubmitType::class, ['label' => 'Créer un type de point d\'intérêt'])
             ->getForm();
 
@@ -102,7 +102,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
 
         $form = $this->createFormBuilder($formPoiType)
             ->add('type', TextType::class, ['label' => 'Type de point d\'intérêt'])
-            ->add('color', ColorType::class, ['label' => 'Couleur'])
+            ->add('color', ColorpickerType::class, ['label' => 'Couleur'])
             ->add('submit', SubmitType::class, ['label' => 'Editer le type de point d\'intérêt'])
             ->getForm();
 
@@ -197,7 +197,7 @@ class OrganizerPoiTypeController extends AjaxAPIController
 
         $form = $this->createFormBuilder($formPoiType)
             ->add('type', TextType::class, ['label' => 'Type de point d\'intérêt', 'data' => ''])
-            ->add('color', ColorType::class, ['label' => 'Couleur'])
+            ->add('color', ColorpickerType::class, ['label' => 'Couleur'])
             ->add('submit', SubmitType::class, ['label' => 'Créer un type de point d\'intérêt'])
             ->getForm();
 

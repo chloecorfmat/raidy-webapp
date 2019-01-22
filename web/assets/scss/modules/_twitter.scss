@@ -1,0 +1,79 @@
+.tweets-list {
+  padding-left: 0;
+}
+
+.tweet {
+  border: 1px solid $text-color;
+  border-radius: 15px;
+  list-style-type: none;
+  margin-top: 2rem;
+  position: relative;
+
+  &-user-link {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    text-decoration: none;
+  }
+
+  &-user-profile {
+    border-radius: 50%;
+  }
+
+  &-user-name {
+    display: inline-block;
+    font-weight: 700;
+    margin-left: 1rem;
+  }
+
+  &-user-date {
+    display: inline-block;
+  }
+
+  header {
+    background: $grey-light;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-left: 1rem;
+    padding-right: 1rem;
+
+
+    a {
+      color: $live-color;
+    }
+  }
+
+  main {
+    margin: 1rem 1rem 2rem;
+    padding: 0;
+  }
+
+  footer {
+    background: none;
+    bottom: 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    position: absolute;
+    right: 0;
+
+    a {
+      color: $twitter-color;
+    }
+  }
+
+  .tweet-is-retweet {
+    align-self: end;
+    color: $text-color;
+    margin-right: 1rem;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    max-width: 35%;
+  }
+}

@@ -144,6 +144,8 @@ class OrganizerContactController extends Controller
             throw $this->createNotFoundException('Ce contact n\'existe pas');
         }
 
+        $this->addFlash('success', 'Le contact a bien été supprimé.');
+
         return $this->redirectToRoute('listContacts', array('raid' => $raid, 'raidId' => $raid->getUniqId()));
     }
 
@@ -200,8 +202,8 @@ class OrganizerContactController extends Controller
                 'choices' => $helpers,
                 'choice_label' => function ($helper) {
                     /**
-                    * @var Helper $helper
-                    */
+                     * @var Helper
+                     */
                     $helperName = $helper->getUser()->getFirstName() . ' ' . $helper->getUser()->getLastName();
 
                     return $helperName;
@@ -237,6 +239,8 @@ class OrganizerContactController extends Controller
                         $em->persist($contact);
                         $em->flush();
 
+                        $this->addFlash('success', 'Le contact a bien été ajouté.');
+
                         return $this->redirectToRoute('listContacts', array('raidId' => $raidId));
                     } else {
                         $formatService = $this->container->get('FormatService');
@@ -246,6 +250,8 @@ class OrganizerContactController extends Controller
 
                         $em->persist($contact);
                         $em->flush();
+
+                        $this->addFlash('success', 'Le contact a bien été ajouté.');
 
                         return $this->redirectToRoute('listContacts', array('raidId' => $raidId));
                     }

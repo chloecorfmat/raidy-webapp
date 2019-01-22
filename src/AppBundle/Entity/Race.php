@@ -3,7 +3,7 @@
  * Created by PhpStorm.
  * User: lucas
  * Date: 19/12/18
- * Time: 08:36
+ * Time: 08:36.
  */
 
 namespace AppBundle\Entity;
@@ -32,18 +32,23 @@ class Race
      *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères",
      * )
      */
-    private $name;
+    protected $name;
 
     /**
      * @ORM\Column(name="start_time", type="datetime", nullable=true)
      */
-    private $startTime;
+    protected $startTime;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $raid;
+    protected $raid;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\RaceTrack", cascade={"persist", "remove"}, mappedBy="race")
+     */
+    protected $tracks;
 
     /**
      * @return mixed
@@ -107,5 +112,30 @@ class Race
     public function setRaid($raid)
     {
         $this->raid = $raid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTracks()
+    {
+        return $this->tracks;
+    }
+
+    /**
+     * @param mixed $tracks
+     */
+    public function setTracks($tracks)
+    {
+        $this->tracks = $tracks;
+    }
+
+    /**
+     * @param Track $track
+     */
+    public function addTrack($track)
+    {
+        $this->tracks[] = $track;
+        $track->setRace($this);
     }
 }

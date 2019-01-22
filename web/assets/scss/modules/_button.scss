@@ -84,7 +84,7 @@ button {
   font-size: 5rem;
   height: 5rem;
   line-height: 5rem;
-  margin: 1.5rem auto;
+  margin: 4rem auto;
   overflow: hidden;
   position: fixed;
   right: 1.5rem;
@@ -99,7 +99,7 @@ button {
   }
 
   @media screen and (min-width: $breakpoint-large) {
-    margin: 2.5rem;
+    margin: 4rem;
     right: 0;
   }
 }

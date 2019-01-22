@@ -36,6 +36,19 @@
 <h1>{{ raid.name }} (édition {{ raid.editionNumber }})</h1>
 <div class="content">
     <div class="content--quarter">
+        {% if messages is not empty %}
+            <h2>Fil d'informations</h2>
+            {% for message in messages %}
+                <div class="message message--{{ message.type }}" data-id="{{ message.id }}">
+                    <div class="message-datetime">
+                        <p>Le {{ message.datetime|date('d/m/Y à H:i:s') }}</p>
+                    </div>
+                    <div class="message-content">
+                        {{ message.text|raw }}
+                    </div>
+                </div>
+            {% endfor %}
+        {% endif %}
         <h2>Informations</h2>
         <div class="content-important">
             <div class="content-important--part">
@@ -68,6 +81,11 @@
     <div class="content--quarter">
         <div>
             <h2>Affectation</h2>
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
             <div>
                 {{ form_start(form) }}
                 {{ form_widget(form) }}

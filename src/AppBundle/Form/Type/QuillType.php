@@ -3,17 +3,14 @@
  * Created by PhpStorm.
  * User: chloecorfmat
  * Date: 03/01/2019
- * Time: 17:49
+ * Time: 17:49.
  */
 
 namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\BaseType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class QuillType extends AbstractType
 {
