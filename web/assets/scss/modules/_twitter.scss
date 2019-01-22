@@ -47,19 +47,19 @@
   }
 
   main {
+    margin: 1rem 1rem 2rem;
     padding: 0;
-    margin: 1rem 1rem 2rem 1rem;
   }
 
   footer {
     background: none;
+    bottom: 0;
     display: flex;
-    position: absolute;
     flex-direction: row;
     justify-content: flex-end;
     padding-left: 1rem;
     padding-right: 1rem;
-    bottom: 0;
+    position: absolute;
     right: 0;
 
     a {
