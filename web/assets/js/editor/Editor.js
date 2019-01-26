@@ -63,7 +63,7 @@ function getRootElementFontSize() {
 function checkoutForConflict(){
   let keepThis = this;
   let xhr_object = new XMLHttpRequest();
-  xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
+  xhr_object.open('GET', base_url + '/editor/raid/'+raidID+'/lastEdit', true);
   xhr_object.send(null);
   xhr_object.onreadystatechange = function () {
     if (this.readyState === XMLHttpRequest.DONE) {
@@ -141,7 +141,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
   function checkoutForConflict(){
     var keepThis = this;
     var xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/editor/raid/'+raidID+'/lastEdit', true);
+    xhr_object.open('GET', base_url + '/editor/raid/'+raidID+'/lastEdit', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE) {

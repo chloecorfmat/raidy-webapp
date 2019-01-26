@@ -48,7 +48,7 @@ function editMessage(e) {
             }
         }
 
-        xhr_object.open('PATCH', '/organizer/raid/' + raidid + '/message/' + id + '/edit', true);
+        xhr_object.open('PATCH', base_url + '/organizer/raid/' + raidid + '/message/' + id + '/edit', true);
         xhr_object.setRequestHeader('Content-Type', 'application/json');
         xhr_object.send(JSON.stringify({content: quill.root.innerHTML.trim()}));
     });

@@ -62,7 +62,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.decorator = L.polylineDecorator(this.line, {
       patterns: [patternParameters]
     });
-    
+
     this.decorator.addTo(this.map);
   }
   Track.prototype.setSportType = function (sportType) {
@@ -263,7 +263,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   Track.prototype.push = function () {
     console.log(this.line.getLatLngs());
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
+    xhr_object.open('PATCH', base_url + '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(this.toJSON());
 
@@ -282,7 +282,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
   Track.prototype.remove = function () {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('DELETE', '/editor/raid/' + raidID + '/track/' + this.id, true);
+    xhr_object.open('DELETE', base_url + '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
 
     xhr_object.send(null);

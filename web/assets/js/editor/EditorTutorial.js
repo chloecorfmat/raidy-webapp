@@ -8,7 +8,7 @@ function initTutorial(e) {
             MicroModal.show('tutorial_1');
 
             let xhr_object = new XMLHttpRequest();
-            xhr_object.open('PATCH', '/organizer/checkTutorial', true);
+            xhr_object.open('PATCH', base_url + '/organizer/checkTutorial', true);
             xhr_object.setRequestHeader('Content-Type', 'application/json');
             xhr_object.send();
         }

@@ -68,7 +68,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Poi.prototype.push = function () {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('PATCH', '/editor/raid/' + raidID + '/poi/' + this.id, true);
+    xhr_object.open('PATCH', base_url + '/editor/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(this.toJSON());
 
@@ -140,7 +140,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Poi.prototype.remove = function () {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('DELETE', '/editor/raid/' + raidID + '/poi/' + this.id, true);
+    xhr_object.open('DELETE', base_url + '/editor/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(null);
 
