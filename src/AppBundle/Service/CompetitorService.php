@@ -65,7 +65,6 @@ class CompetitorService
 
         $competitor->setUniqid(uniqid());
 
-
         return $competitor;
     }
 
@@ -75,7 +74,8 @@ class CompetitorService
      *
      * @return Competitor
      */
-    public function competitorFromCsv($array, $raidId) {
+    public function competitorFromCsv($array, $raidId)
+    {
         $competitor = new Competitor();
 
         $competitor->setFirstname($array[0]);
@@ -92,8 +92,39 @@ class CompetitorService
 
         $competitor->setUniqid(uniqid());
 
-
         return $competitor;
+    }
 
+    /**
+     * @param array $competitors
+     *
+     * @return false|string
+     */
+    public function competitorsArrayToJson($competitors)
+    {
+        $competitorsObj = [];
+
+        foreach ($competitors as $competitor) {
+            $obj = [];
+
+            $obj['id'] = $competitor->getUniqid();
+            $obj['firstname'] = $competitor->getFirstname();
+            $obj['lastname'] = $competitor->getLastname();
+            $obj['number_sign'] = $competitor->getNumberSign();
+            $obj['category'] = $competitor->getCategory();
+            $obj['sex'] = $competitor->getSex();
+            $obj['birthyear'] = $competitor->getBirthYear();
+            if ($competitor->getRace() != null) {
+                $obj['race'] = $competitor->getRace()->getId();
+            } else {
+                $obj['race'] = null;
+            }
+
+            $obj['raid'] = $competitor->getRaid()->getId();
+
+            $competitorsObj[] = $obj;
+        }
+
+        return json_encode($competitorsObj);
     }
 }
