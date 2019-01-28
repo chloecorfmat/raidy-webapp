@@ -31,7 +31,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         poiType: this.poiType.id,
         description: this.description,
         image: this.image,
-        isCheckpoint: this.isCheckpoint
+        isCheckpoint: this.isCheckpoint ? true : false
       };
     let json = JSON.stringify(poi);
     return json;
@@ -45,6 +45,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.requiredHelpers = poi.requiredHelpers;
     this.description = poi.description;
     this.image = poi.image;
+    this.isCheckpoint = false;
     this.isCheckpoint = poi.isCheckpoint;
     this.marker = L.marker([poi.latitude, poi.longitude]);
 
@@ -95,20 +96,38 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       popupAnchor: [0, -35],
       html: '<span class="poi-marker"' + checkpointClass + ' style="background-color:' + this.color + ';" />'
     });
-    this.marker.bindPopup('' +
-      '<header style="' +
-      'background: ' + this.color + ' ;' +
-      'color: #ffffff ;' +
-      'padding: 0rem 3rem;">' +
-      '<h3>' + this.name + checkpointIcon +'</h3>' +
-      '</header>' +
-      '<div> ' +
-      '<p style="padding: 0.5rem; text-align: left;">'+shortDesc+'</p>'+
-      '<h4>' + this.requiredHelpers + ' bénévoles requis.</h4>'+
-      '<button style="background-color: #77aeaf; border-radius : 2rem; width: 2rem; height: 2rem; " id="poi-edit-button-'+keepThis.id+'"> <i class="fas fa-pen"></i> </button>' +
-      '<button style="background-color: #77aeaf; border-radius : 2rem; width: 2rem; height: 2rem; " id="poi-info-button-'+keepThis.id+'"> <i class="fas fa-plus"> </button>' +
-      '</div>'
-    );
+
+
+    if(mapManager.isEditor){
+      this.marker.bindPopup('' +
+        '<header style="' +
+        'background: ' + this.color + ' ;' +
+        'color: #ffffff ;' +
+        'padding: 0rem 3rem;">' +
+        '<h3>' + this.name + checkpointIcon +'</h3>' +
+        '</header>' +
+        '<div> ' +
+        '<p style="padding: 0.5rem; text-align: left;">'+shortDesc+'</p>'+
+        '<h4>' + this.requiredHelpers + ' bénévoles requis.</h4>'+
+        '<button class="poi-action-btn" id="poi-edit-button-'+keepThis.id+'"> <i class="fas fa-pen"></i> </button>' +
+        '<button class="poi-action-btn" id="poi-info-button-'+keepThis.id+'"> <i class="fas three-points">...</i> </button>' +
+        '</div>'
+      );
+    }else{
+      this.marker.bindPopup('' +
+        '<header style="' +
+        'background: ' + this.color + ' ;' +
+        'color: #ffffff ;' +
+        'padding: 0rem 3rem;">' +
+        '<h3>' + this.name + checkpointIcon +'</h3>' +
+        '</header>' +
+        '<div> ' +
+        '<p style="padding: 0.5rem; text-align: left;">'+shortDesc+'</p>'+
+        '<h4>' + this.requiredHelpers + ' bénévoles requis.</h4>'+
+        '<button class="poi-action-btn" id="poi-info-button-'+keepThis.id+'"> <i class="fas three-points">...</i> </button>' +
+        '</div>'
+      );
+    }
 
     this.marker.setIcon(icon);
 

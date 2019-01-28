@@ -163,6 +163,20 @@
     z-index: 1000;
   }
 
+  .close-graph-btn {
+    background-color: $tertiary-color-1;
+    border-radius: 3rem;
+    color: $white07;
+    font-size: .5rem;
+    font-weight: bold;
+    height: 1.5rem;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 1.5rem;
+  }
+
   .editor--list {
     list-style-type: none;
     padding: 0;
@@ -986,6 +1000,22 @@ div {
   position: relative;
   transform:  translateX(-$poi-size/2) translateY(-$poi-size) rotate(45deg);
   width: $poi-size;
+}
+
+.poi-action-btn {
+  background-color: $tertiary-color-1;
+  border-radius: 2rem;
+  height: 2rem;
+  margin: .25rem;
+  width: 2rem;
+
+  .three-points {
+    font-family: Fontastique, SansSerif;
+    letter-spacing: .1rem;
+    position: relative;
+    text-align: center;
+    top: -.2rem;
+  }
 }
 
 .track-marker {
