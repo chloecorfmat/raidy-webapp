@@ -36,6 +36,7 @@ GPXExporter.prototype.buildGPXBase = function(){
 
         wpt.setAttribute('lat', latLng.lat);
         wpt.setAttribute('lon', latLng.lng);
+
         gpx.appendChild(wpt);
     })
 
@@ -55,7 +56,12 @@ GPXExporter.prototype.exportAsTracks = function () {
           let trkpt = document.createElement('trkpt');
           trkpt.setAttribute("lat", point.lat);
           trkpt.setAttribute("lon", point.lng);
-          trkseg.appendChild(trkpt);
+
+         let eleNode = document.createElement('ele');
+         eleNode.innerHTML = point.alt;
+         trkpt.appendChild(eleNode);
+
+         trkseg.appendChild(trkpt);
        });
 
        trk.appendChild(trkseg);
@@ -81,6 +87,9 @@ GPXExporter.prototype.exportAsRoutes = function () {
             let rtept = document.createElement('rtept');
             rtept.setAttribute("lat", point.lat);
             rtept.setAttribute("lon", point.lng);
+            let eleNode = document.createElement('ele');
+            eleNode.innerHTML = point.alt;
+            rtept.appendChild(eleNode);
             rte.appendChild(rtept);
         });
         gpx.appendChild(rte);

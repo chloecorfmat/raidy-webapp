@@ -30,7 +30,7 @@ GPXImporter.prototype.importGPXTrack = function(id, sportType, gpxTrack){
 
     let latLngs = [];
     for(let point of gpxTrack.points){
-        latLngs.push([point.lat, point.lon]);
+        latLngs.push([point.lat, point.lon, point.ele]);
     }
 
     let track = new Track(this.mapManager.map);

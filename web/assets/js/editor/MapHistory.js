@@ -20,8 +20,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         if(line.editor != undefined){
           if(line.editor.drawing()) {
             console.log(line.editor._drawing);
-            line.editor.endDrawing();
-            if (line.editor._drawing == 1) {
+          //  line.editor.endDrawing();
+            if (line.editor._drawing > 0) {
              console.log("forward");
               line.editor.endDrawing();
               line.editor.continueForward();
@@ -56,7 +56,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
           for (let element in latLngArray) {
             toRedo.push({
               lat: latLngArray[element].lat,
-              lng: latLngArray[element].lng
+              lng: latLngArray[element].lng,
+              alt: latLngArray[element].alt
             });
           }
           this.redoBuffer.push({
@@ -68,6 +69,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       }
       this.apply(action);
 
+    }else{
+      console.log("Nothing to undo.");
     }
   };
 
@@ -82,7 +85,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
           for (let element in latLngArray) {
             toUndo.push({
               lat: latLngArray[element].lat,
-              lng: latLngArray[element].lng
+              lng: latLngArray[element].lng,
+              alt: latLngArray[element].alt
             });
           }
           this.undoBuffer.push({
@@ -94,12 +98,15 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       }
 
     this.apply(action);
-  }
+  }else{
+      console.log("Nothing to redo.");
+    }
   };
 
   MapHistory.prototype.logModification = function (obj) {
     this.undoBuffer.push(obj);
-    this.redoBuffer = [];
+    console.log(this.undoBuffer);
+    //this.redoBuffer = [];
   };
 
   MapHistory.prototype.clearHistory = function () {

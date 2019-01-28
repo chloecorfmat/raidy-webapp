@@ -78,9 +78,8 @@ class CompetitorService
     public function competitorFromCsv($array, $raidId)
     {
         $competitor = new Competitor();
-
-        $competitor->setFirstname($array[0]);
-        $competitor->setLastname($array[1]);
+        $competitor->setLastname($array[0]);
+        $competitor->setFirstname($array[1]);
         $competitor->setNumberSign($array[2]);
         $competitor->setCategory($array[3]);
         $competitor->setSex($array[4]);
@@ -117,7 +116,9 @@ class CompetitorService
             $obj['sex'] = $competitor->getSex();
             $obj['birthyear'] = $competitor->getBirthYear();
             if ($competitor->getRace() != null) {
-                $obj['race'] = $competitor->getRace()->getId();
+                $obj['race'] = [];
+                $obj['race']['id'] = $competitor->getRace()->getId();
+                $obj['race']['name'] = $competitor->getRace()->getName();
             } else {
                 $obj['race'] = null;
             }

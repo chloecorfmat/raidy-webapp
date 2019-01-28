@@ -18,6 +18,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
    * MapManager is the data to map content manager
    */
   MapManager = function() {
+
+    this.isEditor = (typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null);
     this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
     this.OSMTiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
@@ -375,6 +377,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
   };
 
+
   MapManager.prototype.loadTracks = function () {
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('GET', '/editor/raid/' + raidID + '/track', true);
@@ -395,6 +398,11 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
   };
 
+  MapManager.prototype.reloadPois = function () {
+
+    this.loadPois ();
+  }
+
   MapManager.prototype.loadPois = function () {
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('GET', '/editor/raid/' + raidID + '/poi', true);
@@ -402,12 +410,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     xhr_object.onreadystatechange = function (event) {
       if (this.readyState === XMLHttpRequest.DONE) {
         if (xhr_object.status === 200) {
+          mapManager.poiMap.forEach(function (poi) {
+            mapManager.map.removeLayer(poi.marker);
+          });
           let pois = JSON.parse(xhr_object.responseText);
           for (let poi of pois) {
             mapManager.addPoi(poi);
-          }
-          if (mapManager.group.getLayers().length > 0) {
-            mapManager.map.fitBounds(mapManager.group.getBounds());
           }
         }
       }

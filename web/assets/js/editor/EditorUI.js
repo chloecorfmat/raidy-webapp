@@ -146,6 +146,7 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         '         <div id="myDropdown" class="dropdown-content">' +
         '            <a class="btn--track--edit" data-id = "' + newTrack.id + '"> <i class="fas fa-pen"></i> Éditer le tracé</a>' +
         '            <a class="btn--track--settings" data-id = "' + newTrack.id + '"> <i class="fas fa-cog"></i> Modifier les infos</a>' +
+        '            <a class="btn--track--graph" data-id = "' + newTrack.id + '"> <i class="fas fa-chart-line"></i> Voir l\'altimétrie</a>' +
         '            <a class="btn--track--delete" data-id = "' + newTrack.id +'"><i class="fas fa-trash"></i> Supprimer</a.btn--track--delete>' +
         '          </div>';
 
@@ -176,6 +177,12 @@ if(typeof(document.getElementById("editorContainer")) !== "undefined" && documen
         MicroModal.show('delete-track');
       });
 
+      // TRACK EDIT PENCIL
+      let btnShowElev = li.querySelector('.btn--track--graph');
+      btnShowElev.addEventListener('click', function () {
+        mapManager.elevator.initChart(mapManager.tracksMap.get(parseInt(btnShowElev.dataset.id)));
+        document.querySelector(".elevation-tools").style.display = "block";
+      });
 
       // TRACK EDIT PENCIL
       let btnEdit = li.querySelector('.btn--track--edit');

@@ -307,7 +307,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       mapManager.elevator = new MapElevation();
       let ShowElevationGraphCtrl = L.Control.extend({
       options: {
-        position: 'topright'
+        position: 'bottomleft'
       },
       onAdd: function(map) {
         let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
@@ -329,6 +329,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       },
     });
 
+      document.querySelector(".close-graph-btn").addEventListener("click", function(e){
+
+          document.querySelector(".elevation-tools").style.display = "none";
+
+      });
 
     let ignTileUrl = "http://wxs.ign.fr/" + IGNAPIKEY
         + "/geoportail/wmts?SERVICE=WMTS&REQUEST=GetTile&VERSION=1.0.0&"
