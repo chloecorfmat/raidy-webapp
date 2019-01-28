@@ -80,6 +80,24 @@ class Poi
      */
     protected $description;
 
+    protected $helpers = [];
+
+    /**
+     * @return array
+     */
+    public function getHelpers()
+    {
+        return $this->helpers;
+    }
+
+    /**
+     * @param array $helpers
+     */
+    public function setHelpers($helpers)
+    {
+        $this->helpers = $helpers;
+    }
+
     /**
      * Poi constructor.
      */
