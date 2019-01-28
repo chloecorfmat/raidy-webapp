@@ -93,8 +93,13 @@ fos_user:
   firewall_name: main
   user_class: AppBundle\Entity\User
   from_email:
-    address: "-"
-    sender_name: "-"
+    address: "raidy@enssat.fr"
+    sender_name: "Raidy"
+  service:
+    mailer: fos_user.mailer.twig_swift
+  resetting:
+    email:
+      template: email/password_resetting.email.twig
 
 fos_rest:
   view:

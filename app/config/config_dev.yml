@@ -38,7 +38,7 @@ monolog:
         #    level: info
 
 swiftmailer:
-    delivery_addresses: ['anais.pignet@gmail.com']
+    delivery_addresses: ['luuka.tr@gmail.com']
 
 app:
     twitter:
