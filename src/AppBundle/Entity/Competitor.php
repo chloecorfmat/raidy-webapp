@@ -97,6 +97,11 @@ class Competitor
     private $uniqid;
 
     /**
+     * @ORM\Column(name="nfcserialid", type="text")
+     */
+    private $NFCSerialId;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -254,5 +259,21 @@ class Competitor
     public function setUniqid($uniqid)
     {
         $this->uniqid = $uniqid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNFCSerialId()
+    {
+        return $this->NFCSerialId;
+    }
+
+    /**
+     * @param mixed $NFCSerialId
+     */
+    public function setNFCSerialId($NFCSerialId)
+    {
+        $this->NFCSerialId = $NFCSerialId;
     }
 }
