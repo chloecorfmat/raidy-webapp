@@ -89,6 +89,8 @@ class PoiService
             $obj['image'] = '';
         }
 
+        $obj['helpers'] = $poi->getHelpers();
+
         return json_encode($obj);
     }
 
@@ -149,6 +151,8 @@ class PoiService
             } else {
                 $obj['poiType'] = '';
             }
+
+            $obj['helpers'] = $poi->getHelpers();
 
             $poisObj[] = $obj;
         }
