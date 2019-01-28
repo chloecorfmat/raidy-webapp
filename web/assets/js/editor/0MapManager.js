@@ -18,6 +18,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
    * MapManager is the data to map content manager
    */
   MapManager = function() {
+
+    this.isEditor = (typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null);
     this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
     this.OSMTiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'

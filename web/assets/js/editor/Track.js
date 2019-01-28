@@ -111,7 +111,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       ret = {};
 
     for (var i = 0; i < points.length - 1; i++) {
-      var diff = parseFloat(points[i + 1].ele) - parseFloat(points[i].ele);
+      var diff = parseFloat(points[i + 1].alt) - parseFloat(points[i].alt);
 
       if (diff < 0) {
         dm += diff;
@@ -124,7 +124,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     var sum = 0;
 
     for (var i = 0, len = points.length; i < len; i++) {
-      var ele = parseFloat(points[i].ele);
+      var ele = parseFloat(points[i].alt);
       elevation.push(ele);
       sum += ele;
     }
@@ -188,7 +188,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     let latlong = [];
     let i =0;
     for (let obj of this.line.getLatLngs()) {
-      latlong.push({lat: obj.lat, lng: obj.lng, ele : obj.ele});
+      latlong.push({lat: obj.lat, lng: obj.lng, ele : obj.alt});
       i++;
     }
     let track =
@@ -219,7 +219,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     let i = 0;
     for (let obj of this.line.getLatLngs()) {
-      obj.ele = waypoints[i].ele;
+      obj.alt = waypoints[i].ele;
       //if(waypoints[i].ele === undefined) mapManager.elevator.getElevationAt(obj, function() {});
       i++;
     }
@@ -261,7 +261,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
 
   Track.prototype.push = function () {
-    console.log(this.line.getLatLngs());
+  //  console.log(this.line.getLatLngs());
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
