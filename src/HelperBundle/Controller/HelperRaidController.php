@@ -102,9 +102,10 @@ class HelperRaidController extends Controller
         $contactManager = $em->getRepository('AppBundle:Contact');
         $contacts = $contactManager->findBy(array('raid' => $raid));
 
-        $messageManager = $em->getRepository('AppBundle:Message');
-
-        $messages = $messageManager->findByPoitype($raid->getId(), $helper->getPoi()->getPoitype()->getId());
+        if (!is_null($helper->getPoi())) {
+            $messageManager = $em->getRepository('AppBundle:Message');
+            $messages = $messageManager->findByPoitype($raid->getId(), $helper->getPoi()->getPoitype()->getId());
+        }
 
         return $this->render(
             'HelperBundle:Raid:raid.html.twig',
@@ -112,7 +113,7 @@ class HelperRaidController extends Controller
             'raid' => $raid,
             'contacts' => $contacts,
             'form' => $form->createView(),
-            'messages' => $messages,
+            'messages' => $messages ?? '',
             ]
         );
     }
