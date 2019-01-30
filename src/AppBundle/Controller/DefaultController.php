@@ -73,14 +73,4 @@ class DefaultController extends Controller
     {
         return $this->render('AppBundle:Admin:legalNotice.html.twig');
     }
-
-    /**
-     * @Route("/politique-confidentialite", name="privacyPolicy")
-     *
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function privacyPolicy()
-    {
-        return $this->render('AppBundle:Admin:privacyPolicy.html.twig');
-    }
 }
