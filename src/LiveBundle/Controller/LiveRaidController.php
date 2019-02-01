@@ -34,8 +34,7 @@ class LiveRaidController extends AjaxAPIController
 
         $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
         $meta['title'] = 'Live | Raidy';
-        // @TODO.
-        $meta['image'] = '/uploads/raids/dc015d1aa7f746d65707ce2815452229.png';
+        $meta['image'] = '/uploads/raids/' . $raid->getPicture();
         $meta['description'] = 'Accéder au live de raids';
 
         // Get tweets.
@@ -83,11 +82,29 @@ class LiveRaidController extends AjaxAPIController
         $competitorsData = [];
 
         foreach ($competitors as $competitor) {
+            if ($competitor->getRace()) {
+                $r = $competitor->getRace()->getId();
+            } else {
+                $r = null;
+            }
+
             $competitorsData[] = [
                 'id' => $competitor->getId(),
                 'lastname' => $competitor->getLastname(),
                 'firstname' => $competitor->getFirstname(),
                 'numbersign' => $competitor->getNumberSign(),
+                'race_id' => $r,
+            ];
+        }
+
+        $raceManager = $em->getRepository('AppBundle:Race');
+        $races = $raceManager->findBy(['raid' => $raid]);
+
+        $racesData = [];
+        foreach ($races as $race) {
+            $racesData[] = [
+                'id' => $race->getId(),
+                'name' => $race->getName(),
             ];
         }
 
@@ -98,6 +115,7 @@ class LiveRaidController extends AjaxAPIController
             'twitter_activation' => $tweets ? true:false,
             'competitors' => json_encode($competitorsData) ?? "[]",
             'via' => $this->container->getParameter('app.twitter.account'),
+            'races' => json_encode($racesData) ?? "[]",
         ]);
     }
 
@@ -121,7 +139,9 @@ class LiveRaidController extends AjaxAPIController
         $data = $twitterApiDataManager->findBy(['raid' => $raid], ['id' => 'desc'], 1);
         $now = new \DateTime();
 
-        $interval = $now->getTimestamp() - $data[0]->getRequestDatetime()->getTimestamp();
+        if (!empty($data)) {
+            $interval = $now->getTimestamp() - $data[0]->getRequestDatetime()->getTimestamp();
+        }
 
         if (empty($data) || ($interval > 60)) {
             // Get tweets.
