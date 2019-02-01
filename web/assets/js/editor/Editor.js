@@ -484,6 +484,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poiImageData = document.getElementById('addPoi_image').files[0];
     let preview = document.getElementById('addPoi_preview');
     let reader = new FileReader();
+
     if (poiImageData) {
       if (poiImageData.type.indexOf('image') === 0) {
         reader.onload = function (event) {
@@ -520,6 +521,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       }
       reader.readAsDataURL(poiImageData);
     } else {
+      preview.url = '';
       preview.className = 'form--item-file-hide-preview';
     }
   });
@@ -530,7 +532,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     let poiType = document.getElementById('addPoi_type').value;
     let poiHelpersCount = document.getElementById('addPoi_nbhelper').value;
     let poiDescription = document.getElementById('addPoi_description').value;
-    let preview = document.getElementById('addPoi_preview');
+    let preview = document.getElementById('addPoi_preview').src;
     let poiIsCheckpoint = document.getElementById('addPoi_isCheckpoint').checked;
 
     MicroModal.close('add-poi-popin');
@@ -540,7 +542,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         position: 'bottomRight',
     });
 
-    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, preview.src, poiIsCheckpoint);
+    if (preview.substr(0, 10) !== ('data:image')) {
+      preview = '';
+    }
+
+    mapManager.requestNewPoi(poiName, poiType, poiHelpersCount, poiDescription, preview, poiIsCheckpoint);
 
     document.getElementById('addPoi_name').value = '';
     document.getElementById('addPoi_type').value = '';
@@ -549,6 +555,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('addPoi_image').value = '';
     document.getElementById('addPoi_isCheckpoint').checked = false;
     document.getElementById('addPoi_preview').src = '';
+    document.getElementById('addPoi_preview').className = 'form--item-file-hide-preview';
   });
 
   // EDIT POI IMAGE
@@ -593,6 +600,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       reader.readAsDataURL(poiImageData);
     } else {
       preview.className = 'form--item-file-hide-preview';
+      preview.src = '';
     }
   });
 // EDIT POI SUBMIT
@@ -607,6 +615,11 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
     poi.description = document.getElementById('editPoi_description').value;
     poi.image = document.getElementById('editPoi_preview').src;
+    
+     if (poi.image.substr(0, 10) !== ('data:image')) {
+         poi.image  = '';
+     }
+
 
     mapManager.editorUI.updatePoi(poi);
     poi.buildUI();
@@ -626,6 +639,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     document.getElementById('editPoi_image').value = '';
     document.getElementById('editPoi_isCheckpoint').checked = false;
     document.getElementById('editPoi_preview').src = '';
+    document.getElementById('editPoi_preview').className = 'form--item-file-hide-preview';
   });
 
   //Import GPX
