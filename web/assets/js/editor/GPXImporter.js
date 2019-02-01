@@ -51,7 +51,7 @@ GPXImporter.prototype.importGPXTrack = function(id, sportType, gpxTrack){
                 track = JSON.parse(xhr_object.responseText);
                 var tr = keepThis.mapManager.addTrack(track);
                 tr.setEditable(false);
-                tr.setEditable(false);
+                keepThis.mapManager.map.fitBounds(keepThis.mapManager.group.getBounds());
             }
         }
     }
