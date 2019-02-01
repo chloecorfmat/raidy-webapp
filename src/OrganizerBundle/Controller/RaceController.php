@@ -36,7 +36,7 @@ class RaceController extends AjaxAPIController
         $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         $authChecker = $this->get('security.authorization_checker');
-        if (!$authChecker->isGranted(RaidVoter::COLLAB, $raid)) {
+        if (!$authChecker->isGranted(RaidVoter::EDIT, $raid)) {
             throw $this->createAccessDeniedException();
         }
 
