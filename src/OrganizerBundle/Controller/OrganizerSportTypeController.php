@@ -8,7 +8,7 @@
 
 namespace OrganizerBundle\Controller;
 
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use AppBundle\Controller\AjaxAPIController;
 use Symfony\Component\HttpFoundation\Response;
 
