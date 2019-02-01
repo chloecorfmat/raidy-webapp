@@ -12,12 +12,18 @@ let EditorMode = Object.freeze({
   }
 });
 
+
 if (typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
 
+  let zoomScale = {0 : 0.1, 1 : 0.1,2 : 0.1,3 : 0.1,4 : 0.1,5 : 0.1,6 : 0.1,7 : 0.1,8 : 0.1,9 : 0.1,10 : 0.1,11 : 0.1,12 : 0.1,13 : 0.1,14 : 0.1,15 : 0.1,16 : 0.1,17 : 0.00005,18 : 0.00001,}
   /**
    * MapManager is the data to map content manager
    */
   MapManager = function() {
+
+    this.isRootingMode = false;
+    this.root = function(e){};
+    this.startRootVertex;
 
     this.isEditor = (typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null);
     this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
@@ -26,11 +32,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }).addTo(this.map);
     console.log("event loaded");
 
+
     this.redoBuffer = [];
     this.group = new L.featureGroup();
     this.group.addTo(this.map);
 
     this.waitingPoi = null;
+    this.advancedPoly;
 
     this.poiTypesMap   = new Map();
     this.sportTypesMap = new Map();
@@ -74,6 +82,66 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           });
           break;
         case EditorMode.TRACK_EDIT :
+          console.log("log click");
+          console.log(keepThis.isRootingMode);
+          if(keepThis.isRootingMode && keepThis.startRootVertex){
+            console.log("log click in rooting mode");
+              /*Gp.Services.route({
+                apiKey : IGNAPIKEY, // clef d'accès à la plateforme
+                startPoint : { x: keepThis.startRootVertex.latlng.lat, y: keepThis.startRootVertex.latlng.lng},       // point de départ
+                endPoint : { x: e.latlng.lat, y: e.latlng.lng},          // point d'arrivée
+                graph : "Pieton",                 // grapĥe utilisé
+                onSuccess : function (result) {
+                  // exploitation des resultats : "result" est de type Gp.Services.RouteResponse
+                  console.log(result);
+                }
+              });
+*/
+            let lat1 = 48.7268687;
+            let lng1 = -3.4599370999999337;
+
+            let graph = 'Pieton';
+            let routePreference = 'shortest';
+
+            try {
+              Gp.Services.route({
+                startPoint: {
+                  x: lng1,
+                  y: lat1
+                },
+                endPoint: {
+                  x: e.latlng.lat,
+                  y: e.latlng.lng
+                },
+                graph: graph,
+                routePreference: routePreference,
+                apiKey: "jhyvi0fgmnuxvfv0zjzorvdn",
+                onSuccess: function (result) {
+                  var format = new ol.format.GeoJSON();
+                  var feature = new ol.Feature({
+                    geometry: format.readGeometry(result.routeGeometry, {
+                      featureProjection: "EPSG:3857"
+                    })
+                  });
+                  feature.setStyle(new ol.style.Style({
+                    stroke: new ol.style.Stroke({
+                      color: 'red',
+                      width: 3
+                    })
+                  }));
+                  var vectorSource = new ol.source.Vector({
+                    features: [feature]
+                  });
+                  var vectorLayer = new ol.layer.Vector({
+                    source: vectorSource
+                  });
+                  map.addLayer(vectorLayer);
+                }
+              });
+            } catch (e) {
+              console.log(e);
+            }
+          }
           break;
         case EditorMode.POI_EDIT :
           break;
@@ -95,7 +163,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:drawing:click', function () {
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
-      track.push();
+     // track.push();
      // keepThis.mapHistory.logModification({type : "ADD_TRACK_MARKER", target : e.Marker, lastPostition : keepThis.lastPostition, newPosition : e.vertex.latlng})
       track.update();
     });
@@ -110,7 +178,9 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
     });
-    this.map.on('editable:vertex:dragstart', function (e) {
+
+
+      this.map.on('editable:vertex:dragstart', function (e) {
       keepThis.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
       keepThis.lastPostition  = [];
       let latLngArray =  keepThis.currentTrack.line.getLatLngs();
@@ -125,7 +195,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
       keepThis.elevator.getElevationAt(e.vertex.latlng,function(){track.push()});
-      track.push();
+   //   track.push();
       track.update();
       keepThis.mapHistory.logModification({
         type : "MOVE_TRACK_MARKER",
@@ -145,7 +215,21 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:vertex:rawclick', function (e) { // click on a point
       keepThis.tracksMap.get(keepThis.currentEditID).update();
       e.cancel();
-      e.vertex.continue();
+      if(!keepThis.isRootingMode){
+        e.vertex.continue();
+      }else{
+        console.log("select first vertex for rooting");
+        keepThis.startRootVertex = e.vertex;
+      }
+     /* if(e.vertex.getIndex() != 0) {
+        console.log('rawclick');
+        console.log(e.vertex);
+        keepThis.advancedPoly = L.polyline([e.vertex.latlng]);
+        keepThis.currentTrack.line.editor.endDrawing();
+        keepThis.map.addLayer(keepThis.advancedPoly);
+        keepThis.advancedPoly.enableEdit();
+        keepThis.advancedPoly.editor.continueBackward();
+      }*/
     });
 
     this.map.on('editable:vertex:remove', function (e) { //point on track is removed
@@ -167,23 +251,40 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
 
     this.map.on(' editable:vertex:new', function (e) {
-      keepThis.elevator.getElevationAt(e.vertex.latlng, function(){track.push()});
 
-      keepThis.mapHistory.logModification({
-        type : "MOVE_TRACK_MARKER",
-        track : keepThis.tracksMap.get(keepThis.currentEditID),
-        lastPosition : keepThis.lastPostition
-      });
-      let latLngArray =  keepThis.currentTrack.line.getLatLngs();
-      keepThis.lastPostition  = [];
+      console.log("new vertex")
+      if(keepThis.advancedPoly ==null) {
 
-      for (let element in latLngArray){
-        keepThis.lastPostition.push({
-          lat : latLngArray[element].lat,
-          lng : latLngArray[element].lng
+        keepThis.elevator.getElevationAt(e.vertex.latlng, function () {
+          keepThis.currentTrack.push()
         });
+
+        keepThis.mapHistory.logModification({
+          type: "MOVE_TRACK_MARKER",
+          track: keepThis.tracksMap.get(keepThis.currentEditID),
+          lastPosition: keepThis.lastPostition
+        });
+        let latLngArray = keepThis.currentTrack.line.getLatLngs();
+        keepThis.lastPostition = [];
+
+        for (let element in latLngArray) {
+          keepThis.lastPostition.push({
+            lat: latLngArray[element].lat,
+            lng: latLngArray[element].lng
+          });
+        }
+        keepThis.elevator.initChart(keepThis.currentTrack);
+      }else{
+        let target;
+        let markerLL = e.vertex.latlng;
+        for(let latlng of keepThis.currentTrack.line.getLatLngs() ){
+          let distance = Math.sqrt((latlng.lat-markerLL.lat)*(latlng.lat-markerLL.lat) + (latlng.lng-markerLL.lng)* (latlng.lng-markerLL.lng));
+          console.log(distance);
+          console.log(keepThis.map.getZoom());
+          if(distance < 0.005){
+          }
+        }
       }
-      keepThis.elevator.initChart(keepThis.currentTrack);
 
     });
     this.map.on('editable:drawing:end', function () {
@@ -193,7 +294,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       document.getElementById('map').style.cursor = 'crosshair';
       keepThis.mapHistory.clearHistory()
     });
-
 
     this.loadRessources();
     this.switchMode(EditorMode.READING);
@@ -252,6 +352,10 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           document.getElementById("fabActionButton").classList.remove('add--poi');
         }
         break;
+      case EditorMode.TRACK_EDIT :
+        if (this.advancedPoly!= null){
+          this.map.removeLayer(this.advancedPoly);
+        }
     }
     this.lastMode = this.mode;
     let keepThis = this;
@@ -288,10 +392,14 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         this.setTracksEditable(false);
         let res = this.tracksMap.get(this.currentEditID);
         let currentTrack = this.tracksMap.get(this.currentEditID);
-        currentTrack.setEditable(true);
-        if(currentTrack.line.isEmpty()){
-          currentTrack.line.editor.continueForward();
-          document.getElementById('map').style.cursor = 'crosshair';
+        if(this.isRootingMode){
+
+        }else {
+          currentTrack.setEditable(true);
+          if (currentTrack.line.isEmpty()) {
+            currentTrack.line.editor.continueForward();
+            document.getElementById('map').style.cursor = 'crosshair';
+          }
         }
         this.elevator.initChart(currentTrack);
         break;
@@ -303,7 +411,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         if(fab != null){
             fab.classList.remove('add--poi');
         }
-        break
+        break;
     }
   };
 
@@ -421,6 +529,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       }
     }
   };
+
 
   MapManager.prototype.addPoi = function (poi) {
     let newPoi = new Poi(this.map);

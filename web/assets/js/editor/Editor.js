@@ -212,7 +212,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
           mapManager.setPoiEditable(this.checked);
           if(this.checked){
             document.querySelectorAll(".poi-marker").forEach(function(el) {
-              el.style.boxShadow = "0px 0px 1px 2px #0f5e54";
+              el.style.boxShadow = "rgba(7, 47, 42, 0.7) 0px 0px 4px 2px";
             });
           }else{
             document.querySelectorAll(".poi-marker").forEach(function(el) {
@@ -304,6 +304,29 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       },
     });
 
+    console.log(" add routing control");
+    let RoutingCtrl = L.Control.extend({
+      options: {
+        position: 'topleft'
+      },
+      onAdd: function(map) {
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.style.width = '30px';
+        container.style.height = '30px';
+        container.id = 'RoutingCtrl';
+        container.innerHTML = "<i class=\"fas fa-route fa-2x\"></i>";
+        container.setAttribute("title", "Activer / Désactiver le traçage automatique");
+        container.onclick = function(e) {
+          e.preventDefault();
+
+          document.getElementById("RoutingCtrl").classList.toggle("track-routing");
+          mapManager.isRootingMode = document.getElementById("RoutingCtrl").classList.contains("track-routing");
+          if(mapManager.isRootingMode ){console.log("track-routing");}
+        };
+        return container;
+      },
+    });
+
       mapManager.elevator = new MapElevation();
       let ShowElevationGraphCtrl = L.Control.extend({
       options: {
@@ -352,6 +375,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
     mapManager.map.addControl(new ImportGPXCtrl());
     mapManager.map.addControl(new ExportGPXCtrl());
+    mapManager.map.addControl(new RoutingCtrl());
     mapManager.map.addControl(new ShowElevationGraphCtrl());
 
     mapManager.trackControl = new L.TrackEditControl();
@@ -385,7 +409,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       }else if(mapManager.mode == EditorMode.TRACK_EDIT){
         e.preventDefault();
         e.stopImmediatePropagation();
-        mapManager.tracksMap.get(mapManager.currentEditID).push();
+        mapManager.tracksMap.get(mapManager.currentEditID).push(true);
       }
       mapManager.switchMode(mapManager.lastMode);
       this.classList.remove('add--poi')
@@ -414,11 +438,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     mapManager.requestNewTrack(trName, trColor, trSport);
     MicroModal.close('add-track-popin');
 
-    iziToast.success({
-        message: 'Le parcours a bien été créé.',
-        position: 'bottomRight',
-    });
-
     document.getElementById('addTrack_name').value = '';
     document.getElementById('addTrack_color').value = '#000000'
   });
@@ -436,13 +455,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     track.setColor(trColor);
     track.setSportType(trSport);
 
-    track.push();
+    track.push(true);
     MicroModal.close('edit-track-popin');
 
-    iziToast.success({
-        message: 'Le parcours a bien été sauvegardé.',
-        position: 'bottomRight',
-    });
   });
 
   document.getElementById('editTrack_delete').addEventListener('click', function () {
@@ -473,10 +488,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     poi.remove();
     MicroModal.close('delete-poi');
 
-    iziToast.success({
-        message: 'Le point d\'intérêt a bien été supprimé.',
-        position: 'bottomRight',
-    });
   });
 
   // ADD POI SUBMIT
@@ -610,7 +621,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
     mapManager.editorUI.updatePoi(poi);
     poi.buildUI();
-    poi.push();
+    poi.push(true);
 
     MicroModal.close('edit-poi-popin');
 

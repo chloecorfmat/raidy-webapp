@@ -73,10 +73,27 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   };
 
-  Poi.prototype.push = function () {
+  Poi.prototype.push = function (feedback = false) {
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/editor/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
+
+    if(feedback) {
+      xhr_object.onreadystatechange = function () {
+        if (xhr_object.readyState == XMLHttpRequest.DONE) {
+          iziToast.success({
+            message: 'Le point d\'intérêt a bien été sauvergardé.',
+            position: 'bottomLeft',
+          });
+        }else{
+          iziToast.error({
+            message: 'Impossible d\'enregistrer le point d\'intérêt. Vérifier votre connexion internet.',
+            position: 'bottomLeft',
+          });
+        }
+      };
+    }
+
     xhr_object.send(this.toJSON());
 
       this.name = htmlentities.encode(this.name);
@@ -115,10 +132,13 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         '<div> ' +
         '<p style="padding: 0.5rem; text-align: left;">'+shortDesc+'</p>'+
         '<h4>' + this.helpers.length+'/'+this.requiredHelpers + ' bénévoles requis.</h4>'+
+        '<button style=" background-color: '+this.color+';"class="poi-action-btn" id="poi-move-button-'+keepThis.id+'"> <i class="fas fa-arrows-alt"></i> </button>' +
         '<button style=" background-color: '+this.color+';" class="poi-action-btn" id="poi-edit-button-'+keepThis.id+'"> <i class="fas fa-cog"></i> </button>' +
         '<button style=" background-color: '+this.color+';"class="poi-action-btn" id="poi-info-button-'+keepThis.id+'"> <i class="fas three-points">...</i> </button>' +
+
         '</div>'
       );
+
     }else{
       this.marker.bindPopup('' +
         '<header style="' +
@@ -167,6 +187,19 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('DELETE', '/editor/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
+    xhr_object.onreadystatechange = function () {
+      if (xhr_object.readyState == XMLHttpRequest.DONE) {
+        iziToast.success({
+          message: 'Le point d\'intérêt a bien été supprimé.',
+          position: 'bottomLeft',
+        });
+      }else{
+        iziToast.error({
+          message: 'Impossible de supprimé le point d\'intérêt. Vérifier votre connexion internet.',
+          position: 'bottomLeft',
+        });
+      }
+    };
     xhr_object.send(null);
 
     this.map.removeLayer(this.marker);
@@ -215,7 +248,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       for(let helper of this.helpers){
         console.log(this.helpers);
         node = document.createElement("TR");
-        node.innerHTML = '<td>'+helper.firstname+'</td> <td>'+helper.lastname+'</td> <td>'+helper.phone+'</td>';
+        node.innerHTML = '<td>'+helper.firstname+'</td> <td>'+helper.lastname+'</td> <td><a href="tel:'+helper.phone+'">'+helper.phone+'</a></td>';
         helpersTable.appendChild(node);
       }
     }

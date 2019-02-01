@@ -105,7 +105,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   MapHistory.prototype.logModification = function (obj) {
     this.undoBuffer.push(obj);
-    console.log(this.undoBuffer);
+    //console.log(this.undoBuffer);
     //this.redoBuffer = [];
   };
 

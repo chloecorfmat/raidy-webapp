@@ -582,6 +582,7 @@
   }
 
   .leaflet-control-custom {
+    background-color: $white;
     box-sizing: border-box;
     color: $tertiary-color-1;
     font-size: .6rem;
@@ -942,6 +943,11 @@
         outline-color: $secondary-color-2;
       }
     }
+  }
+
+  .track-routing {
+    background-color: $tertiary-color-1;
+    color: $white;
   }
 
   .editor-error--message {
