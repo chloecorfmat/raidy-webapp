@@ -1,0 +1,14 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% if form is defined %}
+    {% form_theme form 'form/fields.html.twig' %}
+{% endif %}
+
+{{ form_start(form, { 'action': path('fos_user_resetting_reset', {'token': token}), 'attr': { 'class': 'fos_user_resetting_reset' } }) }}
+    {{ form_widget(form) }}
+
+<div class="form--item-submit">
+    <input type="submit" id="_submit" name="_submit" value="{{ 'resetting.reset.submit'|trans }}" class="btn" />
+</div>
+
+{{ form_end(form) }}

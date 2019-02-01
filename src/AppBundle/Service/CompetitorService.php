@@ -31,6 +31,7 @@ class CompetitorService
         $obj['firstname'] = $competitor->getFirstname();
         $obj['lastname'] = $competitor->getLastname();
         $obj['number_sign'] = $competitor->getNumberSign();
+        $obj['nfc_serial_id'] = $competitor->getNFCSerialId();
         $obj['category'] = $competitor->getCategory();
         $obj['sex'] = $competitor->getSex();
         $obj['birthyear'] = $competitor->getBirthYear();
@@ -110,6 +111,7 @@ class CompetitorService
             $obj['firstname'] = $competitor->getFirstname();
             $obj['lastname'] = $competitor->getLastname();
             $obj['number_sign'] = $competitor->getNumberSign();
+            $obj['nfc_serial_id'] = $competitor->getNFCSerialId();
             $obj['category'] = $competitor->getCategory();
             $obj['sex'] = $competitor->getSex();
             $obj['birthyear'] = $competitor->getBirthYear();

@@ -1,4 +1,8 @@
 
+{% if base_class is not defined %}
+    {% set base_class = 'helper' %}
+{% endif %}
+
 {% if background_url is not defined %}
     {% set background_url = '' %}
 {% endif %}
