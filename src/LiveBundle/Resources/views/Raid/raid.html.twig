@@ -3,7 +3,10 @@
 {% block body %}
     <div id="app">
         <social-media-share url="{{ meta['url'] }}" raidname="{{ raid.name }}" via="{{ via }}"></social-media-share>
-        <tweets-list tweets="{{ tweets }}"></tweets-list>
+        <div class="content">
+            <tweets-list v-show="{{ tweets }} != []" tweets="{{ tweets }}"></tweets-list>
+            <competitors-component competitors="{{ competitors }}"></competitors-component>
+        </div>
     </div>
 {% endblock %}
 

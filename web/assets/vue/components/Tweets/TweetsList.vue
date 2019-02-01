@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="content--third">
         <h1>En direct !</h1>
         <ul class="tweets-list">
             <Tweet v-for="(tweet, index) in this.tweets_object" :key=index :tweet=tweet>

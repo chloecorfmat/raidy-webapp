@@ -39,8 +39,5 @@
                 return 'https://twitter.com/' + this.tweet.user.screen_name;
             }
         },
-        mounted () {
-            console.log(this.tweet);
-        },
     }
 </script>
