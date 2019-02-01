@@ -4,7 +4,7 @@
     <div id="app">
         <social-media-share url="{{ meta['url'] }}" raidname="{{ raid.name }}" via="{{ via }}"></social-media-share>
         <div class="content">
-            <tweets-list v-show="{{ tweets }} != []" tweets="{{ tweets }}"></tweets-list>
+            <tweets-list v-show="{{ twitter_activation }}" raidid="{{ raid.uniqid }}"></tweets-list>
             <competitors-component competitors="{{ competitors }}"></competitors-component>
         </div>
     </div>
