@@ -121,15 +121,16 @@ class OrganizerAdminController extends Controller
                         $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
 
                         $message = (new \Swift_Message('Création d\'un compte organisateur'))
-                        ->setFrom('raidy@enssat.fr')
-                        ->setTo($user->getEmail())
-                        ->setBody(
-                            $this->renderView(
-                                'AppBundle:Emails:registration.html.twig',
-                                array('user' => $user, 'password' => $formUser->getPlainPassword())
-                            ),
-                            'text/html'
-                        );
+                            ->setFrom($this->container->getParameter('app.mail.from'))
+                            ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
+                            ->setTo($user->getEmail())
+                            ->setBody(
+                                $this->renderView(
+                                    'AppBundle:Emails:registration.html.twig',
+                                    array('user' => $user, 'password' => $formUser->getPlainPassword())
+                                ),
+                                'text/html'
+                            );
 
                         $mailer->send($message);
 

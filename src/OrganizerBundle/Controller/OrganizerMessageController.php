@@ -126,7 +126,8 @@ class OrganizerMessageController extends AjaxAPIController
                     foreach ($helpers as $helper) {
                         $mail = \Swift_Message::newInstance()
                             ->setSubject('Nouvelle notification pour le raid ' . $raid->getName())
-                            ->setFrom('raidy@enssat.fr')
+                            ->setFrom($this->container->getParameter('app.mail.from'))
+                            ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
                             ->setTo($helper->getUser()->getEmail())
                             ->setBody(
                                 $this->renderView(

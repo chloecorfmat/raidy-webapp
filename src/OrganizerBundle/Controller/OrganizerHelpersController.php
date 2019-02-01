@@ -55,7 +55,8 @@ class OrganizerHelpersController extends AjaxAPIController
                 /* Send email to helper */
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Nouvelle affectation pour le raid ' . $raid->getName())
-                    ->setFrom('raidy@enssat.fr')
+                    ->setFrom($this->container->getParameter('app.mail.from'))
+                    ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
                     ->setTo($helper->getUser()->getEmail())
                     ->setBody(
                         $this->renderView(

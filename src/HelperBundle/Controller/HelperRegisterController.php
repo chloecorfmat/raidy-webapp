@@ -249,7 +249,8 @@ class HelperRegisterController extends Controller
                                 /* Send email to helper */
                                 $message = \Swift_Message::newInstance()
                                     ->setSubject('Création d\'un compte bénévole')
-                                    ->setFrom('raidy@enssat.fr')
+                                    ->setFrom($this->container->getParameter('app.mail.from'))
+                                    ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
                                     ->setTo($user->getEmail())
                                     ->setBody(
                                         $this->renderView(
@@ -264,7 +265,8 @@ class HelperRegisterController extends Controller
                                 /* Send email to organizer */
                                 $message = \Swift_Message::newInstance()
                                     ->setSubject('Enregistrement d\'un bénévole pour ' . $raid->getName())
-                                    ->setFrom('raidy@enssat.fr')
+                                    ->setFrom($this->container->getParameter('app.mail.from'))
+                                    ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
                                     ->setTo($raid->getUser()->getEmail())
                                     ->setBody(
                                         $this->renderView(
