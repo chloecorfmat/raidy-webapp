@@ -53,7 +53,7 @@
                         {# A login user cannot disable or delete his/her account. #}
                         {% if app.user.id != user.id %}
                             {% if user.enabled %}
-                                <button data-organizer-id="{{ user.id }}" class="btn btn--disable-organizer">Désactiver</button> {#data-micromodal-trigger="enable-organizer" #}
+                                <button data-organizer-id="{{ user.id }}" class="btn btn--danger btn--disable-organizer">Désactiver</button> {#data-micromodal-trigger="enable-organizer" #}
                             {% else %}
                                 <button data-organizer-id="{{ user.id }}" class="btn btn--enable-organizer">Activer</button> {#data-micromodal-trigger="enable-organizer" #}
                             {% endif %}
