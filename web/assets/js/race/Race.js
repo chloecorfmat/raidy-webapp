@@ -40,8 +40,8 @@ Race.prototype.fromObj = function(obj){
         }
     }
 
-    this.startTime =  obj['startTime'];
-    this.endTime =  obj['endTime'];
+    this.startTime = obj['startTime'];
+    this.endTime = obj['endTime'];
     this.raid = obj['raid'];
 };
 

@@ -9,8 +9,12 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
+use AppBundle\Entity\Competitor;
+use AppBundle\Entity\Fraud;
 use AppBundle\Entity\Race;
+use AppBundle\Entity\RaceTrack;
 use AppBundle\Entity\Raid;
+use AppBundle\Entity\Track;
 use AppBundle\Service\RaceService;
 use OrganizerBundle\Security\RaidVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -229,6 +233,9 @@ class RaceController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raceManager = $em->getRepository('AppBundle:Race');
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+        $raceCheckpointManager = $em->getRepository('AppBundle:RaceCheckpoint');
+        $raceTimingManager = $em->getRepository('AppBundle:RaceTiming');
 
         // Find the user
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
@@ -253,7 +260,39 @@ class RaceController extends AjaxAPIController
             $em->flush();
             $flashbag->add("success", "La course a été arrêtée ");
 
-            //@TODO : START FRAUD CHECKING
+            $competitors = $competitorManager->findBy(["race" => $race->getId()]);
+
+            $tracks = $race->getTracks();
+            $checkpoints = [];
+            /** @var RaceTrack $track */
+            foreach ($tracks as $track) {
+                foreach ($track->getCheckpoints() as $checkpoint) {
+                    $checkpoints[] = $checkpoint;
+                }
+            }
+
+            /** @var Competitor $competitor */
+            foreach ($competitors as $competitor) {
+                foreach ($checkpoints as $checkpoint) {
+                    $rt = $raceTimingManager->findOneBy(
+                        [
+                            "competitor" => $competitor->getId(),
+                            "checkpoint" => $checkpoint->getId(),
+                        ]
+                    );
+
+                    if ($rt == null) {
+                        $competitor->setIsFraud(true);
+
+                        $fraud = new Fraud();
+                        $fraud->setCompetitor($competitor);
+                        $fraud->setCheckpoint($checkpoint);
+                        $em->persist($fraud);
+
+                        $em->flush();
+                    }
+                }
+            }
         } else {
             $flashbag->add("error", "Problème dans l'arrêt de la course");
         }

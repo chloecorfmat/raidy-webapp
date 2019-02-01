@@ -36,15 +36,12 @@
 {% endblock %}
 
 {% block body %}
+    {% for flash_message in app.session.flashBag.get('success') %}
+        <div class="alert alert--success">
+            <p>{{ flash_message }}</p>
+        </div>
+    {% endfor %}
     <div class="content raceEditor">
-
-        {% for flash_message in app.session.flashBag.get('success') %}
-            <div class="alert alert--success">
-                <p>{{ flash_message }}</p>
-            </div>
-        {% endfor %}
-
-
         <section class="content--half">
             <h1>Edition des épreuves</h1>
             <section class="race" id="race">

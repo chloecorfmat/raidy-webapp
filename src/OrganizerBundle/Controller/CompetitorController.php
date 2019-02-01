@@ -9,6 +9,7 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Entity\Competitor;
+use AppBundle\Entity\Fraud;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
@@ -48,6 +49,7 @@ class CompetitorController extends Controller
         $competitorManager = $em->getRepository('AppBundle:Competitor');
 
         $raidManager = $em->getRepository('AppBundle:Raid');
+        $fraudManager = $em->getRepository('AppBundle:Fraud');
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         $competitors = $competitorManager->findBy(
@@ -55,6 +57,21 @@ class CompetitorController extends Controller
                 'raid' => $raid->getId(),
             ]
         );
+
+        $frauds = [];
+        /** @var Competitor $competitor */
+        foreach ($competitors as $competitor) {
+            $fraud = $fraudManager->findBy(["competitor" => $competitor]);
+
+            if (count($fraud) > 0) {
+                $frauds[$competitor->getId()] = [];
+                /** @var Fraud $f */
+                foreach ($fraud as $f) {
+                    $frauds[$competitor->getId()][] = $f->getCheckpoint()->getPoi()->getName();
+                }
+            }
+        }
+
         $formFactory = $this->get('form.factory');
 
         $formCompetitor = new Competitor();
@@ -241,11 +258,12 @@ class CompetitorController extends Controller
         return $this->render(
             'OrganizerBundle:Competitor:listCompetitor.html.twig',
             [
-                'raid_id' => $raidId,
-                'raidName' => $raid->getName(),
+                'raid_id'     => $raidId,
+                'raidName'    => $raid->getName(),
                 'competitors' => $competitors,
-                'form' => $form->createView(),
-                'formImport' => $formImport->createView(),
+                'frauds'      => $frauds,
+                'form'        => $form->createView(),
+                'formImport'  => $formImport->createView(),
             ]
         );
     }
