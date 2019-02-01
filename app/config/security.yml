@@ -40,6 +40,10 @@ security:
             anonymous:    true
             access_denied_handler: AccessDeniedService
             logout_on_user_change: true
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
 
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
