@@ -81,7 +81,7 @@
                                             <input class="form--input-text" type="text" id="addRace_name"
                                                    required="required" maxlength="100" v-model="newRace.name">
                                         </div>
-                                        <div class="actions modal--actions">
+                                        <div class="actions">
                                             <button type="submit" id="addRace_submit" class="btn">Ajouter un parcours</button>
                                             <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
                                         </div>

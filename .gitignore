@@ -24,8 +24,8 @@
 /web/uploads
 /web/build
 
-web/build/app.js
-web/build/race.js
+/web/build/app.js
+/web/build/race.js
 
 .php_cs.cache
 
