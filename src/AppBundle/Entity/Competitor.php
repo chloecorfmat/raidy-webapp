@@ -97,7 +97,7 @@ class Competitor
     private $uniqid;
 
     /**
-     * @ORM\Column(name="nfcserialid", type="text")
+     * @ORM\Column(name="nfcserialid", type="text", nullable=true)
      */
     private $NFCSerialId;
 
