@@ -101,6 +101,40 @@ main {
   }
 }
 
+.content--third {
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    box-sizing: border-box;
+    width: 33%;
+
+    &:not(:last-child) {
+      padding-right: 3rem;
+    }
+  }
+}
+
+.content--two-third {
+  width: 100%;
+
+  &:not(:last-child) {
+    margin-bottom: 2rem;
+  }
+
+  @media screen and (min-width: $breakpoint-large) {
+    box-sizing: border-box;
+    width: 66%;
+
+    &:not(:last-child) {
+      padding-left: 3rem;
+    }
+  }
+}
+
 .main-flex-column {
   display: flex;
   flex-direction: column;

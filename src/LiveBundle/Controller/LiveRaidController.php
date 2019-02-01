@@ -73,10 +73,25 @@ class LiveRaidController extends Controller
         // This is passed to vuejs component.
         $tweets = json_decode($jsonResults)->statuses ?? '';
 
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+        $competitors = $competitorManager->findBy(['raid' => $raid]);
+
+        $competitorsData = [];
+
+        foreach ($competitors as $competitor) {
+            $competitorsData[] = [
+                'id' => $competitor->getId(),
+                'lastname' => $competitor->getLastname(),
+                'firstname' => $competitor->getFirstname(),
+                'numbersign' => $competitor->getNumberSign(),
+            ];
+        }
+
         return $this->render('LiveBundle:Raid:raid.html.twig', [
             'raid' => $raid,
             'meta' => $meta,
-            'tweets' => json_encode($tweets) ?? '',
+            'tweets' => json_encode($tweets) ?? "[]",
+            'competitors' => json_encode($competitorsData) ?? "[]",
             'via' => $this->container->getParameter('app.twitter.account'),
         ]);
     }
