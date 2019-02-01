@@ -2,11 +2,15 @@
 
 namespace LiveBundle\Controller;
 
+use AppBundle\Controller\AjaxAPIController;
+use AppBundle\Entity\TwitterApiData;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
+use FOS\RestBundle\Controller\Annotations as Rest;
+use Symfony\Component\HttpFoundation\Response;
 
-class LiveRaidController extends Controller
+class LiveRaidController extends AjaxAPIController
 {
     /**
      * @Route("/live/raid/{id}", name="live")
@@ -91,8 +95,84 @@ class LiveRaidController extends Controller
             'raid' => $raid,
             'meta' => $meta,
             'tweets' => json_encode($tweets) ?? "[]",
+            'twitter_activation' => $tweets ? true:false,
             'competitors' => json_encode($competitorsData) ?? "[]",
             'via' => $this->container->getParameter('app.twitter.account'),
         ]);
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"secured"})
+     * @Rest\Get("/api/public/raid/{raidId}/tweets")
+     *
+     * @param Request $request request
+     * @param int     $raidId  raid identifier
+     *
+     * @return Response
+     */
+    public function tweets(Request $request, $raidId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
+        $twitterApiDataManager = $em->getRepository('AppBundle:TwitterApiData');
+        $data = $twitterApiDataManager->findBy(['raid' => $raid], ['id' => 'desc'], 1);
+        $now = new \DateTime();
+
+        $interval = $now->getTimestamp() - $data[0]->getRequestDatetime()->getTimestamp();
+
+        if (empty($data) || ($interval > 60)) {
+            // Get tweets.
+            $twitterService = $this->container->get('TwitterService');
+
+            // API used : https://developer.twitter.com/en/docs/tweets/search/overview.
+            $url = 'https://api.twitter.com/1.1/search/tweets.json';
+
+            // Get fields according to data saved in database.
+            $twitterAccounts = explode(',', str_replace(' ', '', $raid->getTwitterAccounts()));
+
+            foreach ($twitterAccounts as $key => $account) {
+                $twitterAccounts[$key] = '@' . $account;
+            }
+
+            $twitterHashtags = explode(',', str_replace(' ', '', $raid->getTwitterHashtags()));
+
+            $filters = array_merge($twitterAccounts, $twitterHashtags);
+
+            $data = '';
+
+            foreach ($filters as $key => $filter) {
+                if ('@' !== $filter && '' !== $filter) {
+                    $data .= $filter;
+
+                    if (next($filters)) {
+                        $data .= '%20OR%20';
+                    }
+                }
+            }
+
+            $getfield = '?q=' . $data . '&result_type=recent&include_entities=false';
+            $requestMethod = 'GET';
+
+            $jsonResults = $twitterService->setGetfield($getfield)
+                ->buildOauth($url, $requestMethod)
+                ->performRequest();
+
+            // This is passed to vuejs component.
+            $tweets = json_decode($jsonResults)->statuses ?? '';
+
+            $twitterApiData = new TwitterApiData();
+            $twitterApiData->setRaid($raid);
+            $twitterApiData->setData(json_encode($tweets) ?? "[]");
+            $twitterApiData->setRequestDatetime($now);
+            $em->persist($twitterApiData);
+            $em->flush();
+
+            return new Response($twitterApiData->getData());
+        }
+
+        return new Response($data[0]->getData());
     }
 }
