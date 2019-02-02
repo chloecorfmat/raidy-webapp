@@ -3,7 +3,12 @@
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
-        <li class="breadcrumb--list-item"><a href="{{ path('listOrganizer') }}">Liste des organisateurs</a></li>
+        {% if userPath == false %}
+            <li class="breadcrumb--list-item"><a href="{{ path('listOrganizer') }}">Liste des organisateurs</a></li>
+        {% else %}
+            <li class="breadcrumb--list-item"><a href="{{ path('listUsers') }}">Liste des utilisateurs</a></li>
+        {% endif %}
+
         <li class="breadcrumb--list-item">{{ username }}</li>
     </ol>
 {% endblock %}
@@ -21,33 +26,6 @@
             {{ form_start(form) }}
             {{ form_widget(form) }}
             {{ form_end(form) }}
-        </div>
-        <button data-organizer-id="{{ userId }}" class="btn btn--danger btn--delete-organizer btn--full-width">Supprimer l'organisateur</button>
-    </div>
-
-    <div id="delete-organizer" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
-        <!-- [2] -->
-        <div tabindex="-1" data-micromodal-close>
-            <!-- [3] -->
-            <div role="dialog" aria-modal="true" aria-labelledby="delete-organizer-title" >
-                <div class="modal-container">
-                    <header class="modal--header modal--header--danger">
-                        <h2 id="delete-organizer-title">
-                            Supprimer un organisateur
-                        </h2>
-                        <!-- [4] -->
-                        <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
-                    </header>
-                    <div id="delete-organizer-content" class="modal--content">
-                        <p>Êtes-vous certains de vouloir supprimer cet organisateur ?</p>
-                        <p class="text--important">Cette action est irréversible.</p>
-                        <div class="modal--actions">
-                            <a href="" id="btn--delete-organizer" class="btn btn--danger" data-base-url="/admin/organizer/delete/">Supprimer</a>
-                            <button data-micromodal-close class="btn btn--cancel">Annuler</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 

@@ -615,7 +615,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     poi.requiredHelpers = parseInt(document.getElementById('editPoi_nbhelper').value);
     poi.description = document.getElementById('editPoi_description').value;
     poi.image = document.getElementById('editPoi_preview').src;
-    
+
      if (poi.image.substr(0, 10) !== ('data:image')) {
          poi.image  = '';
      }

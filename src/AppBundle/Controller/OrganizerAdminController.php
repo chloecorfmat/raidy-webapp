@@ -155,20 +155,21 @@ class OrganizerAdminController extends Controller
     }
 
     /**
-     * @Route("/admin/organizer/edit/{id}", name="editOrganizer")
+     * @Route("/admin/organizer/edit/{id}/{userPath}", name="editOrganizer")
      *
-     * @param Request $request request
-     * @param mixed   $id      id
+     * @param Request $request  request
+     * @param mixed   $id       id
+     * @param mixed   $userPath user
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editOrganizer(Request $request, $id)
+    public function editOrganizer(Request $request, $id, $userPath)
     {
         $userManager = $this->get('fos_user.user_manager');
         $formUser = $userManager->findUserBy(['id' => $id]);
 
         if (null === $formUser) {
-            throw $this->createNotFoundException('The organizer does not exist');
+            throw $this->createNotFoundException('The user does not exist');
         }
 
         $form = $this->createFormBuilder($formUser, array('validation_groups' => array('Profile')))
@@ -201,7 +202,6 @@ class OrganizerAdminController extends Controller
                 TelType::class,
                 [
                     'label' => 'Numéro de téléphone',
-                    //'attr' => array('maxlength' => 10),
                 ]
             )
             ->add(
@@ -212,7 +212,7 @@ class OrganizerAdminController extends Controller
                     'attr' => array('maxlength' => 180),
                 ]
             )
-            ->add('submit', SubmitType::class, ['label' => 'Editer un organisateur'])
+            ->add('submit', SubmitType::class, ['label' => 'Editer un utilisateur'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -236,7 +236,11 @@ class OrganizerAdminController extends Controller
                     $userManager->updateUser($user);
                     $this->addFlash('success', 'Le profil a bien été modifié.');
 
-                    return $this->redirectToRoute('editOrganizer', ['id' => $id]);
+                    if ($userPath) {
+                        return $this->redirectToRoute('listUsers');
+                    } else {
+                        return $this->redirectToRoute('listOrganizer');
+                    }
                 } else {
                     $form->addError(new FormError('Un numéro de téléphone doit comporter 10 chiffres'));
                 }
@@ -251,6 +255,7 @@ class OrganizerAdminController extends Controller
             'form' => $form->createView(),
             'username' => $formUser->getUsername() ?? '',
             'userId' => $id,
+            'userPath' => $userPath,
             ]
         );
     }
