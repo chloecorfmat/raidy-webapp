@@ -37,6 +37,7 @@ class RaceService
         $obj['id']        = $race->getId();
         $obj['name']      = $race->getName();
         $obj['startTime'] = $race->getStartTime();
+        $obj['endTime']   = $race->getEndTime();
         $obj['raid']      = $race->getRaid()->getId();
 
         $tracks           = $race->getTracks();
@@ -65,6 +66,7 @@ class RaceService
             $obj['id']        = $race->getId();
             $obj['name']      = $race->getName();
             $obj['startTime'] = $race->getStartTime();
+            $obj['endTime']   = $race->getEndTime();
             $obj['raid']      = $race->getRaid()->getId();
 
             /** @var PersistentCollection $tracks */

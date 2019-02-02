@@ -3,6 +3,7 @@ var Race = function () {
     this.name = "";
     this.raceTracks = [];
     this.startTime = null;
+    this.endTime = null;
     this.raid = null;
 };
 
@@ -17,6 +18,7 @@ Race.prototype.toJSON = function () {
   });
 
   obj.startTime  = this.startTime;
+  obj.endTime    = this.endTime;
   obj.raid       = this.raid;
   return JSON.stringify(obj);
 };
@@ -38,7 +40,8 @@ Race.prototype.fromObj = function(obj){
         }
     }
 
-    this.startTime =  obj['startTime'];
+    this.startTime = obj['startTime'];
+    this.endTime = obj['endTime'];
     this.raid = obj['raid'];
 };
 

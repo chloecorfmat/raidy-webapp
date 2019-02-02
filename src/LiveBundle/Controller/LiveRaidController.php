@@ -5,7 +5,7 @@ namespace LiveBundle\Controller;
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\TwitterApiData;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Response;
