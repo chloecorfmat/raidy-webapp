@@ -20,10 +20,79 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
    * MapManager is the data to map content manager
    */
   MapManager = function() {
-
+    let keepThis = this;
+    let headers = [];
     this.isRootingMode = false;
-    this.root = function(e){};
-    this.startRootVertex;
+    this.routing = function(e){
+      console.log("log click in rooting mode");
+      mapManager.currentTrack.line.getLatLngs().pop();
+    //  keepThis.currentTrack.line.setLatLngs(mapManager.currentTrack.line.getLatLngs().splice(0,-1));
+
+      Gp.Services.route({
+        apiKey : IGNAPIKEY, // clef d'accès à la plateforme
+        startPoint : { y: keepThis.routingLatlng.lat, x: keepThis.routingLatlng.lng},       // point de départ
+        endPoint : { y: e.latlng.lat, x: e.latlng.lng},          // point d'arrivée
+        geometryInInstructions : false,
+        graph : "Pieton",                 // grapĥe utilisé
+        onSuccess : function (result) {
+          // exploitation des resultats : "result" est de type Gp.Services.RouteResponse
+          console.log(result);
+          let shape = [];
+          let latLngs = [];
+          let i =0 ;
+          keepThis.currentTrack.line.disableEdit();
+
+          for(let coord of result.routeGeometry.coordinates){
+            //console.log(coord);
+            if((i%4 == 0) || (i == result.routeGeometry.coordinates.length)) {
+              let latlng = L.latLng(coord[1], coord[0]);
+              shape.push({lon : coord[0], lat : coord[1]});
+              latLngs.push(latlng)
+              keepThis.currentTrack.line.addLatLng(latlng);
+
+            }
+            keepThis.routingLatlng = L.latLng( coord[1], coord[0]);
+            i++;
+          }
+
+          keepThis.currentTrack.line.enableEdit();
+          keepThis.currentTrack.line.editor.continueForward();
+          let promises = [];
+          while(shape.length >0){
+            let subArray = shape.splice(0,48);
+            let subLatLngs = latLngs.splice(0,48);
+            let key = subLatLngs[0].lat+"/"+subLatLngs[0].lng+"";
+            headers[key] = subLatLngs.splice(0);
+            promises.push(new Promise(function(resolve, reject) {
+            Gp.Services.getAltitude({
+                apiKey: IGNAPIKEY, // clef d'accès à la  plate
+                positions: subArray,
+                onSuccess: function (result) {
+                  let key = result['elevations'][0].lat+"/"+result['elevations'][0].lon+'';
+                  let array = headers[key];
+                  let i = 0;
+                  for (let elem of result['elevations']) {
+                    array[i].alt = elem.z;
+                    i++;
+                  }
+                  resolve('foo');
+                },
+              failure : function () {
+                reject();
+              }
+              });
+            }));
+          }
+          console.log("waiting request");
+          console.log(promises.length);
+          Promise.all(promises).then(function(values) {
+            console.log("finished loading");
+            console.log( keepThis.currentTrack.line.getLatLngs());
+            keepThis.currentTrack.update();
+          });
+        }
+      });
+    };
 
     this.isEditor = (typeof(document.getElementById("editorContainer")) !== "undefined" && document.getElementById("editorContainer") !== null);
     this.map = L.map('map', {editable: true}).setView([46.9659015,2.458187], 6);
@@ -82,66 +151,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           });
           break;
         case EditorMode.TRACK_EDIT :
-          console.log("log click");
-          console.log(keepThis.isRootingMode);
-          if(keepThis.isRootingMode && keepThis.startRootVertex){
-            console.log("log click in rooting mode");
-              /*Gp.Services.route({
-                apiKey : IGNAPIKEY, // clef d'accès à la plateforme
-                startPoint : { x: keepThis.startRootVertex.latlng.lat, y: keepThis.startRootVertex.latlng.lng},       // point de départ
-                endPoint : { x: e.latlng.lat, y: e.latlng.lng},          // point d'arrivée
-                graph : "Pieton",                 // grapĥe utilisé
-                onSuccess : function (result) {
-                  // exploitation des resultats : "result" est de type Gp.Services.RouteResponse
-                  console.log(result);
-                }
-              });
-*/
-            let lat1 = 48.7268687;
-            let lng1 = -3.4599370999999337;
-
-            let graph = 'Pieton';
-            let routePreference = 'shortest';
-
-            try {
-              Gp.Services.route({
-                startPoint: {
-                  x: lng1,
-                  y: lat1
-                },
-                endPoint: {
-                  x: e.latlng.lat,
-                  y: e.latlng.lng
-                },
-                graph: graph,
-                routePreference: routePreference,
-                apiKey: "jhyvi0fgmnuxvfv0zjzorvdn",
-                onSuccess: function (result) {
-                  var format = new ol.format.GeoJSON();
-                  var feature = new ol.Feature({
-                    geometry: format.readGeometry(result.routeGeometry, {
-                      featureProjection: "EPSG:3857"
-                    })
-                  });
-                  feature.setStyle(new ol.style.Style({
-                    stroke: new ol.style.Stroke({
-                      color: 'red',
-                      width: 3
-                    })
-                  }));
-                  var vectorSource = new ol.source.Vector({
-                    features: [feature]
-                  });
-                  var vectorLayer = new ol.layer.Vector({
-                    source: vectorSource
-                  });
-                  map.addLayer(vectorLayer);
-                }
-              });
-            } catch (e) {
-              console.log(e);
-            }
-          }
           break;
         case EditorMode.POI_EDIT :
           break;
@@ -151,6 +160,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.map.on('editable:enable', function () {
       keepThis.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
+      if(!keepThis.currentTrack.line.isEmpty()){
+        let latlngs = keepThis.currentTrack.line.getLatLngs();
+        keepThis.routingLatlng = latlngs[latlngs.length-1];
+      }else{
+        keepThis.routingLatlng = null;
+      }
     });
 
     /* Save track when middle marker is mouved */
@@ -215,21 +230,10 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:vertex:rawclick', function (e) { // click on a point
       keepThis.tracksMap.get(keepThis.currentEditID).update();
       e.cancel();
-      if(!keepThis.isRootingMode){
-        e.vertex.continue();
-      }else{
-        console.log("select first vertex for rooting");
-        keepThis.startRootVertex = e.vertex;
-      }
-     /* if(e.vertex.getIndex() != 0) {
-        console.log('rawclick');
-        console.log(e.vertex);
-        keepThis.advancedPoly = L.polyline([e.vertex.latlng]);
-        keepThis.currentTrack.line.editor.endDrawing();
-        keepThis.map.addLayer(keepThis.advancedPoly);
-        keepThis.advancedPoly.enableEdit();
-        keepThis.advancedPoly.editor.continueBackward();
-      }*/
+      e.vertex.continue();
+
+      keepThis.routingLatlng = e.vertex.latlng;
+
     });
 
     this.map.on('editable:vertex:remove', function (e) { //point on track is removed
@@ -252,7 +256,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.map.on(' editable:vertex:new', function (e) {
 
-      console.log("new vertex")
+      //console.log("new vertex")
       if(keepThis.advancedPoly ==null) {
 
         keepThis.elevator.getElevationAt(e.vertex.latlng, function () {
@@ -285,6 +289,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           }
         }
       }
+      if(keepThis.isRootingMode && keepThis.routingLatlng){
+        if(!keepThis.currentTrack.line.isEmpty()){
+          keepThis.routing(e);
+        }
+      }
+      keepThis.routingLatlng = e.vertex.latlng;
 
     });
     this.map.on('editable:drawing:end', function () {
@@ -479,6 +489,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           mapManager.currentEditID = track.id;
           mapManager.currentTrack = mapManager.tracksMap.get(mapManager.currentEditID);
           mapManager.switchMode(EditorMode.TRACK_EDIT);
+          mapManager.currentTrack.line.enableEdit();
           mapManager.currentTrack.line.editor.continueForward();
         }
       }
