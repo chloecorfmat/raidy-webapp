@@ -10,7 +10,162 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.redoBuffer = [];
   };
 
-  MapHistory.prototype.apply = function (action) {
+/* TRACK MODIFICATION */
+  // MOVE UNDO
+  MapHistory.prototype.undoMoveMarkerTrack = function(action){
+
+    action.track.line.getLatLngs()[action.vertexId].lat = action.beforeLat;
+    action.track.line.getLatLngs()[action.vertexId].lng = action.beforeLng;
+  };
+  // MOVE REDO
+  MapHistory.prototype.redoMoveMarkerTrack = function(action){
+    action.track.line.getLatLngs()[action.vertexId].lat = action.afterLat;
+    action.track.line.getLatLngs()[action.vertexId].lng = action.afterLng;
+  };
+
+  // ADD UNDO
+  MapHistory.prototype.undoAddMarkerTrack = function(action){
+    action.track.line.getLatLngs().pop();
+  };
+  // ADD REDO
+  MapHistory.prototype.redoAddMarkerTrack = function(action){
+    action.track.line.addLatLng(action.latLng);
+  };
+
+  // REMOVE UNDO
+  MapHistory.prototype.undoRemoveMarkerTrack = function(action){
+
+  };
+
+  // REMOVE REDO
+  MapHistory.prototype.redoRemoveMarkerTrack = function(action){
+
+  };
+  // AUTO UNDO
+  MapHistory.prototype.redoAutoTrack = function(action){
+    action.track.line.setLatLngs(action.track.line.getLatLngs().splice(0,action.lastSize));
+  };
+
+  // AUTO REDO
+  MapHistory.prototype.undoAutoTrack = function(action){
+    for(let latLng of action.latLngs){
+      console.log(latLng);
+      action.track.line.addLatLng(latLng);
+    }
+  };
+
+  MapHistory.prototype.undo = function () {
+    let action = this.undoBuffer.pop();
+    if(action != undefined) {
+      if(action.track){
+        let wasEnabled = action.track.line.editEnabled();
+        if(wasEnabled){ action.track.line.disableEdit(); }
+        switch (action.type) {
+
+          case "MOVE_MARKER_TRACK" :
+            this.undoMoveMarkerTrack(action);
+            break;
+
+          case "ADD_MARKER_TRACK" :
+            this.undoAddMarkerTrack(action);
+            break;
+
+          case "REMOVE_MARKER_TRACK" :
+            this.undoRemoveMarkerTrack(action);
+            break;
+
+          case "AUTO_TRACK" :
+            this.undoAutoTrack(action);
+            break;
+        }
+
+        if(wasEnabled){
+          action.track.line.enableEdit();
+          action.track.line.editor.reset();
+        }
+
+        this.redoBuffer.push(action);
+
+        action.track.line.redraw();
+        action.track.line.editor.reset();
+        action.track.update();
+        action.track.push();
+      }
+      console.log("undo");
+
+    }else{
+      console.log("Nothing to undo.");
+    }
+    console.log(this.redoBuffer);
+    console.log(this.undoBuffer);
+  };
+
+  MapHistory.prototype.redo = function () {
+    let action = this.redoBuffer.pop();
+    if(action != undefined) {
+      if(action.track){
+        let wasEnabled = action.track.line.editEnabled();
+        if(wasEnabled){ action.track.line.disableEdit(); }
+        switch (action.type) {
+
+          case "MOVE_MARKER_TRACK" :
+            this.redoMoveMarkerTrack(action);
+            break;
+
+          case "ADD_MARKER_TRACK" :
+            this.redoAddMarkerTrack(action);
+            break;
+
+          case "REMOVE_MARKER_TRACK" :
+            this.redoRemoveMarkerTrack(action);
+            break;
+
+          case "AUTO_TRACK" :
+            this.redoAutoTrack(action);
+            break;
+        }
+
+        if(wasEnabled){
+          action.track.line.enableEdit();
+          action.track.line.editor.reset();
+        }
+
+        this.undoBuffer.push(action);
+
+        action.track.line.redraw();
+        action.track.update();
+        action.track.push();
+      }
+      console.log("redo");
+    }else{
+      console.log("Nothing to redo.");
+    }
+    console.log(this.redoBuffer);
+    console.log(this.undoBuffer);
+
+  };
+
+  MapHistory.prototype.logModification = function (obj) {
+    this.undoBuffer.push(obj);
+    this.redoBuffer = [];
+    console.log(obj);
+  };
+
+  MapHistory.prototype.clearHistory = function () {
+    this.undoBuffer = [];
+    this.redoBuffer = [];
+    console.log("History cleared")
+  };
+}
+/*
+ * type
+ * target
+ * newValue
+ * lastValue
+ */
+
+
+/*MapHistory.prototype.apply = function (action) {
     switch (action.type) {
       case "MOVE_TRACK_MARKER" :
         let line = action.track.line;
@@ -39,131 +194,4 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         action.track.update();
         break;
     }
-  }
-
-
-  MapHistory.prototype.undo = function () {
-    let action = this.undoBuffer.pop();
-    if(action != undefined) {
-
-      console.log("undo");
-      console.log(action);
-      switch (action.type) {
-        case "ADD_MARKER_TRACK" :
-          let wasEnabled1 = action.track.line.editEnabled();
-          if(wasEnabled1){ action.track.line.disableEdit(); }
-          action.track.line.getLatLngs().pop();
-          if(wasEnabled1){ action.track.line.enableEdit(); }
-          this.redoBuffer.push(action);
-          action.track.update();
-          action.track.line.redraw();
-          action.track.push();
-          break;
-
-        case "AUTO_TRACK" :
-          let wasEnabled = action.track.line.editEnabled();
-          if(wasEnabled){ action.track.line.disableEdit(); }
-          action.track.line.setLatLngs(action.track.line.getLatLngs().splice(0,action.lastSize));
-          if(wasEnabled){ action.track.line.enableEdit(); }
-          this.redoBuffer.push(action);
-          action.track.update();
-          action.track.line.redraw();
-          action.track.push();
-          break;
-        case "MOVE_TRACK_MARKER" :
-          let toRedo = [];
-          let latLngArray = action.track.line.getLatLngs();
-          for (let element in latLngArray) {
-            toRedo.push({
-              lat: latLngArray[element].lat,
-              lng: latLngArray[element].lng,
-              alt: latLngArray[element].alt
-            });
-          }
-          this.redoBuffer.push({
-            type: "MOVE_TRACK_MARKER",
-            track: action.track,
-            lastPosition: toRedo
-          });
-          break;
-      }
-      this.apply(action);
-
-    }else{
-      console.log("Nothing to undo.");
-    }
-  };
-
-  MapHistory.prototype.redo = function () {
-    let action = this.redoBuffer.pop();
-    if (action != undefined) {
-       console.log("redo");
-      switch (action.type) {
-
-        case "ADD_MARKER_TRACK" :
-          let wasEnabled1 = action.track.line.editEnabled();
-          if(wasEnabled1){ action.track.line.disableEdit(); }
-          action.track.line.addLatLng(action.latLng);
-          if(wasEnabled1){ action.track.line.enableEdit(); }
-          this.redoBuffer.push(action);
-          action.track.update();
-          action.track.line.redraw();
-          action.track.push();
-          break;
-
-        case "AUTO_TRACK" :
-          let wasEnabled = action.track.line.editEnabled();
-          if(wasEnabled){ action.track.line.disableEdit(); }
-          for(let latLng of action.latLngs){
-            console.log(latLng);
-            action.track.line.addLatLng(latLng);
-          }
-          if(wasEnabled){ action.track.line.enableEdit(); }
-          this.undoBuffer.push(action);
-          action.track.update();
-          action.track.line.redraw();
-          action.track.push();
-          break;
-
-
-        case "MOVE_TRACK_MARKER" :
-          let toUndo = [];
-          let latLngArray = action.track.line.getLatLngs();
-          for (let element in latLngArray) {
-            toUndo.push({
-              lat: latLngArray[element].lat,
-              lng: latLngArray[element].lng,
-              alt: latLngArray[element].alt
-            });
-          }
-          this.undoBuffer.push({
-            type: "MOVE_TRACK_MARKER",
-            track: action.track,
-            lastPosition: toUndo
-          });
-          break;
-      }
-
-    this.apply(action);
-  }else{
-      console.log("Nothing to redo.");
-    }
-  };
-
-  MapHistory.prototype.logModification = function (obj) {
-    this.undoBuffer.push(obj);
-    console.log(obj);
-  };
-
-  MapHistory.prototype.clearHistory = function () {
-    this.undoBuffer = [];
-    this.redoBuffer = [];
-    console.log("History cleared")
-  };
-}
-/*
- * type
- * target
- * newValue
- * lastValue
- */
+  }*/

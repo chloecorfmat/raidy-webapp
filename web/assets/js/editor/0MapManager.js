@@ -205,12 +205,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       keepThis.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
       keepThis.lastPostition  = [];
       let latLngArray =  keepThis.currentTrack.line.getLatLngs();
-      for (let element in latLngArray){
-        keepThis.lastPostition.push({
-          lat : latLngArray[element].lat,
-          lng : latLngArray[element].lng
-        });
-      }
+
+     // for (let element in latLngArray){
+        keepThis.lastPostition = {
+          lat : e.vertex.latlng.lat,
+          lng : e.vertex.latlng.lng
+        };
+      //}
     });
     this.map.on('editable:vertex:dragend', function (e) {
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
@@ -219,10 +220,23 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
    //   track.push();
       track.update();
       keepThis.mapHistory.logModification({
+        type : "MOVE_MARKER_TRACK",
+        track : track,
+        beforeLat: keepThis.lastPostition.lat,
+        beforeLng: keepThis.lastPostition.lng,
+        afterLat: e.vertex.latlng.lat,
+        afterLng: e.vertex.latlng.lng,
+        vertex : e.vertex,
+        vertexId : e.vertex.getIndex()
+      })
+
+      /*keepThis.mapHistory.logModification({
         type : "MOVE_TRACK_MARKER",
         track : track,
-        lastPosition : keepThis.lastPostition, })
+        lastPosition : keepThis.lastPostition, })*/
     });
+
+
 
     this.map.on('editable:vertex:drag', function () {
       keepThis.currentTrack.update();
