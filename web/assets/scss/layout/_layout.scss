@@ -18,8 +18,12 @@ main {
 
 .content {
   display: flex;
-  flex-direction: column-reverse;
+  flex-direction: column;
   width: 100%;
+
+  &--reverse-small {
+    flex-direction: column-reverse;
+  }
 
   .content--part {
     box-sizing: border-box;

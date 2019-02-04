@@ -29,7 +29,7 @@
 
 {% block body %}
     <h1>{{ raid.name }}</h1>
-    <div class="content">
+    <div class="content content--reverse-small">
         <div class="content--quarter">
             {% for flash_message in app.session.flashBag.get('success') %}
                 <div class="alert alert--success">
@@ -58,7 +58,7 @@
 
             <div class="cards-block">
                 <header class="cards-block--header">
-                    <i class="fas fa-angle-up fa-lg"></i>
+                    <i class="fas fa-angle-up fa-lg cards-block--header--arrow" ></i>
                     <p>Parcours</p>
                 </header>
                 <div class="cards-block--content">
@@ -86,7 +86,7 @@
 
             <div class="cards-block">
                 <header class="cards-block--header">
-                    <i class="fas fa-angle-up fa-lg"></i>
+                    <i class="fas fa-angle-up fa-lg cards-block--header--arrow"></i>
                     <p>Bénévoles</p>
                 </header>
                 <div class="cards-block--content">
