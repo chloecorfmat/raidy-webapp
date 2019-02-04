@@ -107,6 +107,7 @@ class OrganizerHelpersController extends AjaxAPIController
         return $this->render(
             'OrganizerBundle:Helpers:helpers.html.twig',
             [
+            'raid' => $raid,
             'raid_id' => $id,
             'raidName' => $raid->getName(),
             'helpers' => $helpers,
