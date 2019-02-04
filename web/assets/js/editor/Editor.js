@@ -518,6 +518,9 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
             preview.className = 'form--item-file-preview';
           }
         }
+      } else {
+        preview.url = '';
+        preview.className = 'form--item-file-hide-preview';
       }
       reader.readAsDataURL(poiImageData);
     } else {
