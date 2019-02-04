@@ -27,7 +27,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       console.log("log click in rooting mode");
       mapManager.currentTrack.line.getLatLngs().pop();
     //  keepThis.currentTrack.line.setLatLngs(mapManager.currentTrack.line.getLatLngs().splice(0,-1));
-
+      let currentSize = keepThis.currentTrack.line.getLatLngs().length;
       Gp.Services.route({
         apiKey : IGNAPIKEY, // clef d'accès à la plateforme
         startPoint : { y: keepThis.routingLatlng.lat, x: keepThis.routingLatlng.lng},       // point de départ
@@ -49,11 +49,11 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
               shape.push({lon : coord[0], lat : coord[1]});
               latLngs.push(latlng)
               keepThis.currentTrack.line.addLatLng(latlng);
-
             }
             keepThis.routingLatlng = L.latLng( coord[1], coord[0]);
             i++;
           }
+          let dump = latLngs.slice(0);
 
           keepThis.currentTrack.line.enableEdit();
           keepThis.currentTrack.line.editor.continueForward();
@@ -89,6 +89,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
             console.log("finished loading");
             console.log( keepThis.currentTrack.line.getLatLngs());
             keepThis.currentTrack.update();
+            keepThis.mapHistory.logModification({
+              type : "AUTO_TRACK",
+              track : keepThis.currentTrack,
+              lastSize : currentSize,
+              latLngs : dump
+            });
           });
         }
       });
@@ -263,11 +269,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           keepThis.currentTrack.push()
         });
 
-        keepThis.mapHistory.logModification({
-          type: "MOVE_TRACK_MARKER",
-          track: keepThis.tracksMap.get(keepThis.currentEditID),
-          lastPosition: keepThis.lastPostition
-        });
+
         let latLngArray = keepThis.currentTrack.line.getLatLngs();
         keepThis.lastPostition = [];
 
@@ -293,6 +295,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         if(!keepThis.currentTrack.line.isEmpty()){
           keepThis.routing(e);
         }
+      }else{
+        keepThis.mapHistory.logModification({
+          type: "ADD_MARKER_TRACK",
+          track: keepThis.tracksMap.get(keepThis.currentEditID),
+          latLng : L.latLng(e.vertex.latlng.lat, e.vertex.latlng.lng),
+        });
       }
       keepThis.routingLatlng = e.vertex.latlng;
 
@@ -302,7 +310,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
     this.map.on('editable:drawing:start', function () {
       document.getElementById('map').style.cursor = 'crosshair';
-      keepThis.mapHistory.clearHistory()
+   //   keepThis.mapHistory.clearHistory()
     });
 
     this.loadRessources();

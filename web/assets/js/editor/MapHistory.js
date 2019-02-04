@@ -20,7 +20,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         if(line.editor != undefined){
           if(line.editor.drawing()) {
             console.log(line.editor._drawing);
-          //  line.editor.endDrawing();
             if (line.editor._drawing > 0) {
              console.log("forward");
               line.editor.endDrawing();
@@ -50,6 +49,27 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       console.log("undo");
       console.log(action);
       switch (action.type) {
+        case "ADD_MARKER_TRACK" :
+          let wasEnabled1 = action.track.line.editEnabled();
+          if(wasEnabled1){ action.track.line.disableEdit(); }
+          action.track.line.getLatLngs().pop();
+          if(wasEnabled1){ action.track.line.enableEdit(); }
+          this.redoBuffer.push(action);
+          action.track.update();
+          action.track.line.redraw();
+          action.track.push();
+          break;
+
+        case "AUTO_TRACK" :
+          let wasEnabled = action.track.line.editEnabled();
+          if(wasEnabled){ action.track.line.disableEdit(); }
+          action.track.line.setLatLngs(action.track.line.getLatLngs().splice(0,action.lastSize));
+          if(wasEnabled){ action.track.line.enableEdit(); }
+          this.redoBuffer.push(action);
+          action.track.update();
+          action.track.line.redraw();
+          action.track.push();
+          break;
         case "MOVE_TRACK_MARKER" :
           let toRedo = [];
           let latLngArray = action.track.line.getLatLngs();
@@ -79,6 +99,33 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     if (action != undefined) {
        console.log("redo");
       switch (action.type) {
+
+        case "ADD_MARKER_TRACK" :
+          let wasEnabled1 = action.track.line.editEnabled();
+          if(wasEnabled1){ action.track.line.disableEdit(); }
+          action.track.line.addLatLng(action.latLng);
+          if(wasEnabled1){ action.track.line.enableEdit(); }
+          this.redoBuffer.push(action);
+          action.track.update();
+          action.track.line.redraw();
+          action.track.push();
+          break;
+
+        case "AUTO_TRACK" :
+          let wasEnabled = action.track.line.editEnabled();
+          if(wasEnabled){ action.track.line.disableEdit(); }
+          for(let latLng of action.latLngs){
+            console.log(latLng);
+            action.track.line.addLatLng(latLng);
+          }
+          if(wasEnabled){ action.track.line.enableEdit(); }
+          this.undoBuffer.push(action);
+          action.track.update();
+          action.track.line.redraw();
+          action.track.push();
+          break;
+
+
         case "MOVE_TRACK_MARKER" :
           let toUndo = [];
           let latLngArray = action.track.line.getLatLngs();
@@ -105,13 +152,13 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   MapHistory.prototype.logModification = function (obj) {
     this.undoBuffer.push(obj);
-    //console.log(this.undoBuffer);
-    //this.redoBuffer = [];
+    console.log(obj);
   };
 
   MapHistory.prototype.clearHistory = function () {
     this.undoBuffer = [];
     this.redoBuffer = [];
+    console.log("History cleared")
   };
 }
 /*
