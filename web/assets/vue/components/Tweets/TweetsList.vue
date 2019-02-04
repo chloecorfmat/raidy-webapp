@@ -14,7 +14,7 @@
 
     export default {
         name: "TweetsList",
-        props: ['raidid'],
+        props: ['raidid', 'baseurl'],
         data() {
             return {'tweets_object': [],};
         },
@@ -27,7 +27,7 @@
         },
         methods: {
             getTweetsObject () {
-                axios.get('/api/public/raid/' + this.raidid + '/tweets')
+                axios.get(this.baseurl + '/api/public/raid/' + this.raidid + '/tweets')
                     .then(response => {
                         // JSON responses are automatically parsed.
                         this.tweets_object = response.data;

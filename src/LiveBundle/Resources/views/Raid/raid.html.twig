@@ -4,8 +4,8 @@
     <div id="app">
         <social-media-share url="{{ meta['url'] }}" raidname="{{ raid.name }}" via="{{ via }}"></social-media-share>
         <div class="content">
-            <tweets-list v-show="{{ twitter_activation }}" raidid="{{ raid.uniqid }}"></tweets-list>
-            <competitors-component races="{{ races }}" competitors="{{ competitors }}"></competitors-component>
+            <tweets-list v-show="{{ twitter_activation }}" baseurl="{{ base_url }}" raidid="{{ raid.uniqid }}"></tweets-list>
+            <competitors-component races="{{ races }}" baseurl="{{ base_url }}" competitors="{{ competitors }}"></competitors-component>
         </div>
     </div>
 {% endblock %}

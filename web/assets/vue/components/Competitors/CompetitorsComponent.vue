@@ -35,43 +35,30 @@
                 'races_object': {},
             }
         },
-        props: ['competitors', 'races'],
+        props: ['competitors', 'races', 'baseurl'],
         components: {
             CompetitorsList
         },
-        computed: {
-        },
-        watch: {
-            search_competitor: function (newValue) {
-                this.search_competitor = newValue;
+        methods: {
+            filter () {
+                var c = JSON.parse(JSON.stringify(this.competitors_object));
 
-                // Filter object (competitors) in table.
+                console.log(this.search_competitor);
                 if (this.search_competitor !== 'all') {
-                    var c = JSON.parse(JSON.stringify(this.competitors_object));
                     for (var o in c) {
                         if (c.hasOwnProperty(o)) {
                             if (
-                                (c[o].firstname.toLowerCase().indexOf(newValue.toLowerCase()) === -1) &&
-                                (c[o].lastname.toLowerCase().indexOf(newValue.toLowerCase()) === -1) &&
-                                (c[o].numbersign.toLowerCase().indexOf(newValue.toLowerCase()) === -1)
+                                (c[o].firstname.toLowerCase().indexOf(this.search_competitor.toLowerCase()) === -1) &&
+                                (c[o].lastname.toLowerCase().indexOf(this.search_competitor.toLowerCase()) === -1) &&
+                                (c[o].numbersign.toLowerCase().indexOf(this.search_competitor.toLowerCase()) === -1)
                             ) {
                                 delete c[o];
                             }
                         }
                     }
-                    this.competitors_list = Object.assign({}, c);
-                } else {
-                    // If filter is empty, show all competitors.
-                    this.competitors_list = this.competitors_object;
                 }
-            },
-            race_selected: function (newValue) {
-                this.race_selected = newValue;
-
-                console.log(this.competitors_object);
 
                 if (this.race_selected !== 'all') {
-                    var c = JSON.parse(JSON.stringify(this.competitors_object));
                     for (var o in c) {
                         if (c.hasOwnProperty(o)) {
                             if (
@@ -81,12 +68,21 @@
                             }
                         }
                     }
-                    this.competitors_list = Object.assign({}, c);
-                } else {
-                    // If filter is empty, show all competitors.
-                    this.competitors_list = this.competitors_object;
                 }
+
+
+                this.competitors_list = Object.assign({}, c);
             }
+        },
+        watch: {
+            search_competitor: function (newValue) {
+                this.search_competitor = newValue;
+                this.filter();
+            },
+            race_selected: function (newValue) {
+                this.race_selected = newValue;
+                this.filter();
+            },
         },
         mounted() {
             this.races_object = JSON.parse(this.races);
