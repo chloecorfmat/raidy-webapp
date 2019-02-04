@@ -2,7 +2,7 @@
   background-color: $tertiary-color-1;
   display: block;
   height: 2rem;
-  margin-bottom: 0.5rem;
+  margin-bottom: .5rem;
   padding: .5rem;
   text-align: center;
   width: 100%;
@@ -12,12 +12,12 @@
   }
 
   a {
+    align-items: center;
     color: $white;
     display: flex;
     flex-direction: row;
-    height: 100%;
     justify-content: space-around;
-    align-items: center;
+    height: 100%;
     text-decoration: none;
     width: 100%;
 
@@ -30,3 +30,82 @@
     }
   }
 }
+
+.content{
+  .cards-block {
+    margin-bottom: .5rem;
+
+    &--header {
+      background: $tertiary-color-1;
+      height: 2rem;
+      margin: 0;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: .5rem;
+      color: white;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      p {
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        padding: .2rem;
+      }
+
+      i {
+        padding-left: .2rem;
+      }
+
+    }
+
+    &--content {
+      display: none;
+      border: 1px solid $tertiary-color-1;
+
+      .card {
+        background: white;
+        width: auto;
+        margin-bottom: 0;
+        position: relative;
+        overflow: hidden;
+
+        transition: all .2s ease;
+
+        &:hover {
+          padding-left: .8rem;
+        }
+
+        a {
+          justify-content: flex-start;
+          color: $tertiary-color-1;
+
+          p {
+            width: auto;
+            padding-left: 2rem;
+          }
+
+        }
+      }
+
+    }
+
+    &.open {
+
+      .cards-block--header {
+        i::before {
+          content: "\f107";
+        }
+      }
+
+      .cards-block--content {
+        display: block;
+      }
+    }
+  }
+
+}
+

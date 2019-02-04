@@ -54,43 +54,73 @@
         </div>
 
         <div class="content--quarter">
-            <div class="card">
-                <a href="{{ path('editor', {'id': raid.uniqid}) }}">
-                    <i class="fas fa-map-marked-alt fa-lg"></i>
-                    <p>Éditeur</p>
-                </a>
-            </div>
-            <div class="card">
-                <a href="{{ path('listPois', {'raidId': raid.uniqid}) }}">
-                    <i class="fas fa-map-marker-alt fa-lg"></i>
-                    <p>Points d'intérêt</p>
-                </a>
+
+
+            <div class="cards-block">
+                <header class="cards-block--header">
+                    <i class="fas fa-angle-up fa-lg"></i>
+                    <p>Parcours</p>
+                </header>
+                <div class="cards-block--content">
+                    <div class="card">
+                        <a href="{{ path('editor', {'id': raid.uniqid}) }}">
+                            <i class="fas fa-map-marked-alt fa-lg"></i>
+                            <p>Éditeur</p>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <a href="{{ path('listPois', {'raidId': raid.uniqid}) }}">
+                            <i class="fas fa-map-marker-alt fa-lg"></i>
+                            <p>Points d'intérêt</p>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <a href="{{ path('listRace', {'raidId': raid.uniqid}) }}">
+                            <i class="fas fa-trophy fa-lg"></i>
+                            <p>Épreuves</p>
+                        </a>
+                    </div>
+                </div>
             </div>
 
-            <div class="card">
-                <a href="{{ path('listHelpers', {'id': raid.uniqid}) }}">
-                    <i class="fas fa-users fa-lg"></i>
+
+            <div class="cards-block">
+                <header class="cards-block--header">
+                    <i class="fas fa-angle-up fa-lg"></i>
                     <p>Bénévoles</p>
-                </a>
+                </header>
+                <div class="cards-block--content">
+                    <div class="card">
+                        <a href="{{ path('listHelpers', {'id': raid.uniqid}) }}">
+                            <i class="fas fa-users fa-lg"></i>
+                            <p>Bénévoles</p>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <a href="{{ path('listContacts', {'raidId': raid.uniqid}) }}">
+                            <i class="fas fa-phone fa-lg"></i>
+                            <p>Contacts</p>
+                        </a>
+                    </div>
+                    <div class="card">
+                        <a href="{{ path('listMessages', {'raidId': raid.uniqid}) }}">
+                            <i class="fas fa-info fa-lg"></i>
+                            <p>Fil d'informations</p>
+                        </a>
+                    </div>
+                </div>
             </div>
-            <div class="card">
-                <a href="{{ path('listRace', {'raidId': raid.uniqid}) }}">
-                    <i class="fas fa-trophy fa-lg"></i>
-                    <p>Épreuves</p>
-                </a>
-            </div>
+
+
+
+
             <div class="card">
                 <a href="{{ path('listCompetitor', {'raidId': raid.uniqid}) }}">
                     <i class="fas fa-running fa-lg"></i>
                     <p>Participants</p>
                 </a>
             </div>
-            <div class="card">
-                <a href="{{ path('listContacts', {'raidId': raid.uniqid}) }}">
-                    <i class="fas fa-phone fa-lg"></i>
-                    <p>Contacts</p>
-                </a>
-            </div>
+
 
             <div class="card">
                 <a href="{{ path('liveRaid', {'id': raid.uniqid}) }}">
@@ -99,12 +129,7 @@
                 </a>
             </div>
 
-            <div class="card">
-                <a href="{{ path('listMessages', {'raidId': raid.uniqid}) }}">
-                    <i class="fas fa-info fa-lg"></i>
-                    <p>Fil d'informations</p>
-                </a>
-            </div>
+
             {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
                 <div class="card">
                     <a href="{{ path('listCollaborators', {'raidId': raid.uniqid}) }}">
