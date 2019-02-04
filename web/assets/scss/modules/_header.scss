@@ -86,8 +86,9 @@ body {
     flex-direction: column;
   }
 
-    .roles--menu {
+  .roles--menu {
     align-items: center;
+    text-align: center;
 
     @media screen and (min-width: $breakpoint-medium) {
       display: flex;
