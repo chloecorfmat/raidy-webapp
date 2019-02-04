@@ -155,18 +155,18 @@ class OrganizerAdminController extends Controller
     }
 
     /**
-     * @Route("/admin/organizer/edit/{id}/{userPath}", name="editOrganizer")
+     * @Route("/admin/organizer/edit/{id}", name="editOrganizer")
      *
-     * @param Request $request  request
-     * @param mixed   $id       id
-     * @param mixed   $userPath user
+     * @param Request $request request
+     * @param mixed   $id      id
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function editOrganizer(Request $request, $id, $userPath)
+    public function editOrganizer(Request $request, $id)
     {
         $userManager = $this->get('fos_user.user_manager');
         $formUser = $userManager->findUserBy(['id' => $id]);
+        $userPath = $request->query->get('userPath');
 
         if (null === $formUser) {
             throw $this->createNotFoundException('The user does not exist');
@@ -236,10 +236,10 @@ class OrganizerAdminController extends Controller
                     $userManager->updateUser($user);
                     $this->addFlash('success', 'Le profil a bien été modifié.');
 
-                    if ($userPath) {
-                        return $this->redirectToRoute('listUsers');
-                    } else {
+                    if ('0' == $userPath) {
                         return $this->redirectToRoute('listOrganizer');
+                    } else {
+                        return $this->redirectToRoute('listUsers');
                     }
                 } else {
                     $form->addError(new FormError('Un numéro de téléphone doit comporter 10 chiffres'));
