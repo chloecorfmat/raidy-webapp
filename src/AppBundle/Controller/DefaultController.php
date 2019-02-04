@@ -61,6 +61,12 @@ class DefaultController extends Controller
         $configs['app.twitter.consumer_secret'] =
             $this->container->getParameter('app.twitter.consumer_secret');
 
+        $configs['app.mail.from'] =
+            $this->container->getParameter('app.mail.from');
+
+        $configs['app.mail.reply_to'] =
+            $this->container->getParameter('app.mail.reply_to');
+
         return $this->render('AppBundle:Admin:config.html.twig', compact('configs'));
     }
 

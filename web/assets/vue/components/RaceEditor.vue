@@ -4,8 +4,13 @@
         <ul class="race--list">
             <li v-for="(race, index) in races">
                 <header>
-                    <h3>{{ race.name }}</h3>
+                    <div>
+                        <h3>{{ race.name }}</h3>
+                    </div>
                     <nav>
+                        <button v-on:click="openStartRacePopin(race)" v-if="race.startTime == null" class="btn">Démarrer l'épreuve</button>
+                        <button v-on:click="openStopRacePopin(race)" v-if="race.startTime != null && race.endTime == null" class="btn">Arrêter l'épreuve</button>
+                        <strong v-if="race.startTime != null && race.endTime != null">Epreuve terminée</strong>
                         <button v-on:click="openNewTrackPopin(race)">Ajouter un parcours</button>
                         <button class="btn btn--danger" v-on:click="displayRemoveRacePopin(race)"><i class="fa fa-trash"></i></button>
                     </nav>
@@ -81,7 +86,7 @@
                                             <input class="form--input-text" type="text" id="addRace_name"
                                                    required="required" maxlength="100" v-model="newRace.name">
                                         </div>
-                                        <div class="actions modal--actions">
+                                        <div class="actions">
                                             <button type="submit" id="addRace_submit" class="btn">Ajouter un parcours</button>
                                             <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
                                         </div>
@@ -126,6 +131,57 @@
                     </div>
                 </div>
             </div>
+
+            <!-- START RACE -->
+            <div id="start-race" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+                <!-- [2] -->
+                <div tabindex="-1" data-micromodal-close>
+                    <!-- [3] -->
+                    <div role="dialog" aria-modal="true" aria-labelledby="add-race-title" >
+                        <div class="modal-container">
+                            <header class="modal--header modal--header--danger">
+                                <h2 id="start-race-title">
+                                    Démarrer une épreuve
+                                </h2>
+                                <!-- [4] -->
+                                <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                            </header>
+                            <div id="start-track-content" class="modal--content">
+                                <p>Êtes-vous certains de vouloir démarrer l'épreuve : <strong v-if="currentRace !== null">{{ currentRace.name }}</strong> ?</p>
+                                <p class="text--important">Cette action est irréversible.</p>
+
+                                <a v-if="currentRace !== null" v-bind:href="'race/'+currentRace.id+'/start/'" class="btn btn--danger">Démarrer l'épreuve</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP RACE -->
+            <div id="stop-race" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+                <!-- [2] -->
+                <div tabindex="-1" data-micromodal-close>
+                    <!-- [3] -->
+                    <div role="dialog" aria-modal="true" aria-labelledby="add-race-title" >
+                        <div class="modal-container">
+                            <header class="modal--header modal--header--danger">
+                                <h2 id="stop-race-title">
+                                    Démarrer une épreuve
+                                </h2>
+                                <!-- [4] -->
+                                <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                            </header>
+                            <div id="stop-track-content" class="modal--content">
+                                <p>Êtes-vous certains de vouloir arrêter l'épreuve : <strong v-if="currentRace !== null">{{ currentRace.name }}</strong> ?</p>
+                                <p class="text--important">Cette action est irréversible.</p>
+
+                                <a v-if="currentRace !== null" v-bind:href="'race/'+currentRace.id+'/stop/'" class="btn btn--danger">Arrêter l'épreuve</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -135,6 +191,7 @@
         name: "RaceEditor",
         data() {
             return {
+                raidId: raidID,
                 races: [],
                 newRace: new Race(),
                 newRaceTrack: new RaceTrack(),
@@ -174,6 +231,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
+                            console.log(race);
                             keepThis.races.push(r);
                             console.log(r);
                         }
@@ -456,6 +514,14 @@
                 }
 
                 this.checkpointsMap = cp;
+            },
+            openStartRacePopin(race) {
+                this.currentRace = race;
+                MicroModal.show("start-race");
+            },
+            openStopRacePopin(race) {
+                this.currentRace = race;
+                MicroModal.show("stop-race");
             },
             addRace(e){
                 e.preventDefault();

@@ -38,7 +38,7 @@ monolog:
         #    level: info
 
 swiftmailer:
-    delivery_addresses: ['luuka.tr@gmail.com']
+    delivery_addresses: ['anais.pignet@gmail.com']
 
 app:
     twitter:
@@ -47,3 +47,6 @@ app:
         oauth_access_token_secret: "11i6uN6VFgUfOfonMum5hNnOihCpH0tCPYNtkmGCL4sIM"
         consumer_key: "rfeiA23fHb2wdt4qbycQ07VZc"
         consumer_secret: "hUw1TGy2lw03LJHGvIelyNh2KSl5xqpkEZU6tHY6DDquGLNWIJ"
+    mail:
+        from: "raidy@enssat.fr"
+        reply_to: "raidy_reply_to@enssat.fr"

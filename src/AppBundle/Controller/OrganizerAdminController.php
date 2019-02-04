@@ -121,15 +121,16 @@ class OrganizerAdminController extends Controller
                         $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
 
                         $message = (new \Swift_Message('Création d\'un compte organisateur'))
-                        ->setFrom('raidy@enssat.fr')
-                        ->setTo($user->getEmail())
-                        ->setBody(
-                            $this->renderView(
-                                'AppBundle:Emails:registration.html.twig',
-                                array('user' => $user, 'password' => $formUser->getPlainPassword())
-                            ),
-                            'text/html'
-                        );
+                            ->setFrom($this->container->getParameter('app.mail.from'))
+                            ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
+                            ->setTo($user->getEmail())
+                            ->setBody(
+                                $this->renderView(
+                                    'AppBundle:Emails:registration.html.twig',
+                                    array('user' => $user, 'password' => $formUser->getPlainPassword())
+                                ),
+                                'text/html'
+                            );
 
                         $mailer->send($message);
 
@@ -165,9 +166,10 @@ class OrganizerAdminController extends Controller
     {
         $userManager = $this->get('fos_user.user_manager');
         $formUser = $userManager->findUserBy(['id' => $id]);
+        $userPath = $request->query->get('userPath');
 
         if (null === $formUser) {
-            throw $this->createNotFoundException('The organizer does not exist');
+            throw $this->createNotFoundException('The user does not exist');
         }
 
         $form = $this->createFormBuilder($formUser, array('validation_groups' => array('Profile')))
@@ -200,7 +202,6 @@ class OrganizerAdminController extends Controller
                 TelType::class,
                 [
                     'label' => 'Numéro de téléphone',
-                    //'attr' => array('maxlength' => 10),
                 ]
             )
             ->add(
@@ -211,7 +212,7 @@ class OrganizerAdminController extends Controller
                     'attr' => array('maxlength' => 180),
                 ]
             )
-            ->add('submit', SubmitType::class, ['label' => 'Editer un organisateur'])
+            ->add('submit', SubmitType::class, ['label' => 'Editer un utilisateur'])
             ->getForm();
 
         $form->handleRequest($request);
@@ -235,7 +236,11 @@ class OrganizerAdminController extends Controller
                     $userManager->updateUser($user);
                     $this->addFlash('success', 'Le profil a bien été modifié.');
 
-                    return $this->redirectToRoute('editOrganizer', ['id' => $id]);
+                    if ('0' == $userPath) {
+                        return $this->redirectToRoute('listOrganizer');
+                    } else {
+                        return $this->redirectToRoute('listUsers');
+                    }
                 } else {
                     $form->addError(new FormError('Un numéro de téléphone doit comporter 10 chiffres'));
                 }
@@ -250,6 +255,7 @@ class OrganizerAdminController extends Controller
             'form' => $form->createView(),
             'username' => $formUser->getUsername() ?? '',
             'userId' => $id,
+            'userPath' => $userPath,
             ]
         );
     }

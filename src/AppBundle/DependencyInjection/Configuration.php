@@ -28,6 +28,12 @@ class Configuration implements ConfigurationInterface
                             ->scalarNode('consumer_secret')->end()
                         ->end()
                 ->end()
+                ->arrayNode('mail')
+                    ->children()
+                        ->scalarNode('from')->end()
+                        ->scalarNode('reply_to')->end()
+                    ->end()
+                ->end()
             ->end()
         ;
 

@@ -40,6 +40,11 @@ class Race
     protected $startTime;
 
     /**
+     * @ORM\Column(name="end_time", type="datetime", nullable=true)
+     */
+    protected $endTime;
+
+    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Raid")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -137,5 +142,21 @@ class Race
     {
         $this->tracks[] = $track;
         $track->setRace($this);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getEndTime()
+    {
+        return $this->endTime;
+    }
+
+    /**
+     * @param mixed $endTime
+     */
+    public function setEndTime($endTime)
+    {
+        $this->endTime = $endTime;
     }
 }

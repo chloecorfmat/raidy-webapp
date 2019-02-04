@@ -35,6 +35,10 @@
                         <th scope="col">Sexe</th>
                         <th scope="col">Année</th>
                         <th scope="col">Épreuve</th>
+                        <th scope="col">Fraude</th>
+                        {% if frauds|length > 0 %}
+                        <th scope="col">Checkpoint(s) manquant(s)</th>
+                        {% endif %}
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -48,7 +52,29 @@
                             <td>{{ competitor.sex }}</td>
                             <td>{{ competitor.birthYear }}</td>
                             <td>{% if competitor.race is not null %}{{ competitor.race.name }}{% else %}Aucune épreuve{% endif %}</td>
-
+                            <td>
+                                {% if competitor.isFraud is empty %}
+                                    <span class="helper-check helper-check--no-assign"></span>
+                                    <span class="helper-check--text sr-only">Aucun POI assigné</span>
+                                {% elseif competitor.isFraud == false %}
+                                    <span class="helper-check helper-check--in"></span>
+                                    <span class="helper-check--text sr-only">Validé</span>
+                                {% else %}
+                                    <span class="helper-check helper-check--not"></span>
+                                    <span class="helper-check--text sr-only">Non validé</span>
+                                {% endif %}
+                            </td>
+                            {% if frauds|length > 0 %}
+                                <td>
+                                    {% if frauds[competitor.id] is defined %}
+                                        <ul>
+                                            {% for fraud in frauds[competitor.id] %}
+                                                <li>{{ fraud }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
                             <td>
                                 <a href="{{ path('editCompetitor', {'competitorId': competitor.id, 'raidId': competitor.raid.uniqid }) }}" class="btn">Editer</a>
                                 <button class="btn btn--danger btn--delete-competitor" data-competitor-id="{{ competitor.id }}" >Supprimer</button></td>

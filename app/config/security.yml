@@ -40,6 +40,10 @@ security:
             anonymous:    true
             access_denied_handler: AccessDeniedService
             logout_on_user_change: true
+            remember_me:
+                secret:   '%kernel.secret%'
+                lifetime: 604800 # 1 week in seconds
+                path:     /
 
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
@@ -56,6 +60,7 @@ security:
     access_control:
     - { path: ^/$, role: [ROLE_ORGANIZER,ROLE_HELPER, ROLE_SUPER_ADMIN, IS_AUTHENTICATED_ANONYMOUSLY] }
     - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
+    - { path: ^/api/public, role: IS_AUTHENTICATED_ANONYMOUSLY }
     - { path: ^/admin, role: ROLE_SUPER_ADMIN }
     - { path: ^/organizer/raid/add$, role: [ROLE_ORGANIZER, ROLE_SUPER_ADMIN] }
     - { path: ^/organizer, role: [ROLE_ORGANIZER, ROLE_SUPER_ADMIN, ROLE_COLLABORATOR] }

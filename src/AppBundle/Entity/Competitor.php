@@ -102,6 +102,11 @@ class Competitor
     private $NFCSerialId;
 
     /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isFraud = false;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -275,5 +280,21 @@ class Competitor
     public function setNFCSerialId($NFCSerialId)
     {
         $this->NFCSerialId = $NFCSerialId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getisFraud()
+    {
+        return $this->isFraud;
+    }
+
+    /**
+     * @param mixed $isFraud
+     */
+    public function setIsFraud($isFraud)
+    {
+        $this->isFraud = $isFraud;
     }
 }

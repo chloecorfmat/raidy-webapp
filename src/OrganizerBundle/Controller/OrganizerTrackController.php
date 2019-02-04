@@ -6,7 +6,7 @@ use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Track;
 use AppBundle\Entity\Raid;
 use OrganizerBundle\Security\RaidVoter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

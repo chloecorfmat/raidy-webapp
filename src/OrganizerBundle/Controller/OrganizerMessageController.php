@@ -7,7 +7,7 @@ use AppBundle\Entity\Message;
 use AppBundle\Form\Type\QuillType;
 use OrganizerBundle\Security\RaidVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
@@ -126,7 +126,8 @@ class OrganizerMessageController extends AjaxAPIController
                     foreach ($helpers as $helper) {
                         $mail = \Swift_Message::newInstance()
                             ->setSubject('Nouvelle notification pour le raid ' . $raid->getName())
-                            ->setFrom('raidy@enssat.fr')
+                            ->setFrom($this->container->getParameter('app.mail.from'))
+                            ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
                             ->setTo($helper->getUser()->getEmail())
                             ->setBody(
                                 $this->renderView(

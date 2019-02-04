@@ -6,7 +6,7 @@ use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\PoiType;
 use AppBundle\Form\Type\ColorpickerType;
 use OrganizerBundle\Security\RaidVoter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormError;
