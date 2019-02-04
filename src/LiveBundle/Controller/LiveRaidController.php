@@ -195,4 +195,44 @@ class LiveRaidController extends AjaxAPIController
 
         return new Response($data[0]->getData());
     }
+
+    /**
+     * @Rest\View(serializerGroups={"secured"})
+     * @Rest\Get("/api/public/raid/{raidId}/competitors")
+     *
+     * @param Request $request request
+     * @param int     $raidId  raid identifier
+     *
+     * @return Response
+     */
+    public function competitors(Request $request, $raidId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+        $competitors = $competitorManager->findBy(['raid' => $raid]);
+
+        $competitorsData = [];
+
+        foreach ($competitors as $competitor) {
+            if ($competitor->getRace()) {
+                $r = $competitor->getRace()->getId();
+            } else {
+                $r = null;
+            }
+
+            $competitorsData[] = [
+                'id' => $competitor->getId(),
+                'lastname' => $competitor->getLastname(),
+                'firstname' => $competitor->getFirstname(),
+                'numbersign' => $competitor->getNumberSign(),
+                'race_id' => $r,
+            ];
+        }
+
+        return new Response(json_encode($competitorsData) ?? "[]");
+    }
 }

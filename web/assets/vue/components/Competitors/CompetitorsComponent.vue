@@ -22,6 +22,7 @@
 </template>
 
 <script>
+    import axios from 'axios';
     import CompetitorsList from './CompetitorsList'
 
     export default {
@@ -35,15 +36,18 @@
                 'races_object': {},
             }
         },
-        props: ['competitors', 'races', 'baseurl'],
+        props: ['raidid', 'competitors', 'races', 'baseurl'],
         components: {
             CompetitorsList
+        },
+        created () {
+            this.tweets = this.getCompetitorsObject();
+            setInterval(this.getCompetitorsObject, 60*1000);
         },
         methods: {
             filter () {
                 var c = JSON.parse(JSON.stringify(this.competitors_object));
 
-                console.log(this.search_competitor);
                 if (this.search_competitor !== 'all') {
                     for (var o in c) {
                         if (c.hasOwnProperty(o)) {
@@ -70,8 +74,18 @@
                     }
                 }
 
-
                 this.competitors_list = Object.assign({}, c);
+            },
+            getCompetitorsObject () {
+                axios.get(this.baseurl + '/api/public/raid/' + this.raidid + '/competitors')
+                    .then(response => {
+                        // JSON responses are automatically parsed.
+                        this.competitors_object = response.data;
+                        this.filter();
+                    })
+                    .catch(e => {
+                        console.log(e);
+                    });
             }
         },
         watch: {
