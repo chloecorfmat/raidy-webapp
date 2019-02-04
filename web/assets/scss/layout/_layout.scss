@@ -14,15 +14,16 @@ body {
 main {
   flex-grow: 1;
   margin: 2rem 1.5rem;
-
-  @media screen and (min-width: $breakpoint-large) {
-    margin: 2rem 3rem;
-  }
 }
 
 .content {
-  display: block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
+
+  &--reverse-small {
+    flex-direction: column-reverse;
+  }
 
   .content--part {
     box-sizing: border-box;
@@ -43,6 +44,7 @@ main {
 
   @media screen and (min-width: $breakpoint-large) {
     display: flex;
+    flex-direction: row;
 
     .content--part {
       margin-top: initial;
@@ -79,7 +81,7 @@ main {
     width: 25%;
 
     &:not(:last-child) {
-      margin-right: 3rem;
+      margin-right: 1rem;
     }
   }
 }
@@ -96,7 +98,7 @@ main {
     width: 50%;
 
     &:not(:last-child) {
-      margin-right: 3rem;
+      margin-right: 1rem;
     }
   }
 }
@@ -113,7 +115,7 @@ main {
     width: 33%;
 
     &:not(:last-child) {
-      padding-right: 3rem;
+      padding-right: 1rem;
     }
   }
 }
@@ -130,7 +132,7 @@ main {
     width: 66%;
 
     &:not(:last-child) {
-      padding-left: 3rem;
+      padding-left: 1rem;
     }
   }
 }

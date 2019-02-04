@@ -83,9 +83,11 @@ class LiveRaidController extends AjaxAPIController
 
         foreach ($competitors as $competitor) {
             if ($competitor->getRace()) {
-                $r = $competitor->getRace()->getId();
+                $rId = $competitor->getRace()->getId();
+                $rName = $competitor->getRace()->getName();
             } else {
-                $r = null;
+                $rId = null;
+                $rName = '-';
             }
 
             $competitorsData[] = [
@@ -93,7 +95,11 @@ class LiveRaidController extends AjaxAPIController
                 'lastname' => $competitor->getLastname(),
                 'firstname' => $competitor->getFirstname(),
                 'numbersign' => $competitor->getNumberSign(),
-                'race_id' => $r,
+                'category' => $competitor->getCategory(),
+                'race_name' => $rName,
+                'classment' => 0, //@TODO
+                'timing' => (new \DateTime())->format('H:m:s'), //@TODO
+                'race_id' => $rId,
             ];
         }
 
@@ -194,5 +200,51 @@ class LiveRaidController extends AjaxAPIController
         }
 
         return new Response($data[0]->getData());
+    }
+
+    /**
+     * @Rest\View(serializerGroups={"secured"})
+     * @Rest\Get("/api/public/raid/{raidId}/competitors")
+     *
+     * @param Request $request request
+     * @param int     $raidId  raid identifier
+     *
+     * @return Response
+     */
+    public function competitors(Request $request, $raidId)
+    {
+        $em = $this->getDoctrine()->getManager();
+
+        $raidManager = $em->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+        $competitors = $competitorManager->findBy(['raid' => $raid]);
+
+        $competitorsData = [];
+
+        foreach ($competitors as $competitor) {
+            if ($competitor->getRace()) {
+                $rId = $competitor->getRace()->getId();
+                $rName = $competitor->getRace()->getName();
+            } else {
+                $rId = null;
+                $rName = '-';
+            }
+
+            $competitorsData[] = [
+                'id' => $competitor->getId(),
+                'lastname' => $competitor->getLastname(),
+                'firstname' => $competitor->getFirstname(),
+                'numbersign' => $competitor->getNumberSign(),
+                'category' => $competitor->getCategory(),
+                'race_name' => $rName,
+                'classment' => 0, //@TODO
+                'timing' => (new \DateTime())->format('H:m:s'), //@TODO
+                'race_id' => $rId,
+            ];
+        }
+
+        return new Response(json_encode($competitorsData) ?? "[]");
     }
 }

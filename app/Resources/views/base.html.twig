@@ -39,7 +39,7 @@
         {% block meta %}{% endblock %}
     </head>
     <body class="{{ base_class }} {% block body_class %}{% endblock %}">
-        <header>
+        <header class="header">
             <div class="header--raidy">
             <a href="{{ logo_url }}" class="logo">
                 <img src="{{ asset('assets/images/logo-white.svg') }}" alt="Logo Raidy">
@@ -57,7 +57,7 @@
                     {% endif %}
 
                     {% if "ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles %}
-                        <a href="{{ path('listRaid') }}" class="roles--menu--item {% if (base_class=='organizer') %} item--active{% endif %}">Organizer</a>
+                        <a href="{{ path('listRaid') }}" class="roles--menu--item {% if (base_class=='organizer') %} item--active{% endif %}">Mes raids</a>
                     {% endif %}
 
                     {% if ("ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles) and "ROLE_HELPER" in app.user.roles %}
@@ -65,7 +65,7 @@
                     {% endif %}
 
                     {% if "ROLE_HELPER" in app.user.roles %}
-                        <a href="{{ path('helper') }}" class="roles--menu--item {% if (base_class=='helper') %} item--active{% endif %}">Helper</a>
+                        <a href="{{ path('helper') }}" class="roles--menu--item {% if (base_class=='helper') %} item--active{% endif %}">Mes bénévolats</a>
                     {% endif %}
                 </nav>
                 {% endif %}
