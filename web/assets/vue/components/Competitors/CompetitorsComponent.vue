@@ -1,6 +1,6 @@
 <template>
     <div class="content--two-third">
-        <h1>Classement</h1>
+        <h2>Classement</h2>
         <div class="filters">
             <div>
                 <label for="competitor">Rechercher</label>
@@ -48,7 +48,7 @@
             filter () {
                 var c = JSON.parse(JSON.stringify(this.competitors_object));
 
-                if (this.search_competitor !== 'all') {
+                if (this.search_competitor !== '') {
                     for (var o in c) {
                         if (c.hasOwnProperty(o)) {
                             if (

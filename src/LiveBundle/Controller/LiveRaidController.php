@@ -83,9 +83,11 @@ class LiveRaidController extends AjaxAPIController
 
         foreach ($competitors as $competitor) {
             if ($competitor->getRace()) {
-                $r = $competitor->getRace()->getId();
+                $rId = $competitor->getRace()->getId();
+                $rName = $competitor->getRace()->getName();
             } else {
-                $r = null;
+                $rId = null;
+                $rName = '-';
             }
 
             $competitorsData[] = [
@@ -93,7 +95,11 @@ class LiveRaidController extends AjaxAPIController
                 'lastname' => $competitor->getLastname(),
                 'firstname' => $competitor->getFirstname(),
                 'numbersign' => $competitor->getNumberSign(),
-                'race_id' => $r,
+                'category' => $competitor->getCategory(),
+                'race_name' => $rName,
+                'classment' => 0, //@TODO
+                'timing' => (new \DateTime())->format('H:m:s'), //@TODO
+                'race_id' => $rId,
             ];
         }
 
@@ -219,9 +225,11 @@ class LiveRaidController extends AjaxAPIController
 
         foreach ($competitors as $competitor) {
             if ($competitor->getRace()) {
-                $r = $competitor->getRace()->getId();
+                $rId = $competitor->getRace()->getId();
+                $rName = $competitor->getRace()->getName();
             } else {
-                $r = null;
+                $rId = null;
+                $rName = '-';
             }
 
             $competitorsData[] = [
@@ -229,7 +237,11 @@ class LiveRaidController extends AjaxAPIController
                 'lastname' => $competitor->getLastname(),
                 'firstname' => $competitor->getFirstname(),
                 'numbersign' => $competitor->getNumberSign(),
-                'race_id' => $r,
+                'category' => $competitor->getCategory(),
+                'race_name' => $rName,
+                'classment' => 0, //@TODO
+                'timing' => (new \DateTime())->format('H:m:s'), //@TODO
+                'race_id' => $rId,
             ];
         }
 

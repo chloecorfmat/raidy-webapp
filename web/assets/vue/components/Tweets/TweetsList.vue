@@ -1,6 +1,6 @@
 <template>
     <div v-show="this.tweets_object != []" class="content--third">
-        <h1>En direct !</h1>
+        <h2>En direct !</h2>
         <ul class="tweets-list">
             <Tweet v-for="(tweet, index) in this.tweets_object" :key=index :tweet=tweet>
             </Tweet>
