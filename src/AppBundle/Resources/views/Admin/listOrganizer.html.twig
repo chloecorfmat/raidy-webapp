@@ -49,7 +49,7 @@
                         {% endif %}
                     </td>
                     <td>
-                        <a href="{{ path('editOrganizer', {'id': user.id, 'userPath': 0}) }}" class="btn">Editer</a>
+                        <a href="{{ path('editOrganizer', {'id': user.id, 'userPath': '0'}) }}" class="btn">Editer</a>
                         {# A login user cannot disable or delete his/her account. #}
                         {% if app.user.id != user.id %}
                             {% if user.enabled %}

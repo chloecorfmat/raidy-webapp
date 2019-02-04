@@ -3,7 +3,7 @@
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Administration</a></li>
-        {% if userPath == false %}
+        {% if userPath != null and userPath == false %}
             <li class="breadcrumb--list-item"><a href="{{ path('listOrganizer') }}">Liste des organisateurs</a></li>
         {% else %}
             <li class="breadcrumb--list-item"><a href="{{ path('listUsers') }}">Liste des utilisateurs</a></li>
