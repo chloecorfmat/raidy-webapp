@@ -652,6 +652,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       }
     };
     //L.DomEvent.addListener(document, 'keydown', onKeyDown, keepThis.map);
-    document.getElementById("editorContainer").addEventListener("keydown", onKeyDown);
+    if(this.isEditor){
+      document.getElementById("editorContainer").addEventListener("keydown", onKeyDown);
+    }
   }
 }
