@@ -138,7 +138,23 @@ class CompetitorController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
         }
 
-        $competitor = $competitorManager->findOneBy(array('numberSign' => $numberSign));
+        $competitors = $competitorManager->findBy(array('numberSign' => $numberSign));
+        $competitor = null;
+
+        foreach ($competitors as $c) {
+            $race = $c->getRace();
+
+            if (is_null($race)) {
+                return parent::buildJSONStatus(
+                    Response::HTTP_NOT_FOUND,
+                    'Ce participant n\'est pas associé à une épreuve.'
+                );
+            }
+
+            if ($race->getRaid() === $raid) {
+                $competitor = $c;
+            }
+        }
 
         if (null == $competitor) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce numéro de dossard n\'existe pas');
