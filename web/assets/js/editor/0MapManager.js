@@ -334,6 +334,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           type: "ADD_MARKER_TRACK",
           track: keepThis.tracksMap.get(keepThis.currentEditID),
           latLng: L.latLng(e.vertex.latlng.lat, e.vertex.latlng.lng),
+          head : keepThis.currentTrack.line.editor._drawing
         });
       }
       keepThis.routingLatlng = e.vertex.latlng;

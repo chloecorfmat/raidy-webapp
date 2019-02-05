@@ -305,6 +305,46 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       },
     });
 
+    let RedoCtrl = L.Control.extend({
+      options: {
+        position: 'topright'
+      },
+      onAdd: function (map) {
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.style.backgroundColor = 'white';
+        container.style.width = '30px';
+        container.style.height = '30px';
+        container.innerHTML = "<i class=\"fas fa-redo-alt fa-2x\"></i>";
+        container.setAttribute("title", "Rétablir la dernière action");
+        container.onclick = function (e) {
+          e.preventDefault();
+          mapManager.mapHistory.redo();
+        };
+        return container;
+      },
+    });
+
+    let UndoCtrl = L.Control.extend({
+      options: {
+        position: 'topright'
+      },
+      onAdd: function (map) {
+        let container = L.DomUtil.create('div', 'leaflet-bar leaflet-control leaflet-control-custom');
+        container.style.backgroundColor = 'white';
+        container.style.width = '30px';
+        container.style.height = '30px';
+        container.style.display = 'inline';
+        container.innerHTML = "<i class=\"fas fa-undo-alt fa-2x\"></i>";
+        container.setAttribute("title", "Annuler la dernière action");
+        container.onclick = function (e) {
+          e.preventDefault();
+          mapManager.mapHistory.undo();
+        };
+        return container;
+      },
+    });
+
+
     console.log(" add routing control");
     let RoutingCtrl = L.Control.extend({
       options: {
@@ -378,6 +418,8 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
 
     mapManager.map.addControl(new ImportGPXCtrl());
     mapManager.map.addControl(new ExportGPXCtrl());
+    mapManager.map.addControl(new UndoCtrl());
+    mapManager.map.addControl(new RedoCtrl());
     mapManager.map.addControl(new RoutingCtrl());
     mapManager.map.addControl(new ShowElevationGraphCtrl());
 
