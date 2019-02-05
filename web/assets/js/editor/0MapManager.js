@@ -279,10 +279,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:vertex:remove', function (e) { //point on track is removed
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
+
       keepThis.mapHistory.logModification({
-        type: "MOVE_TRACK_MARKER",
+        type: "REMOVE_MARKER_TRACK",
         track: track,
-        lastPosition: keepThis.lastPostition
+        vertexLat: e.vertex.latlng.lat,
+        vertexLng: e.vertex.latlng.lng,
+        vertexId: e.vertex.getIndex()
       });
       let latLngArray = keepThis.currentTrack.line.getLatLngs();
       keepThis.lastPostition = [];
@@ -650,6 +653,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       }
     };
     //L.DomEvent.addListener(document, 'keydown', onKeyDown, keepThis.map);
-    document.getElementById("editorContainer").addEventListener("keydown", onKeyDown);
+    if( this.isEditor == true ){
+      document.getElementById("editorContainer").addEventListener("keydown", onKeyDown);
+    }
   }
 }

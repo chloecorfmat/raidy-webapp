@@ -34,6 +34,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   // REMOVE UNDO
   MapHistory.prototype.undoRemoveMarkerTrack = function (action) {
+    let array = action.track.line.getLatLngs();
 
   };
 
@@ -89,7 +90,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         this.redoBuffer.push(action);
 
         action.track.line.redraw();
-        action.track.line.editor.reset();
         action.track.update();
         action.track.buildUI();
         action.track.push();
