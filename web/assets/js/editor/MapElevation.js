@@ -1,5 +1,5 @@
 let MapElevation;
-if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
+if (typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
   MapElevation = function () {
     //this.API_KEY = 'j2z0s6csrgwdg2f5gl7gp2my';
 
@@ -60,8 +60,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     };
 
 
-
-
     this.chart = new Chart(ctx, config);
 
     window.myLine = this.chart;
@@ -79,10 +77,10 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         let alti = result['elevations'][0].z;
         // exploitation des resultats : "result" est de type Gp.Services.AltiResponse
         latlng.alt = alti;
-      //  console.log(alti);
+        //  console.log(alti);
         callback();
       },
-      onFailure : function () {
+      onFailure: function () {
         iziToast.error({
           message: 'Erreur dans le calcul de l\'altitude. Vérifier votre connexion internet.',
           position: 'bottomLeft',
@@ -99,26 +97,26 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     let lastPoint;
     if (track != undefined) {
       for (let obj of track.line.getLatLngs()) {
-        datapoints.push({x: dist/1000, y: obj.alt});
+        datapoints.push({x: dist / 1000, y: obj.alt});
         //datapoints.push(obj.ele);
         labels.push(i);
-        if(lastPoint !=null){
+        if (lastPoint != null) {
           dist += this.calcDistanceBetween(lastPoint, obj);
         }
         lastPoint = obj;
         i++;
       }
     }
-   // console.log(datapoints);
+    // console.log(datapoints);
     let data = {
       datasets: [{
         label: 'Cubic interpolation (monotone)',
         data: datapoints,
         borderColor: track.color,
         backgroundColor: 'rgba(0, 1, 0, 0.2)',
-        pointRadius : 0,
+        pointRadius: 0,
         fill: true,
-        showLine : true,
+        showLine: true,
         cubicInterpolationMode: 'default'
       }/*, {
           label: 'Cubic interpolation (default)',
@@ -157,4 +155,5 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     return 6371000 * c;
   }
 
-};
+}
+;

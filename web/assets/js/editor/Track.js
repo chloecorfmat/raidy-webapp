@@ -3,16 +3,16 @@
  * Manage all actions on Tracks on the map
  */
 let Track;
-if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
+if (typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
   let patternParameters;
   Track = function (map) {
-      this.map = map;
+    this.map = map;
 
     this.startMarker = L.marker([0, 0]);
     this.endMarker = L.marker([0, 0]);
 
     this.id = '';
-      this.name = '';
+    this.name = '';
     this.color = '';
     this.sportType = 1;
 
@@ -37,45 +37,47 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.addDecorator();
 
-    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
-      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #78e08f'  + ';" />'
+    this.startMarker.setIcon(L.divIcon({
+      className: 'my-custom-pin', iconAnchor: [0, 0], labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
+      html: '<span class="track-marker" style=" border:2px solid ' + this.color + '; background-color: #78e08f' + ';" />'
     }));
-    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
-      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #f74a45' +  ';" />'
+    this.endMarker.setIcon(L.divIcon({
+      className: 'my-custom-pin', iconAnchor: [0, 0], labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
+      html: '<span class="track-marker" style=" border:2px solid ' + this.color + '; background-color: #f74a45' + ';" />'
     }));
 
   };
-  Track.prototype.addDecorator = function(){
-    if(this.decorator != undefined) {
+  Track.prototype.addDecorator = function () {
+    if (this.decorator != undefined) {
       this.map.removeLayer(this.decorator);
     }
     patternParameters = {
       offset: 100,
-      endOffset : 100,
+      endOffset: 100,
       repeat: 100,
       symbol: L.Symbol.arrowHead({
         pixelSize: 12,
-        pathOptions: {fillOpacity: 1, color: this.color,  weight: 1}
+        pathOptions: {fillOpacity: 1, color: this.color, weight: 1}
       })
     };
 
     this.decorator = L.polylineDecorator(this.line, {
       patterns: [patternParameters]
     });
-    
+
     this.decorator.addTo(this.map);
   }
   Track.prototype.setSportType = function (sportType) {
-        this.sportType = sportType;
-    };
+    this.sportType = sportType;
+  };
 
   Track.prototype.setEditable = function (b) {
-    if(b){
+    if (b) {
       this.line.enableEdit();
       this.decorator.removeFrom(this.map);
-    }else{
+    } else {
       this.line.disableEdit();
-      if(this.visible) {
+      if (this.visible) {
         this.decorator.addTo(this.map);
         if (!this.line.isEmpty()) {
           this.decorator.removeFrom(this.map);
@@ -170,7 +172,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.hide();
     mapManager.group.addLayer(this.line);
 
-   this.addDecorator();
+    this.addDecorator();
     this.startMarker.addTo(this.map);
 
     this.endMarker.addTo(this.map);
@@ -186,9 +188,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Track.prototype.toJSON = function () {
     let latlong = [];
-    let i =0;
+    let i = 0;
     for (let obj of this.line.getLatLngs()) {
-      latlong.push({lat: obj.lat, lng: obj.lng, ele : obj.alt});
+      latlong.push({lat: obj.lat, lng: obj.lng, ele: obj.alt});
       i++;
     }
     let track =
@@ -226,11 +228,13 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.line.addTo(mapManager.group);
 
-    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0],
-      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #78e08f'  + ';" />'
+    this.startMarker.setIcon(L.divIcon({
+      className: 'my-custom-pin', iconAnchor: [0, 0], labelAnchor: [0, 0], popupAnchor: [0, 0],
+      html: '<span class="track-marker" style=" border:2px solid ' + this.color + '; background-color: #78e08f' + ';" />'
     }));
-    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0],
-      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #f74a45' +  ';" />'
+    this.endMarker.setIcon(L.divIcon({
+      className: 'my-custom-pin', iconAnchor: [0, 0], labelAnchor: [0, 0], popupAnchor: [0, 0],
+      html: '<span class="track-marker" style=" border:2px solid ' + this.color + '; background-color: #f74a45' + ';" />'
     }));
 
     this.line.bindPopup('' +
@@ -247,7 +251,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.addDecorator();
     this.update();
 
-    if(!this.visible) {
+    if (!this.visible) {
       this.map.removeLayer(this.line);
       this.map.removeLayer(this.decorator);
       this.map.removeLayer(this.startMarker);
@@ -261,28 +265,26 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   };
 
   Track.prototype.push = function (feedback = false) {
-  //  console.log(this.line.getLatLngs());
+    //  console.log(this.line.getLatLngs());
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
-    if(feedback) {
+    if (feedback) {
       xhr_object.onreadystatechange = function () {
         if (xhr_object.readyState == XMLHttpRequest.DONE) {
           iziToast.success({
             message: 'Le parcours a bien été sauvergardé.',
             position: 'bottomLeft',
           });
-        }else{
+        } else {
           iziToast.error({
-            message: 'Impossible d\'enregistrer le parcours. Vérifier votre connexion internet.',
+            message: 'Impossible d\'enregistrer le parcours. Vérifier votre chausette internet.',
             position: 'bottomLeft',
           });
         }
       };
     }
     xhr_object.send(this.toJSON());
-
-
 
 
     //Encode html entities to display purpose only
@@ -292,8 +294,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.calculDistance();
     this.calculElevation();
     li.querySelector('.track-distance').innerHTML = Math.round(10 * this.distance / 1000) / 10 + 'Km ';
-    li.querySelector('.track-elev-gain').innerHTML = Math.round(this.posElev)+'m';
-    li.querySelector('.track-elev-lose').innerHTML = Math.round(this.negElev)+'m';
+    li.querySelector('.track-elev-gain').innerHTML = Math.round(this.posElev) + 'm';
+    li.querySelector('.track-elev-lose').innerHTML = Math.round(this.negElev) + 'm';
     mapManager.editorUI.updateTrack(this);
     this.decorator.removeFrom(this.map);
 

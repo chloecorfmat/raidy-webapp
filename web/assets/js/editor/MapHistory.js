@@ -3,52 +3,52 @@
  * Manage all actions on Tracks on the map
  */
 let MapHistory;
-if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
+if (typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
   MapHistory = function (map) {
     this.map = map;
     this.undoBuffer = [];
     this.redoBuffer = [];
   };
 
-/* TRACK MODIFICATION */
+  /* TRACK MODIFICATION */
   // MOVE UNDO
-  MapHistory.prototype.undoMoveMarkerTrack = function(action){
+  MapHistory.prototype.undoMoveMarkerTrack = function (action) {
 
     action.track.line.getLatLngs()[action.vertexId].lat = action.beforeLat;
     action.track.line.getLatLngs()[action.vertexId].lng = action.beforeLng;
   };
   // MOVE REDO
-  MapHistory.prototype.redoMoveMarkerTrack = function(action){
+  MapHistory.prototype.redoMoveMarkerTrack = function (action) {
     action.track.line.getLatLngs()[action.vertexId].lat = action.afterLat;
     action.track.line.getLatLngs()[action.vertexId].lng = action.afterLng;
   };
 
   // ADD UNDO
-  MapHistory.prototype.undoAddMarkerTrack = function(action){
+  MapHistory.prototype.undoAddMarkerTrack = function (action) {
     action.track.line.getLatLngs().pop();
   };
   // ADD REDO
-  MapHistory.prototype.redoAddMarkerTrack = function(action){
+  MapHistory.prototype.redoAddMarkerTrack = function (action) {
     action.track.line.addLatLng(action.latLng);
   };
 
   // REMOVE UNDO
-  MapHistory.prototype.undoRemoveMarkerTrack = function(action){
+  MapHistory.prototype.undoRemoveMarkerTrack = function (action) {
 
   };
 
   // REMOVE REDO
-  MapHistory.prototype.redoRemoveMarkerTrack = function(action){
+  MapHistory.prototype.redoRemoveMarkerTrack = function (action) {
 
   };
   // AUTO UNDO
-  MapHistory.prototype.redoAutoTrack = function(action){
-    action.track.line.setLatLngs(action.track.line.getLatLngs().splice(0,action.lastSize));
+  MapHistory.prototype.redoAutoTrack = function (action) {
+    action.track.line.setLatLngs(action.track.line.getLatLngs().splice(0, action.lastSize));
   };
 
   // AUTO REDO
-  MapHistory.prototype.undoAutoTrack = function(action){
-    for(let latLng of action.latLngs){
+  MapHistory.prototype.undoAutoTrack = function (action) {
+    for (let latLng of action.latLngs) {
       console.log(latLng);
       action.track.line.addLatLng(latLng);
     }
@@ -56,10 +56,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   MapHistory.prototype.undo = function () {
     let action = this.undoBuffer.pop();
-    if(action != undefined) {
-      if(action.track){
+    if (action != undefined) {
+      if (action.track) {
         let wasEnabled = action.track.line.editEnabled();
-        if(wasEnabled){ action.track.line.disableEdit(); }
+        if (wasEnabled) {
+          action.track.line.disableEdit();
+        }
         switch (action.type) {
 
           case "MOVE_MARKER_TRACK" :
@@ -79,7 +81,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
             break;
         }
 
-        if(wasEnabled){
+        if (wasEnabled) {
           action.track.line.enableEdit();
           action.track.line.editor.reset();
         }
@@ -93,7 +95,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       }
       console.log("undo");
 
-    }else{
+    } else {
       console.log("Nothing to undo.");
     }
     console.log(this.redoBuffer);
@@ -102,10 +104,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   MapHistory.prototype.redo = function () {
     let action = this.redoBuffer.pop();
-    if(action != undefined) {
-      if(action.track){
+    if (action != undefined) {
+      if (action.track) {
         let wasEnabled = action.track.line.editEnabled();
-        if(wasEnabled){ action.track.line.disableEdit(); }
+        if (wasEnabled) {
+          action.track.line.disableEdit();
+        }
         switch (action.type) {
 
           case "MOVE_MARKER_TRACK" :
@@ -125,7 +129,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
             break;
         }
 
-        if(wasEnabled){
+        if (wasEnabled) {
           action.track.line.enableEdit();
           action.track.line.editor.reset();
         }
@@ -137,7 +141,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         action.track.push();
       }
       console.log("redo");
-    }else{
+    } else {
       console.log("Nothing to redo.");
     }
     console.log(this.redoBuffer);
