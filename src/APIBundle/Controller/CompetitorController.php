@@ -140,30 +140,27 @@ class CompetitorController extends AjaxAPIController
         }
 
         $competitors = $competitorManager->findBy(array('numberSign' => $numberSign));
-        $competitor = null;
 
-        foreach ($competitors as $c) {
-            $race = $c->getRace();
+        foreach ($competitors as $competitor) {
+            $race = $competitor->getRace();
 
-            if (is_null($race)) {
-                return parent::buildJSONStatus(
-                    Response::HTTP_NOT_FOUND,
-                    'Ce participant n\'est pas associé à une épreuve.'
-                );
-            }
+            if (!is_null($race)) {
+                if ($race->getRaid() === $raid) {
+                    $competitorService = $this->container->get('CompetitorService');
 
-            if ($race->getRaid() === $raid) {
-                $competitor = $c;
+                    return new Response($competitorService->competitorToJson($competitor));
+                }
             }
         }
 
-        if (null == $competitor) {
+        if (!empty($competitors)) {
+            return parent::buildJSONStatus(
+                Response::HTTP_NOT_FOUND,
+                'Ce participant n\'est pas associé à une épreuve.'
+            );
+        } else {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce numéro de dossard n\'existe pas');
         }
-
-        $competitorService = $this->container->get('CompetitorService');
-
-        return new Response($competitorService->competitorToJson($competitor));
     }
 
     /**
