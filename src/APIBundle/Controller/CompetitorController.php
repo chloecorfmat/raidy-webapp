@@ -12,6 +12,7 @@ use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Competitor;
 use AppBundle\Entity\RaceCheckpoint;
 use AppBundle\Entity\RaceTiming;
+use AppBundle\Entity\RaceTrack;
 use DateTime;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
@@ -235,6 +236,7 @@ class CompetitorController extends AjaxAPIController
     /**
      * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Put("/api/helper/raid/{raidId}/racetiming")
+     * @Rest\Put("/api/organizer/raid/{raidId}/racetiming")
      *
      * @param Request $request request
      * @param int     $raidId  raid id
@@ -245,18 +247,10 @@ class CompetitorController extends AjaxAPIController
         $data = $request->request->all();
         $NFCSerialId = $data['NFCSerialId'];
         $time = new DateTime($data['time']);
-        $checkpointId = $data['poi_id'];
+        $poiId = $data['poi_id'];
 
         // Get managers
         $em = $this->getDoctrine()->getManager();
-
-        $raceCheckpointManager = $em->getRepository('AppBundle:RaceCheckpoint');
-        /** @var RaceCheckpoint $raceCheckpoint */
-        $raceCheckpoint = $raceCheckpointManager->find($checkpointId);
-
-        $competitorManager = $em->getRepository('AppBundle:Competitor');
-        /** @var Competitor $competitor */
-        $competitor = $competitorManager->findOneBy(["NFCSerialId" => $NFCSerialId]);
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
@@ -265,13 +259,45 @@ class CompetitorController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
         }
 
-        $raceTiming = new RaceTiming();
-        $raceTiming->setCheckpoint($raceCheckpoint);
-        $raceTiming->setCompetitor($competitor);
-        $raceTiming->setTime($time);
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+        /** @var Competitor $competitor */
+        $competitor = $competitorManager->findOneBy(["NFCSerialId" => $NFCSerialId]);
 
-        $em->persist($raceTiming);
-        $em->flush();
+        $raceTracksManager = $em->getRepository('AppBundle:RaceTrack');
+        $raceTracks = $raceTracksManager->findBy(["race" => $competitor->getRace()], ['order' => 'ASC']);
+
+        $raceCheckpointManager = $em->getRepository('AppBundle:RaceCheckpoint');
+        $raceTimingManager = $em->getRepository('AppBundle:RaceTiming');
+
+        /** @var RaceTrack $raceTrack */
+        foreach ($raceTracks as $raceTrack) {
+            /** @var RaceCheckpoint $raceCheckpoint */
+            $raceCheckpoints = $raceCheckpointManager->findBy(
+                [
+                    "poi" => $poiId,
+                    "raceTrack" => $raceTrack,
+                ],
+                [
+                    'order' => 'ASC',
+                ]
+            );
+
+            foreach ($raceCheckpoints as $raceCheckpoint) {
+                $rt = $raceTimingManager->findOneBy(['checkpoint' => $raceCheckpoint, 'competitor' => $competitor]);
+
+                if ($rt == null) {
+                    $raceTiming = new RaceTiming();
+                    $raceTiming->setCheckpoint($raceCheckpoint);
+                    $raceTiming->setCompetitor($competitor);
+                    $raceTiming->setTime($time);
+
+                    $em->persist($raceTiming);
+                    $em->flush();
+
+                    break 2;
+                }
+            }
+        }
 
         return parent::buildJSONStatus(Response::HTTP_OK, 'Competitor updated');
     }
