@@ -529,6 +529,12 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
             preview.className = 'form--item-file-preview';
           }
         }
+      } else {
+        document.getElementById('addPoi_image').value = '';
+        iziToast.error({
+          message: 'Le fichier n\'est pas au bon format. Les formats acceptés sont : png, jpeg, gif et svg.',
+          position: 'bottomRight',
+        });
       }
       reader.readAsDataURL(poiImageData);
     } else {
@@ -607,6 +613,12 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
             preview.className = 'form--item-file-preview';
           }
         }
+      } else {
+        document.getElementById('editPoi_image').value = '';
+        iziToast.error({
+          message: 'Le fichier n\'est pas au bon format. Les formats acceptés sont : png, jpeg, gif et svg.',
+          position: 'bottomRight',
+        });
       }
       reader.readAsDataURL(poiImageData);
     } else {
