@@ -359,7 +359,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         container.setAttribute("title", "Activer / Désactiver le traçage automatique");
         container.onclick = function (e) {
           e.preventDefault();
-
           document.getElementById("RoutingCtrl").classList.toggle("track-routing");
           mapManager.isRootingMode = document.getElementById("RoutingCtrl").classList.contains("track-routing");
           if (mapManager.isRootingMode) {

@@ -628,6 +628,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           keepThis.mapHistory.undo();
         }
       }
+      
       if (e.ctrlKey && e.keyCode == 89) { //Y
         keepThis.mapHistory.redo();
       }
