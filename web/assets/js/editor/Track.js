@@ -260,12 +260,30 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.fromObj(track);
   };
 
-  Track.prototype.push = function () {
+  Track.prototype.push = function (feedback = false) {
   //  console.log(this.line.getLatLngs());
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
+    if(feedback) {
+      xhr_object.onreadystatechange = function () {
+        if (xhr_object.readyState == XMLHttpRequest.DONE) {
+          iziToast.success({
+            message: 'Le parcours a bien été sauvergardé.',
+            position: 'bottomLeft',
+          });
+        }else{
+          iziToast.error({
+            message: 'Impossible d\'enregistrer le parcours. Vérifier votre connexion internet.',
+            position: 'bottomLeft',
+          });
+        }
+      };
+    }
     xhr_object.send(this.toJSON());
+
+
+
 
     //Encode html entities to display purpose only
     this.name = htmlentities.encode(this.name);
