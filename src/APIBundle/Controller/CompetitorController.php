@@ -245,7 +245,7 @@ class CompetitorController extends AjaxAPIController
         $data = $request->request->all();
         $NFCSerialId = $data['NFCSerialId'];
         $time = new DateTime($data['time']);
-        $checkpointId = $data['checkpoint_id'];
+        $checkpointId = $data['poi_id'];
 
         // Get managers
         $em = $this->getDoctrine()->getManager();
