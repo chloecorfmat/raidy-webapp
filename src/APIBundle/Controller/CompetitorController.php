@@ -140,6 +140,10 @@ class CompetitorController extends AjaxAPIController
 
         $competitor = $competitorManager->findOneBy(array('numberSign' => $numberSign));
 
+        if (null == $competitor) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce numéro de dossard n\'existe pas');
+        }
+
         $competitorService = $this->container->get('CompetitorService');
 
         return new Response($competitorService->competitorToJson($competitor));
