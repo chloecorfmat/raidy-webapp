@@ -60,6 +60,8 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     };
 
 
+
+
     this.chart = new Chart(ctx, config);
 
     window.myLine = this.chart;
@@ -68,7 +70,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   MapElevation.prototype.getElevationAt = function (latlng, callback) {
 
     Gp.Services.getAltitude({
-      apiKey: "choisirgeoportail", // clef d'accès à la plateforme
+      apiKey: IGNAPIKEY, // clef d'accès à la plateforme
       positions: [                        // positions pour le calcul alti
         {lon: latlng.lng, lat: latlng.lat}
       ],
@@ -79,6 +81,12 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
         latlng.alt = alti;
       //  console.log(alti);
         callback();
+      },
+      onFailure : function () {
+        iziToast.error({
+          message: 'Erreur dans le calcul de l\'altitude. Vérifier votre connexion internet.',
+          position: 'bottomLeft',
+        });
       }
     });
   }
