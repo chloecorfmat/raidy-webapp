@@ -117,6 +117,36 @@ class CompetitorController extends AjaxAPIController
 
     /**
      * @Rest\View(statusCode=Response::HTTP_OK)
+     * @Rest\Get("/api/helper/raid/{raidId}/race/competitor/numbersign/{numberSign}")
+     *
+     * @param Request $request    request
+     * @param int     $raidId     raid id
+     * @param int     $numberSign Number sign
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getCompetitorByNumberSignActionWithoutRace(Request $request, $raidId, $numberSign)
+    {
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
+        }
+
+        $competitor = $competitorManager->findOneBy(array('numberSign' => $numberSign));
+
+        $competitorService = $this->container->get('CompetitorService');
+
+        return new Response($competitorService->competitorToJson($competitor));
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_OK)
      * @Rest\Get("/api/helper/raid/{raidId}/race/{raceId}/competitor/nfcserialid/{nfcserialid}")
      * @Rest\Get("/api/organizer/raid/{raidId}/race/{raceId}/competitor/nfcserialid/{nfcserialid}")
      *
