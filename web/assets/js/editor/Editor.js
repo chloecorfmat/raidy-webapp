@@ -412,7 +412,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       } else if (mapManager.mode == EditorMode.TRACK_EDIT) {
         e.preventDefault();
         e.stopImmediatePropagation();
-        //mapManager.tracksMap.get(mapManager.currentEditID).push(true);
+        mapManager.tracksMap.get(mapManager.currentEditID).push(true);
       }
       mapManager.switchMode(mapManager.lastMode);
       this.classList.remove('add--poi')

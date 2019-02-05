@@ -91,6 +91,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         action.track.line.redraw();
         action.track.line.editor.reset();
         action.track.update();
+        action.track.buildUI();
         action.track.push();
       }
       console.log("undo");
@@ -138,6 +139,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
         action.track.line.redraw();
         action.track.update();
+        action.track.buildUI();
+
         action.track.push();
       }
       console.log("redo");

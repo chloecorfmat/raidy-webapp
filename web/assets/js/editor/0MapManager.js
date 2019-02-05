@@ -116,7 +116,14 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
               latLngs: dump
             });
           });
+        },
+        onFailure : function (error) {
+          iziToast.error({
+            message: 'Le tracé automatique à échoué : '+error.message,
+            position: 'bottomLeft',
+          });
         }
+        
       });
     };
 

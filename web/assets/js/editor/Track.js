@@ -97,11 +97,22 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   Track.prototype.update = function () {
 
     if (!this.line.isEmpty()) {
+      if(!this.map.hasLayer(this.startMarker)){
+        this.map.addLayer(this.startMarker);
+      }
       let latLngs = this.line.getLatLngs();
       this.startMarker.setLatLng(latLngs[0]);
       if (latLngs.length > 1) {
+        if(!this.map.hasLayer(this.endMarker)){
+          this.map.addLayer(this.endMarker);
+        }
         this.endMarker.setLatLng(latLngs[latLngs.length - 1]);
+      }else{
+        this.map.removeLayer(this.endMarker);
       }
+    }else{
+      this.map.removeLayer(this.startMarker);
+      this.map.removeLayer(this.endMarker);
     }
   };
 
@@ -271,18 +282,19 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     if (feedback) {
       xhr_object.onreadystatechange = function () {
-        if (xhr_object.readyState == XMLHttpRequest.DONE) {
+        if (xhr_object.readyState === 4 && xhr_object.status === 200) {
           iziToast.success({
             message: 'Le parcours a bien été sauvergardé.',
             position: 'bottomLeft',
           });
-        } else {
+        }else if (xhr_object.readyState === 4) {
           iziToast.error({
-            message: 'Impossible d\'enregistrer le parcours. Vérifier votre chausette internet.',
+            message: 'Impossible d\'enregistrer le parcours. Vérifier votre connexion internet.',
             position: 'bottomLeft',
           });
         }
       };
+
     }
     xhr_object.send(this.toJSON());
 
@@ -300,10 +312,29 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.decorator.removeFrom(this.map);
 
   };
-  Track.prototype.remove = function () {
+  Track.prototype.remove = function (feedback = false) {
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('DELETE', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
+
+    if (feedback) {
+      xhr_object.onreadystatechange = function () {
+        if (xhr_object.readyState  === 4) {
+          if (xhr_object.status === 200) {
+            iziToast.success({
+              message: 'Le parcours a bien été supprimé.',
+              position: 'bottomLeft',
+            });
+          } else {
+            iziToast.error({
+              message: 'Impossible de supprimer le parcours. Vérifier votre connexion internet.',
+              position: 'bottomLeft',
+            });
+          }
+        }
+        ;
+      }
+    }
 
     xhr_object.send(null);
 
@@ -316,7 +347,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     mapManager.tracksMap.delete(this.id);
   };
   Track.prototype.buildUI = function () {
-    mapManager.editorUI.updatePoi()
+    mapManager.editorUI.updateTrack(this)
   };
 
   console.log("Track JS loaded");
