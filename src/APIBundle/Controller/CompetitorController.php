@@ -13,6 +13,7 @@ use AppBundle\Entity\Competitor;
 use AppBundle\Entity\RaceCheckpoint;
 use AppBundle\Entity\RaceTiming;
 use AppBundle\Entity\RaceTrack;
+use AppBundle\Service\CompetitorService;
 use DateTime;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
@@ -208,6 +209,11 @@ class CompetitorController extends AjaxAPIController
     public function setNFCSerialIdAction(Request $request, $raidId, $raceId, $numberSign)
     {
         $data = $request->request->all();
+
+        if (!isset($data['NFCSerialId']) || $data['NFCSerialId'] == null) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled.');
+        }
+
         $NFCSerialId = $data['NFCSerialId'];
 
         // Get managers
@@ -241,7 +247,14 @@ class CompetitorController extends AjaxAPIController
      */
     public function addRaceTimingAction(Request $request, $raidId)
     {
+        /** @var CompetitorService $competitorService */
+        $competitorService = $this->container->get('CompetitorService');
         $data = $request->request->all();
+
+        if (!$competitorService->checkRaceTimingData($data)) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'Every fields must be filled.');
+        }
+
         $NFCSerialId = $data['NFCSerialId'];
         $time = new DateTime($data['time']);
         $poiId = $data['poi_id'];

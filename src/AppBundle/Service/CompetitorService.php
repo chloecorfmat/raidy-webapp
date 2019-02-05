@@ -130,4 +130,26 @@ class CompetitorService
 
         return json_encode($competitorsObj);
     }
+
+    /**
+     * @param mixed $data
+     * @return bool
+     */
+    public function checkRaceTimingData($data)
+    {
+
+        if (!isset($data['NFCSerialId']) || $data['NFCSerialId'] == null) {
+            return false;
+        }
+
+        if (!isset($data['time']) || $data['time'] == null) {
+            return false;
+        }
+
+        if (!isset($data['poi_id']) || $data['poi_id'] == null) {
+            return false;
+        }
+
+        return true;
+    }
 }
