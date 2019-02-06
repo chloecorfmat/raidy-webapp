@@ -5,6 +5,7 @@ namespace LiveBundle\Controller;
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Raid;
 use AppBundle\Entity\TwitterApiData;
+use AppBundle\Entity\RaceTiming;
 use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
@@ -209,80 +210,127 @@ class LiveRaidController extends AjaxAPIController
     private function getClassment(Raid $raid, EntityManager $em)
     {
         $competitorManager = $em->getRepository('AppBundle:Competitor');
-        $competitors = $competitorManager->findBy(
-            ['raid' => $raid],
-            ['race' => 'DESC']
-        );
+        $raceManager = $em->getRepository('AppBundle:Race');
+        $raceTimingManager = $em->getRepository('AppBundle:RaceTiming');
+        $raceTracksManager = $em->getRepository('AppBundle:RaceTrack');
+        $raceCheckpointManager = $em->getRepository('AppBundle:RaceCheckpoint');
 
-        $competitorsData = [];
+        $competitorsFinal = [];
 
-        foreach ($competitors as $competitor) {
-            if ($competitor->getRace()) {
-                $rt = null;
+        // Get all races.
+        $races = $raceManager->findBy(['raid' => $raid]);
 
-                $race = $competitor->getRace();
+        foreach ($races as $race) {
+            $position = 1;
+            $competitorsDataTemp = [];
+            $competitorsData = [];
+
+            // Get all checkpoints ordered.
+            $checkpoints = [];
+            $raceTracks = $raceTracksManager->findBy(["race" => $race], ['order' => 'DESC']);
+
+            foreach ($raceTracks as $track) {
+                $raceCheckpoints = $raceCheckpointManager->findBy(
+                    ["raceTrack" => $track],
+                    ['order' => 'DESC']
+                );
+
+                $checkpoints = array_merge($checkpoints, $raceCheckpoints);
+            }
+
+            $lastCheckpoint = reset($checkpoints);
+            $raceCompetitors = $competitorManager->findBy(['race' => $race]);
+
+            foreach ($raceCompetitors as $competitor) {
                 $rId = $race->getId();
                 $rName = $race->getName();
                 $rStartTime = $race->getStartTime();
                 $rEndTime = $race->getEndTime();
 
-                $raceTracksManager = $em->getRepository('AppBundle:RaceTrack');
-                $raceTracks = $raceTracksManager->findBy(["race" => $race], ['order' => 'ASC']);
+                $lastCheckpointTiming = $raceTimingManager->findOneBy(
+                    ['checkpoint' => $lastCheckpoint, 'competitor' => $competitor]
+                );
 
-                $raceCheckpointManager = $em->getRepository('AppBundle:RaceCheckpoint');
-                $raceTimingManager = $em->getRepository('AppBundle:RaceTiming');
-
-                /** @var RaceTrack $raceTrack */
-                foreach ($raceTracks as $raceTrack) {
-                    /** @var RaceCheckpoint $raceCheckpoint */
-                    $raceCheckpoints = $raceCheckpointManager->findBy(
-                        [
-                            "raceTrack" => $raceTrack,
-                        ],
-                        [
-                            'order' => 'ASC',
-                        ]
+                if (!is_null($lastCheckpointTiming)) {
+                    $timing = date(
+                        'H:i:s',
+                        (($lastCheckpointTiming->getTime()->getTimestamp()) - ($rStartTime->getTimestamp()))
                     );
-
-                    foreach ($raceCheckpoints as $raceCheckpoint) {
-                        $rt = $raceTimingManager->findOneBy(
-                            ['checkpoint' => $raceCheckpoint, 'competitor' => $competitor]
-                        );
-
-                        if ($rt != null) {
-                            break 2;
-                        }
-                    }
-                }
-
-                if (is_null($rEndTime)) {
-                    if (!is_null($rt)) {
-                        $timing = date(
-                            'H:i:s',
-                            ((new \DateTime())->getTimestamp() - ($rStartTime->getTimestamp()))
-                        );
-                    }
-                } else {
+                } elseif (is_null($rEndTime) && !is_null($rStartTime)) {
+                    $timing = date(
+                        'H:i:s',
+                        ((new \DateTime())->getTimestamp() - ($rStartTime->getTimestamp()))
+                    );
+                } elseif (!is_null($rStartTime)) {
                     $timing = date(
                         'H:i:s',
                         (($rEndTime)->getTimestamp() - ($rStartTime->getTimestamp()))
                     );
                 }
 
-                $competitorsData[] = [
+                $competitorsDataTemp[$competitor->getId()] = [
                     'id' => $competitor->getId(),
                     'lastname' => $competitor->getLastname(),
                     'firstname' => $competitor->getFirstname(),
                     'numbersign' => $competitor->getNumberSign(),
                     'category' => $competitor->getCategory(),
                     'race_name' => $rName,
-                    'classment' => 0, //@TODO
+                    'classment' => 0,
                     'timing' => $timing ?? 0,
                     'race_id' => $rId,
                 ];
             }
+
+            $competitorsIds = array_keys($competitorsDataTemp);
+
+            foreach ($checkpoints as $checkpoint) {
+                if (!empty($competitorsIds)) {
+                    $partialClassment = $this->getPartialClassmentOnCheckpoint(
+                        $checkpoint->getId(),
+                        $competitorsIds,
+                        $em
+                    );
+
+                    foreach ($partialClassment as $element) {
+                        $key = array_search($element['competitor_id'], $competitorsIds);
+                        unset($competitorsIds[$key]);
+                        $competitorsDataTemp[$element['competitor_id']]['classment'] = $position++;
+                        $competitorsData[] = $competitorsDataTemp[$element['competitor_id']];
+                        unset($competitorsDataTemp[$element['competitor_id']]);
+                    }
+                }
+            }
+
+            $competitorsData = array_merge($competitorsData, $competitorsDataTemp);
+            $competitorsFinal = array_merge($competitorsFinal, $competitorsData);
         }
 
-        return $competitorsData;
+        return $competitorsFinal;
+    }
+
+    /**
+     * @param int           $checkpoint
+     * @param array         $cids
+     * @param EntityManager $em
+     * @return mixed
+     */
+    private function getPartialClassmentOnCheckpoint($checkpoint, $cids, $em)
+    {
+        $rawSql = "SELECT rt.* " .
+            "FROM race_timing rt " .
+            "INNER JOIN (" .
+            "    SELECT competitor_id, MAX(start_time) AS st " .
+            "    FROM race_timing " .
+            "    WHERE competitor_id IN (" . implode(',', $cids) . ") " .
+            "    AND checkpoint_id = " . $checkpoint . " " .
+            "    GROUP BY competitor_id" .
+            ") ct " .
+            "ON rt.competitor_id = ct.competitor_id " .
+            "AND rt.start_time = ct.st";
+
+        $stmt = $em->getConnection()->prepare($rawSql);
+        $stmt->execute([]);
+
+        return $stmt->fetchAll();
     }
 }

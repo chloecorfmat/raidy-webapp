@@ -1,6 +1,7 @@
 <template>
     <tr>
-        <td>{{ competitor.classment }}</td>
+        <td v-if="competitor.classment !== 0">{{ competitor.classment}}</td>
+        <td v-else>-</td>
         <td>{{ competitor.timing }}</td>
         <td>{{ competitor.firstname}} {{ competitor.lastname}}</td>
         <td>{{ competitor.numbersign}}</td>
