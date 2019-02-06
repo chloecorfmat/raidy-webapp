@@ -43,7 +43,7 @@
         },
         created () {
             this.tweets = this.getCompetitorsObject();
-            setInterval(this.getCompetitorsObject, 10*1000);
+            setInterval(this.getCompetitorsObject, 60*1000);
         },
         methods: {
             filter () {
