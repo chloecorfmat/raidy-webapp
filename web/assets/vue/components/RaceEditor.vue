@@ -11,7 +11,7 @@
                         <button v-on:click="openStartRacePopin(race)" v-if="race.startTime == null" class="btn">Démarrer l'épreuve</button>
                         <button v-on:click="openStopRacePopin(race)" v-if="race.startTime != null && race.endTime == null" class="btn">Arrêter l'épreuve</button>
                         <strong v-if="race.startTime != null && race.endTime != null">Epreuve terminée</strong>
-                        <button v-on:click="openNewTrackPopin(race)">Ajouter un parcours</button>
+                        <button v-on:click="openNewTrackPopin(race)" v-if="race.startTime == null" >Ajouter un parcours</button>
                         <button class="btn btn--danger" v-if="race.startTime == null" v-on:click="displayRemoveRacePopin(race)"><i class="fa fa-trash"></i></button>
                     </nav>
                 </header>
@@ -19,7 +19,7 @@
                     <li class="race--track" v-for="(raceTrack, idx) in race.raceTracks">
                         <header>
                             <h4>{{ htmlDecode(raceTrack.name) }}</h4>
-                            <nav class="race--track--toolbar">
+                            <nav class="race--track--toolbar" v-if="race.startTime == null">
                                 <button class="btn" v-on:click="openNewCheckpointPopin(raceTrack)">Ajouter un checkpoint</button>
                                 <div class="race--track--checkpoint--order" v-if="race.startTime == null">
                                     <button class="btn" v-on:click="moveTrackUp(idx, races[index].raceTracks, races[index])"><i class="fa fa-caret-up"></i></button>
@@ -263,26 +263,36 @@
 
                     };
                     req.onload = function () {
-                        keepThis.move(tracks, idx, idx-1);
+                        if(this.status === 200){
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
+
+                            iziToast.success({
+                                message: 'Le parcours a bien été sauvergardé.',
+                                position: 'bottomRight',
+                            });
+
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la sauvegarde du parcours',
+                                position: 'bottomRight',
+                            });
+                        }
                     };
+
+                    let obj = {};
+                    obj.direction = "up";
 
                     req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
-                    req.send(track.toJSON());
-
-
-                    /*MOVE OLD*/
-                    const oldReq = new XMLHttpRequest();
-                    oldReq.onerror = function () {
-
-                    };
-                    oldReq.onload = function () {
-
-                    };
-
-                    oldReq.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+previousTrack.id, true);
-                    oldReq.setRequestHeader('Content-Type', 'application/json');
-                    oldReq.send(previousTrack.toJSON());
+                    req.send(JSON.stringify(obj));
                 }
             },
             moveTrackDown (idx, tracks, race) {
@@ -304,27 +314,36 @@
 
                     };
                     req.onload = function () {
-                        keepThis.move(tracks, idx, idx+1);
+                        if(this.status === 200){
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
+
+                            iziToast.success({
+                                message: 'Le parcours a bien été sauvergardé.',
+                                position: 'bottomRight',
+                            });
+
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la sauvegarde du parcours.',
+                                position: 'bottomRight',
+                            });
+                        }
                     };
+
+                    let obj = {};
+                    obj.direction = "down";
 
                     req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
-                    req.send(track.toJSON());
-
-
-                    /*MOVE OLD*/
-                    const oldReq = new XMLHttpRequest();
-                    oldReq.onerror = function () {
-
-                    };
-                    oldReq.onload = function () {
-
-                    };
-
-                    oldReq.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+nextTrack.id, true);
-                    oldReq.setRequestHeader('Content-Type', 'application/json');
-                    oldReq.send(nextTrack.toJSON());
-
+                    req.send(JSON.stringify(obj));
                 }
             },
             moveCheckpointUp (idx, checkpoints, race, track) {
@@ -346,26 +365,37 @@
 
                     };
                     req.onload = function () {
-                        keepThis.move(checkpoints, idx, idx-1);
+                        if(this.status === 200){
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
+
+                            iziToast.success({
+                                message: 'Le checkpoint a bien été sauvergardé.',
+                                position: 'bottomRight',
+                            });
+
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la sauvegarde du checkpoint.',
+                                position: 'bottomRight',
+                            });
+                        }
                     };
+
+                    let obj = {};
+                    obj.direction = "up";
 
                     req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track+'/raceCheckpoint/'+checkpoint.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
-                    req.send(checkpoint.toJSON());
+                    req.send(JSON.stringify(obj));
 
-
-                    /*MOVE OLD*/
-                    const oldReq = new XMLHttpRequest();
-                    oldReq.onerror = function () {
-
-                    };
-                    oldReq.onload = function () {
-
-                    };
-
-                    oldReq.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id+'/raceCheckpoint/'+previousCheckpoint.id, true);
-                    oldReq.setRequestHeader('Content-Type', 'application/json');
-                    oldReq.send(previousCheckpoint.toJSON());
                 }
             },
             moveCheckpointDown (idx, checkpoints, race, track) {
@@ -387,26 +417,36 @@
 
                     };
                     req.onload = function () {
-                        keepThis.move(checkpoints, idx, idx+1);
+                        if (this.status === 200) {
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
+
+                            iziToast.success({
+                                message: 'Le checkpoint a bien été sauvergardé.',
+                                position: 'bottomRight',
+                            });
+
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la sauvegarde du checkpoint.',
+                                position: 'bottomRight',
+                            });
+                        }
                     };
+
+                    let obj = {};
+                    obj.direction = "down";
 
                     req.open('PATCH','/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id+'/raceCheckpoint/'+checkpoint.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
-                    req.send(checkpoint.toJSON());
-
-
-                    /*MOVE OLD*/
-                    const oldReq = new XMLHttpRequest();
-                    oldReq.onerror = function () {
-
-                    };
-                    oldReq.onload = function () {
-
-                    };
-
-                    oldReq.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track+'/raceCheckpoint/'+previousCheckpoint.id, true);
-                    oldReq.setRequestHeader('Content-Type', 'application/json');
-                    oldReq.send(previousCheckpoint.toJSON());
+                    req.send(JSON.stringify(obj));
                 }
             },
             displayRemoveRacePopin(race){
@@ -415,9 +455,6 @@
                 MicroModal.show("remove-race");
             },
             removeRace() {
-
-                let idx = this.races.indexOf(this.toRemoveRace);
-
                 if(this.toRemoveRace.name === this.toRemoveRaceCheck){
                     let keepThis = this;
                     let race = this.toRemoveRace;
@@ -427,17 +464,26 @@
 
                     };
                     req.onload = function () {
-                        if (this.status === 200) {
-                            keepThis.races.splice(idx,1);
-                            MicroModal.close("remove-race");
+                        if(this.status === 200){
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
 
                             iziToast.success({
-                                message: 'L\'épreuve a bien été supprimée',
+                                message: 'L\'épreuve a bien été supprimée.',
                                 position: 'bottomRight',
                             });
+
+                            MicroModal.close("add-race");
                         } else {
-                            iziToast.success({
-                                message: 'Erreur lors de la supression de l\épreuve',
+                            iziToast.error({
+                                message: 'Erreur lors de la suppression de l\'épreuve.',
                                 position: 'bottomRight',
                             });
                         }
@@ -455,22 +501,25 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
-                        keepThis.races[raceOrder].raceTracks.splice(raceTrack.order,1);
-
-                        for(let rt of keepThis.races[raceOrder].raceTracks){
-                            if(rt.order > raceTrack.order){
-                                rt.order = rt.order-1;
-                            }
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races) {
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
                         }
 
                         iziToast.success({
                             message: 'Le parcours a bien été supprimé',
                             position: 'bottomRight',
                         });
+
                     } else {
                         iziToast.error({
-                            message: 'Erreur lors de la supression du parcours',
+                            message: 'Erreur lors de la suppression du parcours.',
                             position: 'bottomRight',
                         });
                     }
@@ -487,14 +536,15 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
-                        console.log("rm race checkpoint");
-                        keepThis.races[raceIdx].raceTracks[raceTrackIdx].checkpoints.splice(raceCheckpoint.order,1);
-
-                        for(let rc of keepThis.races[raceIdx].raceTracks[raceTrackIdx].checkpoints){
-                            if(rc.order > raceCheckpoint.order){
-                                rc.order = rc.order-1;
-                            }
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races){
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
                         }
 
                         iziToast.success({
@@ -504,7 +554,7 @@
 
                     } else {
                         iziToast.error({
-                            message: 'Erreur lors de la supression du checkpoint',
+                            message: 'Erreur lors de la suppression du checkpoint.',
                             position: 'bottomRight',
                         });
                     }
@@ -563,18 +613,24 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
-
-                        let r = new Race();
-                        r.fromObj(JSON.parse(this.responseText));
-                        keepThis.races.push(r);
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races){
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
+                        }
 
                         iziToast.success({
-                            message: 'L\'épreuve a bien été créée.',
+                            message: 'L\'épreuve a bien été créee.',
                             position: 'bottomRight',
                         });
+
                     } else {
-                        iziToast.success({
+                        iziToast.error({
                             message: 'Erreur lors de la création de l\'épreuve.',
                             position: 'bottomRight',
                         });
@@ -598,19 +654,22 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
-
-                        let rt = new RaceTrack();
-                        rt.fromObj(JSON.parse(this.responseText));
-                        keepThis.races[raceIdx].raceTracks.push(rt);
-
-                        keepThis.newRaceTrack = new RaceTrack();
-                        keepThis.currentRace = null;
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races){
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
+                        }
 
                         iziToast.success({
-                            message: 'Le parcours a bien été ajouté à l\'épreuve.',
+                            message: 'Le parcours a bien été ajouté.',
                             position: 'bottomRight',
                         });
+
                     } else {
                         iziToast.error({
                             message: 'Erreur lors de l\'ajout du parcours.',
@@ -637,19 +696,22 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
-
-                        let rc = new Checkpoint();
-                        rc.fromObj(JSON.parse(this.responseText));
-                        keepThis.races[raceIdx].raceTracks[trackIdx].checkpoints.push(rc);
-
-                        keepThis.newCheckpoint = new Checkpoint();
-                        keepThis.currentRaceTrack = null;
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races){
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
+                        }
 
                         iziToast.success({
-                            message: 'Le checkpoint a bien été ajouté à l\'épreuve.',
+                            message: 'Le checkpoint a bien été ajouté.',
                             position: 'bottomRight',
                         });
+
                     } else {
                         iziToast.error({
                             message: 'Erreur lors de l\'ajout du checkpoint.',
@@ -660,8 +722,6 @@
                 req.open('PUT', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+raceTrackId+'/raceCheckpoint', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newCheckpoint.toJSON());
-
-
             },
             htmlDecode(str){
                 return htmlentities.decode(str);

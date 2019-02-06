@@ -57,6 +57,14 @@
   h4 {
     font-size: 1.3rem;
   }
+
+  form {
+    select,
+    button {
+      height: 2rem;
+      width: 50%;
+    }
+  }
 }
 
 .race--track--toolbar {
@@ -81,6 +89,14 @@
 
   h5 {
     font-size: 1rem;
+  }
+
+  form {
+    select,
+    button {
+      height: 2rem;
+      width: 50%;
+    }
   }
 }
 

@@ -66,6 +66,7 @@ class RaceController extends AjaxAPIController
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
+        $raceManager = $em->getRepository('AppBundle:Race');
 
         // Find the user
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
@@ -92,7 +93,11 @@ class RaceController extends AjaxAPIController
         $em->persist($race);
         $em->flush();
 
-        return new Response($raceService->raceToJson($race));
+        $races = $raceManager->findBy(array('raid' => $raid));
+
+        $raceService = $this->container->get('RaceService');
+
+        return new Response($raceService->racesArrayToJson($races));
     }
 
     /**
@@ -168,7 +173,11 @@ class RaceController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
 
-        return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
+        $races = $raceManager->findBy(array('raid' => $raid));
+
+        $raceService = $this->container->get('RaceService');
+
+        return new Response($raceService->racesArrayToJson($races));
     }
 
     /**

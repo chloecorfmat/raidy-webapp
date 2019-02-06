@@ -9,6 +9,7 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
+use AppBundle\Entity\Race;
 use AppBundle\Entity\RaceTrack;
 use AppBundle\Service\RaceService;
 use AppBundle\Service\RaceTrackService;
@@ -70,7 +71,11 @@ class RaceTrackController extends AjaxAPIController
         $em->persist($raceTrack);
         $em->flush();
 
-        return new Response(json_encode($raceTrackService->raceTrackToObj($raceTrack)));
+        $races = $raceManager->findBy(array('raid' => $raid));
+
+        $raceService = $this->container->get('RaceService');
+
+        return new Response($raceService->racesArrayToJson($races));
     }
 
     /**
@@ -89,6 +94,7 @@ class RaceTrackController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raceTrackManager = $em->getRepository('AppBundle:RaceTrack');
+        $raceManager = $em->getRepository('AppBundle:Race');
 
         // Find the user
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
@@ -103,17 +109,42 @@ class RaceTrackController extends AjaxAPIController
         }
 
         $data = $request->request->all();
-        $raceTrack = $raceTrackManager->find($racetrackId);
 
-        $raceTrack->setOrder($data['order']);
+        /** @var RaceTrack $raceTrack */
+        $raceTrack = $raceTrackManager->find($racetrackId);
+        $order = $raceTrack->getOrder();
 
         if (null != $raceTrack) {
+            if ($data['direction'] == "up") {
+                if ($order > 0) {
+                    /** @var RaceTrack $raceTrack */
+                    $prevTrack = $raceTrackManager->findOneBy(['order' => $order-1, 'race' => $raceTrack->getRace()]);
+
+                    $raceTrack->setOrder($order-1);
+                    $prevTrack->setOrder($order);
+                }
+            } else {
+                /** @var Race $race */
+                $race = $raceTrack->getRace();
+                $tracksCount = count($race->getTracks());
+                if ($order < $tracksCount-1) {
+                    /** @var RaceTrack $prevTrack */
+                    $prevTrack = $raceTrackManager->findOneBy(['order' => $order+1, 'race' => $raceTrack->getRace()]);
+
+                    $raceTrack->setOrder($order+1);
+                    $prevTrack->setOrder($order);
+                }
+            }
             $em->flush();
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
 
-        return parent::buildJSONStatus(Response::HTTP_OK, 'Updated');
+        $races = $raceManager->findBy(array('raid' => $raid));
+
+        $raceService = $this->container->get('RaceService');
+
+        return new Response($raceService->racesArrayToJson($races));
     }
 
     /**
@@ -133,6 +164,7 @@ class RaceTrackController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raceTrackManager = $em->getRepository('AppBundle:RaceTrack');
+        $raceManager = $em->getRepository('AppBundle:Race');
 
         // Find the user
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
@@ -165,6 +197,10 @@ class RaceTrackController extends AjaxAPIController
 
         $em->flush();
 
-        return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
+        $races = $raceManager->findBy(array('raid' => $raid));
+
+        $raceService = $this->container->get('RaceService');
+
+        return new Response($raceService->racesArrayToJson($races));
     }
 }
