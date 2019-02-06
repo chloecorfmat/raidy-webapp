@@ -44,9 +44,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     let headers = [];
     this.isRootingMode = false;
     this.routing = function (e) {
-      console.log("log click in rooting mode");
       mapManager.currentTrack.line.getLatLngs().pop();
-      //  keepThis.currentTrack.line.setLatLngs(mapManager.currentTrack.line.getLatLngs().splice(0,-1));
       let currentSize = keepThis.currentTrack.line.getLatLngs().length;
       Gp.Services.route({
         apiKey: IGNAPIKEY, // clef d'accès à la plateforme
@@ -56,14 +54,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         graph: "Pieton",                 // grapĥe utilisé
         onSuccess: function (result) {
           // exploitation des resultats : "result" est de type Gp.Services.RouteResponse
-          console.log(result);
           let shape = [];
           let latLngs = [];
           let i = 0;
           keepThis.currentTrack.line.disableEdit();
 
           for (let coord of result.routeGeometry.coordinates) {
-            //console.log(coord);
             if ((i % 4 == 0) || (i == result.routeGeometry.coordinates.length)) {
               let latlng = L.latLng(coord[1], coord[0]);
               shape.push({lon: coord[0], lat: coord[1]});
@@ -103,11 +99,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
               });
             }));
           }
-          console.log("waiting request");
-          console.log(promises.length);
+
           Promise.all(promises).then(function (values) {
-            console.log("finished loading");
-            console.log(keepThis.currentTrack.line.getLatLngs());
             keepThis.currentTrack.update();
             keepThis.mapHistory.logModification({
               type: "AUTO_TRACK",
@@ -117,13 +110,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
             });
           });
         },
-        onFailure : function (error) {
+        onFailure: function (error) {
           iziToast.error({
-            message: 'Le tracé automatique à échoué : '+error.message,
+            message: 'Le tracé automatique à échoué : ' + error.message,
             position: 'bottomLeft',
           });
         }
-        
+
       });
     };
 
@@ -132,8 +125,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.OSMTiles = L.tileLayer('http://{s}.tile.osm.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
     }).addTo(this.map);
-    console.log("event loaded");
-
 
     this.redoBuffer = [];
     this.group = new L.featureGroup();
@@ -211,8 +202,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:drawing:click', function () {
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.name = htmlentities.decode(track.name);
-      // track.push();
-      // keepThis.mapHistory.logModification({type : "ADD_TRACK_MARKER", target : e.Marker, lastPostition : keepThis.lastPostition, newPosition : e.vertex.latlng})
+
       track.update();
     });
 
@@ -276,7 +266,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     });
 
-    this.map.on('editable:vertex:remove', function (e) { //point on track is removed
+    this.map.on('editable:vertex:deleted', function (e) { //point on track is removed
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
 
@@ -299,7 +289,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.map.on(' editable:vertex:new', function (e) {
 
-      //console.log("new vertex")
       if (keepThis.advancedPoly == null) {
 
         keepThis.elevator.getElevationAt(e.vertex.latlng, function () {
@@ -337,6 +326,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           type: "ADD_MARKER_TRACK",
           track: keepThis.tracksMap.get(keepThis.currentEditID),
           latLng: L.latLng(e.vertex.latlng.lat, e.vertex.latlng.lng),
+          head: keepThis.currentTrack.line.editor._drawing
         });
       }
       keepThis.routingLatlng = e.vertex.latlng;
@@ -347,7 +337,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
     this.map.on('editable:drawing:start', function () {
       document.getElementById('map').style.cursor = 'crosshair';
-      //   keepThis.mapHistory.clearHistory()
     });
 
     this.loadRessources();
@@ -630,6 +619,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           keepThis.mapHistory.undo();
         }
       }
+
       if (e.ctrlKey && e.keyCode == 89) { //Y
         keepThis.mapHistory.redo();
       }
@@ -652,8 +642,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         }
       }
     };
-    //L.DomEvent.addListener(document, 'keydown', onKeyDown, keepThis.map);
-    if( this.isEditor == true ){
+    if (this.isEditor) {
       document.getElementById("editorContainer").addEventListener("keydown", onKeyDown);
     }
   }

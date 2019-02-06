@@ -331,7 +331,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     });
 
     mapManager.elevator = new MapElevation();
-    let ShowElevationGraphCtrl = L.Control.extend({
+    /*let ShowElevationGraphCtrl = L.Control.extend({
       options: {
         position: 'bottomleft'
       },
@@ -353,7 +353,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         };
         return container;
       },
-    });
+    });*/
 
     document.querySelector(".close-graph-btn").addEventListener("click", function (e) {
 
@@ -379,7 +379,7 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     mapManager.map.addControl(new ImportGPXCtrl());
     mapManager.map.addControl(new ExportGPXCtrl());
     mapManager.map.addControl(new RoutingCtrl());
-    mapManager.map.addControl(new ShowElevationGraphCtrl());
+  //  mapManager.map.addControl(new ShowElevationGraphCtrl());
 
     mapManager.trackControl = new L.TrackEditControl();
     MapManager.prototype.displayTrackButton = function (b) {

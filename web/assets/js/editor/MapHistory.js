@@ -35,7 +35,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   // REMOVE UNDO
   MapHistory.prototype.undoRemoveMarkerTrack = function (action) {
     let array = action.track.line.getLatLngs();
-
+    array = array.splice(0,action.vertexId).concat([L.latLng(action.vertexLat, action.vertexLng)]).concat(array.splice(0,action.vertexId));
   };
 
   // REMOVE REDO
@@ -147,15 +147,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     } else {
       console.log("Nothing to redo.");
     }
-    console.log(this.redoBuffer);
-    console.log(this.undoBuffer);
+
 
   };
 
   MapHistory.prototype.logModification = function (obj) {
     this.undoBuffer.push(obj);
     this.redoBuffer = [];
-    console.log(obj);
   };
 
   MapHistory.prototype.clearHistory = function () {
