@@ -10,6 +10,7 @@ namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Competitor;
+use AppBundle\Entity\Race;
 use AppBundle\Entity\RaceCheckpoint;
 use AppBundle\Entity\RaceTiming;
 use AppBundle\Entity\RaceTrack;
@@ -114,10 +115,11 @@ class CompetitorController extends AjaxAPIController
 
         if ($competitor != null) {
             $competitorService = $this->container->get('CompetitorService');
+
             return new Response($competitorService->competitorToJson($competitor));
-        } 
-        
-        return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');        
+        }
+
+        return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
     }
 
     /**
@@ -195,9 +197,10 @@ class CompetitorController extends AjaxAPIController
 
         if ($competitor != null) {
             $competitorService = $this->container->get('CompetitorService');
-            return new Response($competitorService->competitorToJson($competitor));    
-        } 
-        
+
+            return new Response($competitorService->competitorToJson($competitor));
+        }
+
         return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
     }
 
@@ -239,9 +242,10 @@ class CompetitorController extends AjaxAPIController
         if ($competitor != null) {
             $competitor->setNFCSerialId($NFCSerialId);
             $em->flush();
+
             return parent::buildJSONStatus(Response::HTTP_OK, 'Competitor updated');
-        } 
-        
+        }
+
         return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
     }
 
@@ -284,8 +288,14 @@ class CompetitorController extends AjaxAPIController
 
         if ($competitor == null) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
-        } 
-               
+        }
+
+        /** @var Race $race */
+        $race = $competitor->getRace();
+        if (!$race->isRunning()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'La course n\'est pas en cours');
+        }
+
         $raceTracksManager = $em->getRepository('AppBundle:RaceTrack');
         $raceTracks = $raceTracksManager->findBy(["race" => $competitor->getRace()], ['order' => 'ASC']);
 
@@ -321,7 +331,7 @@ class CompetitorController extends AjaxAPIController
                 }
             }
         }
-        
+
         return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'No checkpoint for this poi and this competitor');
     }
 }

@@ -159,4 +159,16 @@ class Race
     {
         $this->endTime = $endTime;
     }
+
+    /**
+     * @return bool
+     */
+    public function isRunning()
+    {
+        if ($this->getStartTime() != null && $this->getEndTime() == null) {
+            return true;
+        }
+
+        return false;
+    }
 }
