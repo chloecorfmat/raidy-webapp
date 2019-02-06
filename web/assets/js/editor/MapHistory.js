@@ -25,11 +25,19 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   // ADD UNDO
   MapHistory.prototype.undoAddMarkerTrack = function (action) {
-    action.track.line.getLatLngs().pop();
+    if(action.head == 1){
+      action.track.line.getLatLngs().pop();
+    }else{
+      action.track.line.getLatLngs().shift();
+    }
   };
   // ADD REDO
   MapHistory.prototype.redoAddMarkerTrack = function (action) {
-    action.track.line.addLatLng(action.latLng);
+    if(action.head == 1){
+      action.track.line.addLatLng(action.latLng);
+    }else{
+      action.track.line.getLatLngs().unshift(action.latLng);
+    }
   };
 
   // REMOVE UNDO
@@ -50,7 +58,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   // AUTO REDO
   MapHistory.prototype.undoAutoTrack = function (action) {
     for (let latLng of action.latLngs) {
-      console.log(latLng);
+     // console.log(latLng);
       action.track.line.addLatLng(latLng);
     }
   };
@@ -64,7 +72,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           action.track.line.disableEdit();
         }
         switch (action.type) {
-
           case "MOVE_MARKER_TRACK" :
             this.undoMoveMarkerTrack(action);
             break;
@@ -94,13 +101,17 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         action.track.buildUI();
         action.track.push();
       }
-      console.log("undo");
+     // console.log("undo");
 
     } else {
-      console.log("Nothing to undo.");
+    //  console.log("Nothing to undo.");
+      iziToast.info({
+        message: 'Rien à annuler',
+        position: 'bottomLeft',
+      });
     }
-    console.log(this.redoBuffer);
-    console.log(this.undoBuffer);
+   // console.log(this.redoBuffer);
+   // console.log(this.undoBuffer);
   };
 
   MapHistory.prototype.redo = function () {
@@ -143,10 +154,15 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
         action.track.push();
       }
-      console.log("redo");
+    //  console.log("redo");
     } else {
-      console.log("Nothing to redo.");
+      iziToast.info({
+        message: 'Rien à rétablir',
+        position: 'bottomLeft',
+      });
     }
+   // console.log(this.redoBuffer);
+ //   console.log(this.undoBuffer);
 
 
   };
@@ -154,12 +170,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   MapHistory.prototype.logModification = function (obj) {
     this.undoBuffer.push(obj);
     this.redoBuffer = [];
+   // console.log(obj);
   };
 
   MapHistory.prototype.clearHistory = function () {
     this.undoBuffer = [];
     this.redoBuffer = [];
-    console.log("History cleared")
+   // console.log("History cleared")
   };
 }
 /*

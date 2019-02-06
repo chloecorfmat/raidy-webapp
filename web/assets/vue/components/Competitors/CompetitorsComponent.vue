@@ -2,14 +2,15 @@
     <div class="content--two-third">
         <h2>Classement</h2>
         <div class="filters">
-            <div>
-                <label for="competitor">Rechercher</label>
-                <input type="text" id="competitor" v-model="search_competitor">
+            <div class="filter">
+                <label for="competitor" class="sr-only">Rechercher</label>
+                <i class="fas fa-search"></i>
+                <input class="search" type="text" id="competitor" v-model="search_competitor" placeholder="Rechercher">
             </div>
 
-            <div>
-                <label for="race">Courses</label>
-                <select id="race" v-model="race_selected">
+            <div class="filter">
+                <label for="race" class="sr-only">Épreuve</label>
+                <select class="race" id="race" v-model="race_selected">
                     <option value="all">Toutes les épreuves</option>
                     <option v-for="(race, index) in this.races_object" :key=index :value=race.id>{{ race.name }}</option>
                 </select>

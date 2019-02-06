@@ -1,5 +1,9 @@
 {% extends 'default/organizer.html.twig' %}
 
+{% if formImport is defined %}
+    {% form_theme formImport 'form/fields.html.twig' %}
+{% endif %}
+
 {% block breadcrumb %}
     <ol class="breadcrumb--list">
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>

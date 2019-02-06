@@ -326,7 +326,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           type: "ADD_MARKER_TRACK",
           track: keepThis.tracksMap.get(keepThis.currentEditID),
           latLng: L.latLng(e.vertex.latlng.lat, e.vertex.latlng.lng),
-          head: keepThis.currentTrack.line.editor._drawing
+          head : keepThis.currentTrack.line.editor._drawing
         });
       }
       keepThis.routingLatlng = e.vertex.latlng;
@@ -619,7 +619,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           keepThis.mapHistory.undo();
         }
       }
-
+      
       if (e.ctrlKey && e.keyCode == 89) { //Y
         keepThis.mapHistory.redo();
       }

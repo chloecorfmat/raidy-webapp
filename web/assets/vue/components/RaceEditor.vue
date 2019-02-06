@@ -87,7 +87,7 @@
                                                    required="required" maxlength="100" v-model="newRace.name">
                                         </div>
                                         <div class="actions">
-                                            <button type="submit" id="addRace_submit" class="btn">Ajouter un parcours</button>
+                                            <button type="submit" id="addRace_submit" class="btn">Ajouter une épreuve</button>
                                             <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
                                         </div>
                                     </div>
