@@ -12,7 +12,7 @@
                         <button v-on:click="openStopRacePopin(race)" v-if="race.startTime != null && race.endTime == null" class="btn">Arrêter l'épreuve</button>
                         <strong v-if="race.startTime != null && race.endTime != null">Epreuve terminée</strong>
                         <button v-on:click="openNewTrackPopin(race)">Ajouter un parcours</button>
-                        <button class="btn btn--danger" v-on:click="displayRemoveRacePopin(race)"><i class="fa fa-trash"></i></button>
+                        <button class="btn btn--danger" v-if="race.startTime == null" v-on:click="displayRemoveRacePopin(race)"><i class="fa fa-trash"></i></button>
                     </nav>
                 </header>
                 <ul class="race--tracks">
@@ -21,22 +21,22 @@
                             <h4>{{ htmlDecode(raceTrack.name) }}</h4>
                             <nav class="race--track--toolbar">
                                 <button class="btn" v-on:click="openNewCheckpointPopin(raceTrack)">Ajouter un checkpoint</button>
-                                <div class="race--track--checkpoint--order">
+                                <div class="race--track--checkpoint--order" v-if="race.startTime == null">
                                     <button class="btn" v-on:click="moveTrackUp(idx, races[index].raceTracks, races[index])"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn" v-on:click="moveTrackDown(idx, races[index].raceTracks, races[index])"><i class="fa fa-caret-down"></i></button>
                                 </div>
-                                <button class="btn btn--danger" v-on:click="removeRaceTrack(index, races[index], races[index].raceTracks[idx])"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn--danger" v-if="race.startTime == null" v-on:click="removeRaceTrack(index, races[index], races[index].raceTracks[idx])"><i class="fa fa-trash"></i></button>
                             </nav>
                         </header>
                         <ul class="race--track--checkpoints">
                             <li class="race--track--checkpoint" v-for="(checkpoint, checkpointIdx) in raceTrack.checkpoints">
                                 <h5>{{ htmlDecode(checkpoint.poi.name) }}</h5>
                                 <div class="race--track--checkpoint--tools">
-                                    <div class="race--track--checkpoint--order">
+                                    <div class="race--track--checkpoint--order" v-if="race.startTime == null">
                                         <button class="btn"><i class="fa fa-caret-up" v-on:click="moveCheckpointUp(checkpointIdx, races[index].raceTracks[idx].checkpoints,races[index], races[index].raceTracks[idx])"></i></button>
                                         <button class="btn"><i class="fa fa-caret-down" v-on:click="moveCheckpointDown(checkpointIdx, races[index].raceTracks[idx].checkpoints,races[index], races[index].raceTracks[idx])"></i></button>
                                     </div>
-                                    <button class="btn btn--danger" v-on:click="removeRaceCheckpoint(index, races[index], idx, races[index].raceTracks[idx], raceTrack.checkpoints[checkpointIdx])"><i class="fa fa-trash"></i></button>
+                                    <button class="btn btn--danger" v-if="race.startTime == null" v-on:click="removeRaceCheckpoint(index, races[index], idx, races[index].raceTracks[idx], raceTrack.checkpoints[checkpointIdx])"><i class="fa fa-trash"></i></button>
                                 </div>
                             </li>
                             <li class="race--track--checkpoint" v-if="raceTrack === currentRaceTrack">
@@ -435,6 +435,11 @@
                                 message: 'L\'épreuve a bien été supprimée',
                                 position: 'bottomRight',
                             });
+                        } else {
+                            iziToast.success({
+                                message: 'Erreur lors de la supression de l\épreuve',
+                                position: 'bottomRight',
+                            });
                         }
                     };
                     req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id, true);
@@ -451,18 +456,28 @@
                 };
                 req.onload = function () {
                     if (this.status === 200) {
-                        console.log("rm");
                         keepThis.races[raceOrder].raceTracks.splice(raceTrack.order,1);
+
+                        for(let rt of keepThis.races[raceOrder].raceTracks){
+                            if(rt.order > raceTrack.order){
+                                rt.order = rt.order-1;
+                            }
+                        }
+
+                        iziToast.success({
+                            message: 'Le parcours a bien été supprimé',
+                            position: 'bottomRight',
+                        });
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de la supression du parcours',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id, true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(null);
-
-                iziToast.success({
-                    message: 'Le parcours a bien été supprimé',
-                    position: 'bottomRight',
-                });
             },
             removeRaceCheckpoint (raceIdx, race, raceTrackIdx, raceTrack, raceCheckpoint) {
                 let keepThis = this;
@@ -473,18 +488,30 @@
                 };
                 req.onload = function () {
                     if (this.status === 200) {
-                        console.log("rm");
+                        console.log("rm race checkpoint");
                         keepThis.races[raceIdx].raceTracks[raceTrackIdx].checkpoints.splice(raceCheckpoint.order,1);
+
+                        for(let rc of keepThis.races[raceIdx].raceTracks[raceTrackIdx].checkpoints){
+                            if(rc.order > raceCheckpoint.order){
+                                rc.order = rc.order-1;
+                            }
+                        }
+
+                        iziToast.success({
+                            message: 'Le checkpoint a bien été supprimé',
+                            position: 'bottomRight',
+                        });
+
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de la supression du checkpoint',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id+'/racecheckpoint/'+raceCheckpoint.id, true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(null);
-
-                iziToast.success({
-                    message: 'Le checkpoint a bien été supprimé',
-                    position: 'bottomRight',
-                });
             },
             move (array, oldIndex, newIndex) {
                 if (newIndex >= array.length || newIndex < 0) {
@@ -541,16 +568,21 @@
                         let r = new Race();
                         r.fromObj(JSON.parse(this.responseText));
                         keepThis.races.push(r);
+
+                        iziToast.success({
+                            message: 'L\'épreuve a bien été créée.',
+                            position: 'bottomRight',
+                        });
+                    } else {
+                        iziToast.success({
+                            message: 'Erreur lors de la création de l\'épreuve.',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('PUT', '/race/raid/'+raidID+'/race', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newRace.toJSON());
-
-                iziToast.success({
-                    message: 'L\'épreuve a bien été créée.',
-                    position: 'bottomRight',
-                });
             },
             addTrack(e,raceIdx){
                 e.preventDefault();
@@ -574,16 +606,21 @@
 
                         keepThis.newRaceTrack = new RaceTrack();
                         keepThis.currentRace = null;
+
+                        iziToast.success({
+                            message: 'Le parcours a bien été ajouté à l\'épreuve.',
+                            position: 'bottomRight',
+                        });
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de l\'ajout du parcours.',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('PUT', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newRaceTrack.toJSON());
-
-                iziToast.success({
-                    message: 'Le parcours a bien été ajouté à l\'épreuve.',
-                    position: 'bottomRight',
-                });
             },
             addCheckpoint(e, raceIdx, trackIdx){
                 e.preventDefault();
@@ -608,16 +645,23 @@
 
                         keepThis.newCheckpoint = new Checkpoint();
                         keepThis.currentRaceTrack = null;
+
+                        iziToast.success({
+                            message: 'Le checkpoint a bien été ajouté à l\'épreuve.',
+                            position: 'bottomRight',
+                        });
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de l\'ajout du checkpoint.',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('PUT', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+raceTrackId+'/raceCheckpoint', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newCheckpoint.toJSON());
 
-                iziToast.success({
-                    message: 'Le checkpoint a bien été ajouté à l\'épreuve.',
-                    position: 'bottomRight',
-                });
+
             },
             htmlDecode(str){
                 return htmlentities.decode(str);
