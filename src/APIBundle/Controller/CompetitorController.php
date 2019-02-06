@@ -112,9 +112,12 @@ class CompetitorController extends AjaxAPIController
 
         $competitor = $competitorManager->findOneBy(array('race' => $raceId, 'numberSign' => $numberSign));
 
-        $competitorService = $this->container->get('CompetitorService');
-
-        return new Response($competitorService->competitorToJson($competitor));
+        if ($competitor != null) {
+            $competitorService = $this->container->get('CompetitorService');
+            return new Response($competitorService->competitorToJson($competitor));
+        } 
+        
+        return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');        
     }
 
     /**
@@ -190,9 +193,12 @@ class CompetitorController extends AjaxAPIController
 
         $competitor = $competitorManager->findOneBy(array('race' => $raceId, 'NFCSerialId' => $nfcserialid));
 
-        $competitorService = $this->container->get('CompetitorService');
-
-        return new Response($competitorService->competitorToJson($competitor));
+        if ($competitor != null) {
+            $competitorService = $this->container->get('CompetitorService');
+            return new Response($competitorService->competitorToJson($competitor));    
+        } 
+        
+        return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
     }
 
     /**
@@ -230,10 +236,13 @@ class CompetitorController extends AjaxAPIController
         /** @var Competitor $competitor */
         $competitor = $competitorManager->findOneBy(array('race' => $raceId, 'numberSign' => $numberSign));
 
-        $competitor->setNFCSerialId($NFCSerialId);
-        $em->flush();
-
-        return parent::buildJSONStatus(Response::HTTP_OK, 'Competitor updated');
+        if ($competitor != null) {
+            $competitor->setNFCSerialId($NFCSerialId);
+            $em->flush();
+            return parent::buildJSONStatus(Response::HTTP_OK, 'Competitor updated');
+        } 
+        
+        return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
     }
 
     /**
@@ -273,6 +282,10 @@ class CompetitorController extends AjaxAPIController
         /** @var Competitor $competitor */
         $competitor = $competitorManager->findOneBy(["NFCSerialId" => $NFCSerialId]);
 
+        if ($competitor == null) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
+        } 
+               
         $raceTracksManager = $em->getRepository('AppBundle:RaceTrack');
         $raceTracks = $raceTracksManager->findBy(["race" => $competitor->getRace()], ['order' => 'ASC']);
 
