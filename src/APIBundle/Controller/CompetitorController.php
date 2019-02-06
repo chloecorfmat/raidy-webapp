@@ -304,11 +304,11 @@ class CompetitorController extends AjaxAPIController
                     $em->persist($raceTiming);
                     $em->flush();
 
-                    break 2;
+                    return parent::buildJSONStatus(Response::HTTP_OK, 'Competitor updated');
                 }
             }
         }
-
-        return parent::buildJSONStatus(Response::HTTP_OK, 'Competitor updated');
+        
+        return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'No checkpoint for this poi and this competitor');
     }
 }
