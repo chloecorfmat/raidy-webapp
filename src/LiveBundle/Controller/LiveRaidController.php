@@ -3,7 +3,9 @@
 namespace LiveBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
+use AppBundle\Entity\Raid;
 use AppBundle\Entity\TwitterApiData;
+use Doctrine\ORM\EntityManager;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -76,32 +78,7 @@ class LiveRaidController extends AjaxAPIController
         // This is passed to vuejs component.
         $tweets = json_decode($jsonResults)->statuses ?? '';
 
-        $competitorManager = $em->getRepository('AppBundle:Competitor');
-        $competitors = $competitorManager->findBy(['raid' => $raid]);
-
-        $competitorsData = [];
-
-        foreach ($competitors as $competitor) {
-            if ($competitor->getRace()) {
-                $rId = $competitor->getRace()->getId();
-                $rName = $competitor->getRace()->getName();
-            } else {
-                $rId = null;
-                $rName = '-';
-            }
-
-            $competitorsData[] = [
-                'id' => $competitor->getId(),
-                'lastname' => $competitor->getLastname(),
-                'firstname' => $competitor->getFirstname(),
-                'numbersign' => $competitor->getNumberSign(),
-                'category' => $competitor->getCategory(),
-                'race_name' => $rName,
-                'classment' => 0, //@TODO
-                'timing' => (new \DateTime())->format('H:m:s'), //@TODO
-                'race_id' => $rId,
-            ];
-        }
+        $competitorsData = $this->getClassment($raid, $em);
 
         $raceManager = $em->getRepository('AppBundle:Race');
         $races = $raceManager->findBy(['raid' => $raid]);
@@ -218,33 +195,94 @@ class LiveRaidController extends AjaxAPIController
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
+        $competitorsData = $this->getClassment($raid, $em);
+
+        return new Response(json_encode($competitorsData) ?? "[]");
+    }
+
+    /**
+     * @param Raid          $raid Raid
+     * @param EntityManager $em   Entity manager
+     *
+     * @return array
+     */
+    private function getClassment(Raid $raid, EntityManager $em)
+    {
         $competitorManager = $em->getRepository('AppBundle:Competitor');
-        $competitors = $competitorManager->findBy(['raid' => $raid]);
+        $competitors = $competitorManager->findBy(
+            ['raid' => $raid],
+            ['race' => 'DESC']
+        );
 
         $competitorsData = [];
 
         foreach ($competitors as $competitor) {
             if ($competitor->getRace()) {
-                $rId = $competitor->getRace()->getId();
-                $rName = $competitor->getRace()->getName();
-            } else {
-                $rId = null;
-                $rName = '-';
-            }
+                $rt = null;
 
-            $competitorsData[] = [
-                'id' => $competitor->getId(),
-                'lastname' => $competitor->getLastname(),
-                'firstname' => $competitor->getFirstname(),
-                'numbersign' => $competitor->getNumberSign(),
-                'category' => $competitor->getCategory(),
-                'race_name' => $rName,
-                'classment' => 0, //@TODO
-                'timing' => (new \DateTime())->format('H:m:s'), //@TODO
-                'race_id' => $rId,
-            ];
+                $race = $competitor->getRace();
+                $rId = $race->getId();
+                $rName = $race->getName();
+                $rStartTime = $race->getStartTime();
+                $rEndTime = $race->getEndTime();
+
+                $raceTracksManager = $em->getRepository('AppBundle:RaceTrack');
+                $raceTracks = $raceTracksManager->findBy(["race" => $race], ['order' => 'ASC']);
+
+                $raceCheckpointManager = $em->getRepository('AppBundle:RaceCheckpoint');
+                $raceTimingManager = $em->getRepository('AppBundle:RaceTiming');
+
+                /** @var RaceTrack $raceTrack */
+                foreach ($raceTracks as $raceTrack) {
+                    /** @var RaceCheckpoint $raceCheckpoint */
+                    $raceCheckpoints = $raceCheckpointManager->findBy(
+                        [
+                            "raceTrack" => $raceTrack,
+                        ],
+                        [
+                            'order' => 'ASC',
+                        ]
+                    );
+
+                    foreach ($raceCheckpoints as $raceCheckpoint) {
+                        $rt = $raceTimingManager->findOneBy(
+                            ['checkpoint' => $raceCheckpoint, 'competitor' => $competitor]
+                        );
+
+                        if ($rt != null) {
+                            break 2;
+                        }
+                    }
+                }
+
+                if (is_null($rEndTime)) {
+                    if (!is_null($rt)) {
+                        $timing = date(
+                            'H:i:s',
+                            ((new \DateTime())->getTimestamp() - ($rStartTime->getTimestamp()))
+                        );
+                    }
+                } else {
+                    $timing = date(
+                        'H:i:s',
+                        (($rEndTime)->getTimestamp() - ($rStartTime->getTimestamp()))
+                    );
+                }
+
+                $competitorsData[] = [
+                    'id' => $competitor->getId(),
+                    'lastname' => $competitor->getLastname(),
+                    'firstname' => $competitor->getFirstname(),
+                    'numbersign' => $competitor->getNumberSign(),
+                    'category' => $competitor->getCategory(),
+                    'race_name' => $rName,
+                    'classment' => 0, //@TODO
+                    'timing' => $timing ?? 0,
+                    'race_id' => $rId,
+                ];
+            }
         }
 
-        return new Response(json_encode($competitorsData) ?? "[]");
+        return $competitorsData;
     }
 }
