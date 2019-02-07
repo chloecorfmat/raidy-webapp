@@ -14,6 +14,7 @@ use AppBundle\Entity\Race;
 use AppBundle\Entity\RaceCheckpoint;
 use AppBundle\Entity\RaceTiming;
 use AppBundle\Entity\RaceTrack;
+use AppBundle\Entity\Raid;
 use AppBundle\Service\CompetitorService;
 use DateTime;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -145,7 +146,7 @@ class CompetitorController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
         }
 
-        $competitor = $competitorManager->findOneBy(array('raid' => $raidId, 'numberSign' => $numberSign));
+        $competitor = $competitorManager->findOneBy(array('raid' => $raid->getId(), 'numberSign' => $numberSign));
 
         if ($competitor != null) {
             $competitorService = $this->container->get('CompetitorService');
@@ -208,13 +209,14 @@ class CompetitorController extends AjaxAPIController
         $competitorManager = $em->getRepository('AppBundle:Competitor');
         $raidManager = $em->getRepository('AppBundle:Raid');
 
+        /** @var Raid $raid */
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
         }
 
-        $competitor = $competitorManager->findOneBy(array('raid' => $raidId, 'NFCSerialId' => $nfcserialid));
+        $competitor = $competitorManager->findOneBy(array('raid' => $raid->getId(), 'NFCSerialId' => $nfcserialid));
 
         if ($competitor != null) {
             $competitorService = $this->container->get('CompetitorService');
