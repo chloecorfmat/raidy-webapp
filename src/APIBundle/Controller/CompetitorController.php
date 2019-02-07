@@ -257,6 +257,15 @@ class CompetitorController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
         }
 
+        $checkNFCSerialId = $competitorManager->findOneBy(array('raid' => $raidId, 'NFCSerialId' => $NFCSerialId));
+
+        if ($checkNFCSerialId != null) {
+            return parent::buildJSONStatus(
+                Response::HTTP_BAD_REQUEST,
+                'Bracelet déjà attribué à un participant pour ce raid'
+            );
+        }
+
         /** @var Competitor $competitor */
         $competitor = $competitorManager->findOneBy(array('race' => $raceId, 'numberSign' => $numberSign));
 
