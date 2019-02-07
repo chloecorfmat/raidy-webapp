@@ -1,5 +1,5 @@
 <template>
-    <tr>
+    <tr v-bind:class="{ isfraud: competitor.fraud }">
         <td v-if="competitor.classment !== 0">{{ competitor.classment}}</td>
         <td v-else>-</td>
         <td>{{ competitor.timing }}</td>
@@ -13,6 +13,6 @@
 <script>
     export default {
         name: "Competitor",
-        props: ['competitor']
+        props: ['competitor'],
     }
 </script>

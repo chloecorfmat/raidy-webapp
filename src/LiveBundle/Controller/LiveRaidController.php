@@ -251,21 +251,27 @@ class LiveRaidController extends AjaxAPIController
                     ['checkpoint' => $lastCheckpoint, 'competitor' => $competitor]
                 );
 
-                if (!is_null($lastCheckpointTiming)) {
+                if (!is_null($rStartTime) && !is_null($lastCheckpointTiming)) {
                     $timing = date(
                         'H:i:s',
                         (($lastCheckpointTiming->getTime()->getTimestamp()) - ($rStartTime->getTimestamp()))
                     );
+
+                    $fraud = $competitor->getIsFraud() ? true : false;
                 } elseif (is_null($rEndTime) && !is_null($rStartTime)) {
                     $timing = date(
                         'H:i:s',
                         ((new \DateTime())->getTimestamp() - ($rStartTime->getTimestamp()))
                     );
-                } elseif (!is_null($rStartTime)) {
+
+                    $fraud = $competitor->getIsFraud() ? true : false;
+                } elseif (!is_null($rEndTime) && !is_null($rStartTime)) {
                     $timing = date(
                         'H:i:s',
                         (($rEndTime)->getTimestamp() - ($rStartTime->getTimestamp()))
                     );
+
+                    $fraud = $competitor->getIsFraud() ? true : false;
                 }
 
                 $competitorsDataTemp[$competitor->getId()] = [
@@ -277,6 +283,7 @@ class LiveRaidController extends AjaxAPIController
                     'race_name' => $rName,
                     'classment' => 0,
                     'timing' => $timing ?? 0,
+                    'fraud' => $fraud ?? false,
                     'race_id' => $rId,
                 ];
             }
