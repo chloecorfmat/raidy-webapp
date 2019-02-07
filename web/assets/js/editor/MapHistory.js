@@ -43,12 +43,14 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   // REMOVE UNDO
   MapHistory.prototype.undoRemoveMarkerTrack = function (action) {
     let array = action.track.line.getLatLngs();
-    array = array.splice(0,action.vertexId).concat([L.latLng(action.vertexLat, action.vertexLng)]).concat(array.splice(0,action.vertexId));
+    array.splice(action.vertexId, 0, L.latLng(action.vertexLat, action.vertexLng));
+
   };
 
   // REMOVE REDO
   MapHistory.prototype.redoRemoveMarkerTrack = function (action) {
-
+    let array = action.track.line.getLatLngs();
+    array.splice(action.vertexId, 1);
   };
   // AUTO UNDO
   MapHistory.prototype.redoAutoTrack = function (action) {

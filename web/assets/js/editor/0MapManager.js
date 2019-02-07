@@ -269,13 +269,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:vertex:deleted', function (e) { //point on track is removed
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
-
+      console.log(e.vertex.getNext().getIndex());
       keepThis.mapHistory.logModification({
         type: "REMOVE_MARKER_TRACK",
         track: track,
         vertexLat: e.vertex.latlng.lat,
         vertexLng: e.vertex.latlng.lng,
-        vertexId: e.vertex.getIndex()
+        vertexId: e.vertex.getLastIndex()
       });
       let latLngArray = keepThis.currentTrack.line.getLatLngs();
       keepThis.lastPostition = [];
