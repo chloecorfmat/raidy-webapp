@@ -288,8 +288,8 @@ class CompetitorController extends AjaxAPIController
 
     /**
      * @Rest\View(statusCode=Response::HTTP_OK)
-     * @Rest\Patch("/api/helper/raid/{raidId}/competitor/{numberSign}")
-     * @Rest\Patch("/api/organizer/raid/{raidId}/competitor/{numberSign}")
+     * @Rest\Patch("/api/helper/raid/{raidId}/competitor/numberSign/{numberSign}")
+     * @Rest\Patch("/api/organizer/raid/{raidId}/competitor/numberSign/{numberSign}")
      *
      * @param Request $request    request
      * @param int     $raidId     raid id
