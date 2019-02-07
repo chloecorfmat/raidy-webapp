@@ -53,7 +53,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
     patternParameters = {
       offset: 100,
-      endOffset: 100,
+      endOffset: 50,
       repeat: 100,
       symbol: L.Symbol.arrowHead({
         pixelSize: 12,

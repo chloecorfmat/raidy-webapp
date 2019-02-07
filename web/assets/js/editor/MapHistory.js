@@ -43,12 +43,14 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   // REMOVE UNDO
   MapHistory.prototype.undoRemoveMarkerTrack = function (action) {
     let array = action.track.line.getLatLngs();
+    array.splice(action.vertexId, 0, L.latLng(action.vertexLat, action.vertexLng));
 
   };
 
   // REMOVE REDO
   MapHistory.prototype.redoRemoveMarkerTrack = function (action) {
-
+    let array = action.track.line.getLatLngs();
+    array.splice(action.vertexId, 1);
   };
   // AUTO UNDO
   MapHistory.prototype.redoAutoTrack = function (action) {
@@ -163,6 +165,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
    // console.log(this.redoBuffer);
  //   console.log(this.undoBuffer);
+
 
   };
 

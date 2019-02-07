@@ -302,7 +302,6 @@ L$1.PolylineDecorator = L$1.FeatureGroup.extend({
         L$1.Util.setOptions(this, options);
         this._map = null;
         this._paths = this._initPaths(paths);
-
         this._bounds = this._initBounds();
         this._patterns = this._initPatterns(this.options.patterns);
     },
@@ -321,7 +320,6 @@ L$1.PolylineDecorator = L$1.FeatureGroup.extend({
             return [coords];
         }
         if (input instanceof L$1.Polyline) {
-
             // we need some recursivity to support multi-poly*
             return this._initPaths(input.getLatLngs(), input instanceof L$1.Polygon);
         }
