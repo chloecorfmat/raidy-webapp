@@ -83,12 +83,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         if (xhr_object.readyState == XMLHttpRequest.DONE) {
           iziToast.success({
             message: 'Le point d\'intérêt a bien été sauvergardé.',
-            position: 'bottomLeft',
+            position: 'bottomRight',
           });
         } else {
           iziToast.error({
             message: 'Impossible d\'enregistrer le point d\'intérêt. Vérifier votre connexion internet.',
-            position: 'bottomLeft',
+            position: 'bottomRight',
           });
         }
       };
@@ -199,12 +199,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       if (xhr_object.readyState == XMLHttpRequest.DONE) {
         iziToast.success({
           message: 'Le point d\'intérêt a bien été supprimé.',
-          position: 'bottomLeft',
+          position: 'bottomRight',
         });
       } else {
         iziToast.error({
           message: 'Impossible de supprimé le point d\'intérêt. Vérifier votre connexion internet.',
-          position: 'bottomLeft',
+          position: 'bottomRight',
         });
       }
     };
