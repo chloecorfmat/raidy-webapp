@@ -83,7 +83,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       onFailure: function () {
         iziToast.error({
           message: 'Erreur dans le calcul de l\'altitude. Vérifier votre connexion internet.',
-          position: 'bottomLeft',
+          position: 'bottomRight',
         });
       }
     });

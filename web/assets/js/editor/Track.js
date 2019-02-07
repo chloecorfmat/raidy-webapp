@@ -285,12 +285,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         if (xhr_object.readyState === 4 && xhr_object.status === 200) {
           iziToast.success({
             message: 'Le parcours a bien été sauvergardé.',
-            position: 'bottomLeft',
+            position: 'bottomRight',
           });
         }else if (xhr_object.readyState === 4) {
           iziToast.error({
             message: 'Impossible d\'enregistrer le parcours. Vérifier votre connexion internet.',
-            position: 'bottomLeft',
+            position: 'bottomRight',
           });
         }
       };
@@ -323,12 +323,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           if (xhr_object.status === 200) {
             iziToast.success({
               message: 'Le parcours a bien été supprimé.',
-              position: 'bottomLeft',
+              position: 'bottomRight',
             });
           } else {
             iziToast.error({
               message: 'Impossible de supprimer le parcours. Vérifier votre connexion internet.',
-              position: 'bottomLeft',
+              position: 'bottomRight',
             });
           }
         }

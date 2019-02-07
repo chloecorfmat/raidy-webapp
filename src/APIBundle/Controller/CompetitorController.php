@@ -10,6 +10,7 @@ namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use AppBundle\Entity\Competitor;
+use AppBundle\Entity\Race;
 use AppBundle\Entity\RaceCheckpoint;
 use AppBundle\Entity\RaceTiming;
 use AppBundle\Entity\RaceTrack;
@@ -123,7 +124,7 @@ class CompetitorController extends AjaxAPIController
 
     /**
      * @Rest\View(statusCode=Response::HTTP_OK)
-     * @Rest\Get("/api/helper/raid/{raidId}/race/competitor/numbersign/{numberSign}")
+     * @Rest\Get("/api/helper/raid/{raidId}/competitor/numbersign/{numberSign}")
      *
      * @param Request $request    request
      * @param int     $raidId     raid id
@@ -144,28 +145,15 @@ class CompetitorController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
         }
 
-        $competitors = $competitorManager->findBy(array('numberSign' => $numberSign));
+        $competitor = $competitorManager->findOneBy(array('raid' => $raidId, 'numberSign' => $numberSign));
 
-        foreach ($competitors as $competitor) {
-            $race = $competitor->getRace();
+        if ($competitor != null) {
+            $competitorService = $this->container->get('CompetitorService');
 
-            if (!is_null($race)) {
-                if ($race->getRaid() === $raid) {
-                    $competitorService = $this->container->get('CompetitorService');
-
-                    return new Response($competitorService->competitorToJson($competitor));
-                }
-            }
+            return new Response($competitorService->competitorToJson($competitor));
         }
 
-        if (!empty($competitors)) {
-            return parent::buildJSONStatus(
-                Response::HTTP_NOT_FOUND,
-                'Ce participant n\'est pas associé à une épreuve.'
-            );
-        } else {
-            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce numéro de dossard n\'existe pas');
-        }
+        return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
     }
 
     /**
@@ -193,6 +181,40 @@ class CompetitorController extends AjaxAPIController
         }
 
         $competitor = $competitorManager->findOneBy(array('race' => $raceId, 'NFCSerialId' => $nfcserialid));
+
+        if ($competitor != null) {
+            $competitorService = $this->container->get('CompetitorService');
+
+            return new Response($competitorService->competitorToJson($competitor));
+        }
+
+        return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
+    }
+
+    /**
+     * @Rest\View(statusCode=Response::HTTP_OK)
+     * @Rest\Get("/api/helper/raid/{raidId}/competitor/nfcserialid/{nfcserialid}")
+     * @Rest\Get("/api/organizer/raid/{raidId}/competitor/nfcserialid/{nfcserialid}")
+     *
+     * @param Request $request     request
+     * @param int     $raidId      raid id
+     * @param int     $nfcserialid nfc badge serial id
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function getCompetitorByNumberNFCSerialIdWithoutRace(Request $request, $raidId, $nfcserialid)
+    {
+        // Get managers
+        $em = $this->getDoctrine()->getManager();
+        $competitorManager = $em->getRepository('AppBundle:Competitor');
+        $raidManager = $em->getRepository('AppBundle:Raid');
+
+        $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
+
+        if (null == $raid) {
+            return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
+        }
+
+        $competitor = $competitorManager->findOneBy(array('raid' => $raidId, 'NFCSerialId' => $nfcserialid));
 
         if ($competitor != null) {
             $competitorService = $this->container->get('CompetitorService');
@@ -233,6 +255,15 @@ class CompetitorController extends AjaxAPIController
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
+        }
+
+        $checkNFCSerialId = $competitorManager->findOneBy(array('raid' => $raidId, 'NFCSerialId' => $NFCSerialId));
+
+        if ($checkNFCSerialId != null) {
+            return parent::buildJSONStatus(
+                Response::HTTP_BAD_REQUEST,
+                'Bracelet déjà attribué à un participant pour ce raid'
+            );
         }
 
         /** @var Competitor $competitor */
@@ -287,6 +318,12 @@ class CompetitorController extends AjaxAPIController
 
         if ($competitor == null) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce competitor n\'existe pas');
+        }
+
+        /** @var Race $race */
+        $race = $competitor->getRace();
+        if (!$race->isRunning()) {
+            return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'La course n\'est pas en cours');
         }
 
         $raceTracksManager = $em->getRepository('AppBundle:RaceTrack');

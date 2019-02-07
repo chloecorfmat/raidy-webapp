@@ -109,7 +109,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     //  console.log("Nothing to undo.");
       iziToast.info({
         message: 'Rien à annuler',
-        position: 'bottomLeft',
+        position: 'bottomRight',
       });
     }
    // console.log(this.redoBuffer);
@@ -160,7 +160,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     } else {
       iziToast.info({
         message: 'Rien à rétablir',
-        position: 'bottomLeft',
+        position: 'bottomRight',
       });
     }
    // console.log(this.redoBuffer);

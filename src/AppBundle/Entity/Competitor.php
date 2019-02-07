@@ -285,7 +285,7 @@ class Competitor
     /**
      * @return mixed
      */
-    public function getisFraud()
+    public function getIsFraud()
     {
         return $this->isFraud;
     }

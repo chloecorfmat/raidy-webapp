@@ -805,6 +805,9 @@
 
   .fab-action-button {
     :hover  {
+      cursor: pointer;
+      opacity: .9;
+
       + .fab-buttons {
         .fab-buttons-link { // sass-lint:disable-line nesting-depth
           &::before { // sass-lint:disable-line nesting-depth
@@ -856,6 +859,11 @@
     transform: scaleY(.5) scaleX(.5) translateY(0) translateX(0);
     transition: .3s;
     width: 3rem;
+
+    &:hover {
+      cursor: pointer;
+      opacity: .9;
+    }
   }
 
   [data-tooltip] {

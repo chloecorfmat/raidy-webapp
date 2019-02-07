@@ -112,8 +112,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         },
         onFailure: function (error) {
           iziToast.error({
-            message: 'Le tracé automatique à échoué : ' + error.message,
-            position: 'bottomLeft',
+            message: 'Le tracé automatique à échoué : '+error.message,
+            position: 'bottomRight',
           });
         }
 
@@ -619,7 +619,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
           keepThis.mapHistory.undo();
         }
       }
-      
+
       if (e.ctrlKey && e.keyCode == 89) { //Y
         keepThis.mapHistory.redo();
       }
