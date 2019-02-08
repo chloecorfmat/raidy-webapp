@@ -233,7 +233,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     let i = 0;
     for (let obj of this.line.getLatLngs()) {
       obj.alt = waypoints[i].ele;
-      //if(waypoints[i].ele === undefined) mapManager.elevator.getElevationAt(obj, function() {});
       i++;
     }
 
@@ -276,6 +275,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   Track.prototype.push = function (feedback = false) {
+    //  console.log(this.line.getLatLngs());
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
@@ -348,4 +348,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   Track.prototype.buildUI = function () {
     mapManager.editorUI.updateTrack(this)
   };
+
+  console.log("Track JS loaded");
 }

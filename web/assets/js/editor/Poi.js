@@ -49,7 +49,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     } else {
       this.helpers = [];
     }
-
+    //console.log(this.helpers);
     this.description = poi.description;
     this.image = poi.image;
     this.isCheckpoint = false;
@@ -130,12 +130,11 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         '<h3>' + this.name + checkpointIcon + '</h3>' +
         '</header>' +
         '<div> ' +
-        '<p style="padding: 0.5rem; text-align: left;">' + shortDesc + '</p>' +
-        '<h4>' + this.helpers.length + '/' + this.requiredHelpers + ' bénévoles requis.</h4>' +
-        '<button style=" background-color: ' + this.color + ';"class="poi-action-btn" id="poi-move-button-' + keepThis.id + '"> <i class="fas fa-arrows-alt"></i> </button>' +
-        '<button style=" background-color: ' + this.color + ';" class="poi-action-btn" id="poi-edit-button-' + keepThis.id + '"> <i class="fas fa-cog"></i> </button>' +
-        '<button style=" background-color: ' + this.color + ';"class="poi-action-btn" id="poi-info-button-' + keepThis.id + '"> <i class="fas three-points">...</i> </button>' +
-
+          '<p style="padding: 0.5rem; text-align: left;">' + shortDesc + '</p>' +
+          '<h4>' + this.helpers.length + '/' + this.requiredHelpers + ' bénévoles requis.</h4>' +
+          '<button style=" background-color: ' + this.color + ';" class="poi-action-btn" id="poi-move-button-' + keepThis.id + '"> <i class="fas fa-arrows-alt"></i> </button>' +
+          '<button style=" background-color: ' + this.color + ';" class="poi-action-btn" id="poi-edit-button-' + keepThis.id + '"> <i class="fas fa-cog"></i> </button>' +
+          '<button style=" background-color: ' + this.color + ';" class="poi-action-btn" id="poi-info-button-' + keepThis.id + '"> <i class="fas three-points">...</i> </button>' +
         '</div>'
       );
 
@@ -159,6 +158,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     let buttonInfo = document.getElementById("poi-info-button-" + keepThis.id);
     let buttonEdit = document.getElementById("poi-edit-button-" + keepThis.id);
+    let buttonMove = document.getElementById("poi-move-button-" + keepThis.id);
 
     if (buttonInfo != null) {
       buttonInfo.addEventListener("click", function () {
@@ -169,12 +169,19 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       buttonEdit.addEventListener("click", function () {
         keepThis.fillEditionPopin();
       });
+
+    }
+    if (buttonMove != null) {
+      buttonMove.addEventListener("click", function () {
+        keepThis.setEditable(!keepThis.marker.editEnabled());
+      });
     }
 
     //  this.marker.openPopup();
     this.marker.on('popupopen', function () {
       let buttonInfo = document.getElementById("poi-info-button-" + keepThis.id);
       let buttonEdit = document.getElementById("poi-edit-button-" + keepThis.id);
+      let buttonMove = document.getElementById("poi-move-button-" + keepThis.id);
 
       if (buttonInfo != null) {
         buttonInfo.addEventListener("click", function () {
@@ -184,6 +191,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       if (buttonEdit != null) {
         buttonEdit.addEventListener("click", function () {
           keepThis.fillEditionPopin();
+        });
+      }
+
+      if (buttonMove != null) {
+        buttonMove.addEventListener("click", function () {
+          keepThis.setEditable(!keepThis.marker.editEnabled());
         });
       }
     });
@@ -254,6 +267,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       node.innerHTML = '<th>Prénom</th><th>Nom</th><th>Tél</th>';
       helpersTable.appendChild(node);
       for (let helper of this.helpers) {
+        console.log(this.helpers);
         node = document.createElement("TR");
         node.innerHTML = '<td>' + helper.firstname + '</td> <td>' + helper.lastname + '</td> <td><a href="tel:' + helper.phone + '">' + helper.phone + '</a></td>';
         helpersTable.appendChild(node);
@@ -270,6 +284,14 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
     //document.getElementById('editPoi_isCheckpoint').checked = this.isCheckpoint;
     document.getElementById('poi-info-img').src = this.image;
+
+    if (mapManager.isEditor) {
+      document.getElementById('poi-info-edit-btn').style.display = 'inline';
+    } else {
+      document.getElementById('poi-info-edit-btn').style.display = 'none';
+    }
     MicroModal.show('poi-info');
   }
+
+  console.log("Track POI loaded");
 }
