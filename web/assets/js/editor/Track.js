@@ -275,6 +275,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
 
   Track.prototype.push = function (feedback = false) {
+    //  console.log(this.line.getLatLngs());
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
@@ -347,4 +348,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   Track.prototype.buildUI = function () {
     mapManager.editorUI.updateTrack(this)
   };
+
+  console.log("Track JS loaded");
 }

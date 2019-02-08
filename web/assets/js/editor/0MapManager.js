@@ -269,6 +269,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.map.on('editable:vertex:deleted', function (e) { //point on track is removed
       let track = keepThis.tracksMap.get(keepThis.currentEditID);
       track.update();
+      console.log(e.vertex.getNext().getIndex());
       keepThis.mapHistory.logModification({
         type: "REMOVE_MARKER_TRACK",
         track: track,
@@ -310,6 +311,8 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         let markerLL = e.vertex.latlng;
         for (let latlng of keepThis.currentTrack.line.getLatLngs()) {
           let distance = Math.sqrt((latlng.lat - markerLL.lat) * (latlng.lat - markerLL.lat) + (latlng.lng - markerLL.lng) * (latlng.lng - markerLL.lng));
+          console.log(distance);
+          console.log(keepThis.map.getZoom());
           if (distance < 0.005) {
           }
         }
@@ -405,6 +408,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     this.mode = mode;
     switch (mode) { //entering mode
       case EditorMode.ADD_POI :
+        console.log("ADD POI");
         document.getElementById("fabActionButton").classList.add('add--poi');
         this.setPoiEditable(false);
         this.waitingPoi = new Poi(this.map);
@@ -606,6 +610,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.mapHistory = new MapHistory();
     let keepThis = this;
+    console.log("Load keyboard listeners");
     let onKeyDown = function (e) {
       if (e.ctrlKey && e.keyCode == 90) { //Z
         if (e.shiftKey) {
@@ -625,6 +630,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         MicroModal.show('add-track-popin');
       }
       if (e.key === "Escape") {
+        console.log("ECHAP");
         if (keepThis.mode == EditorMode.TRACK_EDIT) {
           if (keepThis.currentTrack.line.editor.drawing()) {
             keepThis.currentTrack.line.editor.endDrawing();
