@@ -171,8 +171,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
             }
 
             var date = new Date(Date.parse(lastEdition.lastEdition.date));
-            console.log(new Date(date));
-            console.log(new Date())
             document.getElementById("errorMessage").innerHTML = "Attention " + lastEdition.lastEditor + " a modifié ce raid il y a " + getDuration(date, new Date()).toString() + "  !  <button>X</button>";
 
             document.getElementById('errorMessage').querySelector('button').addEventListener('click', function (e) {
@@ -344,8 +342,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       },
     });
 
-
-    console.log(" add routing control");
     let RoutingCtrl = L.Control.extend({
       options: {
         position: 'topleft'
@@ -361,9 +357,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
           e.preventDefault();
           document.getElementById("RoutingCtrl").classList.toggle("track-routing");
           mapManager.isRootingMode = document.getElementById("RoutingCtrl").classList.contains("track-routing");
-          if (mapManager.isRootingMode) {
-            console.log("track-routing");
-          }
         };
         return container;
       },
@@ -770,8 +763,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
       position: 'bottomRight',
     });
   });
-
-  console.log("Editor JS loaded");
 
   MapManager.prototype.displayTrackButton = function () {
   }

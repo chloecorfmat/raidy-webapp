@@ -71,7 +71,6 @@ function helpersList() {
           // <button class="btn btn-validate-helper" data-helperid="{{ helper.id }}" data-raidid="{{ raid_id }}">Valider</button>
       }
       xhr_object.send(JSON.stringify({poi : data}));
-      console.log(mapManager);
       mapManager.reloadPois();
 
       iziToast.success({
@@ -79,7 +78,6 @@ function helpersList() {
           position: 'bottomRight',
       });
 
-      //location.reload(true);
     });
   };
 

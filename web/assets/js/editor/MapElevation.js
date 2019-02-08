@@ -77,7 +77,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         let alti = result['elevations'][0].z;
         // exploitation des resultats : "result" est de type Gp.Services.AltiResponse
         latlng.alt = alti;
-        //  console.log(alti);
         callback();
       },
       onFailure: function () {
@@ -107,7 +106,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         i++;
       }
     }
-    // console.log(datapoints);
+
     let data = {
       datasets: [{
         label: 'Cubic interpolation (monotone)',

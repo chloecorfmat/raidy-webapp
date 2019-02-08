@@ -10,7 +10,6 @@ GPXImporter.prototype.openGPX = function (file) {
   reader.onload = function (event) {
     keepThis.gpxParser = new gpxParser();
     keepThis.gpxParser.parse(reader.result);
-    console.log(keepThis.gpxParser);
 
     let tracks = keepThis.gpxParser['tracks'];
     let routes = keepThis.gpxParser['routes'];
@@ -77,7 +76,6 @@ GPXImporter.prototype.importWaypoint = function (id, poiType) {
   poi.editable = false;
   poi.poiType = this.mapManager.poiTypesMap.get(parseInt(poiType));
   poi.marker = L.marker([gpxWaypoint.lat, gpxWaypoint.lon]);
-  console.log(poi);
 
   let xhr_object = new XMLHttpRequest();
   xhr_object.open('PUT', '/editor/raid/' + raidID + '/poi', true);
