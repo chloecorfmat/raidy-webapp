@@ -159,6 +159,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     let buttonInfo = document.getElementById("poi-info-button-" + keepThis.id);
     let buttonEdit = document.getElementById("poi-edit-button-" + keepThis.id);
+    let buttonMove = document.getElementById("poi-move-button-" + keepThis.id);
 
     if (buttonInfo != null) {
       buttonInfo.addEventListener("click", function () {
@@ -168,6 +169,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     if (buttonEdit != null) {
       buttonEdit.addEventListener("click", function () {
         keepThis.fillEditionPopin();
+      });
+    }
+
+    if (buttonEdit != null) {
+      buttonEdit.addEventListener("click", function () {
+        keepThis.marker.toggleEdit();
       });
     }
 
@@ -271,6 +278,12 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     });
     //document.getElementById('editPoi_isCheckpoint').checked = this.isCheckpoint;
     document.getElementById('poi-info-img').src = this.image;
+
+    if(mapManager.isEditor){
+      document.getElementById('poi-info-edit-btn').style.display = 'inline';
+    }else{
+      document.getElementById('poi-info-edit-btn').style.display = 'none';
+    }
     MicroModal.show('poi-info');
   }
 

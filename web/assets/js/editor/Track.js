@@ -233,7 +233,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     let i = 0;
     for (let obj of this.line.getLatLngs()) {
       obj.alt = waypoints[i].ele;
-      //if(waypoints[i].ele === undefined) mapManager.elevator.getElevationAt(obj, function() {});
       i++;
     }
 

@@ -184,7 +184,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
     this.map.on('editable:enable', function () {
       keepThis.currentTrack = keepThis.tracksMap.get(keepThis.currentEditID);
-      if (!keepThis.currentTrack.line.isEmpty()) {
+      if (keepThis.currentTrack &&!keepThis.currentTrack.line.isEmpty()) {
         let latlngs = keepThis.currentTrack.line.getLatLngs();
         keepThis.routingLatlng = latlngs[latlngs.length - 1];
       } else {
