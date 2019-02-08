@@ -1,3 +1,5 @@
+{%  set base_url = app.request.getSchemeAndHttpHost() %}
+
 {% if form is defined %}
     {% form_theme form 'form/fields.html.twig' %}
 {% endif %}
@@ -11,7 +13,7 @@
 {% endif %}
 
 {% if logo_url is not defined %}
-    {% set logo_url = '/' %}
+    {% set logo_url = path('homepage') %}
 {% endif %}
 
 <!DOCTYPE html>
@@ -37,7 +39,7 @@
         {% block meta %}{% endblock %}
     </head>
     <body class="{{ base_class }} {% block body_class %}{% endblock %}">
-        <header>
+        <header class="header">
             <div class="header--raidy">
             <a href="{{ logo_url }}" class="logo">
                 <img src="{{ asset('assets/images/logo-white.svg') }}" alt="Logo Raidy">
@@ -55,7 +57,7 @@
                     {% endif %}
 
                     {% if "ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles %}
-                        <a href="{{ path('listRaid') }}" class="roles--menu--item {% if (base_class=='organizer') %} item--active{% endif %}">Organizer</a>
+                        <a href="{{ path('listRaid') }}" class="roles--menu--item {% if (base_class=='organizer') %} item--active{% endif %}">Mes raids</a>
                     {% endif %}
 
                     {% if ("ROLE_ORGANIZER" in app.user.roles or "ROLE_COLLABORATOR" in app.user.roles) and "ROLE_HELPER" in app.user.roles %}
@@ -63,7 +65,7 @@
                     {% endif %}
 
                     {% if "ROLE_HELPER" in app.user.roles %}
-                        <a href="{{ path('helper') }}" class="roles--menu--item {% if (base_class=='helper') %} item--active{% endif %}">Helper</a>
+                        <a href="{{ path('helper') }}" class="roles--menu--item {% if (base_class=='helper') %} item--active{% endif %}">Mes bénévolats</a>
                     {% endif %}
                 </nav>
                 {% endif %}
@@ -103,10 +105,7 @@
             <footer>
                 <ul>
                     <li>
-                        <a href="{{ path('legalNotice') }}">Mentions légales</a>
-                    </li>
-                    <li>
-                        <a href="{{ path('privacyPolicy') }}">Politique de confidentialité</a>
+                        <a href="{{ path('legalNotice') }}">Mentions légales & Politique de confidentialité</a>
                     </li>
                 </ul>
                 <a href="http://www.enssat.fr/" class="logo logo--enssat">
@@ -114,6 +113,45 @@
                 </a>
             </footer>
         {% endblock %}
+
+
+        <!-- POI INFO  -->
+        <div id="poi-info" aria-hidden="true" class="modal" data-micromodal-close>
+            <!-- [2] -->
+            <div tabindex="-1" data-micromodal-close>
+                <!-- [3] -->
+                <div role="dialog" aria-modal="true" aria-labelledby="add-track-title" data-micromodal-close>
+                    <div class="modal-container">
+                        <header id="poi-info-header" class="modal--header ">
+                            <h2 id="poi-info-title">
+                                Mon POI
+                            </h2>
+                            <!-- [4] -->
+                            <button id="poi-info-close-btn" aria-label="Fermer la fenêtre" data-micromodal-close><i
+                                        data-micromodal-close class="fas fa-times"></i></button>
+                        </header>
+                        <div id="poi-info-content" class="modal--content">
+                            <img id="poi-info-img" src="" alt="" width="100%">
+                            <h4 id="poi-info-helpers" ></h4>
+                            <table id="poi-info-helpers-table" style="width:100%">
+                                <tr>
+                                    <th>Prénom</th>
+                                    <th>Nom</th>
+                                    <th>Tél</th>
+                                </tr>
+                            </table>
+                            <p id="poi-info-description"></p>
+                            <button id="poi-info-edit-btn" type="button" class="btn" >Éditer</button>
+                            <button type="button" class="btn btn--danger" data-micromodal-close>Fermer</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            var base_url = "{{ base_url }}";
+        </script>
         <!--script src="https://cdn.klokantech.com/mapbox-gl-js/v0.43.0/mapbox-gl.js"></--script-->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.24/browser.js" type="text/javascript"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js" type="text/javascript"></script>

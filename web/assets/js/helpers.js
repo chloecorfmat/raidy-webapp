@@ -71,13 +71,13 @@ function helpersList() {
           // <button class="btn btn-validate-helper" data-helperid="{{ helper.id }}" data-raidid="{{ raid_id }}">Valider</button>
       }
       xhr_object.send(JSON.stringify({poi : data}));
+      mapManager.reloadPois();
 
       iziToast.success({
           message: 'Les modifications ont bien été enregistrées.',
           position: 'bottomRight',
       });
 
-      //location.reload(true);
     });
   };
 

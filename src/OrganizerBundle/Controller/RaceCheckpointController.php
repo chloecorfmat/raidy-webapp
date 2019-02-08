@@ -40,6 +40,7 @@ class RaceCheckpointController extends AjaxAPIController
         $em = $this->getDoctrine()->getManager();
 
         $raidManager = $em->getRepository('AppBundle:Raid');
+        $raceManager = $em->getRepository('AppBundle:Race');
         $raceTrackManager = $em->getRepository('AppBundle:RaceTrack');
         $poiManager = $em->getRepository('AppBundle:Poi');
 
@@ -78,7 +79,11 @@ class RaceCheckpointController extends AjaxAPIController
         $em->persist($raceCheckpoint);
         $em->flush();
 
-        return new Response(json_encode($raceCheckpointService->raceCheckpointToObj($raceCheckpoint)));
+        $races = $raceManager->findBy(array('raid' => $raid));
+
+        $raceService = $this->container->get('RaceService');
+
+        return new Response($raceService->racesArrayToJson($races));
     }
 
     /**
@@ -98,6 +103,7 @@ class RaceCheckpointController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raceCheckpointManager = $em->getRepository('AppBundle:RaceCheckpoint');
+        $raceManager = $em->getRepository('AppBundle:Race');
 
         // Find the user
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
@@ -112,17 +118,52 @@ class RaceCheckpointController extends AjaxAPIController
         }
 
         $data = $request->request->all();
-        $raceCheckpoint = $raceCheckpointManager->find($raceCheckpointId);
 
-        $raceCheckpoint->setOrder($data['order']);
+        /** @var RaceTrack $raceTrack */
+        $raceCheckpoint = $raceCheckpointManager->find($raceCheckpointId);
+        $order = $raceCheckpoint->getOrder();
 
         if (null != $raceCheckpoint) {
+            if ($data['direction'] == "up") {
+                if ($order > 0) {
+                    /** @var RaceCheckpoint $raceCheckpoint */
+                    $prevCp = $raceCheckpointManager->findOneBy(
+                        [
+                            'order' => $order-1,
+                            'raceTrack' => $raceCheckpoint->getRaceTrack(),
+                        ]
+                    );
+
+                    $raceCheckpoint->setOrder($order-1);
+                    $prevCp->setOrder($order);
+                }
+            } else {
+                /** @var RaceTrack $raceTrack */
+                $raceTrack = $raceCheckpoint->getRaceTrack();
+                $checkpointCount = count($raceTrack->getCheckpoints());
+                if ($order < $checkpointCount-1) {
+                    /** @var RaceCheckpoint $prevCp */
+                    $prevCp = $raceCheckpointManager->findOneBy(
+                        [
+                            'order' => $order+1,
+                            'raceTrack' => $raceCheckpoint->getRaceTrack(),
+                        ]
+                    );
+
+                    $raceTrack->setOrder($order+1);
+                    $prevCp->setOrder($order);
+                }
+            }
             $em->flush();
         } else {
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'This track does not exist');
         }
 
-        return parent::buildJSONStatus(Response::HTTP_OK, $data['order']);
+        $races = $raceManager->findBy(array('raid' => $raid));
+
+        $raceService = $this->container->get('RaceService');
+
+        return new Response($raceService->racesArrayToJson($races));
     }
 
     /**
@@ -143,6 +184,7 @@ class RaceCheckpointController extends AjaxAPIController
 
         $raidManager = $em->getRepository('AppBundle:Raid');
         $raceCheckpointManager = $em->getRepository('AppBundle:RaceCheckpoint');
+        $raceManager = $em->getRepository('AppBundle:Race');
 
         // Find the user
         $raid = $raidManager->findOneBy(array('uniqid' => $raidId));
@@ -175,6 +217,10 @@ class RaceCheckpointController extends AjaxAPIController
 
         $em->flush();
 
-        return parent::buildJSONStatus(Response::HTTP_OK, 'Deleted');
+        $races = $raceManager->findBy(array('raid' => $raid));
+
+        $raceService = $this->container->get('RaceService');
+
+        return new Response($raceService->racesArrayToJson($races));
     }
 }

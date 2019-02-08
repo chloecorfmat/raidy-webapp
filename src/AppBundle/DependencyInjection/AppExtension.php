@@ -22,5 +22,8 @@ class AppExtension extends Extension
         foreach ($config['twitter'] as $key => $value) {
             $container->setParameter('app.twitter.' . $key, $value);
         }
+
+        $container->setParameter('app.mail.from', $config['mail']['from']);
+        $container->setParameter('app.mail.reply_to', $config['mail']['reply_to']);
     }
 }

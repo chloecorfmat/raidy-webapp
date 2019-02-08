@@ -31,6 +31,7 @@ class CompetitorService
         $obj['firstname'] = $competitor->getFirstname();
         $obj['lastname'] = $competitor->getLastname();
         $obj['number_sign'] = $competitor->getNumberSign();
+        $obj['nfc_serial_id'] = $competitor->getNFCSerialId();
         $obj['category'] = $competitor->getCategory();
         $obj['sex'] = $competitor->getSex();
         $obj['birthyear'] = $competitor->getBirthYear();
@@ -65,7 +66,6 @@ class CompetitorService
 
         $competitor->setUniqid(uniqid());
 
-
         return $competitor;
     }
 
@@ -75,11 +75,11 @@ class CompetitorService
      *
      * @return Competitor
      */
-    public function competitorFromCsv($array, $raidId) {
+    public function competitorFromCsv($array, $raidId)
+    {
         $competitor = new Competitor();
-
-        $competitor->setFirstname($array[0]);
-        $competitor->setLastname($array[1]);
+        $competitor->setLastname($array[0]);
+        $competitor->setFirstname($array[1]);
         $competitor->setNumberSign($array[2]);
         $competitor->setCategory($array[3]);
         $competitor->setSex($array[4]);
@@ -92,8 +92,64 @@ class CompetitorService
 
         $competitor->setUniqid(uniqid());
 
-
         return $competitor;
+    }
 
+    /**
+     * @param array $competitors
+     *
+     * @return false|string
+     */
+    public function competitorsArrayToJson($competitors)
+    {
+        $competitorsObj = [];
+
+        foreach ($competitors as $competitor) {
+            $obj = [];
+
+            $obj['id'] = $competitor->getUniqid();
+            $obj['firstname'] = $competitor->getFirstname();
+            $obj['lastname'] = $competitor->getLastname();
+            $obj['number_sign'] = $competitor->getNumberSign();
+            $obj['nfc_serial_id'] = $competitor->getNFCSerialId();
+            $obj['category'] = $competitor->getCategory();
+            $obj['sex'] = $competitor->getSex();
+            $obj['birthyear'] = $competitor->getBirthYear();
+            if ($competitor->getRace() != null) {
+                $obj['race'] = [];
+                $obj['race']['id'] = $competitor->getRace()->getId();
+                $obj['race']['name'] = $competitor->getRace()->getName();
+            } else {
+                $obj['race'] = null;
+            }
+
+            $obj['raid'] = $competitor->getRaid()->getId();
+
+            $competitorsObj[] = $obj;
+        }
+
+        return json_encode($competitorsObj);
+    }
+
+    /**
+     * @param mixed $data
+     * @return bool
+     */
+    public function checkRaceTimingData($data)
+    {
+
+        if (!isset($data['NFCSerialId']) || $data['NFCSerialId'] == null) {
+            return false;
+        }
+
+        if (!isset($data['time']) || $data['time'] == null) {
+            return false;
+        }
+
+        if (!isset($data['poi_id']) || $data['poi_id'] == null) {
+            return false;
+        }
+
+        return true;
     }
 }

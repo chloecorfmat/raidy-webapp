@@ -12,7 +12,7 @@ use AppBundle\Entity\Contact;
 use AppBundle\Entity\Helper;
 use OrganizerBundle\Security\RaidVoter;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -183,32 +183,29 @@ class OrganizerContactController extends Controller
         $form = $this->createFormBuilder($formContact)
             ->add('role', TextType::class, ['label' => 'Rôle'])
             ->add(
+                'helper',
+                ChoiceType::class,
+                array(
+                    'label' => 'Bénévole responsable',
+                    'required' => false,
+                    'choices' => $helpers,
+                    'choice_label' => function ($helper) {
+                        /**
+                         * @var Helper
+                         */
+                        $helperName = $helper->getUser()->getFirstName() . ' ' . $helper->getUser()->getLastName();
+
+                        return $helperName;
+                    },
+                )
+            )
+            ->add(
                 'phoneNumber',
                 TextType::class,
                 [
                     'label' => 'Téléphone',
                     'required' => false,
-                    'attr' => [
-                        'data-help' => 'Le numéro de téléphone doit comporter 10 chiffres.',
-                    ],
                 ]
-            )
-            ->add(
-                'helper',
-                ChoiceType::class,
-                array(
-                'label' => 'Bénévole responsable',
-                'required' => false,
-                'choices' => $helpers,
-                'choice_label' => function ($helper) {
-                    /**
-                     * @var Helper
-                     */
-                    $helperName = $helper->getUser()->getFirstName() . ' ' . $helper->getUser()->getLastName();
-
-                    return $helperName;
-                },
-                )
             )
             ->add('submit', SubmitType::class, ['label' => 'Créer un contact'])
             ->getForm();

@@ -64,7 +64,7 @@ class PoiServiceTest extends TestCase
         $poi->setIsCheckpoint(true);
 
         $json = $this->poiService->poiToJson($poi);
-        $this->assertEquals('{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"isCheckpoint":"1","poiType":1,"description":"Test description","image":""}', $json);
+        $this->assertEquals('{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"isCheckpoint":"1","poiType":1,"description":"Test description","image":"","helpers":[]}', $json);
     }
 
     public function testPoiArrayToJSON()
@@ -102,7 +102,7 @@ class PoiServiceTest extends TestCase
         $pois[] = $poi;
 
         $json = $this->poiService->poisArrayToJson($pois);
-        $this->assertEquals('[{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"image":"","description":"Test description","isCheckpoint":"1","poiType":1}]', $json);
+        $this->assertEquals('[{"id":1,"name":"POI","longitude":"0","latitude":"0","requiredHelpers":"0","raid":1,"image":"","description":"Test description","isCheckpoint":"1","poiType":1,"helpers":[]}]', $json);
     }
 
     public function testCheckDataArray()

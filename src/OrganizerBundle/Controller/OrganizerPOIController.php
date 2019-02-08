@@ -3,10 +3,12 @@
 namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
+use AppBundle\Entity\Helper;
 use AppBundle\Entity\Poi;
 use AppBundle\Entity\Raid;
+use AppBundle\Service\HelperService;
 use OrganizerBundle\Security\RaidVoter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -178,12 +180,16 @@ class OrganizerPOIController extends AjaxAPIController
         $em = $this->getDoctrine()->getManager();
         $poiManager = $em->getRepository('AppBundle:Poi');
         $raidManager = $em->getRepository('AppBundle:Raid');
+        $helperManager = $em->getRepository('AppBundle:Helper');
 
         //$raid = $raidManager->findOneBy(array('id' => $raidId));
         $raid = $raidManager->findOneBy(['uniqid' => $raidId]);
 
         // Get the user
         $user = $this->get('security.token_storage')->getToken()->getUser();
+
+        /** @var HelperService $helperService */
+        $helperService = $this->container->get('HelperService');
 
         if (null == $raid) {
             return parent::buildJSONStatus(Response::HTTP_NOT_FOUND, 'Ce raid n\'existe pas');
@@ -195,8 +201,24 @@ class OrganizerPOIController extends AjaxAPIController
             return parent::buildJSONStatus(Response::HTTP_BAD_REQUEST, 'You are not allowed to access this raid');
         } elseif ($authChecker->isGranted(RaidVoter::EDIT, $raid)) {
             $pois = $poiManager->findBy(array('raid' => $raid));
+            /** @var Poi $poi */
+            foreach ($pois as $poi) {
+                $helpers = $helperManager->findBy(['poi' => $poi]);
+                $helpersArray = [];
+                /** @var Helper $helper */
+                foreach ($helpers as $helper) {
+                    $usr = $helper->getUser();
+
+                    $h = [];
+                    $h['firstname'] = $usr->getFirstName();
+                    $h['lastname'] = $usr->getLastName();
+                    $h['phone'] = $usr->getPhone();
+
+                    $helpersArray[] = $h;
+                }
+                $poi->setHelpers($helpersArray);
+            }
         } else {
-            $helperManager = $em->getRepository('AppBundle:Helper');
             $helper = $helperManager->findOneBy(['user' => $user, 'raid' => $raid]);
 
             if (!is_null($helper) && !is_null($helper->getPoi())) {

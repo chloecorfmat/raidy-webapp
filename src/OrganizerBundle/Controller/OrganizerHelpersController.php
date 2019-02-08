@@ -4,7 +4,7 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
 use OrganizerBundle\Security\RaidVoter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -55,7 +55,8 @@ class OrganizerHelpersController extends AjaxAPIController
                 /* Send email to helper */
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Nouvelle affectation pour le raid ' . $raid->getName())
-                    ->setFrom('raidy@enssat.fr')
+                    ->setFrom($this->container->getParameter('app.mail.from'))
+                    ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
                     ->setTo($helper->getUser()->getEmail())
                     ->setBody(
                         $this->renderView(
@@ -106,6 +107,7 @@ class OrganizerHelpersController extends AjaxAPIController
         return $this->render(
             'OrganizerBundle:Helpers:helpers.html.twig',
             [
+            'raid' => $raid,
             'raid_id' => $id,
             'raidName' => $raid->getName(),
             'helpers' => $helpers,

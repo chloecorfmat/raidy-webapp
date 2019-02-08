@@ -4,4 +4,6 @@
 
 {% block fos_user_content %}
     {{ include('@FOSUser/Security/login_content.html.twig') }}
+    <a href="{{ path('fos_user_resetting_request') }}">Mot de passe oublié ?</a>
+
 {% endblock fos_user_content %}

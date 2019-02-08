@@ -3,16 +3,16 @@
  * Manage all actions on Tracks on the map
  */
 let Track;
-if(typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
+if (typeof(document.getElementById("map")) !== "undefined" && document.getElementById("map") !== null) {
   let patternParameters;
   Track = function (map) {
-      this.map = map;
+    this.map = map;
 
     this.startMarker = L.marker([0, 0]);
     this.endMarker = L.marker([0, 0]);
 
     this.id = '';
-      this.name = '';
+    this.name = '';
     this.color = '';
     this.sportType = 1;
 
@@ -37,45 +37,47 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     this.addDecorator();
 
-    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
-      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #78e08f'  + ';" />'
+    this.startMarker.setIcon(L.divIcon({
+      className: 'my-custom-pin', iconAnchor: [0, 0], labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [2, 2],
+      html: '<span class="track-marker" style=" border:2px solid ' + this.color + '; background-color: #78e08f' + ';" />'
     }));
-    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
-      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #f74a45' +  ';" />'
+    this.endMarker.setIcon(L.divIcon({
+      className: 'my-custom-pin', iconAnchor: [0, 0], labelAnchor: [0, 0], popupAnchor: [0, 0], iconSize: [5, 5],
+      html: '<span class="track-marker" style=" border:2px solid ' + this.color + '; background-color: #f74a45' + ';" />'
     }));
 
   };
-  Track.prototype.addDecorator = function(){
-    if(this.decorator != undefined) {
+  Track.prototype.addDecorator = function () {
+    if (this.decorator != undefined) {
       this.map.removeLayer(this.decorator);
     }
     patternParameters = {
       offset: 100,
-      endOffset : 100,
+      endOffset: 50,
       repeat: 100,
       symbol: L.Symbol.arrowHead({
         pixelSize: 12,
-        pathOptions: {fillOpacity: 1, color: this.color,  weight: 1}
+        pathOptions: {fillOpacity: 1, color: this.color, weight: 1}
       })
     };
 
     this.decorator = L.polylineDecorator(this.line, {
       patterns: [patternParameters]
     });
-    
+
     this.decorator.addTo(this.map);
   }
   Track.prototype.setSportType = function (sportType) {
-        this.sportType = sportType;
-    };
+    this.sportType = sportType;
+  };
 
   Track.prototype.setEditable = function (b) {
-    if(b){
+    if (b) {
       this.line.enableEdit();
       this.decorator.removeFrom(this.map);
-    }else{
+    } else {
       this.line.disableEdit();
-      if(this.visible) {
+      if (this.visible) {
         this.decorator.addTo(this.map);
         if (!this.line.isEmpty()) {
           this.decorator.removeFrom(this.map);
@@ -95,11 +97,22 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
   Track.prototype.update = function () {
 
     if (!this.line.isEmpty()) {
+      if(!this.map.hasLayer(this.startMarker)){
+        this.map.addLayer(this.startMarker);
+      }
       let latLngs = this.line.getLatLngs();
       this.startMarker.setLatLng(latLngs[0]);
       if (latLngs.length > 1) {
+        if(!this.map.hasLayer(this.endMarker)){
+          this.map.addLayer(this.endMarker);
+        }
         this.endMarker.setLatLng(latLngs[latLngs.length - 1]);
+      }else{
+        this.map.removeLayer(this.endMarker);
       }
+    }else{
+      this.map.removeLayer(this.startMarker);
+      this.map.removeLayer(this.endMarker);
     }
   };
 
@@ -111,7 +124,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
       ret = {};
 
     for (var i = 0; i < points.length - 1; i++) {
-      var diff = parseFloat(points[i + 1].ele) - parseFloat(points[i].ele);
+      var diff = parseFloat(points[i + 1].alt) - parseFloat(points[i].alt);
 
       if (diff < 0) {
         dm += diff;
@@ -124,7 +137,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     var sum = 0;
 
     for (var i = 0, len = points.length; i < len; i++) {
-      var ele = parseFloat(points[i].ele);
+      var ele = parseFloat(points[i].alt);
       elevation.push(ele);
       sum += ele;
     }
@@ -170,7 +183,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.hide();
     mapManager.group.addLayer(this.line);
 
-   this.addDecorator();
+    this.addDecorator();
     this.startMarker.addTo(this.map);
 
     this.endMarker.addTo(this.map);
@@ -186,9 +199,9 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
   Track.prototype.toJSON = function () {
     let latlong = [];
-    let i =0;
+    let i = 0;
     for (let obj of this.line.getLatLngs()) {
-      latlong.push({lat: obj.lat, lng: obj.lng, ele : obj.ele});
+      latlong.push({lat: obj.lat, lng: obj.lng, ele: obj.alt});
       i++;
     }
     let track =
@@ -219,18 +232,20 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
 
     let i = 0;
     for (let obj of this.line.getLatLngs()) {
-      obj.ele = waypoints[i].ele;
+      obj.alt = waypoints[i].ele;
       //if(waypoints[i].ele === undefined) mapManager.elevator.getElevationAt(obj, function() {});
       i++;
     }
 
     this.line.addTo(mapManager.group);
 
-    this.startMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0],
-      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #78e08f'  + ';" />'
+    this.startMarker.setIcon(L.divIcon({
+      className: 'my-custom-pin', iconAnchor: [0, 0], labelAnchor: [0, 0], popupAnchor: [0, 0],
+      html: '<span class="track-marker" style=" border:2px solid ' + this.color + '; background-color: #78e08f' + ';" />'
     }));
-    this.endMarker.setIcon(L.divIcon({className: 'my-custom-pin',iconAnchor: [0, 0],labelAnchor: [0, 0], popupAnchor: [0, 0],
-      html: '<span class="track-marker" style=" border:2px solid '+this.color+'; background-color: #f74a45' +  ';" />'
+    this.endMarker.setIcon(L.divIcon({
+      className: 'my-custom-pin', iconAnchor: [0, 0], labelAnchor: [0, 0], popupAnchor: [0, 0],
+      html: '<span class="track-marker" style=" border:2px solid ' + this.color + '; background-color: #f74a45' + ';" />'
     }));
 
     this.line.bindPopup('' +
@@ -247,7 +262,7 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.addDecorator();
     this.update();
 
-    if(!this.visible) {
+    if (!this.visible) {
       this.map.removeLayer(this.line);
       this.map.removeLayer(this.decorator);
       this.map.removeLayer(this.startMarker);
@@ -260,12 +275,28 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.fromObj(track);
   };
 
-  Track.prototype.push = function () {
-    console.log(this.line.getLatLngs());
+  Track.prototype.push = function (feedback = false) {
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
+    if (feedback) {
+      xhr_object.onreadystatechange = function () {
+        if (xhr_object.readyState === 4 && xhr_object.status === 200) {
+          iziToast.success({
+            message: 'Le parcours a bien été sauvergardé.',
+            position: 'bottomRight',
+          });
+        }else if (xhr_object.readyState === 4) {
+          iziToast.error({
+            message: 'Impossible d\'enregistrer le parcours. Vérifier votre connexion internet.',
+            position: 'bottomRight',
+          });
+        }
+      };
+
+    }
     xhr_object.send(this.toJSON());
+
 
     //Encode html entities to display purpose only
     this.name = htmlentities.encode(this.name);
@@ -274,16 +305,35 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     this.calculDistance();
     this.calculElevation();
     li.querySelector('.track-distance').innerHTML = Math.round(10 * this.distance / 1000) / 10 + 'Km ';
-    li.querySelector('.track-elev-gain').innerHTML = Math.round(this.posElev)+'m';
-    li.querySelector('.track-elev-lose').innerHTML = Math.round(this.negElev)+'m';
+    li.querySelector('.track-elev-gain').innerHTML = Math.round(this.posElev) + 'm';
+    li.querySelector('.track-elev-lose').innerHTML = Math.round(this.negElev) + 'm';
     mapManager.editorUI.updateTrack(this);
     this.decorator.removeFrom(this.map);
 
   };
-  Track.prototype.remove = function () {
+  Track.prototype.remove = function (feedback = false) {
     let xhr_object = new XMLHttpRequest();
     xhr_object.open('DELETE', '/editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
+
+    if (feedback) {
+      xhr_object.onreadystatechange = function () {
+        if (xhr_object.readyState  === 4) {
+          if (xhr_object.status === 200) {
+            iziToast.success({
+              message: 'Le parcours a bien été supprimé.',
+              position: 'bottomRight',
+            });
+          } else {
+            iziToast.error({
+              message: 'Impossible de supprimer le parcours. Vérifier votre connexion internet.',
+              position: 'bottomRight',
+            });
+          }
+        }
+        ;
+      }
+    }
 
     xhr_object.send(null);
 
@@ -296,8 +346,6 @@ if(typeof(document.getElementById("map")) !== "undefined" && document.getElement
     mapManager.tracksMap.delete(this.id);
   };
   Track.prototype.buildUI = function () {
-    mapManager.editorUI.updatePoi()
+    mapManager.editorUI.updateTrack(this)
   };
-
-  console.log("Track JS loaded");
 }

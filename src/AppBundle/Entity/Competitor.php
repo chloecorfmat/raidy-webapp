@@ -97,6 +97,16 @@ class Competitor
     private $uniqid;
 
     /**
+     * @ORM\Column(name="nfcserialid", type="text", nullable=true)
+     */
+    private $NFCSerialId;
+
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isFraud = false;
+
+    /**
      * @return mixed
      */
     public function getId()
@@ -254,5 +264,37 @@ class Competitor
     public function setUniqid($uniqid)
     {
         $this->uniqid = $uniqid;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getNFCSerialId()
+    {
+        return $this->NFCSerialId;
+    }
+
+    /**
+     * @param mixed $NFCSerialId
+     */
+    public function setNFCSerialId($NFCSerialId)
+    {
+        $this->NFCSerialId = $NFCSerialId;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getIsFraud()
+    {
+        return $this->isFraud;
+    }
+
+    /**
+     * @param mixed $isFraud
+     */
+    public function setIsFraud($isFraud)
+    {
+        $this->isFraud = $isFraud;
     }
 }

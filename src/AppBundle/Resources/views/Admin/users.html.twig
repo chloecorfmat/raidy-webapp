@@ -62,7 +62,7 @@
                         >
                     </td>
                     <td>
-                        <a href="{{ path('editOrganizer', {'id': user.id}) }}" class="btn">Editer</a>
+                        <a href="{{ path('editOrganizer', {'id': user.id, 'userPath': true}) }}" class="btn">Editer</a>
                     </td>
                 </tr>
             {% endfor %}

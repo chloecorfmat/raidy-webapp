@@ -4,34 +4,39 @@
         <ul class="race--list">
             <li v-for="(race, index) in races">
                 <header>
-                    <h3>{{ race.name }}</h3>
+                    <div>
+                        <h3>{{ race.name }}</h3>
+                    </div>
                     <nav>
-                        <button v-on:click="openNewTrackPopin(race)">Ajouter un parcours</button>
-                        <button class="btn btn--danger" v-on:click="displayRemoveRacePopin(race)"><i class="fa fa-trash"></i></button>
+                        <button v-on:click="openStartRacePopin(race)" v-if="race.startTime == null" class="btn">Démarrer l'épreuve</button>
+                        <button v-on:click="openStopRacePopin(race)" v-if="race.startTime != null && race.endTime == null" class="btn">Arrêter l'épreuve</button>
+                        <strong v-if="race.startTime != null && race.endTime != null">Epreuve terminée</strong>
+                        <button v-on:click="openNewTrackPopin(race)" v-if="race.startTime == null" >Ajouter un parcours</button>
+                        <button class="btn btn--danger" v-if="race.startTime == null" v-on:click="displayRemoveRacePopin(race)"><i class="fa fa-trash"></i></button>
                     </nav>
                 </header>
                 <ul class="race--tracks">
                     <li class="race--track" v-for="(raceTrack, idx) in race.raceTracks">
                         <header>
                             <h4>{{ htmlDecode(raceTrack.name) }}</h4>
-                            <nav class="race--track--toolbar">
+                            <nav class="race--track--toolbar" v-if="race.startTime == null">
                                 <button class="btn" v-on:click="openNewCheckpointPopin(raceTrack)">Ajouter un checkpoint</button>
-                                <div class="race--track--checkpoint--order">
+                                <div class="race--track--checkpoint--order" v-if="race.startTime == null">
                                     <button class="btn" v-on:click="moveTrackUp(idx, races[index].raceTracks, races[index])"><i class="fa fa-caret-up"></i></button>
                                     <button class="btn" v-on:click="moveTrackDown(idx, races[index].raceTracks, races[index])"><i class="fa fa-caret-down"></i></button>
                                 </div>
-                                <button class="btn btn--danger" v-on:click="removeRaceTrack(index, races[index], races[index].raceTracks[idx])"><i class="fa fa-trash"></i></button>
+                                <button class="btn btn--danger" v-if="race.startTime == null" v-on:click="removeRaceTrack(index, races[index], races[index].raceTracks[idx])"><i class="fa fa-trash"></i></button>
                             </nav>
                         </header>
                         <ul class="race--track--checkpoints">
                             <li class="race--track--checkpoint" v-for="(checkpoint, checkpointIdx) in raceTrack.checkpoints">
                                 <h5>{{ htmlDecode(checkpoint.poi.name) }}</h5>
                                 <div class="race--track--checkpoint--tools">
-                                    <div class="race--track--checkpoint--order">
+                                    <div class="race--track--checkpoint--order" v-if="race.startTime == null">
                                         <button class="btn"><i class="fa fa-caret-up" v-on:click="moveCheckpointUp(checkpointIdx, races[index].raceTracks[idx].checkpoints,races[index], races[index].raceTracks[idx])"></i></button>
                                         <button class="btn"><i class="fa fa-caret-down" v-on:click="moveCheckpointDown(checkpointIdx, races[index].raceTracks[idx].checkpoints,races[index], races[index].raceTracks[idx])"></i></button>
                                     </div>
-                                    <button class="btn btn--danger" v-on:click="removeRaceCheckpoint(index, races[index], idx, races[index].raceTracks[idx], raceTrack.checkpoints[checkpointIdx])"><i class="fa fa-trash"></i></button>
+                                    <button class="btn btn--danger" v-if="race.startTime == null" v-on:click="removeRaceCheckpoint(index, races[index], idx, races[index].raceTracks[idx], raceTrack.checkpoints[checkpointIdx])"><i class="fa fa-trash"></i></button>
                                 </div>
                             </li>
                             <li class="race--track--checkpoint" v-if="raceTrack === currentRaceTrack">
@@ -81,8 +86,8 @@
                                             <input class="form--input-text" type="text" id="addRace_name"
                                                    required="required" maxlength="100" v-model="newRace.name">
                                         </div>
-                                        <div class="actions modal--actions">
-                                            <button type="submit" id="addRace_submit" class="btn">Ajouter un parcours</button>
+                                        <div class="actions">
+                                            <button type="submit" id="addRace_submit" class="btn">Ajouter une épreuve</button>
                                             <button type="button" class="btn btn--danger" data-micromodal-close>Annuler</button>
                                         </div>
                                     </div>
@@ -126,6 +131,57 @@
                     </div>
                 </div>
             </div>
+
+            <!-- START RACE -->
+            <div id="start-race" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+                <!-- [2] -->
+                <div tabindex="-1" data-micromodal-close>
+                    <!-- [3] -->
+                    <div role="dialog" aria-modal="true" aria-labelledby="add-race-title" >
+                        <div class="modal-container">
+                            <header class="modal--header modal--header--danger">
+                                <h2 id="start-race-title">
+                                    Démarrer une épreuve
+                                </h2>
+                                <!-- [4] -->
+                                <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                            </header>
+                            <div id="start-track-content" class="modal--content">
+                                <p>Êtes-vous certains de vouloir démarrer l'épreuve : <strong v-if="currentRace !== null">{{ currentRace.name }}</strong> ?</p>
+                                <p class="text--important">Cette action est irréversible.</p>
+
+                                <a v-if="currentRace !== null" v-bind:href="'race/'+currentRace.id+'/start/'" class="btn btn--danger">Démarrer l'épreuve</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- STOP RACE -->
+            <div id="stop-race" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
+                <!-- [2] -->
+                <div tabindex="-1" data-micromodal-close>
+                    <!-- [3] -->
+                    <div role="dialog" aria-modal="true" aria-labelledby="add-race-title" >
+                        <div class="modal-container">
+                            <header class="modal--header modal--header--danger">
+                                <h2 id="stop-race-title">
+                                    Démarrer une épreuve
+                                </h2>
+                                <!-- [4] -->
+                                <button aria-label="Fermer la fenêtre" data-micromodal-close class="btn--danger"><i data-micromodal-close class="fas fa-times"></i></button>
+                            </header>
+                            <div id="stop-track-content" class="modal--content">
+                                <p>Êtes-vous certains de vouloir arrêter l'épreuve : <strong v-if="currentRace !== null">{{ currentRace.name }}</strong> ?</p>
+                                <p class="text--important">Cette action est irréversible.</p>
+
+                                <a v-if="currentRace !== null" v-bind:href="'race/'+currentRace.id+'/stop/'" class="btn btn--danger">Arrêter l'épreuve</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -135,6 +191,7 @@
         name: "RaceEditor",
         data() {
             return {
+                raidId: raidID,
                 races: [],
                 newRace: new Race(),
                 newRaceTrack: new RaceTrack(),
@@ -174,6 +231,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
+                            console.log(race);
                             keepThis.races.push(r);
                             console.log(r);
                         }
@@ -205,26 +263,36 @@
 
                     };
                     req.onload = function () {
-                        keepThis.move(tracks, idx, idx-1);
+                        if(this.status === 200){
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
+
+                            iziToast.success({
+                                message: 'Le parcours a bien été sauvergardé.',
+                                position: 'bottomRight',
+                            });
+
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la sauvegarde du parcours',
+                                position: 'bottomRight',
+                            });
+                        }
                     };
+
+                    let obj = {};
+                    obj.direction = "up";
 
                     req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
-                    req.send(track.toJSON());
-
-
-                    /*MOVE OLD*/
-                    const oldReq = new XMLHttpRequest();
-                    oldReq.onerror = function () {
-
-                    };
-                    oldReq.onload = function () {
-
-                    };
-
-                    oldReq.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+previousTrack.id, true);
-                    oldReq.setRequestHeader('Content-Type', 'application/json');
-                    oldReq.send(previousTrack.toJSON());
+                    req.send(JSON.stringify(obj));
                 }
             },
             moveTrackDown (idx, tracks, race) {
@@ -246,27 +314,36 @@
 
                     };
                     req.onload = function () {
-                        keepThis.move(tracks, idx, idx+1);
+                        if(this.status === 200){
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
+
+                            iziToast.success({
+                                message: 'Le parcours a bien été sauvergardé.',
+                                position: 'bottomRight',
+                            });
+
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la sauvegarde du parcours.',
+                                position: 'bottomRight',
+                            });
+                        }
                     };
+
+                    let obj = {};
+                    obj.direction = "down";
 
                     req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
-                    req.send(track.toJSON());
-
-
-                    /*MOVE OLD*/
-                    const oldReq = new XMLHttpRequest();
-                    oldReq.onerror = function () {
-
-                    };
-                    oldReq.onload = function () {
-
-                    };
-
-                    oldReq.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+nextTrack.id, true);
-                    oldReq.setRequestHeader('Content-Type', 'application/json');
-                    oldReq.send(nextTrack.toJSON());
-
+                    req.send(JSON.stringify(obj));
                 }
             },
             moveCheckpointUp (idx, checkpoints, race, track) {
@@ -288,26 +365,37 @@
 
                     };
                     req.onload = function () {
-                        keepThis.move(checkpoints, idx, idx-1);
+                        if(this.status === 200){
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
+
+                            iziToast.success({
+                                message: 'Le checkpoint a bien été sauvergardé.',
+                                position: 'bottomRight',
+                            });
+
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la sauvegarde du checkpoint.',
+                                position: 'bottomRight',
+                            });
+                        }
                     };
+
+                    let obj = {};
+                    obj.direction = "up";
 
                     req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track+'/raceCheckpoint/'+checkpoint.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
-                    req.send(checkpoint.toJSON());
+                    req.send(JSON.stringify(obj));
 
-
-                    /*MOVE OLD*/
-                    const oldReq = new XMLHttpRequest();
-                    oldReq.onerror = function () {
-
-                    };
-                    oldReq.onload = function () {
-
-                    };
-
-                    oldReq.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id+'/raceCheckpoint/'+previousCheckpoint.id, true);
-                    oldReq.setRequestHeader('Content-Type', 'application/json');
-                    oldReq.send(previousCheckpoint.toJSON());
                 }
             },
             moveCheckpointDown (idx, checkpoints, race, track) {
@@ -329,26 +417,36 @@
 
                     };
                     req.onload = function () {
-                        keepThis.move(checkpoints, idx, idx+1);
+                        if (this.status === 200) {
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
+
+                            iziToast.success({
+                                message: 'Le checkpoint a bien été sauvergardé.',
+                                position: 'bottomRight',
+                            });
+
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la sauvegarde du checkpoint.',
+                                position: 'bottomRight',
+                            });
+                        }
                     };
+
+                    let obj = {};
+                    obj.direction = "down";
 
                     req.open('PATCH','/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id+'/raceCheckpoint/'+checkpoint.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
-                    req.send(checkpoint.toJSON());
-
-
-                    /*MOVE OLD*/
-                    const oldReq = new XMLHttpRequest();
-                    oldReq.onerror = function () {
-
-                    };
-                    oldReq.onload = function () {
-
-                    };
-
-                    oldReq.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track+'/raceCheckpoint/'+previousCheckpoint.id, true);
-                    oldReq.setRequestHeader('Content-Type', 'application/json');
-                    oldReq.send(previousCheckpoint.toJSON());
+                    req.send(JSON.stringify(obj));
                 }
             },
             displayRemoveRacePopin(race){
@@ -357,9 +455,6 @@
                 MicroModal.show("remove-race");
             },
             removeRace() {
-
-                let idx = this.races.indexOf(this.toRemoveRace);
-
                 if(this.toRemoveRace.name === this.toRemoveRaceCheck){
                     let keepThis = this;
                     let race = this.toRemoveRace;
@@ -369,12 +464,26 @@
 
                     };
                     req.onload = function () {
-                        if (this.status === 200) {
-                            keepThis.races.splice(idx,1);
-                            MicroModal.close("remove-race");
+                        if(this.status === 200){
+                            let races = JSON.parse(this.responseText);
+                            keepThis.races = [];
+                            for(let race of races){
+                                let r = new Race();
+                                r.fromObj(race);
+                                console.log(race);
+                                keepThis.races.push(r);
+                                console.log(r);
+                            }
 
                             iziToast.success({
-                                message: 'L\'épreuve a bien été supprimée',
+                                message: 'L\'épreuve a bien été supprimée.',
+                                position: 'bottomRight',
+                            });
+
+                            MicroModal.close("add-race");
+                        } else {
+                            iziToast.error({
+                                message: 'Erreur lors de la suppression de l\'épreuve.',
                                 position: 'bottomRight',
                             });
                         }
@@ -392,19 +501,32 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
-                        console.log("rm");
-                        keepThis.races[raceOrder].raceTracks.splice(raceTrack.order,1);
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races) {
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
+                        }
+
+                        iziToast.success({
+                            message: 'Le parcours a bien été supprimé',
+                            position: 'bottomRight',
+                        });
+
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de la suppression du parcours.',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id, true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(null);
-
-                iziToast.success({
-                    message: 'Le parcours a bien été supprimé',
-                    position: 'bottomRight',
-                });
             },
             removeRaceCheckpoint (raceIdx, race, raceTrackIdx, raceTrack, raceCheckpoint) {
                 let keepThis = this;
@@ -414,19 +536,32 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
-                        console.log("rm");
-                        keepThis.races[raceIdx].raceTracks[raceTrackIdx].checkpoints.splice(raceCheckpoint.order,1);
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races){
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
+                        }
+
+                        iziToast.success({
+                            message: 'Le checkpoint a bien été supprimé',
+                            position: 'bottomRight',
+                        });
+
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de la suppression du checkpoint.',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id+'/racecheckpoint/'+raceCheckpoint.id, true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(null);
-
-                iziToast.success({
-                    message: 'Le checkpoint a bien été supprimé',
-                    position: 'bottomRight',
-                });
             },
             move (array, oldIndex, newIndex) {
                 if (newIndex >= array.length || newIndex < 0) {
@@ -457,6 +592,14 @@
 
                 this.checkpointsMap = cp;
             },
+            openStartRacePopin(race) {
+                this.currentRace = race;
+                MicroModal.show("start-race");
+            },
+            openStopRacePopin(race) {
+                this.currentRace = race;
+                MicroModal.show("stop-race");
+            },
             addRace(e){
                 e.preventDefault();
 
@@ -470,21 +613,32 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races){
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
+                        }
 
-                        let r = new Race();
-                        r.fromObj(JSON.parse(this.responseText));
-                        keepThis.races.push(r);
+                        iziToast.success({
+                            message: 'L\'épreuve a bien été créee.',
+                            position: 'bottomRight',
+                        });
+
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de la création de l\'épreuve.',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('PUT', '/race/raid/'+raidID+'/race', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newRace.toJSON());
-
-                iziToast.success({
-                    message: 'L\'épreuve a bien été créée.',
-                    position: 'bottomRight',
-                });
             },
             addTrack(e,raceIdx){
                 e.preventDefault();
@@ -500,24 +654,32 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races){
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
+                        }
 
-                        let rt = new RaceTrack();
-                        rt.fromObj(JSON.parse(this.responseText));
-                        keepThis.races[raceIdx].raceTracks.push(rt);
+                        iziToast.success({
+                            message: 'Le parcours a bien été ajouté.',
+                            position: 'bottomRight',
+                        });
 
-                        keepThis.newRaceTrack = new RaceTrack();
-                        keepThis.currentRace = null;
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de l\'ajout du parcours.',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('PUT', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newRaceTrack.toJSON());
-
-                iziToast.success({
-                    message: 'Le parcours a bien été ajouté à l\'épreuve.',
-                    position: 'bottomRight',
-                });
             },
             addCheckpoint(e, raceIdx, trackIdx){
                 e.preventDefault();
@@ -534,24 +696,32 @@
 
                 };
                 req.onload = function () {
-                    if (this.status === 200) {
+                    if(this.status === 200){
+                        let races = JSON.parse(this.responseText);
+                        keepThis.races = [];
+                        for(let race of races){
+                            let r = new Race();
+                            r.fromObj(race);
+                            console.log(race);
+                            keepThis.races.push(r);
+                            console.log(r);
+                        }
 
-                        let rc = new Checkpoint();
-                        rc.fromObj(JSON.parse(this.responseText));
-                        keepThis.races[raceIdx].raceTracks[trackIdx].checkpoints.push(rc);
+                        iziToast.success({
+                            message: 'Le checkpoint a bien été ajouté.',
+                            position: 'bottomRight',
+                        });
 
-                        keepThis.newCheckpoint = new Checkpoint();
-                        keepThis.currentRaceTrack = null;
+                    } else {
+                        iziToast.error({
+                            message: 'Erreur lors de l\'ajout du checkpoint.',
+                            position: 'bottomRight',
+                        });
                     }
                 };
                 req.open('PUT', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+raceTrackId+'/raceCheckpoint', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newCheckpoint.toJSON());
-
-                iziToast.success({
-                    message: 'Le checkpoint a bien été ajouté à l\'épreuve.',
-                    position: 'bottomRight',
-                });
             },
             htmlDecode(str){
                 return htmlentities.decode(str);

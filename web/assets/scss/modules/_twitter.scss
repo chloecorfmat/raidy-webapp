@@ -72,8 +72,4 @@
     color: $text-color;
     margin-right: 1rem;
   }
-
-  @media screen and (min-width: $breakpoint-large) {
-    max-width: 35%;
-  }
 }

@@ -163,6 +163,20 @@
     z-index: 1000;
   }
 
+  .close-graph-btn {
+    background-color: $tertiary-color-1;
+    border-radius: 3rem;
+    color: $white07;
+    font-size: .5rem;
+    font-weight: bold;
+    height: 1.5rem;
+    position: absolute;
+    right: 0;
+    text-align: center;
+    top: 0;
+    width: 1.5rem;
+  }
+
   .editor--list {
     list-style-type: none;
     padding: 0;
@@ -568,6 +582,7 @@
   }
 
   .leaflet-control-custom {
+    background-color: $white;
     box-sizing: border-box;
     color: $tertiary-color-1;
     font-size: .6rem;
@@ -790,6 +805,9 @@
 
   .fab-action-button {
     :hover  {
+      cursor: pointer;
+      opacity: .9;
+
       + .fab-buttons {
         .fab-buttons-link { // sass-lint:disable-line nesting-depth
           &::before { // sass-lint:disable-line nesting-depth
@@ -841,6 +859,11 @@
     transform: scaleY(.5) scaleX(.5) translateY(0) translateX(0);
     transition: .3s;
     width: 3rem;
+
+    &:hover {
+      cursor: pointer;
+      opacity: .9;
+    }
   }
 
   [data-tooltip] {
@@ -930,6 +953,11 @@
     }
   }
 
+  .track-routing {
+    background-color: $tertiary-color-1;
+    color: $white;
+  }
+
   .editor-error--message {
     align-items: center;
     background-color: $secondary-color-2;
@@ -986,6 +1014,22 @@ div {
   position: relative;
   transform:  translateX(-$poi-size/2) translateY(-$poi-size) rotate(45deg);
   width: $poi-size;
+}
+
+.poi-action-btn {
+  background-color: $tertiary-color-1;
+  border-radius: 2rem;
+  height: 2rem;
+  margin: .25rem;
+  width: 2rem;
+
+  .three-points {
+    font-family: Fontastique, SansSerif;
+    letter-spacing: .1rem;
+    position: relative;
+    text-align: center;
+    top: -.2rem;
+  }
 }
 
 .track-marker {

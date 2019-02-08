@@ -26,14 +26,35 @@ class TwitterService
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->oauthAccessToken = $this->container->getParameter('app.twitter.oauth_access_token');
-        $this->oauthAccessTokenSecret = $this->container->getParameter('app.twitter.oauth_access_token_secret');
-        $this->consumerKey = $this->container->getParameter('app.twitter.consumer_key');
-        $this->consumerSecret = $this->container->getParameter('app.twitter.consumer_secret');
+        if ($this->isCurlInstalled()) {
+            $this->container = $container;
 
-        // @TODO : Check if curl extension is enable.
-        // @TODO : throw exception if some parameters are empty.
+            if (!empty($this->container->getParameter('app.twitter.oauth_access_token'))) {
+                $this->oauthAccessToken = $this->container->getParameter('app.twitter.oauth_access_token');
+            } else {
+                throw new \Exception('app.twitter.oauth_access_token parameter is needed');
+            }
+
+            if (!empty($this->container->getParameter('app.twitter.oauth_access_token_secret'))) {
+                $this->oauthAccessTokenSecret = $this->container->getParameter('app.twitter.oauth_access_token_secret');
+            } else {
+                throw new \Exception('app.twitter.oauth_access_token_secret parameter is needed');
+            }
+
+            if (!empty($this->container->getParameter('app.twitter.consumer_key'))) {
+                $this->consumerKey = $this->container->getParameter('app.twitter.consumer_key');
+            } else {
+                throw new \Exception('app.twitter.consumer_key parameter is needed');
+            }
+
+            if (!empty($this->container->getParameter('app.twitter.consumer_secret'))) {
+                $this->consumerSecret = $this->container->getParameter('app.twitter.consumer_secret');
+            } else {
+                throw new \Exception('app.twitter.consumer_secret parameter is needed');
+            }
+        } else {
+            throw new \Exception('You need curl extension.');
+        }
     }
 
     /**
@@ -210,5 +231,17 @@ class TwitterService
         $return .= implode(', ', $values);
 
         return $return;
+    }
+
+    /**
+     * @return bool
+     */
+    private function isCurlInstalled()
+    {
+        if (in_array('curl', get_loaded_extensions())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

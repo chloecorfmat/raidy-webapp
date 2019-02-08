@@ -14,7 +14,7 @@ namespace OrganizerBundle\Controller;
 
 use AppBundle\Entity\Raid;
 use OrganizerBundle\Security\RaidVoter;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;

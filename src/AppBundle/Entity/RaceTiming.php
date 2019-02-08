@@ -14,7 +14,8 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Entity
  * @ORM\Table(name="race_timing")
  */
-class RaceTiming
+class
+RaceTiming
 {
     /**
      * @ORM\Id
