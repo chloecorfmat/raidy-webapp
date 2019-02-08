@@ -52,17 +52,17 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     let array = action.track.line.getLatLngs();
     array.splice(action.vertexId, 1);
   };
-  // AUTO UNDO
-  MapHistory.prototype.redoAutoTrack = function (action) {
-    action.track.line.setLatLngs(action.track.line.getLatLngs().splice(0, action.lastSize));
-  };
-
   // AUTO REDO
-  MapHistory.prototype.undoAutoTrack = function (action) {
+  MapHistory.prototype.redoAutoTrack = function (action) {
     for (let latLng of action.latLngs) {
-     // console.log(latLng);
       action.track.line.addLatLng(latLng);
     }
+  };
+
+  // AUTO UNDO
+  MapHistory.prototype.undoAutoTrack = function (action) {
+    action.track.line.setLatLngs(action.track.line.getLatLngs().splice(0, action.lastSize));
+
   };
 
   MapHistory.prototype.undo = function () {
