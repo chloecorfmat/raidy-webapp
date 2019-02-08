@@ -49,7 +49,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     } else {
       this.helpers = [];
     }
-    //console.log(this.helpers);
+
     this.description = poi.description;
     this.image = poi.image;
     this.isCheckpoint = false;
@@ -261,7 +261,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       node.innerHTML = '<th>Prénom</th><th>Nom</th><th>Tél</th>';
       helpersTable.appendChild(node);
       for (let helper of this.helpers) {
-        console.log(this.helpers);
         node = document.createElement("TR");
         node.innerHTML = '<td>' + helper.firstname + '</td> <td>' + helper.lastname + '</td> <td><a href="tel:' + helper.phone + '">' + helper.phone + '</a></td>';
         helpersTable.appendChild(node);
@@ -286,6 +285,4 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
     MicroModal.show('poi-info');
   }
-
-  console.log("Track POI loaded");
 }

@@ -332,8 +332,6 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
         '</div>';
     }
   };
-
-  console.log("Editor UI for editor loaded");
 } else {
   if (document.querySelector('#map') != undefined) {
     let EditorUI = function () {
@@ -350,7 +348,5 @@ if (typeof(document.getElementById("editorContainer")) !== "undefined" && docume
     };
     EditorUI.prototype.removeTrack = function (id) {
     };
-
-    console.log("Editor UI for display only loaded");
   }
 }

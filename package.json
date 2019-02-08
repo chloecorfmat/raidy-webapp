@@ -46,7 +46,8 @@
   },
   "scripts": {
     "watch": "./node_modules/.bin/encore dev --watch",
-    "dev": "./node_modules/.bin/encore dev"
+    "dev": "./node_modules/.bin/encore dev",
+    "prod": "./node_modules/.bin/encore production"
   },
   "repository": {
     "type": "git",

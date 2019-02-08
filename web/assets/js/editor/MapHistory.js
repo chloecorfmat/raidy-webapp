@@ -103,17 +103,13 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
         action.track.buildUI();
         action.track.push();
       }
-     // console.log("undo");
 
     } else {
-    //  console.log("Nothing to undo.");
       iziToast.info({
         message: 'Rien à annuler',
         position: 'bottomRight',
       });
     }
-   // console.log(this.redoBuffer);
-   // console.log(this.undoBuffer);
   };
 
   MapHistory.prototype.redo = function () {
@@ -156,66 +152,21 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
         action.track.push();
       }
-    //  console.log("redo");
     } else {
       iziToast.info({
         message: 'Rien à rétablir',
         position: 'bottomRight',
       });
     }
-   // console.log(this.redoBuffer);
- //   console.log(this.undoBuffer);
-
-
   };
 
   MapHistory.prototype.logModification = function (obj) {
     this.undoBuffer.push(obj);
     this.redoBuffer = [];
-   // console.log(obj);
   };
 
   MapHistory.prototype.clearHistory = function () {
     this.undoBuffer = [];
     this.redoBuffer = [];
-   // console.log("History cleared")
   };
 }
-/*
- * type
- * target
- * newValue
- * lastValue
- */
-
-
-/*MapHistory.prototype.apply = function (action) {
-    switch (action.type) {
-      case "MOVE_TRACK_MARKER" :
-        let line = action.track.line;
-
-        line.setLatLngs(action.lastPosition);
-
-        if(line.editor != undefined){
-          if(line.editor.drawing()) {
-            console.log(line.editor._drawing);
-            if (line.editor._drawing > 0) {
-             console.log("forward");
-              line.editor.endDrawing();
-              line.editor.continueForward();
-            } else {
-             console.log("backward");
-              line.editor.endDrawing();
-              line.editor.continueBackward();
-            }
-          }else{
-            line.editor.reset();
-          }
-
-        }else{
-          action.track.updateDecorator();
-        }
-        action.track.update();
-        break;
-    }
-  }*/
