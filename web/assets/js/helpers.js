@@ -12,7 +12,7 @@ function helpersList() {
       }
 
       let xhr_object = new XMLHttpRequest();
-      xhr_object.open('PATCH', '/editor/raid/' + raidID + '/helper/' + this.id, true);
+      xhr_object.open('PATCH', base_url + 'editor/raid/' + raidID + '/helper/' + this.id, true);
       xhr_object.setRequestHeader('Content-Type', 'application/json');
       let data;
 
@@ -114,7 +114,7 @@ function validateHelper(e) {
         }
     }
 
-    xhr_object.open('PATCH', '/organizer/raid/' + this.dataset.raidid + '/helper/' + this.dataset.helperid + '/checkin', true);
+    xhr_object.open('PATCH', base_url + 'organizer/raid/' + this.dataset.raidid + '/helper/' + this.dataset.helperid + '/checkin', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send();
 }

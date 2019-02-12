@@ -7,7 +7,7 @@ function saveRoles() {
     if (btn !== null) {
         btn.addEventListener('click', function() {
             let xhr_object = new XMLHttpRequest();
-            xhr_object.open('PATCH', '/admin/users/organizer-roles', true);
+            xhr_object.open('PATCH', base_url + 'admin/users/organizer-roles', true);
             xhr_object.setRequestHeader('Content-Type', 'application/json');
 
             let data = [];

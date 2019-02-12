@@ -349,7 +349,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   MapManager.prototype.loadRessources = function () {
     let keepThis = this;
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/editor/raid/' + raidID + '/poitype', true);
+    xhr_object.open('GET', base_url + 'editor/raid/' + raidID + '/poitype', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE) {
@@ -370,7 +370,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   MapManager.prototype.loadSportTypes = function () {
     let keepThis = this;
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/editor/sporttype', true);
+    xhr_object.open('GET', base_url + 'editor/sporttype', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function () {
       if (this.readyState === XMLHttpRequest.DONE) {
@@ -491,7 +491,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     poi.isCheckpoint = poiIsCheckpoint != "" ? poiIsCheckpoint : false;
 
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('PUT', '/editor/raid/' + raidID + '/poi', true);
+    xhr_object.open('PUT', base_url + 'editor/raid/' + raidID + '/poi', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(poi.toJSON());
 
@@ -513,7 +513,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     track.sportType = sportType;
 
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('PUT', '/editor/raid/' + raidID + '/track', true);
+    xhr_object.open('PUT', base_url + 'editor/raid/' + raidID + '/track', true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.send(track.toJSON());
 
@@ -535,7 +535,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   MapManager.prototype.loadTracks = function () {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/editor/raid/' + raidID + '/track', true);
+    xhr_object.open('GET', base_url + 'editor/raid/' + raidID + '/track', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function (event) {
       if (this.readyState === XMLHttpRequest.DONE) {
@@ -560,7 +560,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   MapManager.prototype.loadPois = function () {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('GET', '/editor/raid/' + raidID + '/poi', true);
+    xhr_object.open('GET', base_url + 'editor/raid/' + raidID + '/poi', true);
     xhr_object.send(null);
     xhr_object.onreadystatechange = function (event) {
       if (this.readyState === XMLHttpRequest.DONE) {
