@@ -39,7 +39,7 @@ GPXImporter.prototype.importGPXTrack = function (id, sportType, gpxTrack) {
   track.line.setLatLngs(latLngs);
 
   let xhr_object = new XMLHttpRequest();
-  xhr_object.open('PUT', '/editor/raid/' + raidID + '/track', true);
+  xhr_object.open('PUT', base_url + 'editor/raid/' + raidID + '/track', true);
   xhr_object.setRequestHeader('Content-Type', 'application/json');
   xhr_object.send(track.toJSON());
 
@@ -78,7 +78,7 @@ GPXImporter.prototype.importWaypoint = function (id, poiType) {
   poi.marker = L.marker([gpxWaypoint.lat, gpxWaypoint.lon]);
 
   let xhr_object = new XMLHttpRequest();
-  xhr_object.open('PUT', '/editor/raid/' + raidID + '/poi', true);
+  xhr_object.open('PUT', base_url + 'editor/raid/' + raidID + '/poi', true);
   xhr_object.setRequestHeader('Content-Type', 'application/json');
   xhr_object.send(poi.toJSON());
 

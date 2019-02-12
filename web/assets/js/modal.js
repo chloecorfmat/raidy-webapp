@@ -41,7 +41,7 @@ function displayModalToDeleteOrganizer () {
   if (document.getElementById('btn--delete-organizer-validate') !== null) {
       document.getElementById('btn--delete-organizer-validate').addEventListener('click', function () {
           let xhr_object = new XMLHttpRequest();
-          xhr_object.open('DELETE', '/admin/organizer/delete/' + id, true);
+          xhr_object.open('DELETE', base_url + 'admin/organizer/delete/' + id, true);
           xhr_object.setRequestHeader('Content-Type', 'application/json');
 
           xhr_object.send(null);

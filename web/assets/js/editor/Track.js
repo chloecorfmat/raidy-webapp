@@ -277,7 +277,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   Track.prototype.push = function (feedback = false) {
     //  console.log(this.line.getLatLngs());
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('PATCH', '/editor/raid/' + raidID + '/track/' + this.id, true);
+    xhr_object.open('PATCH', base_url + 'editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     if (feedback) {
       xhr_object.onreadystatechange = function () {
@@ -313,7 +313,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
   };
   Track.prototype.remove = function (feedback = false) {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('DELETE', '/editor/raid/' + raidID + '/track/' + this.id, true);
+    xhr_object.open('DELETE', base_url + 'editor/raid/' + raidID + '/track/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
 
     if (feedback) {
