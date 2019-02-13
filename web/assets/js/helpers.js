@@ -61,7 +61,7 @@ function helpersList() {
           btnValidate.dataset.helperid = this.id;
           btnValidate.dataset.raidid = raidID;
 
-          btnValidate.innerText = "Valider";
+          btnValidate.innerText = "Valider la présence";
 
           helperValidate.appendChild(btnValidate);
 
