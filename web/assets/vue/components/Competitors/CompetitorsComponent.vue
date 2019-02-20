@@ -85,7 +85,7 @@
                         this.filter();
                     })
                     .catch(e => {
-                        console.log(e);
+
                     });
             }
         },

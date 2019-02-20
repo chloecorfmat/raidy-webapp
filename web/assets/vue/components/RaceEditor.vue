@@ -231,9 +231,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
                     }
                 };
@@ -269,9 +267,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -320,9 +316,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -371,9 +365,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -423,9 +415,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -470,9 +460,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -507,9 +495,7 @@
                         for(let race of races) {
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -542,9 +528,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -619,9 +603,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -661,9 +643,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -703,9 +683,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -728,7 +706,6 @@
                 return htmlentities.decode(str);
             },
             log(str){
-                console.log(str);
                 return(str);
             }
         }
