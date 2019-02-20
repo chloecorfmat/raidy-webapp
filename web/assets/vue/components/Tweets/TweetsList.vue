@@ -33,7 +33,7 @@
                         this.tweets_object = response.data;
                     })
                     .catch(e => {
-                        
+
                     });
             }
         }
