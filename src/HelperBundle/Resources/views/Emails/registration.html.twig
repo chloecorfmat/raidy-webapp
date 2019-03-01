@@ -5,18 +5,18 @@
 
     <p>Votre compte bénévole a bien été créé sur Raidy, avec l'identifiant suivant : <strong>{{ user.email }}</strong> et le mot de passe que vous avez renseigné.</p>
     <br>
-    <p>Pour vous connecter, cliquez ici : <a href="{{ url('fos_user_security_login') }}">se connecter</a>.</p>
-    <p>Si le lien ne s'affiche pas correctement, merci de copier-coller ce lien dans votre navigateur : <a href="{{ url('fos_user_security_login') }}">{{ url('fos_user_security_login') }}</a></p>
+    <p>Pour vous connecter, cliquez ici : <a href="{{ path('fos_user_security_login') }}">se connecter</a>.</p>
+    <p>Si le lien ne s'affiche pas correctement, merci de copier-coller ce lien dans votre navigateur : <a href="{{ path('fos_user_security_login') }}">{{ path('fos_user_security_login') }}</a></p>
     <br>
     <div class="actions">
         <div class="downloads">
             <h2 class="login--text">Téléchargez dès maintenant l'application Raidy</h2>
             <div class="downloads--links">
                 <a href="#">
-                    <img src="{{ absolute_url(asset('assets/images/app-store-badge.png')) }}" alt="apple store logo" class="downloads--images">
+                    <img src="{{ relative_path(absolute_url(asset('assets/images/app-store-badge.png'))) }}" alt="apple store logo" class="downloads--images">
                 </a>
                 <a href="#">
-                    <img src="{{ absolute_url(asset('assets/images/google-play-badge.png')) }}" alt="android store logo" class="downloads--images">
+                    <img src="{{ relative_path(absolute_url(asset('assets/images/google-play-badge.png'))) }}" alt="android store logo" class="downloads--images">
                 </a>
             </div>
         </div>
