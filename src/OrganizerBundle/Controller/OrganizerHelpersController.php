@@ -78,6 +78,86 @@ class OrganizerHelpersController extends AjaxAPIController
     }
 
     /**
+     * @Route("/organizer/raid/helpers/{id}/assign", name="assignHelpers")
+     *
+     * @param Request $request request
+     * @param mixed   $id      id
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function patchHelpersToPoi(Request $request, $id)
+    {
+        $manager = $this->getDoctrine()
+            ->getManager();
+
+        $helperManager = $manager->getRepository('AppBundle:Helper');
+
+        $raidManager = $manager->getRepository('AppBundle:Raid');
+        $raid = $raidManager->findOneBy(array('uniqid' => $id));
+
+        $helpers = $helperManager->findBy(
+            [
+                'raid' => $raid->getId(),
+            ],
+            [
+                'favoritePoiType' => 'ASC',
+                'acceptConditions' => 'ASC',
+            ]
+        );
+
+        $poisNotCompleted = [];
+        $helpersNotAffected = [];
+
+        $poiManager = $manager->getRepository('AppBundle:Poi');
+        $pois = $poiManager->findBy(['raid' => $raid->getId()], ['id' => 'ASC']);
+
+        $helperIndex = 0;
+
+        foreach ($pois as $poi) {
+            if ($poi->getRequiredHelpers() > 0) {
+                $required = $poi->getRequiredHelpers();
+                while (($required > 0 && $helperIndex < sizeof($helpers))) {
+                    $helper = $helpers[$helperIndex];
+                    //if (is_null($helper->getPoi())) {
+                    if ($helper->getFavoritePoiType() == $poi->getPoiType()) {
+                        $helper->setPoi($poi);
+                        $required--;
+                    } elseif ($helper->getFavoritePoiType() < $poi->getPoiType()) {
+                        $helpersNotAffected[] = $helper;
+                    }
+                    //}
+                    $helperIndex++;
+                }
+
+                if ($required > 0) {
+                    $poisNotCompleted[] = [
+                        'poi' => $poi,
+                        'required' => $required,
+                    ];
+                }
+            }
+        }
+
+        if (!empty($poisNotCompleted)) {
+            $helperIndex = 0;
+            foreach ($poisNotCompleted as $poi) {
+                $required = $poi["required"];
+                while ($required > 0) {
+                    $helpersNotAffected[$helperIndex]->setPoi($poi["poi"]);
+                    $required--;
+                    $helperIndex++;
+                }
+            }
+        }
+
+        $manager->flush();
+
+        $this->addFlash('success', 'Les bénévoles ont bien été affectés.');
+
+        return $this->redirectToRoute('listHelpers', ['id' => $id]);
+    }
+
+    /**
      * @Route("/organizer/raid/helpers/{id}", name="listHelpers")
      *
      * @param Request $request request
@@ -97,21 +177,34 @@ class OrganizerHelpersController extends AjaxAPIController
 
         $helpers = $helperManager->findBy(
             [
-            'raid' => $raid->getId(),
+                'raid' => $raid->getId(),
             ]
         );
 
         $poiManager = $manager->getRepository('AppBundle:Poi');
         $pois = $poiManager->findBy(['raid' => $raid->getId()]);
 
+        $jobs = [];
+        $required = 0;
+        foreach ($pois as $poi) {
+            if (!in_array($poi->getPoiType()->getId(), array_keys($jobs))) {
+                $jobs[$poi->getPoiType()->getId()] = $poi->getRequiredHelpers();
+            } else {
+                $jobs[$poi->getPoiType()->getId()] += $poi->getRequiredHelpers();
+            }
+            $required += $poi->getRequiredHelpers();
+        }
+
         return $this->render(
             'OrganizerBundle:Helpers:helpers.html.twig',
             [
-            'raid' => $raid,
-            'raid_id' => $id,
-            'raidName' => $raid->getName(),
-            'helpers' => $helpers,
-            'pois' => $pois,
+                'raid' => $raid,
+                'raid_id' => $id,
+                'raidName' => $raid->getName(),
+                'helpers' => $helpers,
+                'pois' => $pois,
+                'jobs' => $jobs,
+                'requiredHelpers' => $required,
             ]
         );
     }
