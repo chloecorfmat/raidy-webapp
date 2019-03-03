@@ -31,6 +31,6 @@
 
 .DS_STORE*
 
-
 node_modules/
 
+scripts/
