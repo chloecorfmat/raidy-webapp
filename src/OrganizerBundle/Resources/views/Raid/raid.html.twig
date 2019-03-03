@@ -42,7 +42,7 @@
             {{ form_end(form) }}
 
 
-            {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
+            {% if (is_granted('ROLE_ORGANIZER') and app.user == raid.user) or is_granted('ROLE_SUPERADMIN') %}
             <div class="clone-btn">
                 <a href="{{ path('cloneRaid', {'raidId': raid.uniqid}) }}" class="btn">Cloner le raid</a>
             </div>
@@ -111,9 +111,6 @@
                 </div>
             </div>
 
-
-
-
             <div class="card">
                 <a href="{{ path('listCompetitor', {'raidId': raid.uniqid}) }}">
                     <i class="fas fa-running fa-lg"></i>
@@ -129,8 +126,7 @@
                 </a>
             </div>
 
-
-            {% if is_granted('ROLE_ORGANIZER') or is_granted('ROLE_SUPERADMIN') %}
+            {% if (is_granted('ROLE_ORGANIZER') and app.user == raid.user) or is_granted('ROLE_SUPERADMIN') %}
                 <div class="card">
                     <a href="{{ path('listCollaborators', {'raidId': raid.uniqid}) }}">
                         <i class="fas fa-hands-helping fa-lg"></i>

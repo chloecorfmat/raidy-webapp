@@ -156,8 +156,6 @@ class OrganizerRaidController extends Controller
             ->getManager()
             ->getRepository('AppBundle:Raid');
 
-        //$raid = $raidManager->find($id);
-
         $raid = $raidManager->findOneBy(['uniqid' => $id]);
 
         $authChecker = $this->get('security.authorization_checker');
@@ -270,8 +268,8 @@ class OrganizerRaidController extends Controller
         return $this->render(
             'OrganizerBundle:Raid:raid.html.twig',
             [
-            'form' => $form->createView(),
-            'raid' => $raid,
+                'form' => $form->createView(),
+                'raid' => $raid,
             ]
         );
     }
