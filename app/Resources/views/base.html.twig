@@ -1,4 +1,4 @@
-{%  set base_url = app.request.getSchemeAndHttpHost() %}
+{%  set base_url = path('homepage') %}
 
 {% if form is defined %}
     {% form_theme form 'form/fields.html.twig' %}

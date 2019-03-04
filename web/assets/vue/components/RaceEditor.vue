@@ -205,11 +205,11 @@
                 toRemoveRaceIndex: null
             }
         },
+        props: ['baseurl'],
         created () {
             this.fetchData();
         },
         mounted () {
-            console.log("initform");
             initForm();
         },
         methods : {
@@ -231,13 +231,11 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
                     }
                 };
-                req.open('GET', '/race/raid/'+raidID+'/race', true);
+                req.open('GET', this.baseurl + 'race/raid/'+raidID+'/race', true);
                 req.send(null);
             },
             toJson () {
@@ -269,9 +267,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -290,7 +286,7 @@
                     let obj = {};
                     obj.direction = "up";
 
-                    req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id, true);
+                    req.open('PATCH', this.baseurl + 'race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
                     req.send(JSON.stringify(obj));
                 }
@@ -320,9 +316,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -341,7 +335,7 @@
                     let obj = {};
                     obj.direction = "down";
 
-                    req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id, true);
+                    req.open('PATCH', this.baseurl + 'race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
                     req.send(JSON.stringify(obj));
                 }
@@ -371,9 +365,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -392,7 +384,7 @@
                     let obj = {};
                     obj.direction = "up";
 
-                    req.open('PATCH', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track+'/raceCheckpoint/'+checkpoint.id, true);
+                    req.open('PATCH', this.baseurl + 'race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track+'/raceCheckpoint/'+checkpoint.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
                     req.send(JSON.stringify(obj));
 
@@ -423,9 +415,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -444,7 +434,7 @@
                     let obj = {};
                     obj.direction = "down";
 
-                    req.open('PATCH','/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id+'/raceCheckpoint/'+checkpoint.id, true);
+                    req.open('PATCH',this.baseurl + 'race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+track.id+'/raceCheckpoint/'+checkpoint.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
                     req.send(JSON.stringify(obj));
                 }
@@ -470,9 +460,7 @@
                             for(let race of races){
                                 let r = new Race();
                                 r.fromObj(race);
-                                console.log(race);
                                 keepThis.races.push(r);
-                                console.log(r);
                             }
 
                             iziToast.success({
@@ -488,7 +476,7 @@
                             });
                         }
                     };
-                    req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id, true);
+                    req.open('DELETE', this.baseurl + 'race/raid/'+raidID+'/race/'+race.id, true);
                     req.setRequestHeader('Content-Type', 'application/json');
                     req.send(null);
                 }
@@ -507,9 +495,7 @@
                         for(let race of races) {
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -524,7 +510,7 @@
                         });
                     }
                 };
-                req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id, true);
+                req.open('DELETE', this.baseurl + 'race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id, true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(null);
             },
@@ -542,9 +528,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -559,7 +543,7 @@
                         });
                     }
                 };
-                req.open('DELETE', '/race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id+'/racecheckpoint/'+raceCheckpoint.id, true);
+                req.open('DELETE', this.baseurl + 'race/raid/'+raidID+'/race/'+race.id+'/racetrack/'+raceTrack.id+'/racecheckpoint/'+raceCheckpoint.id, true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(null);
             },
@@ -619,9 +603,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -636,7 +618,8 @@
                         });
                     }
                 };
-                req.open('PUT', '/race/raid/'+raidID+'/race', true);
+
+                req.open('PUT', this.baseurl + 'race/raid/'+raidID+'/race', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newRace.toJSON());
             },
@@ -660,9 +643,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -677,7 +658,7 @@
                         });
                     }
                 };
-                req.open('PUT', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack', true);
+                req.open('PUT', this.baseurl + 'race/raid/'+raidID+'/race/'+raceId+'/racetrack', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newRaceTrack.toJSON());
             },
@@ -702,9 +683,7 @@
                         for(let race of races){
                             let r = new Race();
                             r.fromObj(race);
-                            console.log(race);
                             keepThis.races.push(r);
-                            console.log(r);
                         }
 
                         iziToast.success({
@@ -719,7 +698,7 @@
                         });
                     }
                 };
-                req.open('PUT', '/race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+raceTrackId+'/raceCheckpoint', true);
+                req.open('PUT', this.baseurl + 'race/raid/'+raidID+'/race/'+raceId+'/racetrack/'+raceTrackId+'/raceCheckpoint', true);
                 req.setRequestHeader('Content-Type', 'application/json');
                 req.send(this.newCheckpoint.toJSON());
             },
@@ -727,7 +706,6 @@
                 return htmlentities.decode(str);
             },
             log(str){
-                console.log(str);
                 return(str);
             }
         }

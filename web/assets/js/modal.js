@@ -41,7 +41,7 @@ function displayModalToDeleteOrganizer () {
   if (document.getElementById('btn--delete-organizer-validate') !== null) {
       document.getElementById('btn--delete-organizer-validate').addEventListener('click', function () {
           let xhr_object = new XMLHttpRequest();
-          xhr_object.open('DELETE', '/admin/organizer/delete/' + id, true);
+          xhr_object.open('DELETE', base_url + 'admin/organizer/delete/' + id, true);
           xhr_object.setRequestHeader('Content-Type', 'application/json');
 
           xhr_object.send(null);
@@ -65,7 +65,7 @@ function displayModalToEnableOrganizer () {
         for (var btn of btns) {
             btn.addEventListener('click', function () {
                 var id = this.dataset.organizerId;
-                var url = document.getElementById('btn--enable-organizer-validate').dataset.baseUrl + id + '/1';
+                var url = base_url + document.getElementById('btn--enable-organizer-validate').dataset.baseUrl + id + '/1';
                 document.getElementById('btn--enable-organizer-validate').href = url;
                 MicroModal.show('enable-organizer');
             });
@@ -81,7 +81,7 @@ function displayModalToDisableOrganizer () {
         for (var btn of btns) {
             btn.addEventListener('click', function () {
                 var id = this.dataset.organizerId;
-                var url = document.getElementById('btn--disable-organizer-validate').dataset.baseUrl + id + '/0';
+                var url = base_url + document.getElementById('btn--disable-organizer-validate').dataset.baseUrl + id + '/0';
                 document.getElementById('btn--disable-organizer-validate').href = url;
                 MicroModal.show('disable-organizer');
             });
@@ -97,7 +97,7 @@ function displayModalToDeletePoiType () {
       for (var btn of btns) {
           btn.addEventListener('click', function () {
               var id = this.dataset.poitypeId;
-              var url = document.getElementById('btn--delete-poitype').dataset.baseUrl + id;
+              var url = base_url + document.getElementById('btn--delete-poitype').dataset.baseUrl + id;
               document.getElementById('btn--delete-poitype').href = url;
               MicroModal.show('delete-poitype'); // eslint-disable-line no-undef
           });
@@ -114,7 +114,7 @@ function displayModalToDeleteSportType () {
       for (var btn of btns) {
           btn.addEventListener('click', function () {
               var id = this.dataset.sporttypeId;
-              var url = document.getElementById('btn--delete-sporttype').dataset.baseUrl + id;
+              var url = base_url + document.getElementById('btn--delete-sporttype').dataset.baseUrl + id;
               document.getElementById('btn--delete-sporttype').href = url;
               MicroModal.show('delete-sporttype'); // eslint-disable-line no-undef
           });
@@ -129,7 +129,7 @@ function displayModalToDeleteCollaborator () {
       MicroModal.init();
       for (var btn of btns) {
           btn.addEventListener('click', function () {
-              var url = '/editor/raid/' + this.dataset.raid + '/collaborator/' + this.dataset.invitation + '/delete';
+              var url = base_url + 'editor/raid/' + this.dataset.raid + '/collaborator/' + this.dataset.invitation + '/delete';
               document.getElementById('btn--delete-collaborator').href = url;
               MicroModal.show('delete-collaborator'); // eslint-disable-line no-undef
           });
@@ -146,7 +146,7 @@ function displayModalToDeleteContact () {
       for (var btn of btns) {
           btn.addEventListener('click', function () {
               var id = this.dataset.contactId;
-              var url = document.getElementById('btn--delete-contact').dataset.baseUrl + id;
+              var url = base_url + document.getElementById('btn--delete-contact').dataset.baseUrl + id;
               document.getElementById('btn--delete-contact').href = url;
               MicroModal.show('delete-contact'); // eslint-disable-line no-undef
           });
@@ -162,7 +162,7 @@ function displayModalToDeleteCompetitor () {
         for (var btn of btns) {
             btn.addEventListener('click', function () {
                 var id = this.dataset.competitorId;
-                var url = document.getElementById('btn--delete-competitor').dataset.baseUrl + id;
+                var url = base_url + document.getElementById('btn--delete-competitor').dataset.baseUrl + id;
                 document.getElementById('btn--delete-competitor').href = url;
                 MicroModal.show('delete-competitor'); // eslint-disable-line no-undef
             });
@@ -177,7 +177,7 @@ function displayModalToDeleteMessage () {
         for (var btn of btns) {
             btn.addEventListener('click', function () {
                 var id = this.dataset.messageId;
-                var url = document.getElementById('btn--delete-message').dataset.baseUrl + id;
+                var url = base_url + document.getElementById('btn--delete-message').dataset.baseUrl + id;
                 document.getElementById('btn--delete-message').href = url;
                 MicroModal.show('delete-message'); // eslint-disable-line no-undef
             });

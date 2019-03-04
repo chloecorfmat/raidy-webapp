@@ -10,7 +10,7 @@
         }
 
         .map {
-            height: 50%;
+            height: 100%;
             width: 100%;
         }
 
@@ -36,9 +36,14 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Liste des bénévoles</h1>
+    <h1>Liste des bénévoles ({{ helpers|length }})</h1>
     <div class="content">
         <div class="content--half" id="helpers">
+            {% for flash_message in app.session.flashBag.get('success') %}
+                <div class="alert alert--success">
+                    <p>{{ flash_message }}</p>
+                </div>
+            {% endfor %}
 
             <div class="card card--half">
                 <a href="{{ path('inviteHelper', {'id': raid.uniqid}) }}" class="copytoclipboard">
@@ -159,6 +164,16 @@
                     </tbody>
                 </table>
             </div>
+
+            <div>
+                <p>Pour affecter automatiquement les bénévoles à un point d'intérêt, le nombre de bénévoles doit être supérieur au nombre de postes. <span class="text--important">Actuellement, il y a {{ requiredHelpers }} bénévoles nécessaires.</span></p>
+                {% if helpers|length >= requiredHelpers %}
+                    <a href="{{ path('assignHelpers', {'id': raid.uniqid}) }}" class="btn">
+                        Affecter les bénévoles
+                    </a>
+                {% endif %}
+            </div>
+
         </div>
         <div class="map--container content--half">
             <div id="map" class="map"></div>

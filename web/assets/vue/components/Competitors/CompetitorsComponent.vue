@@ -78,14 +78,14 @@
                 this.competitors_list = Object.assign({}, c);
             },
             getCompetitorsObject () {
-                axios.get(this.baseurl + '/api/public/raid/' + this.raidid + '/competitors')
+                axios.get(this.baseurl + 'api/public/raid/' + this.raidid + '/competitors')
                     .then(response => {
                         // JSON responses are automatically parsed.
                         this.competitors_object = response.data;
                         this.filter();
                     })
                     .catch(e => {
-                        console.log(e);
+
                     });
             }
         },

@@ -49,7 +49,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     } else {
       this.helpers = [];
     }
-    //console.log(this.helpers);
+
     this.description = poi.description;
     this.image = poi.image;
     this.isCheckpoint = false;
@@ -75,7 +75,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   Poi.prototype.push = function (feedback = false) {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('PATCH', '/editor/raid/' + raidID + '/poi/' + this.id, true);
+    xhr_object.open('PATCH', base_url + 'editor/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
 
     if (feedback) {
@@ -206,7 +206,7 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
 
   Poi.prototype.remove = function () {
     let xhr_object = new XMLHttpRequest();
-    xhr_object.open('DELETE', '/editor/raid/' + raidID + '/poi/' + this.id, true);
+    xhr_object.open('DELETE', base_url + 'editor/raid/' + raidID + '/poi/' + this.id, true);
     xhr_object.setRequestHeader('Content-Type', 'application/json');
     xhr_object.onreadystatechange = function () {
       if (xhr_object.readyState == XMLHttpRequest.DONE) {
@@ -267,7 +267,6 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
       node.innerHTML = '<th>Prénom</th><th>Nom</th><th>Tél</th>';
       helpersTable.appendChild(node);
       for (let helper of this.helpers) {
-        console.log(this.helpers);
         node = document.createElement("TR");
         node.innerHTML = '<td>' + helper.firstname + '</td> <td>' + helper.lastname + '</td> <td><a href="tel:' + helper.phone + '">' + helper.phone + '</a></td>';
         helpersTable.appendChild(node);
@@ -292,6 +291,4 @@ if (typeof(document.getElementById("map")) !== "undefined" && document.getElemen
     }
     MicroModal.show('poi-info');
   }
-
-  console.log("Track POI loaded");
 }

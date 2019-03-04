@@ -27,13 +27,13 @@
         },
         methods: {
             getTweetsObject () {
-                axios.get(this.baseurl + '/api/public/raid/' + this.raidid + '/tweets')
+                axios.get(this.baseurl + 'api/public/raid/' + this.raidid + '/tweets')
                     .then(response => {
                         // JSON responses are automatically parsed.
                         this.tweets_object = response.data;
                     })
                     .catch(e => {
-                        console.log(e);
+
                     });
             }
         }

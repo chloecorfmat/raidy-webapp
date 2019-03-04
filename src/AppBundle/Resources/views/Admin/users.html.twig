@@ -9,68 +9,96 @@
 
 {% block body %}
     <h1>Liste des utilisateurs</h1>
-    {% for flash_message in app.session.flashBag.get('success') %}
-        <div class="alert alert--success">
-            <p>{{ flash_message }}</p>
+    <div id="users">
+        {% for flash_message in app.session.flashBag.get('success') %}
+            <div class="alert alert--success">
+                <p>{{ flash_message }}</p>
+            </div>
+        {% endfor %}
+        {% for flash_message in app.session.flashBag.get('danger') %}
+            <div class="alert alert--danger">
+                <p>{{ flash_message }}</p>
+            </div>
+        {% endfor %}
+        <div class="table-search">
+            <i class="fas fa-search"></i>
+            <input class="search" placeholder="Rechercher" />
         </div>
-    {% endfor %}
-    {% for flash_message in app.session.flashBag.get('danger') %}
-        <div class="alert alert--danger">
-            <p>{{ flash_message }}</p>
-        </div>
-    {% endfor %}
-    <div class="table--container">
-        <table class="table" id="usersList">
-            <caption class="sr-only">Liste des utilisateurs</caption>
-            <thead class="table--headers">
-            <tr>
-                <th scope="col">Nom</th>
-                <th scope="col">Adresse e-mail</th>
-                <th scope="col">Téléphone</th>
-                <th scope="col">Rôle</th>
-                <th scope="col">Organizer ?</th>
-                <th scope="col">Actions</th>
-            </tr>
-            </thead>
-
-            {% for user in users %}
-                <tr class="table--line">
-                    <td>{{ user.firstname }} {{ user.lastname }}</td>
-                    <td>{{ user.email }}</td>
-                    <td>{{ user.phone|telephone }}</td>
-                    <td>
-                        <ul>
-                            {% for role in user.roles %}
-                                <li>{{ role }}</li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                    <td>
-                        <input
-                                type="checkbox"
-
-                                id="user-{{ user.id }}"
-                                class="js-has-role-organizer"
-
-                                {% if "ROLE_ORGANIZER" in user.roles %}
-                                checked
-                                {% endif %}
-
-                                {% if app.user.id == user.id %}
-                                disabled
-                                {% endif %}
-                        >
-                    </td>
-                    <td>
-                        <a href="{{ path('editOrganizer', {'id': user.id, 'userPath': true}) }}" class="btn">Editer</a>
-                    </td>
+        <div class="table--container">
+            <table class="table">
+                <caption class="sr-only">Liste des utilisateurs</caption>
+                <thead class="table--headers">
+                <tr>
+                    <th scope="col">
+                        <button class="btn btn-sort sort" data-sort="name">
+                            <span>Nom</span>
+                            <i class="fas fa-arrows-alt-v"></i>
+                        </button>
+                    </th>
+                    <th scope="col">
+                        <button class="btn btn-sort sort" data-sort="email">
+                            <span>Adresse e-mail</span>
+                            <i class="fas fa-arrows-alt-v"></i>
+                        </button>
+                    </th>
+                    <th scope="col">
+                        <button class="btn btn-sort sort" data-sort="phone">
+                            <span>Téléphone</span>
+                            <i class="fas fa-arrows-alt-v"></i>
+                        </button>
+                    </th>
+                    <th scope="col">
+                        <button class="btn btn-sort sort" data-sort="roles">
+                            <span>Rôles</span>
+                            <i class="fas fa-arrows-alt-v"></i>
+                        </button>
+                    </th>
+                    <th scope="col">Organizer ?</th>
+                    <th scope="col">Actions</th>
                 </tr>
-            {% endfor %}
-        </table>
+                </thead>
+
+                <tbody class="list">
+                    {% for user in users %}
+                        <tr class="table--line">
+                            <td class="name">{{ user.firstname }} {{ user.lastname }}</td>
+                            <td class="email">{{ user.email }}</td>
+                            <td class="phone">{{ user.phone|telephone }}</td>
+                            <td class="roles">
+                                <ul>
+                                    {% for role in user.roles %}
+                                        <li>{{ role }}</li>
+                                    {% endfor %}
+                                </ul>
+                            </td>
+                            <td>
+                                <input
+                                        type="checkbox"
+
+                                        id="user-{{ user.id }}"
+                                        class="js-has-role-organizer"
+
+                                        {% if "ROLE_ORGANIZER" in user.roles %}
+                                            checked
+                                        {% endif %}
+
+                                        {% if app.user.id == user.id %}
+                                            disabled
+                                        {% endif %}
+                                >
+                            </td>
+                            <td>
+                                <a href="{{ path('editOrganizer', {'id': user.id, 'userPath': true}) }}" class="btn">Editer</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <button class="btn" id="btn-save-roles">Enregistrer les modifications de rôle</button>
+
     </div>
-
-    <button class="btn" id="btn-save-roles">Enregistrer les modifications de rôle</button>
-
 
     <!-- [1] -->
     <div id="delete-organizer" aria-hidden="true" class="modal modal--danger" data-micromodal-close>
@@ -90,7 +118,7 @@
                         <p>Êtes-vous certains de vouloir supprimer cet organisateur ?</p>
                         <p class="text--important">Cette action est irréversible.</p>
                         <div class="modal--actions">
-                            <a href="" id="btn--delete-organizer" class="btn btn--danger" data-base-url="/admin/organizer/delete/">Supprimer</a>
+                            <a href="" id="btn--delete-organizer" class="btn btn--danger" data-base-url="admin/organizer/delete/">Supprimer</a>
                             <button data-micromodal-close class="btn btn--cancel">Annuler</button>
                         </div>
                     </div>
@@ -99,7 +127,15 @@
         </div>
     </div>
 
+    <script src="//cdnjs.cloudflare.com/ajax/libs/list.js/1.5.0/list.min.js"></script>
     <script>
+        window.addEventListener('load', function() {
+            // @TODO : Why this create problem on js functions about validation and affectation.
+            var options = {
+                valueNames: ['name', 'email', 'phone', 'roles']
+            };
 
+            var usersList = new List('users', options);
+        });
     </script>
 {% endblock %}
