@@ -17,13 +17,17 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
+        $meta['url'] = $host . $request->server->get('BASE') . $request->getPathInfo();
         $meta['title'] = 'Live | Raidy';
-        $meta['image'] = '/uploads/raids/dc015d1aa7f746d65707ce2815452229.png';
+        $meta['image'] = '/uploads/raids/dc015d1aa7f746d65707ce2815452229.png'; //@TODO : change this.
         $meta['description'] = 'Accéder au live de raids';
 
         $via = $this->container->getParameter('app.twitter.account');
 
-        return $this->render('LiveBundle:Default:index.html.twig', compact('meta', 'via'));
+        return $this->render('LiveBundle:Default:index.html.twig', compact('meta', 'via', 'host'));
     }
 }

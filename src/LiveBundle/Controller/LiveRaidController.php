@@ -35,7 +35,11 @@ class LiveRaidController extends AjaxAPIController
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
-        $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
+        $meta['url'] = $host . $request->server->get('BASE') . $request->getPathInfo();
         $meta['title'] = 'Live | Raidy';
         $meta['image'] = '/uploads/raids/' . $raid->getPicture();
         $meta['description'] = 'Accéder au live de raids';
