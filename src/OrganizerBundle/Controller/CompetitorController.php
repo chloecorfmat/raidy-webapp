@@ -83,8 +83,8 @@ class CompetitorController extends Controller
             'Symfony\Component\Form\Extension\Core\Type\FormType',
             $formCompetitor
         )
-            ->add('lastname', TextType::class, ['label' => 'Nom'])
-            ->add('firstname', TextType::class, ['label' => 'Prénom'])
+            ->add('competitor1', TextType::class, ['label' => 'Participant 1'])
+            ->add('competitor2', TextType::class, ['label' => 'Participant 2', 'required' => false])
             ->add('number_sign', TextType::class, ['label' => 'N° de dossard'])
             ->add('category', TextType::class, ['label' => 'Catégorie', 'required' => false])
             ->add('sex', TextType::class, ['label' => 'Sexe', 'required' => false])
@@ -129,9 +129,10 @@ class CompetitorController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $competitorManager = $em->getRepository('AppBundle:Competitor');
-            $competitorNameExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(),
-                    'lastname' => $formCompetitor->getLastname(),
+            $competitorTeamExist = $competitorManager->findBy(
+                [
+                    'competitor1' => $formCompetitor->getCompetitor1(),
+                    'competitor2' => $formCompetitor->getCompetitor2(),
                     'raid' => $raid->getId(),
                 ]
             );
@@ -140,7 +141,7 @@ class CompetitorController extends Controller
                 ['numberSign' => $formCompetitor->getNumberSign(), 'raid' => $raid->getId()]
             );
 
-            if (!$competitorNameExist) {
+            if (!$competitorTeamExist) {
                 if (!$competitorSignExist) {
                     $competitorService = $this->container->get('CompetitorService');
                     $competitor = $competitorService->competitorFromForm(
@@ -175,11 +176,11 @@ class CompetitorController extends Controller
             $correctLines = array();
             if (($handle = fopen($dir . $fileName, "r")) !== false) {
                 while (($data = fgetcsv($handle, 1000, ";")) !== false) {
-                    // format : lastname; firstname; numbersign; cat; sex; birthyear; race
+                    // format : competitor1; competitor2; numbersign; cat; sex; birthyear; race
 
                     $competitorManager = $em->getRepository('AppBundle:Competitor');
-                    $competitorNameExist = $competitorManager->findBy(
-                        ['firstname' => $data[1], 'lastname' => $data[0], 'raid' => $raid->getId()]
+                    $competitorTeamExist = $competitorManager->findBy(
+                        ['competitor1' => $data[1], 'competitor2' => $data[0], 'raid' => $raid->getId()]
                     );
 
                     $competitorSignExist = $competitorManager->findBy(
@@ -187,14 +188,14 @@ class CompetitorController extends Controller
                     );
 
                     $hasError = false;
-                    if ($data[0] == "" || $data[1] == "" || $data[2] == "") {
+                    if ($data[0] == "" || $data[2] == "") {
                         array_push($errors, array("line" => $row,
                             "msg" => "Un champ requis est manquant",
                         ));
                         $hasError = true;
                     }
 
-                    if ($competitorNameExist != false) {
+                    if ($competitorTeamExist != false) {
                         array_push($errors, array("line" => $row,
                             "msg" => 'Le participant "' . $data[0] . " " . $data[1] . '" existe déjà',
                         ));
@@ -308,8 +309,8 @@ class CompetitorController extends Controller
         }
 
         $form = $this->createFormBuilder($formCompetitor)
-            ->add('lastname', TextType::class, ['label' => 'Nom'])
-            ->add('firstname', TextType::class, ['label' => 'Prénom'])
+            ->add('competitor1', TextType::class, ['label' => 'Participant 1'])
+            ->add('competitor2', TextType::class, ['label' => 'Participant 2', 'required' => false])
             ->add('number_sign', TextType::class, ['label' => 'N° de dossard'])
             ->add('category', TextType::class, ['label' => 'Catégorie', 'required' => false])
             ->add('sex', TextType::class, ['label' => 'Sexe', 'required' => false])
@@ -332,8 +333,9 @@ class CompetitorController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $competitorExist = $competitorManager->findBy(
-                ['firstname' => $formCompetitor->getFirstname(),
-                    'lastname' => $formCompetitor->getLastname(),
+                [
+                    'competitor1' => $formCompetitor->getCompetitor1(),
+                    'competitor2' => $formCompetitor->getCompetitor2(),
                     'raid' => $raid->getId(), ]
             );
             $competitorSignExist = $competitorManager->findBy(
@@ -344,8 +346,8 @@ class CompetitorController extends Controller
                     $formCompetitor = $form->getData();
 
                     $competitor = $competitorManager->findOneBy(['id' => $formCompetitor->getId()]);
-                    $competitor->setFirstname($formCompetitor->getFirstname());
-                    $competitor->setLastname($formCompetitor->getLastname());
+                    $competitor->setCompetitor1($formCompetitor->getCompetitor1());
+                    $competitor->setCompetitor2($formCompetitor->getCompetitor2());
                     $competitor->setNumberSign($formCompetitor->getNumberSign());
                     $competitor->setCategory($formCompetitor->getCategory());
                     $competitor->setSex($formCompetitor->getSex());

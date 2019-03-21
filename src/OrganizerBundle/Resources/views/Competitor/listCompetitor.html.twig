@@ -49,8 +49,8 @@
 
                     {% for competitor in competitors %}
                         <tr class="table--line">
-                            <td>{{ competitor.lastname }}</td>
-                            <td>{{ competitor.firstname }}</td>
+                            <td>{{ competitor.competitor1 }}</td>
+                            <td>{{ competitor.competitor2 }}</td>
                             <td>{{ competitor.numberSign }}</td>
                             <td>{{ competitor.category }}</td>
                             <td>{{ competitor.sex }}</td>
@@ -93,7 +93,7 @@
             {{ form_widget(form) }}
             {{ form_end(form) }}
             <h1>Importer des participants</h1>
-            <p>Le format attendu est Nom; Prénom; Dossard; Catégorie; Sexe; Année de naissance; Epreuve</p>
+            <p>Le format attendu est Participant1; Participant2; Dossard; Catégorie; Sexe; Année de naissance; Epreuve</p>
             {{ form_start(formImport) }}
             {{ form_widget(formImport) }}
             {{ form_end(formImport) }}

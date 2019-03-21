@@ -28,8 +28,8 @@ class CompetitorService
         $obj = [];
 
         $obj['id'] = $competitor->getId();
-        $obj['firstname'] = $competitor->getFirstname();
-        $obj['lastname'] = $competitor->getLastname();
+        $obj['competitor1'] = $competitor->getCompetitor1();
+        $obj['competitor2'] = $competitor->getCompetitor2();
         $obj['number_sign'] = $competitor->getNumberSign();
         $obj['nfc_serial_id'] = $competitor->getNFCSerialId();
         $obj['category'] = $competitor->getCategory();
@@ -52,8 +52,8 @@ class CompetitorService
     {
         $competitor = new Competitor();
 
-        $competitor->setFirstname($obj->getFirstname());
-        $competitor->setLastname($obj->getLastname());
+        $competitor->setCompetitor1($obj->getCompetitor1());
+        $competitor->setCompetitor2($obj->getCompetitor2());
         $competitor->setNumberSign($obj->getNumberSign());
         $competitor->setCategory($obj->getCategory());
         $competitor->setSex($obj->getSex());
@@ -78,8 +78,8 @@ class CompetitorService
     public function competitorFromCsv($array, $raidId)
     {
         $competitor = new Competitor();
-        $competitor->setLastname($array[0]);
-        $competitor->setFirstname($array[1]);
+        $competitor->setCompetitor1($array[0]);
+        $competitor->setCompetitor2($array[1]);
         $competitor->setNumberSign($array[2]);
         $competitor->setCategory($array[3]);
         $competitor->setSex($array[4]);
@@ -108,8 +108,8 @@ class CompetitorService
             $obj = [];
 
             $obj['id'] = $competitor->getUniqid();
-            $obj['firstname'] = $competitor->getFirstname();
-            $obj['lastname'] = $competitor->getLastname();
+            $obj['competitor1'] = $competitor->getCompetitor1();
+            $obj['competitor2'] = $competitor->getCompetitor2();
             $obj['number_sign'] = $competitor->getNumberSign();
             $obj['nfc_serial_id'] = $competitor->getNFCSerialId();
             $obj['category'] = $competitor->getCategory();
