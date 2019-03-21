@@ -47,7 +47,7 @@
 
             <div class="card card--half">
                 <a href="{{ path('inviteHelper', {'id': raid.uniqid}) }}" class="copytoclipboard">
-                    <textarea class="copytoclipboard--tocopy">{{ url('inviteHelper', {'id': raid.uniqid}) }}</textarea>
+                    <textarea class="copytoclipboard--tocopy">{{ path('inviteHelper', {'id': raid.uniqid}) }}</textarea>
                     <i class="far fa-copy"></i>
                     <p>Copier le lien d'invitation des bénévoles</p>
                 </a>

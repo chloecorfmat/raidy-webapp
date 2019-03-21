@@ -53,6 +53,11 @@ class OrganizerHelpersController extends AjaxAPIController
 
             if (null != $helper->getPoi()) {
                 /* Send email to helper */
+
+                $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+                    $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+                    $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
                 $message = \Swift_Message::newInstance()
                     ->setSubject('Nouvelle affectation pour le raid ' . $raid->getName())
                     ->setFrom($this->container->getParameter('app.mail.from'))
@@ -61,7 +66,12 @@ class OrganizerHelpersController extends AjaxAPIController
                     ->setBody(
                         $this->renderView(
                             'OrganizerBundle:Emails:affectation.html.twig',
-                            ['helper' => $helper->getUser(), 'raid' => $raid, 'poi' => $helper->getPoi()->getName()]
+                            [
+                                'helper' => $helper->getUser(),
+                                'raid' => $raid,
+                                'poi' => $helper->getPoi()->getName(),
+                                'host' => $host,
+                            ]
                         ),
                         'text/html'
                     );
