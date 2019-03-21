@@ -46,15 +46,15 @@ class CompetitorServiceTest extends TestCase
         $competitor->setNFCSerialId("XXXXX");
         $competitor->setBirthYear(1995);
         $competitor->setCategory("PRO");
-        $competitor->setFirstname("FirstName");
-        $competitor->setLastname("LastName");
+        $competitor->setCompetitor1("competitor1");
+        $competitor->setCompetitor2("competitor2");
         $competitor->setNumberSign("12");
         $competitor->setSex("M");
         $competitor->setUniqid("AZERTY");
 
         $json = $this->competitorService->competitorToJson($competitor);
 
-        self::assertEquals("{\"id\":1,\"firstname\":\"FirstName\",\"lastname\":\"LastName\",\"number_sign\":\"12\",\"nfc_serial_id\":\"XXXXX\",\"category\":\"PRO\",\"sex\":\"M\",\"birthyear\":1995,\"race\":null,\"raid\":null}", $json);
+        self::assertEquals("{\"id\":1,\"competitor1\":\"competitor1\",\"competitor2\":\"competitor2\",\"number_sign\":\"12\",\"nfc_serial_id\":\"XXXXX\",\"category\":\"PRO\",\"sex\":\"M\",\"birthyear\":1995,\"race\":null,\"raid\":null}", $json);
     }
 
     public function testCompetitorsArrayToJson()
@@ -72,8 +72,8 @@ class CompetitorServiceTest extends TestCase
         $competitor->setNFCSerialId("XXXXX");
         $competitor->setBirthYear(1995);
         $competitor->setCategory("PRO");
-        $competitor->setFirstname("FirstName");
-        $competitor->setLastname("LastName");
+        $competitor->setCompetitor1("competitor11");
+        $competitor->setCompetitor2("competitor12");
         $competitor->setNumberSign("12");
         $competitor->setSex("M");
         $competitor->setUniqid("AZERTY");
@@ -86,8 +86,8 @@ class CompetitorServiceTest extends TestCase
         $competitor2->setNFCSerialId("XXXXX");
         $competitor2->setBirthYear(1995);
         $competitor2->setCategory("PRO");
-        $competitor2->setFirstname("FirstName");
-        $competitor2->setLastname("LastName");
+        $competitor2->setCompetitor1("competitor21");
+        $competitor2->setCompetitor2("competitor22");
         $competitor2->setNumberSign("12");
         $competitor2->setSex("M");
         $competitor2->setUniqid("AZERTY");
@@ -95,7 +95,7 @@ class CompetitorServiceTest extends TestCase
 
         $json = $this->competitorService->competitorsArrayToJson([$competitor, $competitor2]);
 
-        self::assertEquals("[{\"id\":\"AZERTY\",\"firstname\":\"FirstName\",\"lastname\":\"LastName\",\"number_sign\":\"12\",\"nfc_serial_id\":\"XXXXX\",\"category\":\"PRO\",\"sex\":\"M\",\"birthyear\":1995,\"race\":{\"id\":null,\"name\":null},\"raid\":null},{\"id\":\"AZERTY\",\"firstname\":\"FirstName\",\"lastname\":\"LastName\",\"number_sign\":\"12\",\"nfc_serial_id\":\"XXXXX\",\"category\":\"PRO\",\"sex\":\"M\",\"birthyear\":1995,\"race\":{\"id\":null,\"name\":null},\"raid\":null}]", $json);
+        self::assertEquals("[{\"id\":\"AZERTY\",\"competitor1\":\"competitor11\",\"competitor2\":\"competitor12\",\"number_sign\":\"12\",\"nfc_serial_id\":\"XXXXX\",\"category\":\"PRO\",\"sex\":\"M\",\"birthyear\":1995,\"race\":{\"id\":null,\"name\":null},\"raid\":null},{\"id\":\"AZERTY\",\"competitor1\":\"competitor21\",\"competitor2\":\"competitor22\",\"number_sign\":\"12\",\"nfc_serial_id\":\"XXXXX\",\"category\":\"PRO\",\"sex\":\"M\",\"birthyear\":1995,\"race\":{\"id\":null,\"name\":null},\"raid\":null}]", $json);
     }
 
     public function testCheckRaceTimingData()
