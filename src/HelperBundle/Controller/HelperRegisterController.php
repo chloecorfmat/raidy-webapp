@@ -50,7 +50,11 @@ class HelperRegisterController extends Controller
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
-        $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
+        $meta['url'] = $host . $request->server->get('BASE') . $request->getPathInfo();
         $meta['title'] = 'Helper | Raidy';
         $meta['image'] = '/uploads/raids/' . $raid->getPicture();
         $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';
@@ -89,7 +93,11 @@ class HelperRegisterController extends Controller
             throw $this->createNotFoundException('Ce raid n\'existe pas');
         }
 
-        $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
+        $meta['url'] = $host . $request->server->get('BASE') . $request->getPathInfo();
         $meta['title'] = 'Helper | Raidy';
         $meta['image'] = '/uploads/raids/' . $raid->getPicture();
         $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';
@@ -113,6 +121,10 @@ class HelperRegisterController extends Controller
      */
     public function registerHelper(Request $request, $id)
     {
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
         // Logout user if one user is login.
         if ($this->container->get('security.authorization_checker')->isGranted('IS_AUTHENTICATED_FULLY')) {
             // authenticated (NON anonymous)
@@ -255,7 +267,7 @@ class HelperRegisterController extends Controller
                                     ->setBody(
                                         $this->renderView(
                                             'HelperBundle:Emails:registration.html.twig',
-                                            array('user' => $user)
+                                            array('user' => $user, 'host' => $host)
                                         ),
                                         'text/html'
                                     );
@@ -271,7 +283,12 @@ class HelperRegisterController extends Controller
                                     ->setBody(
                                         $this->renderView(
                                             'HelperBundle:Emails:newHelper.html.twig',
-                                            array('helper' => $user, 'organizer' => $raid->getUser(), 'raid' => $raid)
+                                            array(
+                                                'helper' => $user,
+                                                'organizer' => $raid->getUser(),
+                                                'raid' => $raid,
+                                                'host' => $host,
+                                            )
                                         ),
                                         'text/html'
                                     );
@@ -448,7 +465,11 @@ class HelperRegisterController extends Controller
             }
         }
 
-        $meta['url'] = $request->getSchemeAndHttpHost() . $request->getPathInfo();
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
+        $meta['url'] = $host . $request->server->get('BASE') . $request->getPathInfo();
         $meta['title'] = 'Helper | Raidy';
         $meta['image'] = '/uploads/raids/' . $raid->getPicture();
         $meta['description'] = 'Rejoindre le raid "' . $raid->getName() . '"';

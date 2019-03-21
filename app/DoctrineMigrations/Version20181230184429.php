@@ -68,6 +68,11 @@ class Version20181230184429 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->skipIf(
+            $schema->getTable('helper')->hasColumn('accept_conditions'),
+            'Skipping because `accept_conditions` from `helper` table exists.'
+        );
+
         $this->addSql('ALTER TABLE helper ADD accept_conditions DATETIME');
     }
 

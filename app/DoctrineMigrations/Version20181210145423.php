@@ -72,6 +72,11 @@ class Version20181210145423 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() !== 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
+        $this->skipIf(
+            $schema->getTable('raid')->hasColumn('uniqid'),
+            'Skipping because `uniqid` from `raid` table exists.'
+        );
+
         $this->addSql('ALTER TABLE raid ADD uniqid VARCHAR(255)');
     }
 

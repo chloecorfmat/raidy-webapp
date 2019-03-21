@@ -120,6 +120,10 @@ class OrganizerAdminController extends Controller
 
                         $this->addFlash('success', 'L\'organisateur a bien été ajouté.');
 
+                        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+                            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+                            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
                         $message = (new \Swift_Message('Création d\'un compte organisateur'))
                             ->setFrom($this->container->getParameter('app.mail.from'))
                             ->setReplyTo($this->container->getParameter('app.mail.reply_to'))
@@ -127,7 +131,11 @@ class OrganizerAdminController extends Controller
                             ->setBody(
                                 $this->renderView(
                                     'AppBundle:Emails:registration.html.twig',
-                                    array('user' => $user, 'password' => $formUser->getPlainPassword())
+                                    array(
+                                        'user' => $user,
+                                        'password' => $formUser->getPlainPassword(),
+                                        'host' => $host,
+                                    )
                                 ),
                                 'text/html'
                             );

@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20181210155204 extends AbstractMigration
+class Version20190321145027 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -16,13 +16,13 @@ class Version20181210155204 extends AbstractMigration
     public function up(Schema $schema)
     {
         // this up() migration is auto-generated, please modify it to your needs
-        $this->skipIf(
-            $schema->getTable('raid')->hasPrimaryKey('uniqid'),
-            'Skipping because `uniqid` primary key exists.'
-        );
+        if (!$schema->getTable('competitor')->hasColumn('competitor1')) {
+            $this->addSql('ALTER TABLE competitor CHANGE lastname competitor1 VARCHAR(255)');
+        }
 
-        $this->addSql('ALTER TABLE raid CHANGE uniqid uniqid VARCHAR(255) NOT NULL');
-        $this->addSql('CREATE UNIQUE INDEX raid_uniqid ON raid (uniqid)');
+        if (!$schema->getTable('competitor')->hasColumn('competitor2')) {
+            $this->addSql('ALTER TABLE competitor CHANGE firstname competitor2 VARCHAR(255)');
+        }
     }
 
     /**
@@ -31,5 +31,6 @@ class Version20181210155204 extends AbstractMigration
     public function down(Schema $schema)
     {
         // this down() migration is auto-generated, please modify it to your needs
+
     }
 }

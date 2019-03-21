@@ -123,6 +123,10 @@ class OrganizerMessageController extends AjaxAPIController
                     $helperManager = $em->getRepository('AppBundle:Helper');
                     $helpers = $helperManager->findBy(array('poi' => $pois));
 
+                    $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+                        $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+                        $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
                     foreach ($helpers as $helper) {
                         $mail = \Swift_Message::newInstance()
                             ->setSubject('Nouvelle notification pour le raid ' . $raid->getName())
@@ -132,7 +136,12 @@ class OrganizerMessageController extends AjaxAPIController
                             ->setBody(
                                 $this->renderView(
                                     'OrganizerBundle:Emails:notification.html.twig',
-                                    array('helper' => $helper->getUser(), 'raid' => $raid, 'message' => $message)
+                                    array(
+                                        'helper' => $helper->getUser(),
+                                        'raid' => $raid,
+                                        'message' => $message,
+                                        'host' => $host,
+                                    )
                                 ),
                                 'text/html'
                             );

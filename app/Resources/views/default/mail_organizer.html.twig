@@ -6,6 +6,10 @@
     {% set logo_url = '/' %}
 {% endif %}
 
+{% if host is not defined %}
+    {% set host = '' %}
+{% endif %}
+
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -111,8 +115,8 @@
     <table>
         <tr>
             <td class="header--raidy">
-                <a href="{{ absolute_url(logo_url)}}" class="logo">
-                    <img src="{{ absolute_url(asset('assets/images/logo-white.png')) }}" alt="Logo Raidy">
+                <a href="{{ host ~ path('homepage') }}" class="logo">
+                    <img src="{{ host ~ asset('assets/images/logo-white.png') }}" alt="Logo Raidy">
                 </a>
             </td>
         </tr>
@@ -125,7 +129,7 @@
             <td class="footer--mail">
                 <div class="footer--mail-div">
                     <a href="http://www.enssat.fr/" class="logo logo--enssat">
-                        <img src="{{ absolute_url(asset('assets/images/Enssat_UR1_blanc.png')) }}" alt="Logo Enssat">
+                        <img src="{{ host ~ asset('assets/images/Enssat_UR1_blanc.png') }}" alt="Logo Enssat">
                     </a>
                 </div>
             </td>

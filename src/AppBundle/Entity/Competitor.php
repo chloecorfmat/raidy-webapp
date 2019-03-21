@@ -25,24 +25,24 @@ class Competitor
     protected $id;
 
     /**
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(type="string", length=255)
      * @Assert\Length(
      *      min = 1,
-     *      max = 45,
-     *      maxMessage = "Le nom ne doit pas dépasser {{ limit }} caractères",
+     *      max = 255,
+     *      maxMessage = "Le nom du participant 1 ne doit pas dépasser {{ limit }} caractères",
      * )
      */
-    private $lastname;
+    private $competitor1;
 
     /**
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(type="string", length=255)
      * @Assert\Length(
      *      min = 1,
-     *      max = 45,
-     *      maxMessage = "Le prénom ne doit pas dépasser {{ limit }} caractères",
+     *      max = 255,
+     *      maxMessage = "Le nom du participant 2 ne doit pas dépasser {{ limit }} caractères",
      * )
      */
-    private $firstname;
+    private $competitor2;
 
     /**
      * @ORM\Column(type="string", length=45)
@@ -125,33 +125,33 @@ class Competitor
     /**
      * @return mixed
      */
-    public function getLastname()
+    public function getCompetitor1()
     {
-        return $this->lastname;
+        return $this->competitor1;
     }
 
     /**
-     * @param mixed $lastname
+     * @param mixed $competitor1
      */
-    public function setLastname($lastname)
+    public function setCompetitor1($competitor1)
     {
-        $this->lastname = $lastname;
+        $this->competitor1 = $competitor1;
     }
 
     /**
      * @return mixed
      */
-    public function getFirstname()
+    public function getCompetitor2()
     {
-        return $this->firstname;
+        return $this->competitor2;
     }
 
     /**
-     * @param mixed $firstname
+     * @param mixed $competitor2
      */
-    public function setFirstname($firstname)
+    public function setCompetitor2($competitor2)
     {
-        $this->firstname = $firstname;
+        $this->competitor2 = $competitor2;
     }
 
     /**

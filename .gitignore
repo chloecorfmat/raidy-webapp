@@ -1,6 +1,7 @@
 .idea/
 /.web-server-pid
 /app/config/parameters.yml
+/app/config/config_prod.yml
 /build/
 /phpunit.xml
 /var/*

@@ -5,12 +5,12 @@
         <li class="breadcrumb--list-item"><a href="{{ path('homepage') }}">Organizer</a></li>
         <li class="breadcrumb--list-item"><a href="{{ path('displayRaid', {'id': raid.uniqid}) }}">{{ raid.name }}</a></li>
         <li class="breadcrumb--list-item"><a href="{{ path('listCompetitor', {'raidId': raid.uniqid}) }}">Liste des participants</a></li>
-        <li class="breadcrumb--list-item">{{ competitor.firstname~" "~competitor.lastname }}</li>
+        <li class="breadcrumb--list-item">{{ competitor.competitor1~" "~competitor.competitor2 }}</li>
     </ol>
 {% endblock %}
 
 {% block body %}
-    <h1>{{ competitor.firstname~" "~competitor.lastname }}</h1>
+    <h1>{{ competitor.competitor1~" "~competitor.competitor2 }}</h1>
 
     <div class="content">
         <div class="content--part">
