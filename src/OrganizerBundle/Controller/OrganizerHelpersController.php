@@ -205,6 +205,10 @@ class OrganizerHelpersController extends AjaxAPIController
             $required += $poi->getRequiredHelpers();
         }
 
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
         return $this->render(
             'OrganizerBundle:Helpers:helpers.html.twig',
             [
@@ -215,6 +219,7 @@ class OrganizerHelpersController extends AjaxAPIController
                 'pois' => $pois,
                 'jobs' => $jobs,
                 'requiredHelpers' => $required,
+                'host' => $host,
             ]
         );
     }
