@@ -85,9 +85,14 @@ class OrganizerRaidController extends Controller
             $this->addFlash('success', 'Les données ont bien été mises à jour.');
         }
 
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
         return $this->render('LiveBundle:Organizer:live.html.twig', [
             'raid' => $raid,
             'form' => $form->createView(),
+            'host' => $host,
         ]);
     }
 }

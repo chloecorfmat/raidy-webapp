@@ -45,7 +45,7 @@
                                 <td>Validée</td>
                             {% endif %}
 
-                            <td>{{ app.request.getSchemeAndHttpHost() ~ path('inviteCollaborator', {'invitationId': collaboration.invitationId}) }}</td>
+                            <td>{{ host ~ path('inviteCollaborator', {'invitationId': collaboration.invitationId}) }}</td>
                             <td><button class="btn btn--danger btn--delete-collaborator" data-raid="{{ raid.uniqid }}" data-invitation="{{ collaboration.invitationId }}">Supprimer</button></td>
                         </tr>
                     {% endfor %}

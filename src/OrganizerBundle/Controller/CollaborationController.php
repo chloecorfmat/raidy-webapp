@@ -108,12 +108,17 @@ class CollaborationController extends Controller
 
         $collaborations = $collaborationManager->findBy(['raid' => $raid]);
 
+        $host = ($request->server->get('HTTP_X_FORWARDED_HOST')) ?
+            $request->getScheme() . '://' . $request->server->get('HTTP_X_FORWARDED_HOST') :
+            $request->getScheme() . '://' . $request->server->get('HTTP_HOST');
+
         return $this->render(
             'OrganizerBundle:Collaborator:listCollaborator.html.twig',
             [
                 'collaborations' => $collaborations,
                 'form' => $form->createView(),
                 'raid' => $raid,
+                'host' => $host,
             ]
         );
     }

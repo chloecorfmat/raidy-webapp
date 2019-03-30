@@ -9,6 +9,7 @@
 namespace APIBundle\Controller;
 
 use AppBundle\Controller\AjaxAPIController;
+use AppBundle\Entity\Collaboration;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,6 +33,18 @@ class RaidController extends AjaxAPIController
             ->getRepository('AppBundle:Raid');
 
         $raids = $raidManager->findBy(array('user' => $user));
+
+        $collaborationManager = $this->getDoctrine()
+            ->getManager()
+            ->getRepository('AppBundle:Collaboration');
+
+        $collaborations = $collaborationManager->findBy(['user' => $user]);
+
+        /** @var Collaboration $collaboration */
+        foreach ($collaborations as $collaboration) {
+            $raids[] = $collaboration->getRaid();
+        }
+
         $raidService = $this->container->get('RaidService');
 
         return new Response($raidService->raidsArrayToJson($raids));
