@@ -1,0 +1,43 @@
+imports:
+- { resource: config.yml }
+
+#doctrine:
+#    orm:
+#        metadata_cache_driver: apc
+#        result_cache_driver: apc
+#        query_cache_driver: apc
+
+monolog:
+  handlers:
+    main:
+      type: fingers_crossed
+      action_level: error
+      handler: nested
+    nested:
+      type: stream
+      path: '%kernel.logs_dir%/%kernel.environment%.log'
+      level: debug
+    console:
+      type: console
+      process_psr_3_messages: false
+
+app:
+  twitter:
+    account: ""
+    oauth_access_token: ""
+    oauth_access_token_secret: ""
+    consumer_key: ""
+    consumer_secret: ""
+  mail:
+    from: ""
+    reply_to: ""
+
+webpack_encore:
+  output_path: "%kernel.root_dir%/../raidy/build/"
+
+parameters:
+  locale: fr
+  sporttypes_img_directory: '%kernel.project_dir%/raidy/uploads/sporttypes'
+  raids_img_directory: '%kernel.project_dir%/raidy/uploads/raids'
+  tracks_gpx_directory: '%kernel.project_dir%/raidy/uploads/tracks/gpx'
+  competitors_csv_directory: '%kernel.project_dir%/raidy/uploads/competitors/'
