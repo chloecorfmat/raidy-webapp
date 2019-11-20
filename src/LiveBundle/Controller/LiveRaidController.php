@@ -280,8 +280,8 @@ class LiveRaidController extends AjaxAPIController
 
                 $competitorsDataTemp[$competitor->getId()] = [
                     'id' => $competitor->getId(),
-                    'lastname' => $competitor->getLastname(),
-                    'firstname' => $competitor->getFirstname(),
+                    'lastname' => $competitor->getCompetitor1(),
+                    'firstname' => $competitor->getCompetitor2(),
                     'numbersign' => $competitor->getNumberSign(),
                     'category' => $competitor->getCategory(),
                     'race_name' => $rName,
