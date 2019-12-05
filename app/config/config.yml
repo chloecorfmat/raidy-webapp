@@ -97,7 +97,7 @@ fos_user:
   firewall_name: main
   user_class: AppBundle\Entity\User
   from_email:
-    address: "raidy@enssat.fr"
+    address: "raidy@epe.bzh"
     sender_name: "Raidy"
   service:
     mailer: fos_user.mailer.twig_swift
