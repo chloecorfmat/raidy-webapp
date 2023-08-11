@@ -1,5 +1,7 @@
-into-the-woods-webapp
+Raidy webapp
 =====================
+
+This project is the school project used to organize Enssat Raid Adventure.
 
 # Installation
 
